@@ -72,6 +72,13 @@ module AePageObjects
       assert_false proxy.present?
     end
     
+    def test_not_present
+      proxy = new_proxy
+      
+      element_class.expects(:new).raises(Capybara::ElementNotFound)
+      assert proxy.not_present?
+    end
+    
     def test_visible
       proxy = new_proxy
       

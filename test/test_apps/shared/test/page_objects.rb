@@ -1,10 +1,10 @@
 require 'ae_page_objects'
 
 module TestApp
-  module AePageObjects
+  module PageObjects
     class Application < ::AePageObjects::Application
     end
   end
 end
 
-TestApp::AePageObjects::Application.initialize!
+TestApp::PageObjects::Application.initialize!

@@ -1,5 +1,5 @@
 module TestApp
-  module AePageObjects
+  module PageObjects
     module Books
       class NewPage < ::AePageObjects::Document
         

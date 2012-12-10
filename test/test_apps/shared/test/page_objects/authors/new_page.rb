@@ -1,5 +1,5 @@
 module TestApp
-  module AePageObjects
+  module PageObjects
     module Authors
       class NewPage < ::AePageObjects::Document
         
@@ -29,6 +29,8 @@ module TestApp
             find(".remove_star").click
           end
         end
+        
+        node :missing, :locator => "#does_not_exist"
         
         node :rating, :as => Rating, :locator => "#rating"
         

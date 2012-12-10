@@ -6,12 +6,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
     visit("/authors/new")
     
     assert_raises AePageObjects::LoadingFailed do
-      TestApp::AePageObjects::Books::NewPage.new
+      TestApp::PageObjects::Books::NewPage.new
     end
   end
   
   def test_simple_form
-    new_page = TestApp::AePageObjects::Books::NewPage.visit
+    new_page = TestApp::PageObjects::Books::NewPage.visit
     assert_equal "", new_page.title.value
     assert_equal "", new_page.index.pages.value
 
@@ -26,7 +26,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
   
   def test_complex_form
-    new_author_page = TestApp::AePageObjects::Authors::NewPage.visit
+    new_author_page = TestApp::PageObjects::Authors::NewPage.visit
     assert_equal "", new_author_page.first_name.value
     assert_equal "", new_author_page.last_name.value
     assert_equal "", new_author_page.books.first.title.value
@@ -47,7 +47,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
   
   def test_element_proxy
-    author = TestApp::AePageObjects::Authors::NewPage.visit
+    author = TestApp::PageObjects::Authors::NewPage.visit
     assert author.rating.star.present?
     
     author.rating.hide_star
@@ -66,8 +66,17 @@ class PageObjectIntegrationTest < Selenium::TestCase
     raise e      
   end
   
+  def test_element_proxy__not_present
+    author = TestApp::PageObjects::Authors::NewPage.visit
+    assert_false author.missing.present?
+    assert author.missing.not_present?
+  rescue => e
+    puts e.backtrace.join("\n")
+    raise e      
+  end
+  
   def test_element_proxy__nested
-    author = TestApp::AePageObjects::Authors::NewPage.visit
+    author = TestApp::PageObjects::Authors::NewPage.visit
     assert author.nested_rating.star.present?
     
     author.nested_rating.hide_star
