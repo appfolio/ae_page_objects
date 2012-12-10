@@ -23,10 +23,10 @@ namespace :test do
     task :selenium do 
       if app_version = ENV['APP_VERSION'] 
         run_test_in "test/test_apps/#{app_version}", 'test:selenium'
-      end
-
-      for_each_directory_of('test/test_apps/[0-9]*/**/Rakefile') do |directory|
-        run_test_in directory, 'test:selenium'
+      else
+        for_each_directory_of('test/test_apps/[0-9]*/**/Rakefile') do |directory|
+          run_test_in directory, 'test:selenium'
+        end
       end
     end
   end
@@ -34,13 +34,13 @@ end
 
 def run_test_in(directory, *tasks)
   env = "TEST=../../#{ENV['TEST']} " if ENV['TEST']
+  puts '', directory, ''
   system("cd #{directory} && #{env} bundle exec rake #{tasks.join(' ')}")
 end
 
 def for_each_directory_of(path, &block)
   Dir[path].sort.each do |rakefile|
     directory = File.dirname(rakefile)
-    puts '', directory, ''
     block.call(directory)
   end
 end
