@@ -1,18 +1,6 @@
-*.gem
-*.rbc
-.bundle
-.config
-coverage
-InstalledFiles
-lib/bundler/man
+test/test_apps/**/tmp
+test/test_apps/**/log
+*.sqlite3
 pkg
-rdoc
-spec/reports
-test/tmp
-test/version_tmp
-tmp
+.idea
 
-# YARD artifacts
-.yardoc
-_yardoc
-doc/

@@ -1,0 +1,11 @@
+source :rubygems
+
+gem 'rails', '3.0.10'
+gem 'sqlite3'
+gem 'jquery-rails'
+
+group :development do
+  gem 'ae_page_objects', :path => '../../..'
+  gem "mocha", "0.9.8", :require => false
+  gem "rcov", ">= 0"
+end

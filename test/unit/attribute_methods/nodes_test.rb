@@ -1,0 +1,386 @@
+require 'unit_helper'
+
+module AePageObjects
+  module AttributeMethods
+    class NodesTest < ActiveSupport::TestCase
+    
+      def test_nodes__no_as__no_contains__block
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners do 
+            node :owner_name
+            node :kitty_name_during_ownership
+          end
+        end
+        
+        verify_kitty_structure(kitty)
+      
+        document_stub = mock
+        jon = kitty.new(document_stub)
+      
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+      
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
+        
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+      
+      def test_nodes__as__no_contains__block
+        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class.item_class = ::AePageObjects::Element.new_subclass
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :as => previous_owners_class do
+            node :owner_name
+            node :kitty_name_during_ownership
+          end
+        end
+        
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        
+        previous_owners_page_object.expects(:all).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+
+      def test_nodes__as__no_contains__no_block
+        previous_owner_class = ::AePageObjects::Element.new_subclass do
+          node :owner_name
+          node :kitty_name_during_ownership
+        end
+        
+        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class.item_class = previous_owner_class
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :as => previous_owners_class
+        end
+        
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+
+        previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+      
+      def test_nodes__as__contains__no_block__same_item_class
+        previous_owner_class = ::AePageObjects::Element.new_subclass do
+          node :owner_name
+          node :kitty_name_during_ownership
+        end
+        
+        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class.item_class = previous_owner_class
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :as => previous_owners_class, :contains => previous_owner_class
+        end
+        
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+
+        previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+
+      def test_nodes__as__contains__no_block__different_item_class
+        previous_owner_class = ::AePageObjects::Element.new_subclass do
+          node :owner_name
+          node :kitty_name_during_ownership
+        end
+        
+        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :as => previous_owners_class, :contains => previous_owner_class
+        end
+        
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+      
+      def test_nodes__no_as__contains__no_block
+        previous_owner_class = ::AePageObjects::Element.new_subclass do
+          node :owner_name
+          node :kitty_name_during_ownership
+        end
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :contains => previous_owner_class
+        end
+        
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+      
+      def test_nodes__no_as__contains__block
+        previous_owner_class = ::AePageObjects::Element.new_subclass do
+          node :owner_name
+        end
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :contains => previous_owner_class do
+            node :kitty_name_during_ownership
+          end
+        end
+        
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      rescue => e
+        puts e.backtrace.join("\n")
+        raise e      
+      end
+      
+      def test_nodes__as__contains__block
+        previous_owner_class = ::AePageObjects::Element.new_subclass do
+          node :owner_name
+        end
+        
+        previous_owners_class_item_class = ::AePageObjects::Element.new_subclass
+        
+        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class.item_class = previous_owners_class_item_class
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :as => previous_owners_class, :contains => previous_owner_class do
+            node :kitty_name_during_ownership
+          end
+        end
+        
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      rescue => e
+        puts e.backtrace.join("\n")
+        raise e      
+      end
+      
+      def test_nodes__no_as__no_contains__no_block
+        assert_raises ArgumentError do
+          kitty = ::AePageObjects::Document.new_subclass do
+            nodes :previous_owners
+            raise "You will never see this"
+          end
+        end
+      end
+
+      def test_nodes__locator
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :locator => "whatever you want, baby" do 
+            node :owner_name
+            node :kitty_name_during_ownership, :locator => "Kitty Name"
+          end
+        end
+        
+        verify_kitty_structure(kitty)
+      
+        document_stub = mock
+        jon = kitty.new(document_stub)
+      
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("whatever you want, baby").returns(previous_owners_page_object)
+      
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
+        
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("Kitty Name").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+
+      def test_nested_node__locator__proc
+        kitty = ::AePageObjects::Document.new_subclass do
+          nodes :previous_owners, :locator => Proc.new { parent.page_local_context } do 
+            node :owner_name
+            node :kitty_name_during_ownership, :locator => Proc.new { parent.page_local_context }
+          end
+        end
+
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+        
+        jon.expects(:page_local_context).returns("hello")
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("hello").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+        
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("Milkshake").returns(kitty_name_during_ownership_page_object)
+    
+        first_owner.expects(:page_local_context).returns("Milkshake")
+        
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+
+    private
+    
+      def verify_kitty_structure(kitty_class)
+        assert_sets_equal [:previous_owners], kitty_class.node_attributes.keys
+        assert_sets_equal [:owner_name, :kitty_name_during_ownership], kitty_class.node_attributes[:previous_owners].item_class.node_attributes.keys
+      end
+    end
+  end
+end
