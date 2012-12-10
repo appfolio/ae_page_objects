@@ -34,6 +34,12 @@ module AePageObjects
       presence.present?
     end
     
+    def not_present?(timeout = 0)
+      Capybara.using_wait_time(timeout) do
+        ! present?
+      end
+    end
+    
     def presence
       element
     rescue Capybara::ElementNotFound
