@@ -7,6 +7,8 @@ require 'active_support/core_ext/object/try'
 require 'active_support/core_ext/class'
 require 'active_support/dependencies'
 
+require 'ae_page_objects/version'
+
 module AePageObjects
   autoload :ConstantResolver,     'ae_page_objects/core/constant_resolver'
   autoload :DependenciesHook,     'ae_page_objects/core/dependencies_hook'
