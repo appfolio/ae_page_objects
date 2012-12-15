@@ -35,7 +35,9 @@ end
 def run_test_in(directory, *tasks)
   env = "TEST=../../#{ENV['TEST']} " if ENV['TEST']
   puts '', directory, ''
-  system("cd #{directory} && #{env} bundle exec rake #{tasks.join(' ')}")
+  with_pruned_env('BUNDLE_GEMFILE') do
+    system("cd #{directory} && #{env} bundle exec rake #{tasks.join(' ')}")
+  end
 end
 
 def for_each_directory_of(path, &block)
@@ -44,6 +46,12 @@ def for_each_directory_of(path, &block)
     block.call(directory)
   end
 end
+
+def with_pruned_env(key_to_withhold, &block)
+  withholding = ENV.delete(key_to_withhold)
+  tap{ |r| r = yield; ENV[key_to_withhold] = withholding }
+end
+
 
 desc 'Default: run the unit and integration tests.'
 task :default => ['test:integration:units', 'test:integration:selenium']
