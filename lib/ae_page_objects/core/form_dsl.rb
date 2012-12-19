@@ -5,14 +5,6 @@ module AePageObjects
     include AttributeMethods::NestedNode
     include AttributeMethods::Nodes
     
-    included do
-      class << self
-        alias has_one  node
-        alias field    node
-        alias has_many nodes
-      end
-    end
-
     module ClassMethods
     
       def form_for(form_name, options = {}, &block)

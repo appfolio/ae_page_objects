@@ -6,11 +6,11 @@ module TestApp
         path :new_author
 
         form_for "author" do
-          field :first_name
-          field :last_name
+          node :first_name
+          node :last_name
           
-          has_many :books, :locator => "#author_books", :row_xpath => ".//*[contains(@class, 'some-books-fool')]//*[contains(@class,'row') and not(contains(@style,'display'))]" do
-            field :title
+          nodes :books, :locator => "#author_books", :row_xpath => ".//*[contains(@class, 'some-books-fool')]//*[contains(@class,'row') and not(contains(@style,'display'))]" do
+            node :title
           end
         end
         

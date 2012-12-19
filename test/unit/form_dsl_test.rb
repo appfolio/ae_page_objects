@@ -6,15 +6,15 @@ module AePageObjects
     def test_form
       kitty_class = ::AePageObjects::Document.new_subclass do
         form_for "kitty" do
-          field :name
-          field :age
+          node :name
+          node :age
           
-          has_one :owner do
-            field :name
+          node :owner do
+            node :name
           end
           
-          has_many :past_lives do
-            field :died_at
+          nodes :past_lives do
+            node :died_at
           end
         end
       end
@@ -39,15 +39,15 @@ module AePageObjects
     def test_form__using
       kitty_class = ::AePageObjects::Document.new_subclass do
         form_for "kitty", :using => "the_kat" do
-          field :name
-          field :age
+          node :name
+          node :age
           
-          has_one :owner do
-            field :name
+          node :owner do
+            node :name
           end
           
-          has_many :past_lives do
-            field :died_at
+          nodes :past_lives do
+            node :died_at
           end
         end
       end
@@ -80,15 +80,15 @@ module AePageObjects
     def test_form__using__locator
       kitty_class = ::AePageObjects::Document.new_subclass do
         form_for "kitty", :locator => [:css, "#my_kitty_box"], :using => "the_kat" do
-          field :name
-          field :age
+          node :name
+          node :age
           
-          has_one :owner do
-            field :name
+          node :owner do
+            node :name
           end
 
-          has_many :past_lives do
-            field :died_at
+          nodes :past_lives do
+            node :died_at
           end
         end
       end
