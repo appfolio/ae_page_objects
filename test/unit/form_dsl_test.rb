@@ -38,7 +38,7 @@ module AePageObjects
   
     def test_form__using
       kitty_class = ::AePageObjects::Document.new_subclass do
-        form_for "kitty", :using => "the_kat" do
+        form_for "kitty", :name => "the_kat" do
           element :name
           element :age
           
@@ -79,7 +79,7 @@ module AePageObjects
     
     def test_form__using__locator
       kitty_class = ::AePageObjects::Document.new_subclass do
-        form_for "kitty", :locator => [:css, "#my_kitty_box"], :using => "the_kat" do
+        form_for "kitty", :locator => [:css, "#my_kitty_box"], :name => "the_kat" do
           element :name
           element :age
           

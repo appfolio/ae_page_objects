@@ -2,9 +2,9 @@ module AePageObjects
   class HasOne < Element
     def dom_id
       if parent.respond_to?(:dom_id)
-        "#{parent.dom_id}_#{dom_name}_attributes"
+        "#{parent.dom_id}_#{__name__}_attributes"
       else
-        "#{dom_name}_attributes"
+        "#{__name__}_attributes"
       end
     end
   end

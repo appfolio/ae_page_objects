@@ -17,7 +17,7 @@ module AePageObjects
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
       assert_equal "tiger", kitty.dom_id
-      assert_equal "tiger", kitty.dom_name
+      assert_equal "tiger", kitty.name
       assert kitty.using_default_locator?
     end
     
@@ -30,12 +30,12 @@ module AePageObjects
       
       kitty_page_object = mock
       document_stub.expects(:find).with("#jonka").returns(kitty_page_object)
-      kitty = kitty_class.new(pet, :tiger, :using => "jonka")
+      kitty = kitty_class.new(pet, :tiger, :name => "jonka")
       
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
       assert_equal "jonka", kitty.dom_id
-      assert_equal "jonka", kitty.dom_name
+      assert_equal "jonka", kitty.name
       assert kitty.using_default_locator?
     end
     
@@ -53,7 +53,7 @@ module AePageObjects
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
       assert_equal "tiger", kitty.dom_id
-      assert_equal "tiger", kitty.dom_name
+      assert_equal "tiger", kitty.name
       assert_false kitty.using_default_locator?
     end
     
