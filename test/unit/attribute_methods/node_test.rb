@@ -4,13 +4,13 @@ module AePageObjects
   module AttributeMethods
     class NodeTest < ActiveSupport::TestCase
     
-      def test_node__basic
+      def test_element__basic
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind
+          element :kind
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)
@@ -23,13 +23,13 @@ module AePageObjects
         raise e
       end
       
-      def test_node__accessor_yields_to_block
+      def test_element__accessor_yields_to_block
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind
+          element :kind
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)
@@ -55,13 +55,13 @@ module AePageObjects
         raise e
       end
     
-      def test_node__locator
+      def test_element__locator
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind, :locator => "Kind Homie"
+          element :kind, :locator => "Kind Homie"
         end
         
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)
@@ -71,13 +71,13 @@ module AePageObjects
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
     
-      def test_node__locator__proc
+      def test_element__locator__proc
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind, :locator => Proc.new { parent.page_local_context }
+          element :kind, :locator => Proc.new { parent.page_local_context }
         end
         
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)
@@ -88,13 +88,13 @@ module AePageObjects
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
     
-      def test_node__as__select
+      def test_element__as__select
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind, :as => ::AePageObjects::Select
+          element :kind, :as => ::AePageObjects::Select
         end
         
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)
@@ -104,13 +104,13 @@ module AePageObjects
         verify_field(jon, :kind, ::AePageObjects::Select, kind_page_object)
       end
     
-      def test_node__as__checkbox
+      def test_element__as__checkbox
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind, :as => ::AePageObjects::Checkbox
+          element :kind, :as => ::AePageObjects::Checkbox
         end
         
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)
@@ -120,15 +120,15 @@ module AePageObjects
         verify_field(jon, :kind, ::AePageObjects::Checkbox, kind_page_object)
       end
     
-      def test_node__as__special_widget
+      def test_element__as__special_widget
         special_widget = ::AePageObjects::Element.new_subclass
       
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind, :as => special_widget
+          element :kind, :as => special_widget
         end
         
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)
@@ -139,15 +139,15 @@ module AePageObjects
         verify_field(jon, :kind, special_widget, kind_page_object)
       end
     
-      def test_node__as__special_widget__with_locator
+      def test_element__as__special_widget__with_locator
         special_widget = ::AePageObjects::Element.new_subclass
       
         kitty = ::AePageObjects::Document.new_subclass do
-          node :kind, :as => special_widget, :locator => "As If!"
+          element :kind, :as => special_widget, :locator => "As If!"
         end
         
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.node_attributes.keys
+        assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
         jon = kitty.new(document_stub)

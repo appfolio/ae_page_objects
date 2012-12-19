@@ -6,7 +6,7 @@ module AePageObjects
     
       module ClassMethods
         
-        def node(name, options = {}, &block)
+        def element(name, options = {}, &block)
           raise ArgumentError, ":as option and block not supported together" if options[:as].present? && block_given?
           
           if block_given?

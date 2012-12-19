@@ -10,14 +10,14 @@ module TestApp
         end
       
         form_for "book" do
-          node :title
+          element :title
           
-          node :index, :locator => "#book_index" do
-            node :pages
+          element :index, :locator => "#book_index" do
+            element :pages
           end
           
-          node :author do
-            node :first_name
+          element :author do
+            element :first_name
           end
         end
       end

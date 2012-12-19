@@ -6,15 +6,15 @@ module AePageObjects
     def test_form
       kitty_class = ::AePageObjects::Document.new_subclass do
         form_for "kitty" do
-          node :name
-          node :age
+          element :name
+          element :age
           
-          node :owner do
-            node :name
+          element :owner do
+            element :name
           end
           
-          nodes :past_lives do
-            node :died_at
+          collection :past_lives do
+            element :died_at
           end
         end
       end
@@ -39,15 +39,15 @@ module AePageObjects
     def test_form__using
       kitty_class = ::AePageObjects::Document.new_subclass do
         form_for "kitty", :using => "the_kat" do
-          node :name
-          node :age
+          element :name
+          element :age
           
-          node :owner do
-            node :name
+          element :owner do
+            element :name
           end
           
-          nodes :past_lives do
-            node :died_at
+          collection :past_lives do
+            element :died_at
           end
         end
       end
@@ -80,15 +80,15 @@ module AePageObjects
     def test_form__using__locator
       kitty_class = ::AePageObjects::Document.new_subclass do
         form_for "kitty", :locator => [:css, "#my_kitty_box"], :using => "the_kat" do
-          node :name
-          node :age
+          element :name
+          element :age
           
-          node :owner do
-            node :name
+          element :owner do
+            element :name
           end
 
-          nodes :past_lives do
-            node :died_at
+          collection :past_lives do
+            element :died_at
           end
         end
       end
@@ -131,12 +131,12 @@ module AePageObjects
         document_stub.stubs(:find).with("#kitty_#{field_method}").returns(field_page_object)
       end
       
-      form = verify_field(kitty, :kitty, kitty.class.node_attributes[:kitty], document_stub)
+      form = verify_field(kitty, :kitty, kitty.class.element_attributes[:kitty], document_stub)
 
       field_xpath = "kitty_#{field_method}_xpath"
       field_page_object = mock
       prepare_for_field_reference.call(field_xpath, field_page_object)
-      expected_field_type = form.class.node_attributes[field_method]
+      expected_field_type = form.class.element_attributes[field_method]
       field_node = verify_field(form, field_method, expected_field_type, field_page_object)
 
       prepare_for_field_reference.call(field_xpath, field_page_object)
@@ -144,14 +144,14 @@ module AePageObjects
     end
 
     def verify_kitty_structure(kitty_class)
-      assert_sets_equal [:kitty, :name, :age, :owner, :past_lives], kitty_class.node_attributes.keys
-      assert_sets_equal [:name, :age, :owner, :past_lives], kitty_class.node_attributes[:kitty].node_attributes.keys
+      assert_sets_equal [:kitty, :name, :age, :owner, :past_lives], kitty_class.element_attributes.keys
+      assert_sets_equal [:name, :age, :owner, :past_lives], kitty_class.element_attributes[:kitty].element_attributes.keys
       
-      owner_class = kitty_class.node_attributes[:kitty].node_attributes[:owner]
-      assert_sets_equal [:name], owner_class.node_attributes.keys
+      owner_class = kitty_class.element_attributes[:kitty].element_attributes[:owner]
+      assert_sets_equal [:name], owner_class.element_attributes.keys
       
-      past_lives_item_class = kitty_class.node_attributes[:kitty].node_attributes[:past_lives].item_class
-      assert_sets_equal [:died_at], past_lives_item_class.node_attributes.keys
+      past_lives_item_class = kitty_class.element_attributes[:kitty].element_attributes[:past_lives].item_class
+      assert_sets_equal [:died_at], past_lives_item_class.element_attributes.keys
       
       assert_sets_equal ["kitty", "owner", "age", "name", "past_lives"], kitty_class.public_instance_methods(false)
     end

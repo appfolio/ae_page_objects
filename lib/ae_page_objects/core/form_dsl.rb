@@ -18,11 +18,11 @@ module AePageObjects
         options      = options.dup
         options[:as] = klass
       
-        node(form_name, options)
+        element(form_name, options)
         
-        klass.node_attributes.each do |node_name, node_klazz|
+        klass.element_attributes.each do |node_name, node_klazz|
           delegate node_name, :to => form_name
-          self.node_attributes[node_name] = node_klazz
+          self.element_attributes[node_name] = node_klazz
         end
       end
     end

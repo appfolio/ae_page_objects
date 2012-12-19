@@ -8,7 +8,7 @@ module AePageObjects
         include InternalHelpers
         
         # Defines a collection of elements. Blocks are evaluated on the item class used by the 
-        # collection. nodes() defines a method on the class that returns an instance of a collection
+        # collection. collection() defines a method on the class that returns an instance of a collection
         # class which contains instances of the collection's item class.
         #
         # Supported signatures are described below. 
@@ -16,7 +16,7 @@ module AePageObjects
         # ------------------------------------------------        
         # Signature: (:as, no :contains, no block)
         # 
-        #     nodes :addresses, :as => AddressList
+        #     collection :addresses, :as => AddressList
         # 
         #   Collection class: AddressList
         #   Item class:       AddressList.item_class
@@ -24,7 +24,7 @@ module AePageObjects
         # ------------------------------------------------
         # Signature: (no :as, :contains, no block)
         # 
-        #     nodes :addresses, :contains => Address
+        #     collection :addresses, :contains => Address
         # 
         #   Collection class: one-off subclass of ::AePageObjects::Collection  
         #   Item class:       Address
@@ -32,7 +32,7 @@ module AePageObjects
         # ------------------------------------------------
         # Signature: (:as, :contains, no block)
         # 
-        #     nodes :addresses, :as => AddressList, :contains => ExtendedAddress
+        #     collection :addresses, :as => AddressList, :contains => ExtendedAddress
         # 
         #   Collection class: one-off subclass ofAddressList
         #   Item class:       ExtendedAddress
@@ -40,9 +40,9 @@ module AePageObjects
         # ------------------------------------------------
         # Signature: (no :as, no :contains, block)
         # 
-        #     nodes :addresses do
-        #       node :city
-        #       node :state
+        #     collection :addresses do
+        #       element :city
+        #       element :state
         #     end
         #   
         #   Collection class: one-off subclass of ::AePageObjects::Collection
@@ -54,9 +54,9 @@ module AePageObjects
         # ------------------------------------------------
         # Signature: (:as, no :contains, block)
         # 
-        #   nodes :addresses, :as => AddressList do
-        #     node :longitude
-        #     node :latitude
+        #   collection :addresses, :as => AddressList do
+        #     element :longitude
+        #     element :latitude
         #   end
         # 
         #   Collection class: one-off subclass of AddressList  
@@ -68,12 +68,12 @@ module AePageObjects
         # ------------------------------------------------
         # Signature: (no :as, :contains, block)
         # 
-        #   nodes :addresses, :contains => Address do
-        #     node :longitude
-        #     node :latitude
+        #   collection :addresses, :contains => Address do
+        #     element :longitude
+        #     element :latitude
         #   end
         # 
-        #   Collection class: one-off subclass of ::AePageObjects::Collection  
+        #   Collection class: one-off subclass of ::AePageObjects::Collection  element
         #   Item class:       one-off subclass of Address
         #   Methods defined on item class:
         #     longitude()  # -> instance of ::AePageObjects::Element
@@ -82,9 +82,9 @@ module AePageObjects
         # ------------------------------------------------
         # Signature: (:as, :contains, block)
         # 
-        #   nodes :addresses, :as => AddressList, :contains => Address do
-        #     node :longitude
-        #     node :latitude
+        #   collection :addresses, :as => AddressList, :contains => Address do
+        #     element :longitude
+        #     element :latitude
         #   end
         # 
         #   Collection class: one-off subclass of AddressList
@@ -93,7 +93,7 @@ module AePageObjects
         #     longitude()  # -> instance of ::AePageObjects::Element
         #     latitude() # -> instance of ::AePageObjects::Element
         # 
-        def nodes(name, options = {}, &block)
+        def collection(name, options = {}, &block)
           options ||= {}
           
           # only a collection class is specified or the item class
@@ -101,7 +101,7 @@ module AePageObjects
           if block.blank? && options[:as] && ( 
               options[:contains].blank? || options[:as].item_class == options[:contains] 
             )
-            return node(name, options)
+            return element(name, options)
           end
           
           options = options.dup
@@ -118,7 +118,7 @@ module AePageObjects
           item_class = options.delete(:contains) || options[:as].item_class
           if block.present?
             item_class = item_class.new_subclass(&block).tap do |new_item_class|
-              new_item_class.node_attributes.merge!(item_class.node_attributes)
+              new_item_class.element_attributes.merge!(item_class.element_attributes)
             end
           end
           
@@ -127,7 +127,7 @@ module AePageObjects
           options[:as] = options[:as].new_subclass
           options[:as].item_class = item_class
         
-          node(name, options)
+          element(name, options)
         end
       end
     end

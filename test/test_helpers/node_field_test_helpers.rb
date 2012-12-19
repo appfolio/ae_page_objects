@@ -13,7 +13,7 @@ module NodeFieldTestHelpers
   end
   
   def verify_field(parent, field_method, expected_field_type, expected_field_page)
-    assert_equal expected_field_type, parent.class.node_attributes[field_method]
+    assert_equal expected_field_type, parent.class.element_attributes[field_method]
   
     parent.send(field_method).tap do |field|
       assert field.is_a?(expected_field_type)
@@ -25,7 +25,7 @@ module NodeFieldTestHelpers
   end
   
   def verify_field_with_intermediary_class(parent, field_method, expected_field_type, expected_field_page)
-    assert_equal expected_field_type, parent.class.node_attributes[field_method].superclass
+    assert_equal expected_field_type, parent.class.element_attributes[field_method].superclass
   
     parent.send(field_method).tap do |field|
       assert field.is_a?(AePageObjects::ElementProxy)
