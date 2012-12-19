@@ -10,13 +10,13 @@ module AePageObjects
       def form_for(form_name, options = {}, &block)
         options ||= {}
         
-        raise ArgumentError, ":as option not supported" if options[:as]
+        raise ArgumentError, ":is option not supported" if options[:is]
         raise ArgumentError, "Block required." unless block.present?
         
         klass = ::AePageObjects::Form.new_subclass(&block)
         
         options      = options.dup
-        options[:as] = klass
+        options[:is] = klass
       
         element(form_name, options)
         

@@ -31,7 +31,7 @@ module AePageObjects
       private
       
         def field_klass(options)
-          field_type = options.delete(:as)
+          field_type = options.delete(:is)
         
           if field_type.is_a? Class
             field_type

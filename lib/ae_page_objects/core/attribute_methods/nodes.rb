@@ -14,15 +14,15 @@ module AePageObjects
         # Supported signatures are described below. 
         # 
         # ------------------------------------------------        
-        # Signature: (:as, no :contains, no block)
+        # Signature: (:is, no :contains, no block)
         # 
-        #     collection :addresses, :as => AddressList
+        #     collection :addresses, :is => AddressList
         # 
         #   Collection class: AddressList
         #   Item class:       AddressList.item_class
         # 
         # ------------------------------------------------
-        # Signature: (no :as, :contains, no block)
+        # Signature: (no :is, :contains, no block)
         # 
         #     collection :addresses, :contains => Address
         # 
@@ -30,15 +30,15 @@ module AePageObjects
         #   Item class:       Address
         # 
         # ------------------------------------------------
-        # Signature: (:as, :contains, no block)
+        # Signature: (:is, :contains, no block)
         # 
-        #     collection :addresses, :as => AddressList, :contains => ExtendedAddress
+        #     collection :addresses, :is => AddressList, :contains => ExtendedAddress
         # 
         #   Collection class: one-off subclass ofAddressList
         #   Item class:       ExtendedAddress
         #   
         # ------------------------------------------------
-        # Signature: (no :as, no :contains, block)
+        # Signature: (no :is, no :contains, block)
         # 
         #     collection :addresses do
         #       element :city
@@ -52,9 +52,9 @@ module AePageObjects
         #     state() # -> instance of ::AePageObjects::Element
         # 
         # ------------------------------------------------
-        # Signature: (:as, no :contains, block)
+        # Signature: (:is, no :contains, block)
         # 
-        #   collection :addresses, :as => AddressList do
+        #   collection :addresses, :is => AddressList do
         #     element :longitude
         #     element :latitude
         #   end
@@ -66,7 +66,7 @@ module AePageObjects
         #     latitude() # -> instance of ::AePageObjects::Element
         # 
         # ------------------------------------------------
-        # Signature: (no :as, :contains, block)
+        # Signature: (no :is, :contains, block)
         # 
         #   collection :addresses, :contains => Address do
         #     element :longitude
@@ -80,9 +80,9 @@ module AePageObjects
         #     latitude() # -> instance of ::AePageObjects::Element
         # 
         # ------------------------------------------------
-        # Signature: (:as, :contains, block)
+        # Signature: (:is, :contains, block)
         # 
-        #   collection :addresses, :as => AddressList, :contains => Address do
+        #   collection :addresses, :is => AddressList, :contains => Address do
         #     element :longitude
         #     element :latitude
         #   end
@@ -98,8 +98,8 @@ module AePageObjects
           
           # only a collection class is specified or the item class
           # specified matches the collection's item class
-          if block.blank? && options[:as] && ( 
-              options[:contains].blank? || options[:as].item_class == options[:contains] 
+          if block.blank? && options[:is] && ( 
+              options[:contains].blank? || options[:is].item_class == options[:contains] 
             )
             return element(name, options)
           end
@@ -107,15 +107,15 @@ module AePageObjects
           options = options.dup
           
           # create/get the collection class
-          if options[:as]
-            ensure_class_for_param!(:as, options[:as], ::AePageObjects::Collection)
+          if options[:is]
+            ensure_class_for_param!(:is, options[:is], ::AePageObjects::Collection)
           else
-            options[:as] = ::AePageObjects::Collection
+            options[:is] = ::AePageObjects::Collection
             
             raise ArgumentError, "Must specify either a block or a :contains option." if options[:contains].blank? && block.blank?
           end
           
-          item_class = options.delete(:contains) || options[:as].item_class
+          item_class = options.delete(:contains) || options[:is].item_class
           if block.present?
             item_class = item_class.new_subclass(&block).tap do |new_item_class|
               new_item_class.element_attributes.merge!(item_class.element_attributes)
@@ -124,8 +124,8 @@ module AePageObjects
           
           # since we are creating a new item class, we need to subclass the collection class
           # so we can parameterize the collection class with an item class
-          options[:as] = options[:as].new_subclass
-          options[:as].item_class = item_class
+          options[:is] = options[:is].new_subclass
+          options[:is].item_class = item_class
         
           element(name, options)
         end

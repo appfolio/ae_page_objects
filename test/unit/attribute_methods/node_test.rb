@@ -90,7 +90,7 @@ module AePageObjects
     
       def test_element__as__select
         kitty = ::AePageObjects::Document.new_subclass do
-          element :kind, :as => ::AePageObjects::Select
+          element :kind, :is => ::AePageObjects::Select
         end
         
         assert kitty.method_defined?(:kind)
@@ -106,7 +106,7 @@ module AePageObjects
     
       def test_element__as__checkbox
         kitty = ::AePageObjects::Document.new_subclass do
-          element :kind, :as => ::AePageObjects::Checkbox
+          element :kind, :is => ::AePageObjects::Checkbox
         end
         
         assert kitty.method_defined?(:kind)
@@ -124,7 +124,7 @@ module AePageObjects
         special_widget = ::AePageObjects::Element.new_subclass
       
         kitty = ::AePageObjects::Document.new_subclass do
-          element :kind, :as => special_widget
+          element :kind, :is => special_widget
         end
         
         assert kitty.method_defined?(:kind)
@@ -143,7 +143,7 @@ module AePageObjects
         special_widget = ::AePageObjects::Element.new_subclass
       
         kitty = ::AePageObjects::Document.new_subclass do
-          element :kind, :as => special_widget, :locator => "As If!"
+          element :kind, :is => special_widget, :locator => "As If!"
         end
         
         assert kitty.method_defined?(:kind)

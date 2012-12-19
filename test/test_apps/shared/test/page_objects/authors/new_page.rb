@@ -32,7 +32,7 @@ module TestApp
         
         element :missing, :locator => "#does_not_exist"
         
-        element :rating, :as => Rating, :locator => "#rating"
+        element :rating, :is => Rating, :locator => "#rating"
         
         element :nested_rating, :locator => "#rating" do
           element :star, :locator => ".star"

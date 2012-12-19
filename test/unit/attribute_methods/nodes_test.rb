@@ -41,7 +41,7 @@ module AePageObjects
         previous_owners_class.item_class = ::AePageObjects::Element.new_subclass
         
         kitty = ::AePageObjects::Document.new_subclass do
-          collection :previous_owners, :as => previous_owners_class do
+          collection :previous_owners, :is => previous_owners_class do
             element :owner_name
             element :kitty_name_during_ownership
           end
@@ -82,7 +82,7 @@ module AePageObjects
         previous_owners_class.item_class = previous_owner_class
         
         kitty = ::AePageObjects::Document.new_subclass do
-          collection :previous_owners, :as => previous_owners_class
+          collection :previous_owners, :is => previous_owners_class
         end
         
         verify_kitty_structure(kitty)
@@ -119,7 +119,7 @@ module AePageObjects
         previous_owners_class.item_class = previous_owner_class
         
         kitty = ::AePageObjects::Document.new_subclass do
-          collection :previous_owners, :as => previous_owners_class, :contains => previous_owner_class
+          collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class
         end
         
         verify_kitty_structure(kitty)
@@ -155,7 +155,7 @@ module AePageObjects
         previous_owners_class = ::AePageObjects::Collection.new_subclass
         
         kitty = ::AePageObjects::Document.new_subclass do
-          collection :previous_owners, :as => previous_owners_class, :contains => previous_owner_class
+          collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class
         end
         
         verify_kitty_structure(kitty)
@@ -265,7 +265,7 @@ module AePageObjects
         previous_owners_class.item_class = previous_owners_class_item_class
         
         kitty = ::AePageObjects::Document.new_subclass do
-          collection :previous_owners, :as => previous_owners_class, :contains => previous_owner_class do
+          collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class do
             element :kitty_name_during_ownership
           end
         end

@@ -65,7 +65,7 @@ module AePageObjects
         end
         
         kitty = ::AePageObjects::Document.new_subclass do
-          element :tail, :as => tail_class
+          element :tail, :is => tail_class
         end
         
         verify_kitty_structure(kitty)
@@ -100,7 +100,7 @@ module AePageObjects
       def test_nested_element__as_block_mutual_exclusion
         assert_raises ArgumentError do
           kitty = ::AePageObjects::Document.new_subclass do
-            element :tail, :as => :select do
+            element :tail, :is => :select do
               raise "You will never see this"
             end
           end
