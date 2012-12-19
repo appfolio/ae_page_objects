@@ -27,13 +27,15 @@ module AePageObjects
       end
     end
     
-    def dom_id
-      if parent.respond_to?(:dom_id)
-        "#{parent.dom_id}_#{__name__}"
+    def __full_name__
+      if parent.respond_to?(:__full_name__)
+        "#{parent.__full_name__}_#{__name__}"
       else
         __name__
       end
     end
+    
+    alias_method :full_name, :__full_name__
     
     def __name__
       @name || default_name
@@ -67,7 +69,7 @@ module AePageObjects
     end
     
     def default_locator
-      @default_locator ||= Proc.new { "##{dom_id}" }
+      @default_locator ||= Proc.new { "##{__full_name__}" }
     end
     
     def scoped_node

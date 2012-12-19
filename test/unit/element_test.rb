@@ -16,7 +16,7 @@ module AePageObjects
       
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
-      assert_equal "tiger", kitty.dom_id
+      assert_equal "tiger", kitty.full_name
       assert_equal "tiger", kitty.name
       assert kitty.using_default_locator?
     end
@@ -34,7 +34,7 @@ module AePageObjects
       
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
-      assert_equal "jonka", kitty.dom_id
+      assert_equal "jonka", kitty.full_name
       assert_equal "jonka", kitty.name
       assert kitty.using_default_locator?
     end
@@ -52,7 +52,7 @@ module AePageObjects
       
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
-      assert_equal "tiger", kitty.dom_id
+      assert_equal "tiger", kitty.full_name
       assert_equal "tiger", kitty.name
       assert_false kitty.using_default_locator?
     end

@@ -7,7 +7,7 @@ module AePageObjects
       proxy = new_proxy
       assert proxy.respond_to?(:class)
       assert proxy.respond_to?(:presence)
-      assert proxy.respond_to?(:dom_id)
+      assert proxy.respond_to?(:__full_name__)
       assert_false proxy.respond_to?(:whiz_bang!)
     end
         

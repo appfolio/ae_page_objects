@@ -8,7 +8,7 @@ module NodeFieldTestHelpers
     end
     
     assert_equal expected.default_name, value.default_name
-    assert_equal expected.dom_id, value.dom_id
+    assert_equal expected.__full_name__, value.__full_name__
     assert_equal expected.__name__, value.__name__
   end
   
