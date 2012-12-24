@@ -27,23 +27,22 @@ module AePageObjects
     autoload :FormFor,            'ae_page_objects/core/dsl/form_for'
   end
   
-  module Methods
-    autoload :Node, 'ae_page_objects/methods/node'
+  module Concerns
+    autoload :LoadEnsuring,     'ae_page_objects/concerns/load_ensuring'
+    autoload :Staleable,        'ae_page_objects/concerns/staleable'
+    autoload :Visitable,        'ae_page_objects/concerns/visitable'
   end
   
   autoload :Node,              'ae_page_objects/node'
   autoload :Document,          'ae_page_objects/document'
   autoload :Element,           'ae_page_objects/element'
   autoload :ElementProxy,      'ae_page_objects/element_proxy'
-  autoload :HasOne,            'ae_page_objects/has_one'
-  autoload :Collection,        'ae_page_objects/collection'
-  autoload :Form,              'ae_page_objects/form'
-  autoload :Select,            'ae_page_objects/select'
-  autoload :Checkbox,          'ae_page_objects/checkbox'
   
-  autoload :LoadEnsuring,     'ae_page_objects/load_ensuring'
-  autoload :Staleable,        'ae_page_objects/staleable'
-  autoload :Visitable,        'ae_page_objects/visitable'
+  autoload :HasOne,            'ae_page_objects/elements/has_one'
+  autoload :Collection,        'ae_page_objects/elements/collection'
+  autoload :Form,              'ae_page_objects/elements/form'
+  autoload :Select,            'ae_page_objects/elements/select'
+  autoload :Checkbox,          'ae_page_objects/elements/checkbox'  
 end
 
 ActiveSupport::Dependencies.extend AePageObjects::DependenciesHook
