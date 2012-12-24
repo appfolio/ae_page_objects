@@ -4,11 +4,11 @@ module AePageObjects
   module AttributeMethods
     class NodesTest < ActiveSupport::TestCase
     
-      def test_nodes__no_as__no_contains__block
+      def test_collection__no_as__no_contains__block
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners do 
-            node :owner_name
-            node :kitty_name_during_ownership
+          collection :previous_owners do 
+            element :owner_name
+            element :kitty_name_during_ownership
           end
         end
         
@@ -36,14 +36,14 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_nodes__as__no_contains__block
+      def test_collection__as__no_contains__block
         previous_owners_class = ::AePageObjects::Collection.new_subclass
         previous_owners_class.item_class = ::AePageObjects::Element.new_subclass
         
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :as => previous_owners_class do
-            node :owner_name
-            node :kitty_name_during_ownership
+          collection :previous_owners, :is => previous_owners_class do
+            element :owner_name
+            element :kitty_name_during_ownership
           end
         end
         
@@ -72,17 +72,17 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
-      def test_nodes__as__no_contains__no_block
+      def test_collection__as__no_contains__no_block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
-          node :owner_name
-          node :kitty_name_during_ownership
+          element :owner_name
+          element :kitty_name_during_ownership
         end
         
         previous_owners_class = ::AePageObjects::Collection.new_subclass
         previous_owners_class.item_class = previous_owner_class
         
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :as => previous_owners_class
+          collection :previous_owners, :is => previous_owners_class
         end
         
         verify_kitty_structure(kitty)
@@ -109,17 +109,17 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_nodes__as__contains__no_block__same_item_class
+      def test_collection__as__contains__no_block__same_item_class
         previous_owner_class = ::AePageObjects::Element.new_subclass do
-          node :owner_name
-          node :kitty_name_during_ownership
+          element :owner_name
+          element :kitty_name_during_ownership
         end
         
         previous_owners_class = ::AePageObjects::Collection.new_subclass
         previous_owners_class.item_class = previous_owner_class
         
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :as => previous_owners_class, :contains => previous_owner_class
+          collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class
         end
         
         verify_kitty_structure(kitty)
@@ -146,16 +146,16 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
-      def test_nodes__as__contains__no_block__different_item_class
+      def test_collection__as__contains__no_block__different_item_class
         previous_owner_class = ::AePageObjects::Element.new_subclass do
-          node :owner_name
-          node :kitty_name_during_ownership
+          element :owner_name
+          element :kitty_name_during_ownership
         end
         
         previous_owners_class = ::AePageObjects::Collection.new_subclass
         
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :as => previous_owners_class, :contains => previous_owner_class
+          collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class
         end
         
         verify_kitty_structure(kitty)
@@ -182,14 +182,14 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_nodes__no_as__contains__no_block
+      def test_collection__no_as__contains__no_block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
-          node :owner_name
-          node :kitty_name_during_ownership
+          element :owner_name
+          element :kitty_name_during_ownership
         end
         
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :contains => previous_owner_class
+          collection :previous_owners, :contains => previous_owner_class
         end
         
         verify_kitty_structure(kitty)
@@ -216,14 +216,14 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_nodes__no_as__contains__block
+      def test_collection__no_as__contains__block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
-          node :owner_name
+          element :owner_name
         end
         
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :contains => previous_owner_class do
-            node :kitty_name_during_ownership
+          collection :previous_owners, :contains => previous_owner_class do
+            element :kitty_name_during_ownership
           end
         end
         
@@ -254,9 +254,9 @@ module AePageObjects
         raise e      
       end
       
-      def test_nodes__as__contains__block
+      def test_collection__as__contains__block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
-          node :owner_name
+          element :owner_name
         end
         
         previous_owners_class_item_class = ::AePageObjects::Element.new_subclass
@@ -265,8 +265,8 @@ module AePageObjects
         previous_owners_class.item_class = previous_owners_class_item_class
         
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :as => previous_owners_class, :contains => previous_owner_class do
-            node :kitty_name_during_ownership
+          collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class do
+            element :kitty_name_during_ownership
           end
         end
         
@@ -297,20 +297,20 @@ module AePageObjects
         raise e      
       end
       
-      def test_nodes__no_as__no_contains__no_block
+      def test_collection__no_as__no_contains__no_block
         assert_raises ArgumentError do
           kitty = ::AePageObjects::Document.new_subclass do
-            nodes :previous_owners
+            collection :previous_owners
             raise "You will never see this"
           end
         end
       end
 
-      def test_nodes__locator
+      def test_collection__locator
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :locator => "whatever you want, baby" do 
-            node :owner_name
-            node :kitty_name_during_ownership, :locator => "Kitty Name"
+          collection :previous_owners, :locator => "whatever you want, baby" do 
+            element :owner_name
+            element :kitty_name_during_ownership, :locator => "Kitty Name"
           end
         end
         
@@ -338,11 +338,11 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
-      def test_nested_node__locator__proc
+      def test_nested_element__locator__proc
         kitty = ::AePageObjects::Document.new_subclass do
-          nodes :previous_owners, :locator => Proc.new { parent.page_local_context } do 
-            node :owner_name
-            node :kitty_name_during_ownership, :locator => Proc.new { parent.page_local_context }
+          collection :previous_owners, :locator => Proc.new { parent.page_local_context } do 
+            element :owner_name
+            element :kitty_name_during_ownership, :locator => Proc.new { parent.page_local_context }
           end
         end
 
@@ -378,8 +378,8 @@ module AePageObjects
     private
     
       def verify_kitty_structure(kitty_class)
-        assert_sets_equal [:previous_owners], kitty_class.node_attributes.keys
-        assert_sets_equal [:owner_name, :kitty_name_during_ownership], kitty_class.node_attributes[:previous_owners].item_class.node_attributes.keys
+        assert_sets_equal [:previous_owners], kitty_class.element_attributes.keys
+        assert_sets_equal [:owner_name, :kitty_name_during_ownership], kitty_class.element_attributes[:previous_owners].item_class.element_attributes.keys
       end
     end
   end

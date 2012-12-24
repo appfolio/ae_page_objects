@@ -3,7 +3,5 @@ module AePageObjects
     include Methods::Node
     include LoadEnsuring
     include Staleable
-
-    alias :page :node
   end
 end

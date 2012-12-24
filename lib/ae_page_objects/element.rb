@@ -1,12 +1,12 @@
 module AePageObjects
   class Element < Node
-    attr_reader :parent, :page_object_name
+    attr_reader :parent, :default_name
     
     def initialize(parent, name, options_or_locator = {})
-      @parent           = parent
-      @page_object_name = name.to_s
-      @locator          = nil
-      @dom_name         = nil
+      @parent       = parent
+      @default_name = name.to_s
+      @locator      = nil
+      @name         = nil
       
       configure(parse_options(options_or_locator))
       
@@ -27,21 +27,25 @@ module AePageObjects
       end
     end
     
-    def dom_id
-      if parent.respond_to?(:dom_id)
-        "#{parent.dom_id}_#{dom_name}"
+    def __full_name__
+      if parent.respond_to?(:__full_name__)
+        "#{parent.__full_name__}_#{__name__}"
       else
-        dom_name
+        __name__
       end
     end
     
-    def dom_name
-      @dom_name || default_dom_name
+    alias_method :full_name, :__full_name__
+    
+    def __name__
+      @name || default_name
     end
+    
+    alias_method :name, :__name__
     
     def to_s
       super.tap do |str|
-        str << "#dom_name:<#{dom_name}>"
+        str << "#name:<#{__name__}>"
       end
     end
     
@@ -50,13 +54,10 @@ module AePageObjects
     end
     
   private
-    def default_dom_name
-      page_object_name
-    end
   
     def configure(options)
-      @locator  = options.delete(:locator)
-      @dom_name = options.delete(:using).try(:to_s)
+      @locator = options.delete(:locator)
+      @name    = options.delete(:name).try(:to_s)
     end
   
     def parse_options(options_or_locator)
@@ -68,7 +69,7 @@ module AePageObjects
     end
     
     def default_locator
-      @default_locator ||= Proc.new { "##{dom_id}" }
+      @default_locator ||= Proc.new { "##{__full_name__}" }
     end
     
     def scoped_node

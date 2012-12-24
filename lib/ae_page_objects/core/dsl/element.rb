@@ -1,6 +1,6 @@
 module AePageObjects
-  module AttributeMethods
-    module Node
+  module Dsl
+    module Element
       extend ActiveSupport::Concern
     
       module ClassMethods
@@ -8,18 +8,18 @@ module AePageObjects
         def inherited(subclass)
           subclass.class_eval do
             class << self
-              def node_attributes
-                @node_attributes ||= {}
+              def element_attributes
+                @element_attributes ||= {}
               end
             end
           end
         end
         
-        def node(name, options = {})
+        def element(name, options = {})
           options = options.dup
           klass   = field_klass(options)
           
-          self.node_attributes[name.to_sym] = klass
+          self.element_attributes[name.to_sym] = klass
         
           define_method name do |&block|
             ElementProxy.new(klass, self, name, options, &block)
@@ -31,7 +31,7 @@ module AePageObjects
       private
       
         def field_klass(options)
-          field_type = options.delete(:as)
+          field_type = options.delete(:is)
         
           if field_type.is_a? Class
             field_type

@@ -20,15 +20,13 @@ module AePageObjects
   autoload :RakeRouter,           'ae_page_objects/core/rake_router'
   autoload :InternalHelpers,      'ae_page_objects/core/internal_helpers'
   
-  module AttributeMethods
-    autoload :NodeAccessor,       'ae_page_objects/core/attribute_methods/node_accessor'
-    autoload :Node,               'ae_page_objects/core/attribute_methods/node'
-    autoload :NestedNode,         'ae_page_objects/core/attribute_methods/nested_node'
-    autoload :Nodes,              'ae_page_objects/core/attribute_methods/nodes'
+  module Dsl
+    autoload :Element,            'ae_page_objects/core/dsl/element'
+    autoload :NestedElement,      'ae_page_objects/core/dsl/nested_element'
+    autoload :Collection,         'ae_page_objects/core/dsl/collection'
+    autoload :FormFor,            'ae_page_objects/core/dsl/form_for'
   end
   
-  autoload :FormDsl,              'ae_page_objects/core/form_dsl'
-
   module Methods
     autoload :Node, 'ae_page_objects/methods/node'
   end
