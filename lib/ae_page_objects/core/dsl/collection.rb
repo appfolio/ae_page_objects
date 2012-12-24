@@ -1,48 +1,48 @@
 module AePageObjects
-  module AttributeMethods
-    module Nodes
+  module Dsl
+    module Collection
       extend ActiveSupport::Concern
-      include Node
+      include Dsl::Element
     
       module ClassMethods
         include InternalHelpers
         
         # Defines a collection of elements. Blocks are evaluated on the item class used by the 
-        # collection. nodes() defines a method on the class that returns an instance of a collection
+        # collection. collection() defines a method on the class that returns an instance of a collection
         # class which contains instances of the collection's item class.
         #
         # Supported signatures are described below. 
         # 
         # ------------------------------------------------        
-        # Signature: (:as, no :contains, no block)
+        # Signature: (:is, no :contains, no block)
         # 
-        #     nodes :addresses, :as => AddressList
+        #     collection :addresses, :is => AddressList
         # 
         #   Collection class: AddressList
         #   Item class:       AddressList.item_class
         # 
         # ------------------------------------------------
-        # Signature: (no :as, :contains, no block)
+        # Signature: (no :is, :contains, no block)
         # 
-        #     nodes :addresses, :contains => Address
+        #     collection :addresses, :contains => Address
         # 
         #   Collection class: one-off subclass of ::AePageObjects::Collection  
         #   Item class:       Address
         # 
         # ------------------------------------------------
-        # Signature: (:as, :contains, no block)
+        # Signature: (:is, :contains, no block)
         # 
-        #     nodes :addresses, :as => AddressList, :contains => ExtendedAddress
+        #     collection :addresses, :is => AddressList, :contains => ExtendedAddress
         # 
         #   Collection class: one-off subclass ofAddressList
         #   Item class:       ExtendedAddress
         #   
         # ------------------------------------------------
-        # Signature: (no :as, no :contains, block)
+        # Signature: (no :is, no :contains, block)
         # 
-        #     nodes :addresses do
-        #       node :city
-        #       node :state
+        #     collection :addresses do
+        #       element :city
+        #       element :state
         #     end
         #   
         #   Collection class: one-off subclass of ::AePageObjects::Collection
@@ -52,11 +52,11 @@ module AePageObjects
         #     state() # -> instance of ::AePageObjects::Element
         # 
         # ------------------------------------------------
-        # Signature: (:as, no :contains, block)
+        # Signature: (:is, no :contains, block)
         # 
-        #   nodes :addresses, :as => AddressList do
-        #     node :longitude
-        #     node :latitude
+        #   collection :addresses, :is => AddressList do
+        #     element :longitude
+        #     element :latitude
         #   end
         # 
         #   Collection class: one-off subclass of AddressList  
@@ -66,25 +66,25 @@ module AePageObjects
         #     latitude() # -> instance of ::AePageObjects::Element
         # 
         # ------------------------------------------------
-        # Signature: (no :as, :contains, block)
+        # Signature: (no :is, :contains, block)
         # 
-        #   nodes :addresses, :contains => Address do
-        #     node :longitude
-        #     node :latitude
+        #   collection :addresses, :contains => Address do
+        #     element :longitude
+        #     element :latitude
         #   end
         # 
-        #   Collection class: one-off subclass of ::AePageObjects::Collection  
+        #   Collection class: one-off subclass of ::AePageObjects::Collection  element
         #   Item class:       one-off subclass of Address
         #   Methods defined on item class:
         #     longitude()  # -> instance of ::AePageObjects::Element
         #     latitude() # -> instance of ::AePageObjects::Element
         # 
         # ------------------------------------------------
-        # Signature: (:as, :contains, block)
+        # Signature: (:is, :contains, block)
         # 
-        #   nodes :addresses, :as => AddressList, :contains => Address do
-        #     node :longitude
-        #     node :latitude
+        #   collection :addresses, :is => AddressList, :contains => Address do
+        #     element :longitude
+        #     element :latitude
         #   end
         # 
         #   Collection class: one-off subclass of AddressList
@@ -93,41 +93,41 @@ module AePageObjects
         #     longitude()  # -> instance of ::AePageObjects::Element
         #     latitude() # -> instance of ::AePageObjects::Element
         # 
-        def nodes(name, options = {}, &block)
+        def collection(name, options = {}, &block)
           options ||= {}
           
           # only a collection class is specified or the item class
           # specified matches the collection's item class
-          if block.blank? && options[:as] && ( 
-              options[:contains].blank? || options[:as].item_class == options[:contains] 
+          if block.blank? && options[:is] && ( 
+              options[:contains].blank? || options[:is].item_class == options[:contains] 
             )
-            return node(name, options)
+            return element(name, options)
           end
           
           options = options.dup
           
           # create/get the collection class
-          if options[:as]
-            ensure_class_for_param!(:as, options[:as], ::AePageObjects::Collection)
+          if options[:is]
+            ensure_class_for_param!(:is, options[:is], ::AePageObjects::Collection)
           else
-            options[:as] = ::AePageObjects::Collection
+            options[:is] = ::AePageObjects::Collection
             
             raise ArgumentError, "Must specify either a block or a :contains option." if options[:contains].blank? && block.blank?
           end
           
-          item_class = options.delete(:contains) || options[:as].item_class
+          item_class = options.delete(:contains) || options[:is].item_class
           if block.present?
             item_class = item_class.new_subclass(&block).tap do |new_item_class|
-              new_item_class.node_attributes.merge!(item_class.node_attributes)
+              new_item_class.element_attributes.merge!(item_class.element_attributes)
             end
           end
           
           # since we are creating a new item class, we need to subclass the collection class
           # so we can parameterize the collection class with an item class
-          options[:as] = options[:as].new_subclass
-          options[:as].item_class = item_class
+          options[:is] = options[:is].new_subclass
+          options[:is].item_class = item_class
         
-          node(name, options)
+          element(name, options)
         end
       end
     end

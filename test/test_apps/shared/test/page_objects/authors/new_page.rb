@@ -6,16 +6,16 @@ module TestApp
         path :new_author
 
         form_for "author" do
-          field :first_name
-          field :last_name
+          element :first_name
+          element :last_name
           
-          has_many :books, :locator => "#author_books", :row_xpath => ".//*[contains(@class, 'some-books-fool')]//*[contains(@class,'row') and not(contains(@style,'display'))]" do
-            field :title
+          collection :books, :locator => "#author_books", :row_xpath => ".//*[contains(@class, 'some-books-fool')]//*[contains(@class,'row') and not(contains(@style,'display'))]" do
+            element :title
           end
         end
         
         class Rating < ::AePageObjects::Element
-          node :star, :locator => ".star"
+          element :star, :locator => ".star"
           
           def show_star
             find(".show_star").click
@@ -30,12 +30,12 @@ module TestApp
           end
         end
         
-        node :missing, :locator => "#does_not_exist"
+        element :missing, :locator => "#does_not_exist"
         
-        node :rating, :as => Rating, :locator => "#rating"
+        element :rating, :is => Rating, :locator => "#rating"
         
-        node :nested_rating, :locator => "#rating" do
-          node :star, :locator => ".star"
+        element :nested_rating, :locator => "#rating" do
+          element :star, :locator => ".star"
           
           def show_star
             find(".show_star").click

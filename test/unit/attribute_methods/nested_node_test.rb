@@ -4,13 +4,13 @@ module AePageObjects
   module AttributeMethods
     class NestedNodeTest < ActiveSupport::TestCase
     
-      def test_nested_node__block
+      def test_nested_element__block
         kitty = ::AePageObjects::Document.new_subclass do
-          node :tail do
-            node :color
-            node :size do
-              node :length
-              node :width
+          element :tail do
+            element :color
+            element :size do
+              element :length
+              element :width
               
               def grow!
                 "Growing!"
@@ -51,12 +51,12 @@ module AePageObjects
         raise e
       end
       
-      def test_nested_node__as
+      def test_nested_element__as
         tail_class = ::AePageObjects::HasOne.new_subclass do
-          node :color
-          node :size do
-            node :length
-            node :width
+          element :color
+          element :size do
+            element :length
+            element :width
             
             def grow!
               "Growing!"
@@ -65,7 +65,7 @@ module AePageObjects
         end
         
         kitty = ::AePageObjects::Document.new_subclass do
-          node :tail, :as => tail_class
+          element :tail, :is => tail_class
         end
         
         verify_kitty_structure(kitty)
@@ -97,23 +97,23 @@ module AePageObjects
         verify_field(size, :width, ::AePageObjects::Element, width_page_object)
       end
     
-      def test_nested_node__as_block_mutual_exclusion
+      def test_nested_element__as_block_mutual_exclusion
         assert_raises ArgumentError do
           kitty = ::AePageObjects::Document.new_subclass do
-            node :tail, :as => :select do
+            element :tail, :is => :select do
               raise "You will never see this"
             end
           end
         end
       end
 
-      def test_nested_node__locator
+      def test_nested_element__locator
         kitty = ::AePageObjects::Document.new_subclass do
-          node :tail, :locator => "what ever you want, baby" do
-            node :color
-            node :size, :locator => "Size" do
-              node :length
-              node :width, :locator => "Fatness"
+          element :tail, :locator => "what ever you want, baby" do
+            element :color
+            element :size, :locator => "Size" do
+              element :length
+              element :width, :locator => "Fatness"
               
               def grow!
                 "Growing!"
@@ -151,13 +151,13 @@ module AePageObjects
         verify_field(size, :width, ::AePageObjects::Element, width_page_object)
       end
           
-      def test_nested_node__locator__proc
+      def test_nested_element__locator__proc
         kitty = ::AePageObjects::Document.new_subclass do
-          node :tail  do
-            node :color
-            node :size do
-              node :length
-              node :width, :locator => Proc.new { parent.page_local_context }
+          element :tail  do
+            element :color
+            element :size do
+              element :length
+              element :width, :locator => Proc.new { parent.page_local_context }
               
               def grow!
                 "Growing!"
@@ -200,11 +200,11 @@ module AePageObjects
     private
     
       def verify_kitty_structure(kitty_class)
-        assert_sets_equal [:tail], kitty_class.node_attributes.keys
-        assert_sets_equal [:color, :size], kitty_class.node_attributes[:tail].node_attributes.keys
+        assert_sets_equal [:tail], kitty_class.element_attributes.keys
+        assert_sets_equal [:color, :size], kitty_class.element_attributes[:tail].element_attributes.keys
         
-        size_class = kitty_class.node_attributes[:tail].node_attributes[:size]
-        assert_sets_equal [:length, :width], size_class.node_attributes.keys
+        size_class = kitty_class.element_attributes[:tail].element_attributes[:size]
+        assert_sets_equal [:length, :width], size_class.element_attributes.keys
         assert_include size_class.instance_methods(false), "grow!"
       end
     end

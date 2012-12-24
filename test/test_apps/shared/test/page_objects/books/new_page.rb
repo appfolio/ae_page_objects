@@ -10,14 +10,14 @@ module TestApp
         end
       
         form_for "book" do
-          field :title
+          element :title
           
-          has_one :index, :locator => "#book_index" do
-            field :pages
+          element :index, :locator => "#book_index" do
+            element :pages
           end
           
-          has_one :author do
-            field :first_name
+          element :author do
+            element :first_name
           end
         end
       end
