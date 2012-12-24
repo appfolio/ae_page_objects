@@ -1,6 +1,6 @@
 module AePageObjects
   class Document < Node
-    include Visitable
+    include Concerns::Visitable
     
     def document
       self
