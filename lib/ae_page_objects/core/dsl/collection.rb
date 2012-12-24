@@ -1,8 +1,8 @@
 module AePageObjects
-  module AttributeMethods
-    module Nodes
+  module Dsl
+    module Collection
       extend ActiveSupport::Concern
-      include Node
+      include Dsl::Element
     
       module ClassMethods
         include InternalHelpers

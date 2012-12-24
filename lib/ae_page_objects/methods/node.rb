@@ -3,11 +3,10 @@ module AePageObjects
     module Node
       extend ActiveSupport::Concern
     
-      include AttributeMethods::Node
-      include AttributeMethods::NestedNode
-      include AttributeMethods::Nodes
-
-      include FormDsl
+      include Dsl::Element
+      include Dsl::NestedElement
+      include Dsl::Collection
+      include Dsl::FormFor
       
       def initialize(capybara_node = Capybara.current_session)
         @node = capybara_node

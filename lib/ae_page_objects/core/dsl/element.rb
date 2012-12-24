@@ -1,6 +1,6 @@
 module AePageObjects
-  module AttributeMethods
-    module Node
+  module Dsl
+    module Element
       extend ActiveSupport::Concern
     
       module ClassMethods

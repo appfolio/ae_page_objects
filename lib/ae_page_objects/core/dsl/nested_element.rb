@@ -1,8 +1,8 @@
 module AePageObjects
-  module AttributeMethods
-    module NestedNode
+  module Dsl
+    module NestedElement
       extend ActiveSupport::Concern
-      include Node
+      include Dsl::Element
     
       module ClassMethods
         
