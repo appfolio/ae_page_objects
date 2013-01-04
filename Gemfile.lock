@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ae_page_objects (0.0.1.beta.0)
+    ae_page_objects (0.0.1.beta.1)
       activesupport (>= 3.0.0)
       capybara (~> 1.1)
       railties (>= 3.0.0)
@@ -44,7 +44,7 @@ GEM
     hike (1.2.1)
     i18n (0.6.1)
     journey (1.0.4)
-    json (1.7.5)
+    json (1.7.6)
     libwebsocket (0.1.5)
       addressable
     mime-types (1.19)
