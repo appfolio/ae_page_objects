@@ -153,7 +153,7 @@ module AePageObjects
       past_lives_item_class = kitty_class.element_attributes[:kitty].element_attributes[:past_lives].item_class
       assert_sets_equal [:died_at], past_lives_item_class.element_attributes.keys
       
-      assert_sets_equal ["kitty", "owner", "age", "name", "past_lives"], kitty_class.public_instance_methods(false)
+      assert_sets_equal ["kitty", "owner", "age", "name", "past_lives"].map(&:to_sym), kitty_class.public_instance_methods(false).map(&:to_sym)
     end
   end
 end

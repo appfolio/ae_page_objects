@@ -1,5 +1,7 @@
 ENV['RAILS_ENV'] = 'test'
 
+$LOAD_PATH << File.join(File.dirname(__FILE__), '..')
+
 require "config/environment"
 
 # Run the migrations

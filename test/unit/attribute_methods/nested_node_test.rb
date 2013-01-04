@@ -205,7 +205,7 @@ module AePageObjects
         
         size_class = kitty_class.element_attributes[:tail].element_attributes[:size]
         assert_sets_equal [:length, :width], size_class.element_attributes.keys
-        assert_include size_class.instance_methods(false), "grow!"
+        assert_include size_class.instance_methods(false).map(&:to_sym), "grow!".to_sym
       end
     end
   end
