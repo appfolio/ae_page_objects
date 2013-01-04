@@ -3,4 +3,5 @@ test/test_apps/**/log
 *.sqlite3
 pkg
 .idea
+Gemfile.lock
 
