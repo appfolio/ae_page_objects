@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors                   = ["Donnie Tognazzini"]
   s.date                      = "2012-11-21"
   s.description               = "Capybara Page Objects pattern"
-  s.email                     = ["don_tog@yahoo.com", "andrew.mutz@appfolio.com"]
+  s.email                     = ["engineering@appfolio.com"]
 
   s.homepage                  = "http://github.com/appfolio/ae_page_objects"
   s.licenses                  = ["MIT"]
