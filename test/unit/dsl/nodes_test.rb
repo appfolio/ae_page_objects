@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  module AttributeMethods
+  module Dsl
     class NodesTest < ActiveSupport::TestCase
     
       def test_collection__no_as__no_contains__block
@@ -18,7 +18,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
       
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
       
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -28,11 +28,11 @@ module AePageObjects
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
         
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
         
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
@@ -53,7 +53,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -64,11 +64,11 @@ module AePageObjects
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -91,7 +91,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -101,11 +101,11 @@ module AePageObjects
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
@@ -128,7 +128,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -138,11 +138,11 @@ module AePageObjects
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -164,7 +164,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -174,11 +174,11 @@ module AePageObjects
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
@@ -198,7 +198,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -208,11 +208,11 @@ module AePageObjects
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
@@ -233,7 +233,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -243,11 +243,11 @@ module AePageObjects
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       rescue => e
         puts e.backtrace.join("\n")
@@ -276,7 +276,7 @@ module AePageObjects
         jon = kitty.new(document_stub)
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners_attributes").returns(previous_owners_page_object)
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -286,11 +286,11 @@ module AePageObjects
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       rescue => e
         puts e.backtrace.join("\n")
@@ -330,7 +330,7 @@ module AePageObjects
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
         
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
         
         kitty_name_during_ownership_page_object = mock
@@ -364,7 +364,7 @@ module AePageObjects
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = mock
-        first_owner_page_object.expects(:find).with("#previous_owners_attributes_0_owner_name").returns(owner_name_page_object)
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
         verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock

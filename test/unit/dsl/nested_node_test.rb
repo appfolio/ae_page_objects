@@ -1,14 +1,14 @@
 require 'unit_helper'
 
 module AePageObjects
-  module AttributeMethods
+  module Dsl
     class NestedNodeTest < ActiveSupport::TestCase
     
       def test_nested_element__block
         kitty = ::AePageObjects::Document.new_subclass do
-          element :tail do
+          element :tail, :name => "tail_attributes" do
             element :color
-            element :size do
+            element :size, :name => "size_attributes" do
               element :length
               element :width
               
@@ -27,7 +27,7 @@ module AePageObjects
         tail_page_object = mock
         document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
       
-        tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::HasOne, tail_page_object)
+        tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::Element, tail_page_object)
 
         color_page_object = mock
         tail_page_object.expects(:find).with("#tail_attributes_color").returns(color_page_object)
@@ -35,7 +35,7 @@ module AePageObjects
         
         size_page_object = mock
         tail_page_object.expects(:find).with("#tail_attributes_size_attributes").returns(size_page_object)
-        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::HasOne, size_page_object)
+        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::Element, size_page_object)
         
         assert_equal "Growing!", size.grow!
         
@@ -51,10 +51,10 @@ module AePageObjects
         raise e
       end
       
-      def test_nested_element__as
-        tail_class = ::AePageObjects::HasOne.new_subclass do
+      def test_nested_element__is
+        tail_class = ::AePageObjects::Element.new_subclass do
           element :color
-          element :size do
+          element :size, :name => "size_attributes" do
             element :length
             element :width
             
@@ -65,7 +65,7 @@ module AePageObjects
         end
         
         kitty = ::AePageObjects::Document.new_subclass do
-          element :tail, :is => tail_class
+          element :tail, :is => tail_class, :name => 'tail_attributes'
         end
         
         verify_kitty_structure(kitty)
@@ -84,7 +84,7 @@ module AePageObjects
         
         size_page_object = mock
         tail_page_object.expects(:find).with("#tail_attributes_size_attributes").returns(size_page_object)
-        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::HasOne, size_page_object)
+        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::Element, size_page_object)
         
         assert_equal "Growing!", size.grow!
         
@@ -109,9 +109,9 @@ module AePageObjects
 
       def test_nested_element__locator
         kitty = ::AePageObjects::Document.new_subclass do
-          element :tail, :locator => "what ever you want, baby" do
+          element :tail, :locator => "what ever you want, baby", :name => 'tail_attributes' do
             element :color
-            element :size, :locator => "Size" do
+            element :size, :locator => "Size", :name => 'size_attributes' do
               element :length
               element :width, :locator => "Fatness"
               
@@ -130,7 +130,7 @@ module AePageObjects
         tail_page_object = mock
         document_stub.expects(:find).with("what ever you want, baby").returns(tail_page_object)
       
-        tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::HasOne, tail_page_object)
+        tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::Element, tail_page_object)
 
         color_page_object = mock
         tail_page_object.expects(:find).with("#tail_attributes_color").returns(color_page_object)
@@ -138,7 +138,7 @@ module AePageObjects
         
         size_page_object = mock
         tail_page_object.expects(:find).with("Size").returns(size_page_object)
-        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::HasOne, size_page_object)
+        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::Element, size_page_object)
         
         assert_equal "Growing!", size.grow!
         
@@ -153,9 +153,9 @@ module AePageObjects
           
       def test_nested_element__locator__proc
         kitty = ::AePageObjects::Document.new_subclass do
-          element :tail  do
+          element :tail, :name => 'tail_attributes' do
             element :color
-            element :size do
+            element :size, :name => 'size_attributes' do
               element :length
               element :width, :locator => Proc.new { parent.page_local_context }
               
@@ -174,7 +174,7 @@ module AePageObjects
         tail_page_object = mock
         document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
       
-        tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::HasOne, tail_page_object)
+        tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::Element, tail_page_object)
 
         color_page_object = mock
         tail_page_object.expects(:find).with("#tail_attributes_color").returns(color_page_object)
@@ -182,7 +182,7 @@ module AePageObjects
         
         size_page_object = mock
         tail_page_object.expects(:find).with("#tail_attributes_size_attributes").returns(size_page_object)
-        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::HasOne, size_page_object)
+        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::Element, size_page_object)
         
         assert_equal "Growing!", size.grow!
       

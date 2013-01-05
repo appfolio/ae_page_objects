@@ -1,5 +1,5 @@
 module AePageObjects
-  class Collection < HasOne
+  class Collection < Element
     class_attribute :item_class, :instance_writer => false
     self.item_class = Element
 

@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  module AttributeMethods
+  module Dsl
     class NodeTest < ActiveSupport::TestCase
     
       def test_element__basic

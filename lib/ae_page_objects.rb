@@ -38,7 +38,6 @@ module AePageObjects
   autoload :Element,           'ae_page_objects/element'
   autoload :ElementProxy,      'ae_page_objects/element_proxy'
   
-  autoload :HasOne,            'ae_page_objects/elements/has_one'
   autoload :Collection,        'ae_page_objects/elements/collection'
   autoload :Form,              'ae_page_objects/elements/form'
   autoload :Select,            'ae_page_objects/elements/select'
