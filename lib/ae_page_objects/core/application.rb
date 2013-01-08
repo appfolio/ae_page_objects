@@ -3,9 +3,11 @@ module AePageObjects
     include AePageObjects::Singleton
       
     class << self
-      private :new
+      attr_accessor :called_from, :current_document
+      
+      protected :called_from=
 
-      attr_accessor :called_from
+      private :new
 
       delegate :initialize!, :to => :instance
       delegate :config,      :to => :instance
@@ -36,6 +38,11 @@ module AePageObjects
         end
 
         nil
+      end
+      
+      def current_document=(document)
+        @current_document.send(:stale!) if @current_document
+        @current_document = document
       end
     end
 
