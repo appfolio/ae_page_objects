@@ -250,14 +250,50 @@ module AePageObjects
         verify_field(size, :width, ::AePageObjects::Element, width_page_object)
       end
 
-      def test_nested_element__is_block_mutual_exclusion
-        assert_raises ArgumentError do
-          kitty = ::AePageObjects::Document.new_subclass do
-            element :tail, :is => ::AePageObjects::Select do
-              raise "You will never see this"
+      def test_nested_element__is__block
+        tail_base_class = ::AePageObjects::Element.new_subclass
+        
+        kitty = ::AePageObjects::Document.new_subclass do
+          element :tail, :name => "tail_attributes", :is => tail_base_class do
+            element :color
+            element :size, :name => "size_attributes" do
+              element :length
+              element :width
+
+              def grow!
+                "Growing!"
+              end
             end
           end
         end
+
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        tail_page_object = mock
+        document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
+
+        tail = verify_field_with_intermediary_class(jon, :tail, tail_base_class, tail_page_object)
+
+        color_page_object = mock
+        tail_page_object.expects(:find).with("#tail_attributes_color").returns(color_page_object)
+        verify_field(tail, :color, ::AePageObjects::Element, color_page_object)
+
+        size_page_object = mock
+        tail_page_object.expects(:find).with("#tail_attributes_size_attributes").returns(size_page_object)
+        size = verify_field_with_intermediary_class(tail, :size, ::AePageObjects::Element, size_page_object)
+
+        assert_equal "Growing!", size.grow!
+
+        length_page_object = mock
+        size_page_object.expects(:find).with("#tail_attributes_size_attributes_length").returns(length_page_object)
+        verify_field(size, :length, ::AePageObjects::Element, length_page_object)
+
+        width_page_object = mock
+        size_page_object.expects(:find).with("#tail_attributes_size_attributes_width").returns(width_page_object)
+        verify_field(size, :width, ::AePageObjects::Element, width_page_object)
       end
 
       def test_nested_element__locator
