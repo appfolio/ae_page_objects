@@ -4,8 +4,10 @@ module AePageObjects
     
     def initialize
       super(Capybara.current_session)
-    end
 
+      AePageObjects::Application.current_document = self
+    end
+    
     def document
       self
     end

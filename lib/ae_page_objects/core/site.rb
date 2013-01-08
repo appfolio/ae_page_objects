@@ -4,6 +4,7 @@ module AePageObjects
 
     class << self
       private :new
+      attr_accessor :current_document
 
       def initialize!
         instance.initialize!
@@ -34,6 +35,11 @@ module AePageObjects
         end
 
         nil
+      end
+      
+      def current_document=(document)
+        @current_document.send(:stale!) if @current_document
+        @current_document = document
       end
     end
 
