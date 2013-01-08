@@ -2,9 +2,9 @@ require 'unit_helper'
 
 module AePageObjects
   module Dsl
-    class NodesTest < ActiveSupport::TestCase
+    class CollectionTest < ActiveSupport::TestCase
     
-      def test_collection__no_as__no_contains__block
+      def test_collection__no_is__no_contains__block
         kitty = ::AePageObjects::Document.new_subclass do
           collection :previous_owners do 
             element :owner_name
@@ -36,7 +36,7 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_collection__as__no_contains__block
+      def test_collection__is__no_contains__block
         previous_owners_class = ::AePageObjects::Collection.new_subclass
         previous_owners_class.item_class = ::AePageObjects::Element.new_subclass
         
@@ -72,7 +72,7 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
-      def test_collection__as__no_contains__no_block
+      def test_collection__is__no_contains__no_block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
           element :owner_name
           element :kitty_name_during_ownership
@@ -109,7 +109,7 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_collection__as__contains__no_block__same_item_class
+      def test_collection__is__contains__no_block__same_item_class
         previous_owner_class = ::AePageObjects::Element.new_subclass do
           element :owner_name
           element :kitty_name_during_ownership
@@ -146,7 +146,7 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
-      def test_collection__as__contains__no_block__different_item_class
+      def test_collection__is__contains__no_block__different_item_class
         previous_owner_class = ::AePageObjects::Element.new_subclass do
           element :owner_name
           element :kitty_name_during_ownership
@@ -182,7 +182,7 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_collection__no_as__contains__no_block
+      def test_collection__no_is__contains__no_block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
           element :owner_name
           element :kitty_name_during_ownership
@@ -216,7 +216,7 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
       
-      def test_collection__no_as__contains__block
+      def test_collection__no_is__contains__block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
           element :owner_name
         end
@@ -254,7 +254,7 @@ module AePageObjects
         raise e      
       end
       
-      def test_collection__as__contains__block
+      def test_collection__is__contains__block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
           element :owner_name
         end
@@ -297,7 +297,7 @@ module AePageObjects
         raise e      
       end
       
-      def test_collection__no_as__no_contains__no_block
+      def test_collection__no_is__no_contains__no_block
         assert_raises ArgumentError do
           kitty = ::AePageObjects::Document.new_subclass do
             collection :previous_owners

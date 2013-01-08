@@ -15,9 +15,11 @@ module AePageObjects
           end
         end
         
-        def element(name, options = {})
-          options = options.dup
-          klass   = field_klass(options)
+        def element(name, options = {}, &block)
+          raise ArgumentError, ":is option and block not supported together" if options[:is].present? && block_given?
+          
+          options = options.dup 
+          klass   = field_klass(options, &block)
           
           self.element_attributes[name.to_sym] = klass
         
@@ -30,13 +32,11 @@ module AePageObjects
       
       private
       
-        def field_klass(options)
-          field_type = options.delete(:is)
-        
-          if field_type.is_a? Class
-            field_type
+        def field_klass(options, &block)
+          if block_given?
+            ::AePageObjects::Element.new_subclass(&block)
           else
-            ::AePageObjects::Element
+            options.delete(:is) || ::AePageObjects::Element
           end
         end
       end

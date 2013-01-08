@@ -22,7 +22,6 @@ module AePageObjects
   
   module Dsl
     autoload :Element,            'ae_page_objects/core/dsl/element'
-    autoload :NestedElement,      'ae_page_objects/core/dsl/nested_element'
     autoload :Collection,         'ae_page_objects/core/dsl/collection'
     autoload :FormFor,            'ae_page_objects/core/dsl/form_for'
   end
