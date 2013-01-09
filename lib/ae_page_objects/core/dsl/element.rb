@@ -15,9 +15,9 @@ module AePageObjects
           end
         end
         
-        def element(name, options = {})
-          options = options.dup
-          klass   = field_klass(options)
+        def element(name, options = {}, &block)
+          options = options.dup 
+          klass   = field_klass(options, &block)
           
           self.element_attributes[name.to_sym] = klass
         
@@ -30,13 +30,13 @@ module AePageObjects
       
       private
       
-        def field_klass(options)
-          field_type = options.delete(:is)
-        
-          if field_type.is_a? Class
-            field_type
+        def field_klass(options, &block)
+          klass = options.delete(:is) || ::AePageObjects::Element
+          
+          if block_given?
+            klass.new_subclass(&block)
           else
-            ::AePageObjects::Element
+            klass
           end
         end
       end
