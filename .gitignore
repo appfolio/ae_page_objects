@@ -4,4 +4,6 @@ test/test_apps/**/log
 pkg
 .idea
 Gemfile.lock
+gemfiles/*.gemfile.lock
+test/test_apps/**/Gemfile.lock
 
