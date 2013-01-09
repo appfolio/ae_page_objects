@@ -12,11 +12,11 @@ module TestApp
         form_for "book" do
           element :title
           
-          element :index, :locator => "#book_index" do
+          element :index, :name => "index_attributes", :locator => "#book_index" do
             element :pages
           end
           
-          element :author do
+          element :author, :name => "author_attributes" do
             element :first_name
           end
         end

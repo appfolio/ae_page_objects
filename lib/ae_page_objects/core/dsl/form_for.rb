@@ -19,9 +19,9 @@ module AePageObjects
       
           element(form_name, options)
         
-          klass.element_attributes.each do |node_name, node_klazz|
-            delegate node_name, :to => form_name
-            self.element_attributes[node_name] = node_klazz
+          klass.element_attributes.each do |element_name, element_klazz|
+            delegate element_name, :to => form_name
+            self.element_attributes[element_name] = element_klazz
           end
         end
       end
