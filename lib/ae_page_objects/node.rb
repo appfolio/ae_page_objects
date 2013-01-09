@@ -4,7 +4,6 @@ module AePageObjects
       extend ActiveSupport::Concern
 
       include Dsl::Element
-      include Dsl::NestedElement
       include Dsl::Collection
       include Dsl::FormFor
 

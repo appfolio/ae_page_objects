@@ -9,7 +9,10 @@ module TestApp
           element :first_name
           element :last_name
           
-          collection :books, :locator => "#author_books", :row_xpath => ".//*[contains(@class, 'some-books-fool')]//*[contains(@class,'row') and not(contains(@style,'display'))]" do
+          collection :books, 
+                     :name      => "books_attributes",
+                     :locator   => "#author_books", 
+                     :row_xpath => ".//*[contains(@class, 'some-books-fool')]//*[contains(@class,'row') and not(contains(@style,'display'))]" do
             element :title
           end
         end
@@ -34,7 +37,7 @@ module TestApp
         
         element :rating, :is => Rating, :locator => "#rating"
         
-        element :nested_rating, :locator => "#rating" do
+        element :nested_rating, :name => "nested_rating_attributes", :locator => "#rating" do
           element :star, :locator => ".star"
           
           def show_star
