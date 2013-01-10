@@ -2,6 +2,10 @@ module AePageObjects
   class Document < Node
     include Concerns::Visitable
     
+    def initialize
+      super(Capybara.current_session)
+    end
+
     def document
       self
     end

@@ -7,9 +7,11 @@ module AePageObjects
       kitty_class = ::AePageObjects::Document.new_subclass
       
       document_stub = mock
-      kitty_page = kitty_class.new(document_stub)
+      Capybara.stubs(:current_session).returns(document_stub)
+      
+      kitty_page = kitty_class.new
       assert_equal document_stub, kitty_page.node
-      assert ! kitty_page.stale?
+      assert_false kitty_page.stale?
       
       document_stub.expects(:find).with("whatever")
       kitty_page.find("whatever")
