@@ -2,6 +2,14 @@ module AePageObjects
   class Element < Node
     attr_reader :parent, :default_name
     
+    class << self
+      def new(*args)
+        super(*args).tap do |me|
+          yield me if block_given?
+        end
+      end
+    end
+    
     def initialize(parent, name, options_or_locator = {})
       @parent       = parent
       @default_name = name.to_s
