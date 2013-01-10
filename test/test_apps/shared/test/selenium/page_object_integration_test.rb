@@ -123,4 +123,39 @@ class PageObjectIntegrationTest < Selenium::TestCase
     puts e.backtrace.join("\n")
     raise e      
   end
+  
+  def test_document_tracking
+    author = TestApp::PageObjects::Authors::NewPage.visit
+    assert_false author.stale?
+    
+    visit("/books/new")
+    assert_false author.stale?
+    
+    book = TestApp::PageObjects::Books::NewPage.new
+    assert author.stale?
+    assert_false book.stale?
+    
+    author = TestApp::PageObjects::Authors::NewPage.visit
+    assert_false author.stale?
+    assert book.stale?
+
+    book = TestApp::PageObjects::Books::NewPage.visit
+    assert author.stale?
+    assert_false book.stale?
+    
+    author = TestApp::PageObjects::Authors::NewPage.visit
+    assert_false author.stale?
+    assert book.stale?
+    
+    visit("/authors/new")
+    assert_false author.stale?
+    assert book.stale?
+    
+    assert_raises AePageObjects::LoadingFailed do
+      TestApp::PageObjects::Books::NewPage.new
+    end
+    
+    assert_false author.stale?
+    assert book.stale?
+  end
 end
