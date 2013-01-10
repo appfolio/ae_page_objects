@@ -15,7 +15,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -50,7 +52,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -88,7 +92,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -125,7 +131,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -161,7 +169,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -195,7 +205,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -230,7 +242,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -273,7 +287,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
@@ -327,7 +343,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         previous_owners_page_object = mock
         document_stub.expects(:find).with("whatever you want, baby").returns(previous_owners_page_object)
@@ -359,7 +377,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
         
         jon.expects(:page_local_context).returns("hello")
 

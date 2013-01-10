@@ -24,7 +24,9 @@ module AePageObjects
       kitty_class = ::AePageObjects::Document.new_subclass
         
       document_stub = mock
-      kitty_page = kitty_class.new(document_stub)
+      Capybara.stubs(:current_session).returns(document_stub)
+
+      kitty_page = kitty_class.new
 
       document_stub.expects(:find).with(1, 2).returns("result")
       assert_equal "result", kitty_page.find(1, 2)

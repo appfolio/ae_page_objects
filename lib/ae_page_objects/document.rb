@@ -3,7 +3,7 @@ module AePageObjects
     include Concerns::Visitable
     
     def initialize
-      super
+      super(Capybara.current_session)
       
       AePageObjects::Application.current_document = self
     end

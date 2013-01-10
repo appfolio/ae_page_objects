@@ -7,7 +7,7 @@ module AePageObjects
       extend ActiveSupport::Concern
   
       def stale?
-        @stale
+        !!@stale
       end
 
       def node

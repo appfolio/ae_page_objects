@@ -12,7 +12,9 @@ module AePageObjects
         assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         kind_page_object = mock
         document_stub.expects(:find).with("#kind").returns(kind_page_object)
@@ -31,7 +33,9 @@ module AePageObjects
         assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
         
         kind_page_object = mock
         document_stub.expects(:find).with("#kind").returns(kind_page_object)
@@ -63,7 +67,9 @@ module AePageObjects
         assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         kind_page_object = mock
         document_stub.expects(:find).with("Kind Homie").returns(kind_page_object)
@@ -79,7 +85,9 @@ module AePageObjects
         assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
         jon.expects(:page_local_context).returns("hello")
       
         kind_page_object = mock
@@ -96,7 +104,9 @@ module AePageObjects
         assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         kind_page_object = mock
         document_stub.expects(:find).with("#kind").returns(kind_page_object)
@@ -112,7 +122,9 @@ module AePageObjects
         assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         kind_page_object = mock
         document_stub.expects(:find).with("#kind").returns(kind_page_object)
@@ -130,7 +142,9 @@ module AePageObjects
         assert_sets_equal [:kind], kitty.element_attributes.keys
       
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         kind_page_object = mock
         document_stub.expects(:find).with("#kind").returns(kind_page_object)
@@ -147,9 +161,11 @@ module AePageObjects
         
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
+
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
       
         kind_page_object = mock
         document_stub.expects(:find).with("As If!").returns(kind_page_object)
@@ -175,7 +191,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         tail_page_object = mock
         document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
@@ -224,7 +242,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         tail_page_object = mock
         document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
@@ -270,7 +290,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         tail_page_object = mock
         document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
@@ -314,7 +336,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         tail_page_object = mock
         document_stub.expects(:find).with("what ever you want, baby").returns(tail_page_object)
@@ -358,7 +382,9 @@ module AePageObjects
         verify_kitty_structure(kitty)
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
 
         tail_page_object = mock
         document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
