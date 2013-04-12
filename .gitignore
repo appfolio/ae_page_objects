@@ -6,4 +6,5 @@ pkg
 Gemfile.lock
 gemfiles/*.gemfile.lock
 test/test_apps/**/Gemfile.lock
+.bundle
 
