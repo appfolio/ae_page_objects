@@ -7,4 +7,4 @@ gemfile:
   - gemfiles/3.1.gemfile
   - gemfiles/3.2.gemfile
 
-script: "bundle exec rake test"
+script: "bundle exec rake test:units"
