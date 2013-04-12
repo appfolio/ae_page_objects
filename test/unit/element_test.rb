@@ -3,42 +3,56 @@ require 'unit_helper'
 module AePageObjects
   class ElementTest < ActiveSupport::TestCase
   
-    def test_new
+    def test_new__no_name_no_locator
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
       
       document_stub = mock
       pet           = pet_class.new(document_stub)
       
+      error = assert_raises ArgumentError do
+        kitty_class.new(pet)
+      end
+
+      assert_include error.message, ":name or :locator is required"
+    end
+    
+    def test_new
+      pet_class   = ::AePageObjects::Document.new_subclass
+      kitty_class = ::AePageObjects::Element.new_subclass
+
+      document_stub = mock
+      pet           = pet_class.new(document_stub)
+
       kitty_page_object = mock
       document_stub.expects(:find).with("#tiger").returns(kitty_page_object)
-      kitty = kitty_class.new(pet, :tiger)
-      
+      kitty = kitty_class.new(pet, :locator => '#tiger')
+
+      assert_equal pet, kitty.parent
+      assert_equal kitty_page_object, kitty.node
+      assert_equal nil, kitty.full_name
+      assert_equal nil, kitty.name
+      assert_false kitty.using_default_locator?
+    end
+
+    def test_new__with_name
+      pet_class   = ::AePageObjects::Document.new_subclass
+      kitty_class = ::AePageObjects::Element.new_subclass
+
+      document_stub = mock
+      pet           = pet_class.new(document_stub)
+
+      kitty_page_object = mock
+      document_stub.expects(:find).with("#tiger").returns(kitty_page_object)
+      kitty = kitty_class.new(pet, :name => 'tiger')
+
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
       assert_equal "tiger", kitty.full_name
       assert_equal "tiger", kitty.name
       assert kitty.using_default_locator?
     end
-    
-    def test_new__using
-      pet_class   = ::AePageObjects::Document.new_subclass
-      kitty_class = ::AePageObjects::Element.new_subclass
-      
-      document_stub = mock
-      pet           = pet_class.new(document_stub)
-      
-      kitty_page_object = mock
-      document_stub.expects(:find).with("#jonka").returns(kitty_page_object)
-      kitty = kitty_class.new(pet, :tiger, :name => "jonka")
-      
-      assert_equal pet, kitty.parent
-      assert_equal kitty_page_object, kitty.node
-      assert_equal "jonka", kitty.full_name
-      assert_equal "jonka", kitty.name
-      assert kitty.using_default_locator?
-    end
-    
+
     def test_new__locator
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
@@ -48,7 +62,7 @@ module AePageObjects
       
       kitty_page_object = mock
       document_stub.expects(:find).with("J 2da K").returns(kitty_page_object)
-      kitty = kitty_class.new(pet, :tiger, :locator => "J 2da K")
+      kitty = kitty_class.new(pet, :name => 'tiger', :locator => "J 2da K")
       
       assert_equal pet, kitty.parent
       assert_equal kitty_page_object, kitty.node
@@ -67,9 +81,9 @@ module AePageObjects
       
       document_stub.stubs(:find).returns(document_stub)
       
-      kitty1 = kitty_class.new(kitty_page, :tiger)
-      kitty2 = kitty_class.new(kitty1,     :tiger)
-      kitty3 = kitty_class.new(kitty2,     :tiger)
+      kitty1 = kitty_class.new(kitty_page, :name => 'tiger')
+      kitty2 = kitty_class.new(kitty1,     :name => 'tiger')
+      kitty3 = kitty_class.new(kitty2,     :name => 'tiger')
       
       assert_equal kitty_page, kitty1.parent
       assert_equal kitty1, kitty2.parent

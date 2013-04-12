@@ -1,6 +1,6 @@
 module AePageObjects
   class Element < Node
-    attr_reader :parent, :default_name
+    attr_reader :parent
     
     class << self
       def new(*args)
@@ -10,13 +10,14 @@ module AePageObjects
       end
     end
     
-    def initialize(parent, name, options_or_locator = {})
+    def initialize(parent, options_or_locator = {})
       @parent       = parent
-      @default_name = name.to_s
       @locator      = nil
       @name         = nil
       
       configure(parse_options(options_or_locator))
+
+      raise ArgumentError, ":name or :locator is required" unless @name || @locator
       
       @locator ||= default_locator
       
@@ -34,10 +35,10 @@ module AePageObjects
         node
       end
     end
-    
+
     def __full_name__
       if parent.respond_to?(:__full_name__)
-        "#{parent.__full_name__}_#{__name__}"
+        [ parent.__full_name__, __name__ ].compact.join('_')
       else
         __name__
       end
@@ -48,7 +49,7 @@ module AePageObjects
     end
 
     def __name__
-      @name || default_name
+      @name
     end
 
     def name
@@ -57,7 +58,7 @@ module AePageObjects
     
     def to_s
       super.tap do |str|
-        str << "#name:<#{__name__}>"
+        str << "@name:<#{@name}>; #@locator:<#{@locator}>"
       end
     end
     
