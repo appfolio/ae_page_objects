@@ -42,14 +42,18 @@ module AePageObjects
         __name__
       end
     end
-    
-    alias_method :full_name, :__full_name__
-    
+
+    def full_name
+      __full_name__
+    end
+
     def __name__
       @name || default_name
     end
-    
-    alias_method :name, :__name__
+
+    def name
+      __name__
+    end
     
     def to_s
       super.tap do |str|

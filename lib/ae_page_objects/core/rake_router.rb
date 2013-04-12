@@ -92,8 +92,10 @@ module AePageObjects
     
     class Param < Struct.new(:name, :optional)
       include Comparable
-      
-      alias :optional? :optional
+
+      def optional?
+        optional
+      end
       
       def <=>(other)
         name.to_s <=> other.name.to_s

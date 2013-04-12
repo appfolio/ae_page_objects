@@ -59,7 +59,10 @@ module AePageObjects
     def is_a?(type)
       type == @element_class || type == ElementProxy
     end
-    alias_method :kind_of?, :is_a?
+
+    def kind_of?(type)
+      is_a?(type)
+    end
             
     def method_missing(name, *args, &block)
       if name == "class"
