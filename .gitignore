@@ -1,10 +1,11 @@
-test/test_apps/**/tmp
-test/test_apps/**/log
+test/test_apps/**/.bundle
+test/test_apps/**/db/*.sqlite3
+test/test_apps/**/log/*.log
+test/test_apps/**/tmp/**/*
+
 *.sqlite3
 pkg
 .idea
 Gemfile.lock
-gemfiles/*.gemfile.lock
-test/test_apps/**/Gemfile.lock
 .bundle
 
