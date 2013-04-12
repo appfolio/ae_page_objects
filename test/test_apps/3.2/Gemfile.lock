@@ -90,7 +90,6 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     rake (10.0.4)
-    rcov (1.0.0)
     rdoc (3.12.2)
       json (~> 1.4)
     rubyzip (0.9.9)
@@ -123,5 +122,4 @@ DEPENDENCIES
   jquery-rails
   mocha (= 0.13.3)
   rails (= 3.2.13)
-  rcov
   sqlite3
