@@ -94,6 +94,40 @@ module AePageObjects
       assert_false proxy.visible?
     end
     
+    def test_not_visible
+      proxy = new_proxy
+      
+      stub_capybara_session_wait_until
+      
+      element_class.expect_initialize
+      element_class.any_instance.expects(:visible?).returns(false)
+      assert proxy.not_visible?
+      
+      stub_capybara_session_wait_until
+      
+      element_class.any_instance.expects(:visible?).returns(true)
+      assert ! proxy.not_visible?
+    end
+    
+    def test_not_visible__element_not_found
+      proxy = new_proxy
+      
+      stub_capybara_session_wait_until
+
+      element_class.expects(:new).raises(Capybara::ElementNotFound)
+      assert proxy.not_visible?
+    end
+    
+    def test_not_visible__timeout
+      proxy = new_proxy
+      
+      fake_session = stub
+      fake_session.expects(:wait_until).raises(Capybara::TimeoutError)
+      Capybara.stubs(:current_session).returns(fake_session)
+
+      assert !proxy.not_visible?
+    end
+    
     def test_visible__false
       proxy = new_proxy
       
@@ -103,6 +137,19 @@ module AePageObjects
     end
     
   private
+  
+    def stub_capybara_session_wait_until
+      fake_session_class = Class.new do
+        def wait_until
+          verified_called
+          yield
+        end
+      end
+    
+      fake_session = fake_session_class.new
+      fake_session.expects :verified_called
+      Capybara.stubs(:current_session).returns(fake_session)
+    end
   
     def element_class
       @element_class ||= Element.new_subclass do 

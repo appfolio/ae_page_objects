@@ -30,6 +30,16 @@ module AePageObjects
       !!presence.try(:visible?)
     end
     
+    def not_visible?
+      Capybara.current_session.wait_until do
+        Capybara.using_wait_time(0) do
+          ! visible?
+        end
+      end
+    rescue Capybara::TimeoutError
+      false  
+    end
+
     def present?
       presence.present?
     end

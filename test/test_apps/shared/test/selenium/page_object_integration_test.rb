@@ -49,18 +49,27 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_element_proxy
     author = TestApp::PageObjects::Authors::NewPage.visit
     assert author.rating.star.present?
+    assert author.rating.star.visible?
+    assert_false author.rating.star.not_present?
+    assert_false author.rating.star.not_visible?
     
     author.rating.hide_star
     assert author.rating.star.present?
     assert_false author.rating.star.visible?
+    assert_false author.rating.star.not_present?
+    assert author.rating.star.not_visible?
     
     author.rating.show_star
     assert author.rating.star.present?
     assert author.rating.star.visible?
+    assert_false author.rating.star.not_present?
+    assert_false author.rating.star.not_visible?
     
     author.rating.remove_star
     assert_false author.rating.star.present?
     assert_false author.rating.star.visible?
+    assert author.rating.star.not_present?
+    assert author.rating.star.not_visible?
   rescue => e
     puts e.backtrace.join("\n")
     raise e      
