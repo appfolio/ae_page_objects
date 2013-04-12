@@ -10,8 +10,10 @@ module AePageObjects
         self.item_class.new(self, index, [:xpath, "#{row_xpath}[#{index + 1}]"], &block)
       end
     end
-    
-    alias_method :[], :at
+
+    def [](index, &block)
+      at(index, &block)
+    end
     
     def each(&block)
       (0..(size - 1)).each do |index|
