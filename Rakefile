@@ -18,7 +18,24 @@ namespace :test do
     task :units do
       system("bundle exec rake -s appraisal test:units")
     end
-    
+
+    namespace :selenium do
+      task :install do
+        for_each_directory_of('test/test_apps/[0-9]*/**/Gemfile') do |directory|
+          gemfile_path = File.join(directory, 'Gemfile')
+          appraisal = Appraisal::Appraisal.new("name", File.join(directory, 'Gemfile'))
+
+          def appraisal.gemfile_path
+            @gemfile_path
+          end
+
+          appraisal.instance_variable_set(:@gemfile_path, gemfile_path)
+
+          appraisal.install
+        end
+      end
+    end
+
     desc "Run selenium tests on all apps."
     task :selenium do 
       if app_version = ENV['APP_VERSION'] 
@@ -34,9 +51,13 @@ end
 
 def run_test_in(directory, *tasks)
   env = "TEST=../../#{ENV['TEST']} " if ENV['TEST']
+  run_in(directory, "#{env} bundle exec rake #{tasks.join(' ')}")
+end
+
+def run_in(directory, command)
   puts '', directory, ''
   with_pruned_env('BUNDLE_GEMFILE') do
-    system("cd #{directory} && #{env} bundle exec rake #{tasks.join(' ')}")
+    system("cd #{directory} && #{command}")
   end
 end
 
