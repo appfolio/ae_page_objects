@@ -56,12 +56,6 @@ module AePageObjects
           klass.class_eval(&block) if block
           klass  
         end
-
-        def new(*args)
-          super(*args).tap do |me|
-            yield me if block_given?
-          end
-        end
       end
     end
     
