@@ -16,13 +16,15 @@ module AePageObjects
         end
         
         def element(name, options = {}, &block)
-          options = options.dup 
+          options = options.dup
+          options[:name] ||= name
+
           klass   = field_klass(options, &block)
           
           self.element_attributes[name.to_sym] = klass
         
           define_method name do |&block|
-            ElementProxy.new(klass, self, name, options, &block)
+            ElementProxy.new(klass, self, options, &block)
           end
           
           klass
