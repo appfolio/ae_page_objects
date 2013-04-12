@@ -6,9 +6,9 @@ require 'rubygems'
 
 require 'ae_page_objects'
 require 'test/unit'
-require "mocha"
+require "mocha/setup"
 
-Dir["test/test_helpers/**/*.rb"].each {|f| require f}
+Dir[File.join(File.dirname(__FILE__), 'test_helpers', '**', '*.rb')].each {|f| require f}
 
 class ActiveSupport::TestCase
   include NodeFieldTestHelpers

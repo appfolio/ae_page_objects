@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency("capybara", ["~> 1.1"])
   
   s.add_development_dependency("appraisal", "~> 0.5.1")
-  s.add_development_dependency("mocha", "= 0.9.8")
+  s.add_development_dependency("mocha", "= 0.13.3")
   s.add_development_dependency("selenium-webdriver", ">= 0")
 end
 
