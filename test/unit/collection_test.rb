@@ -13,7 +13,7 @@ module AePageObjects
       
       magazine_stub = mock
       parent.expects(:find).with("#18_holder").returns(magazine_stub)
-      magazine = clip.new(parent, "18_holder")
+      magazine = clip.new(parent, :name => "18_holder")
       
       magazine_stub.stubs(:all).with(:xpath, magazine.row_xpath).returns([])
 
@@ -40,7 +40,7 @@ module AePageObjects
       
       magazine_stub = mock
       parent.expects(:find).with("#18_holder").returns(magazine_stub)
-      magazine = clip.new(parent, "18_holder")
+      magazine = clip.new(parent, :name => "18_holder")
       
       bullet1_stub = mock
       bullet2_stub = mock

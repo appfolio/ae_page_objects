@@ -7,7 +7,7 @@ module AePageObjects
       if index >= size || index < 0
         nil
       else
-        self.item_class.new(self, index, [:xpath, "#{row_xpath}[#{index + 1}]"], &block)
+        self.item_class.new(self, :name => index, :locator => [:xpath, "#{row_xpath}[#{index + 1}]"], &block)
       end
     end
 
