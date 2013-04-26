@@ -38,19 +38,27 @@ module AePageObjects
         #   Item class:       ExtendedAddress
         #   
         # ------------------------------------------------
-        # Signature: (no :is, no :contains, block)
+        # Signature: (no :is, no :contains, no block)
         # 
+        #     collection :addresses
+        #   
+        #   Collection class: ::AePageObjects::Collection
+        #   Item class:       ::AePageObjects::Element
+        #
+        # ------------------------------------------------
+        # Signature: (no :is, no :contains, block)
+        #
         #     collection :addresses do
         #       element :city
         #       element :state
         #     end
-        #   
+        #
         #   Collection class: one-off subclass of ::AePageObjects::Collection
         #   Item class:       one-off subclass of ::AePageObjects::Element
         #   Methods defined on item class:
         #     city()  # -> instance of ::AePageObjects::Element
         #     state() # -> instance of ::AePageObjects::Element
-        # 
+        #
         # ------------------------------------------------
         # Signature: (:is, no :contains, block)
         # 
@@ -111,8 +119,6 @@ module AePageObjects
             ensure_class_for_param!(:is, options[:is], ::AePageObjects::Collection)
           else
             options[:is] = ::AePageObjects::Collection
-            
-            raise ArgumentError, "Must specify either a block or a :contains option." if options[:contains].blank? && block.blank?
           end
           
           item_class = options.delete(:contains) || options[:is].item_class
