@@ -154,7 +154,9 @@ module AePageObjects
     def element_class
       @element_class ||= Element.new_subclass do 
         def self.expect_initialize
-          any_instance.expects(:initialize).with(1, 2)
+          silence_warnings do
+            any_instance.expects(:initialize).with(1, 2)
+          end
         end
       end
     end
