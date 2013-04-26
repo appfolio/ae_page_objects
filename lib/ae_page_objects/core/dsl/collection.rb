@@ -11,37 +11,13 @@ module AePageObjects
         # collection. collection() defines a method on the class that returns an instance of a collection
         # class which contains instances of the collection's item class.
         #
-        # Supported signatures are described below. 
-        # 
-        # ------------------------------------------------        
-        # Signature: (:is, no :contains, no block)
-        # 
-        #     collection :addresses, :is => AddressList
-        # 
-        #   Collection class: AddressList
-        #   Item class:       AddressList.item_class
-        # 
-        # ------------------------------------------------
-        # Signature: (no :is, :contains, no block)
-        # 
-        #     collection :addresses, :contains => Address
-        # 
-        #   Collection class: one-off subclass of ::AePageObjects::Collection  
-        #   Item class:       Address
-        # 
-        # ------------------------------------------------
-        # Signature: (:is, :contains, no block)
-        # 
-        #     collection :addresses, :is => AddressList, :contains => ExtendedAddress
-        # 
-        #   Collection class: one-off subclass ofAddressList
-        #   Item class:       ExtendedAddress
-        #   
+        # Supported signatures are described below.
+        #
         # ------------------------------------------------
         # Signature: (no :is, no :contains, no block)
-        # 
+        #
         #     collection :addresses
-        #   
+        #
         #   Collection class: ::AePageObjects::Collection
         #   Item class:       ::AePageObjects::Element
         #
@@ -60,33 +36,57 @@ module AePageObjects
         #     state() # -> instance of ::AePageObjects::Element
         #
         # ------------------------------------------------
-        # Signature: (:is, no :contains, block)
-        # 
-        #   collection :addresses, :is => AddressList do
-        #     element :longitude
-        #     element :latitude
-        #   end
-        # 
-        #   Collection class: one-off subclass of AddressList  
-        #   Item class:       one-off subclass of AddressList.item_class
-        #   Methods defined on item class:
-        #     longitude()  # -> instance of ::AePageObjects::Element
-        #     latitude() # -> instance of ::AePageObjects::Element
-        # 
+        # Signature: (no :is, :contains, no block)
+        #
+        #     collection :addresses, :contains => Address
+        #
+        #   Collection class: one-off subclass of ::AePageObjects::Collection
+        #   Item class:       Address
+        #
         # ------------------------------------------------
         # Signature: (no :is, :contains, block)
-        # 
+        #
         #   collection :addresses, :contains => Address do
         #     element :longitude
         #     element :latitude
         #   end
-        # 
+        #
         #   Collection class: one-off subclass of ::AePageObjects::Collection  element
         #   Item class:       one-off subclass of Address
         #   Methods defined on item class:
         #     longitude()  # -> instance of ::AePageObjects::Element
         #     latitude() # -> instance of ::AePageObjects::Element
+        #
+        # ------------------------------------------------
+        # Signature: (:is, no :contains, no block)
+        #
+        #     collection :addresses, :is => AddressList
+        #
+        #   Collection class: AddressList
+        #   Item class:       AddressList.item_class
+        #
+        # ------------------------------------------------
+        # Signature: (:is, no :contains, block)
+        #
+        #   collection :addresses, :is => AddressList do
+        #     element :longitude
+        #     element :latitude
+        #   end
+        #
+        #   Collection class: one-off subclass of AddressList
+        #   Item class:       one-off subclass of AddressList.item_class
+        #   Methods defined on item class:
+        #     longitude()  # -> instance of ::AePageObjects::Element
+        #     latitude() # -> instance of ::AePageObjects::Element
+        #
+        # ------------------------------------------------
+        # Signature: (:is, :contains, no block)
         # 
+        #     collection :addresses, :is => AddressList, :contains => ExtendedAddress
+        # 
+        #   Collection class: one-off subclass ofAddressList
+        #   Item class:       ExtendedAddress
+        #   
         # ------------------------------------------------
         # Signature: (:is, :contains, block)
         # 
