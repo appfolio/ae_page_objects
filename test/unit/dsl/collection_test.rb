@@ -298,12 +298,22 @@ module AePageObjects
       end
       
       def test_collection__no_is__no_contains__no_block
-        assert_raises ArgumentError do
-          kitty = ::AePageObjects::Document.new_subclass do
-            collection :previous_owners
-            raise "You will never see this"
-          end
+        kitty = ::AePageObjects::Document.new_subclass do
+          collection :previous_owners
         end
+
+        document_stub = mock
+        jon = kitty.new(document_stub)
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+
+        first_owner_page_object = mock
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
       end
 
       def test_collection__locator

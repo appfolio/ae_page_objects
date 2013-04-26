@@ -11,24 +11,74 @@ module AePageObjects
         # collection. collection() defines a method on the class that returns an instance of a collection
         # class which contains instances of the collection's item class.
         #
-        # Supported signatures are described below. 
-        # 
-        # ------------------------------------------------        
-        # Signature: (:is, no :contains, no block)
-        # 
-        #     collection :addresses, :is => AddressList
-        # 
-        #   Collection class: AddressList
-        #   Item class:       AddressList.item_class
-        # 
+        # Supported signatures are described below.
+        #
+        # ------------------------------------------------
+        # Signature: (no :is, no :contains, no block)
+        #
+        #     collection :addresses
+        #
+        #   Collection class: ::AePageObjects::Collection
+        #   Item class:       ::AePageObjects::Element
+        #
+        # ------------------------------------------------
+        # Signature: (no :is, no :contains, block)
+        #
+        #     collection :addresses do
+        #       element :city
+        #       element :state
+        #     end
+        #
+        #   Collection class: one-off subclass of ::AePageObjects::Collection
+        #   Item class:       one-off subclass of ::AePageObjects::Element
+        #   Methods defined on item class:
+        #     city()  # -> instance of ::AePageObjects::Element
+        #     state() # -> instance of ::AePageObjects::Element
+        #
         # ------------------------------------------------
         # Signature: (no :is, :contains, no block)
-        # 
+        #
         #     collection :addresses, :contains => Address
-        # 
-        #   Collection class: one-off subclass of ::AePageObjects::Collection  
+        #
+        #   Collection class: one-off subclass of ::AePageObjects::Collection
         #   Item class:       Address
-        # 
+        #
+        # ------------------------------------------------
+        # Signature: (no :is, :contains, block)
+        #
+        #   collection :addresses, :contains => Address do
+        #     element :longitude
+        #     element :latitude
+        #   end
+        #
+        #   Collection class: one-off subclass of ::AePageObjects::Collection  element
+        #   Item class:       one-off subclass of Address
+        #   Methods defined on item class:
+        #     longitude()  # -> instance of ::AePageObjects::Element
+        #     latitude() # -> instance of ::AePageObjects::Element
+        #
+        # ------------------------------------------------
+        # Signature: (:is, no :contains, no block)
+        #
+        #     collection :addresses, :is => AddressList
+        #
+        #   Collection class: AddressList
+        #   Item class:       AddressList.item_class
+        #
+        # ------------------------------------------------
+        # Signature: (:is, no :contains, block)
+        #
+        #   collection :addresses, :is => AddressList do
+        #     element :longitude
+        #     element :latitude
+        #   end
+        #
+        #   Collection class: one-off subclass of AddressList
+        #   Item class:       one-off subclass of AddressList.item_class
+        #   Methods defined on item class:
+        #     longitude()  # -> instance of ::AePageObjects::Element
+        #     latitude() # -> instance of ::AePageObjects::Element
+        #
         # ------------------------------------------------
         # Signature: (:is, :contains, no block)
         # 
@@ -37,48 +87,6 @@ module AePageObjects
         #   Collection class: one-off subclass ofAddressList
         #   Item class:       ExtendedAddress
         #   
-        # ------------------------------------------------
-        # Signature: (no :is, no :contains, block)
-        # 
-        #     collection :addresses do
-        #       element :city
-        #       element :state
-        #     end
-        #   
-        #   Collection class: one-off subclass of ::AePageObjects::Collection
-        #   Item class:       one-off subclass of ::AePageObjects::Element
-        #   Methods defined on item class:
-        #     city()  # -> instance of ::AePageObjects::Element
-        #     state() # -> instance of ::AePageObjects::Element
-        # 
-        # ------------------------------------------------
-        # Signature: (:is, no :contains, block)
-        # 
-        #   collection :addresses, :is => AddressList do
-        #     element :longitude
-        #     element :latitude
-        #   end
-        # 
-        #   Collection class: one-off subclass of AddressList  
-        #   Item class:       one-off subclass of AddressList.item_class
-        #   Methods defined on item class:
-        #     longitude()  # -> instance of ::AePageObjects::Element
-        #     latitude() # -> instance of ::AePageObjects::Element
-        # 
-        # ------------------------------------------------
-        # Signature: (no :is, :contains, block)
-        # 
-        #   collection :addresses, :contains => Address do
-        #     element :longitude
-        #     element :latitude
-        #   end
-        # 
-        #   Collection class: one-off subclass of ::AePageObjects::Collection  element
-        #   Item class:       one-off subclass of Address
-        #   Methods defined on item class:
-        #     longitude()  # -> instance of ::AePageObjects::Element
-        #     latitude() # -> instance of ::AePageObjects::Element
-        # 
         # ------------------------------------------------
         # Signature: (:is, :contains, block)
         # 
@@ -111,8 +119,6 @@ module AePageObjects
             ensure_class_for_param!(:is, options[:is], ::AePageObjects::Collection)
           else
             options[:is] = ::AePageObjects::Collection
-            
-            raise ArgumentError, "Must specify either a block or a :contains option." if options[:contains].blank? && block.blank?
           end
           
           item_class = options.delete(:contains) || options[:is].item_class
