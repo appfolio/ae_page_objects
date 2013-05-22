@@ -3,10 +3,18 @@ require 'selenium_helper'
 class PageObjectIntegrationTest < Selenium::TestCase
   
   def test_load_ensuring
-    visit("/authors/new")
+    visit("/books/new")
     
-    assert_raises AePageObjects::LoadingFailed do
-      TestApp::PageObjects::Books::NewPage.new
+    exception = assert_raises AePageObjects::LoadingFailed do
+      TestApp::PageObjects::Authors::NewPage.new
+    end
+
+    assert_equal "TestApp::PageObjects::Authors::NewPage cannot be loaded with url '/books/new'", exception.message
+
+    visit("/authors/new")
+
+    assert_nothing_raised do
+      TestApp::PageObjects::Authors::NewPage.new
     end
   end
   
