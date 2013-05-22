@@ -32,13 +32,11 @@ module AePageObjects
       
         def can_load_from_current_url?
           return true if paths.empty?
-        
-          Capybara.current_session.wait_until do
-            url = current_url_without_params
-        
-            paths.any? do |path|
-              application.path_recognizes_url?(path, url)
-            end
+
+          url = current_url_without_params
+
+          paths.any? do |path|
+            application.path_recognizes_url?(path, url)
           end
         end
       

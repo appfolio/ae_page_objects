@@ -11,6 +11,7 @@ module AePageObjects
             return true if route.name.to_s == path.to_s
           end
         end
+        false
       end
     end
 
