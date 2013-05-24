@@ -50,6 +50,8 @@ module AePageObjects
           ! present?
         end
       end
+    rescue Capybara::TimeoutError
+      false
     end
     
     def presence

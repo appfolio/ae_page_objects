@@ -71,8 +71,17 @@ module AePageObjects
       element_class.expects(:new).raises(Capybara::ElementNotFound)
       assert_false proxy.present?
     end
-    
+
     def test_not_present
+      proxy = new_proxy
+
+      stub_capybara_session_wait_until
+
+      element_class.expect_initialize
+      assert_false proxy.not_present?
+    end
+
+    def test_not_present__element_not_found
       proxy = new_proxy
 
       stub_capybara_session_wait_until
@@ -81,15 +90,16 @@ module AePageObjects
       assert proxy.not_present?
     end
     
-    def test_not_present__element_exists
+    def test_not_present__timeout
       proxy = new_proxy
 
-      stub_capybara_session_wait_until
-      
-      element_class.expect_initialize
-      assert_false proxy.not_present?
+      fake_session = stub
+      fake_session.expects(:wait_until).raises(Capybara::TimeoutError)
+      Capybara.stubs(:current_session).returns(fake_session)
+
+      assert !proxy.not_present?
     end
-    
+
     def test_visible
       proxy = new_proxy
       
