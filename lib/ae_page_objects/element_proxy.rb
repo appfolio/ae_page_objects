@@ -44,10 +44,14 @@ module AePageObjects
       presence.present?
     end
     
-    def not_present?(timeout = 0)
-      Capybara.using_wait_time(timeout) do
-        ! present?
+    def not_present?
+      Capybara.current_session.wait_until do
+        Capybara.using_wait_time(0) do
+          ! present?
+        end
       end
+    rescue Capybara::TimeoutError
+      false
     end
     
     def presence
