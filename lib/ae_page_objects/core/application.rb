@@ -1,51 +1,51 @@
 module AePageObjects
   class Application
-    include Configurable
+    include AePageObjects::Singleton
       
     class << self
       private :new
 
+      attr_accessor :called_from
+
       delegate :initialize!, :to => :instance
+      delegate :config,      :to => :instance
 
       def inherited(application_class)
         super
+
+        application_class.called_from = begin
+          call_stack = caller.map { |p| p.sub(/:\d+.*/, '') }
+          File.dirname(call_stack.detect { |p| p !~ %r[railties[\w.-]*/lib/rails|rack[\w.-]*/lib/rack] })
+        end
+
         application_class.parent.send(:include, ConstantResolver)
+        application_class.parent.page_objects_application = application_class
       end
     end
+
+    delegate :root_path, :to => :config
 
     delegate :router, :to => :config
     delegate :path_recognizes_url?, :to => :router
     delegate :generate_path, :to => :router
-
-    def initialize
-      ActiveSupport::Dependencies.autoload_paths.unshift(*all_autoload_paths)
-
-      # Freeze so future modifications will fail rather than do nothing mysteriously
-      config.eager_load_paths.freeze
-    end
 
     def config
       @config ||= Configuration.new(self)
     end
 
     def initialize!
+      ActiveSupport::Dependencies.autoload_paths.unshift(root_path)
       eager_load!
-    end
-
-    def all_autoload_paths
-      @all_autoload_paths ||= config.eager_load_paths.uniq
     end
 
   private
 
     def eager_load!
-      config.eager_load_paths.each do |load_path|
-        matcher = /\A#{Regexp.escape(load_path)}\/(.*)\.rb\Z/
+      matcher = /\A#{Regexp.escape(root_path)}\/(.*)\.rb\Z/
 
-        Dir.glob("#{load_path}/**/*.rb").sort.each do |file|
-          dependency_name = file.sub(matcher, '\1')
-          require_dependency dependency_name
-        end
+      Dir.glob("#{root_path}/**/*.rb").sort.each do |file|
+        dependency_name = file.sub(matcher, '\1')
+        require_dependency dependency_name
       end
     end
   end

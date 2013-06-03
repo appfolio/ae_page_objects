@@ -1,10 +1,8 @@
 module AePageObjects
-  module Configurable
+  module Singleton
     extend ActiveSupport::Concern
 
     module ClassMethods
-      delegate :config, :to => :instance
-
       def instance
         @instance ||= new
       end
