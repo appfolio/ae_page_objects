@@ -1,15 +1,12 @@
 module AePageObjects
   class Configuration
-    attr_writer :router
+    attr_accessor :router, :root_path
     
     def initialize(application)
       @application = application
+      @root_path   = application.class.called_from
     end
 
-    def eager_load_paths
-      @eager_load_paths ||= ["test/page_objects"]
-    end
-    
     def router
       @router ||= ApplicationRouter.new
     end

@@ -15,7 +15,7 @@ module AePageObjects
 
     def load_missing_constant(from_mod, const_name)
       page_objects = DependenciesHook.containing_page_object_universe(from_mod)
-      page_objects && page_objects.load_missing_constant(from_mod, const_name) || super
+      page_objects && page_objects.load_missing_page_objects_constant(from_mod, const_name) || super
     end
   end
 end
