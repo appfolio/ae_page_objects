@@ -14,7 +14,7 @@ module AePageObjects
   autoload :DependenciesHook,     'ae_page_objects/core/dependencies_hook'
   autoload :Installable,          'ae_page_objects/core/installable'
   autoload :Configuration,        'ae_page_objects/core/configuration'
-  autoload :Configurable,         'ae_page_objects/core/configurable'
+  autoload :Singleton,            'ae_page_objects/core/singleton'
   autoload :Application,          'ae_page_objects/core/application'
   autoload :ApplicationRouter,    'ae_page_objects/core/application_router'
   autoload :RakeRouter,           'ae_page_objects/core/rake_router'
