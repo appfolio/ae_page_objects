@@ -5,7 +5,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_application_setup
     assert TestApp::PageObjects < AePageObjects::Universe
     assert_equal TestApp::PageObjects, TestApp::PageObjects::Application.universe
-    assert_equal TestApp::PageObjects::Application.instance, TestApp::PageObjects::Authors::NewPage.application
+    assert_equal TestApp::PageObjects::Application.instance, TestApp::PageObjects::Authors::NewPage.send(:application)
     assert_equal TestApp::PageObjects::Application, TestApp::PageObjects.page_objects_application_class
   end
 
