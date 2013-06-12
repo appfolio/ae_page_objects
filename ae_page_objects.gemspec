@@ -21,7 +21,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency("activesupport", ">= 3.0.0")
   s.add_dependency("capybara", ["~> 1.1"])
-  
+  s.add_dependency("nokogiri", ["~> 1.5.9"])
+
   s.add_development_dependency("appraisal", "~> 0.5.1")
   s.add_development_dependency("mocha", "= 0.13.3")
   s.add_development_dependency("selenium-webdriver", ">= 0")
