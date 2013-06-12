@@ -4,7 +4,7 @@ PATH
     ae_page_objects (0.1.1)
       activesupport (>= 3.0.0)
       capybara (~> 1.1)
-      nokogiri (~> 1.5)
+      nokogiri (~> 1.5.9)
 
 GEM
   remote: https://rubygems.org/
