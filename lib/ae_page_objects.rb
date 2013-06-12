@@ -10,6 +10,7 @@ require 'active_support/dependencies'
 require 'ae_page_objects/version'
 
 module AePageObjects
+  autoload :Universe,             'ae_page_objects/core/universe'
   autoload :ConstantResolver,     'ae_page_objects/core/constant_resolver'
   autoload :DependenciesHook,     'ae_page_objects/core/dependencies_hook'
   autoload :Installable,          'ae_page_objects/core/installable'

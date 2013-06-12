@@ -7,12 +7,9 @@ module AePageObjects
     end
     
     class << self
-      private
+    private
       def application
-        @application ||= begin
-          universe = AePageObjects::DependenciesHook.containing_page_object_universe(self)
-          "#{universe.name}::Application".constantize.instance
-        end
+        @application ||= AePageObjects::Application.from(self)
       end
     end
   end

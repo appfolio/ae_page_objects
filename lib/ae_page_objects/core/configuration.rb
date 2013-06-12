@@ -1,10 +1,10 @@
 module AePageObjects
   class Configuration
-    attr_accessor :router, :root_path
+    attr_accessor :router, :paths
     
     def initialize(application)
       @application = application
-      @root_path   = application.class.called_from
+      @paths       = [application.class.called_from]
     end
 
     def router
