@@ -3,37 +3,40 @@ require 'unit_helper'
 module AePageObjects
   class DependenciesHookTest < ActiveSupport::TestCase
 
-    def test_non_marked_module
+    def test_no_application
       non_marked_module = Object
+
       mod = create_test_mod
       mod.expects(:load_missing_constant_sink).with(non_marked_module, :Whatever)
+
+      Application.expects(:from).with(non_marked_module).returns(nil)
       mod.load_missing_constant(non_marked_module, :Whatever)
     end
     
     def test_marked_module__constant_found
-      marked_module = Module.new do
-        include AePageObjects::ConstantResolver
-      end
+      marked_module = Module.new
 
-      marked_module.expects(:load_missing_page_objects_constant).with(marked_module, :Whatever).returns(true)
+      application_mock = mock()
+      application_mock.expects(:resolve_constant).with(marked_module, :Whatever).returns("whatever")
+      Application.expects(:from).with(marked_module).returns(application_mock)
 
       mod = create_test_mod
       mod.expects(:load_missing_constant_sink).never
 
-      mod.load_missing_constant(marked_module, :Whatever)
+      assert_equal "whatever", mod.load_missing_constant(marked_module, :Whatever)
     end
     
     def test_marked_module__constant_not_found
-      marked_module = Module.new do
-        include AePageObjects::ConstantResolver
-      end
+      marked_module = Module.new
 
-      marked_module.expects(:load_missing_page_objects_constant).with(marked_module, :Whatever).returns(false)
+      application_mock = mock()
+      application_mock.expects(:resolve_constant).with(marked_module, :Whatever).returns(nil)
+      Application.expects(:from).with(marked_module).returns(application_mock)
 
       mod = create_test_mod
-      mod.expects(:load_missing_constant_sink).with(marked_module, :Whatever)
+      mod.expects(:load_missing_constant_sink).with(marked_module, :Whatever).returns("not_found")
 
-      mod.load_missing_constant(marked_module, :Whatever)
+      assert_equal "not_found", mod.load_missing_constant(marked_module, :Whatever)
     end
 
   protected

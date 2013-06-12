@@ -18,34 +18,64 @@ module AePageObjects
           File.dirname(call_stack.detect { |p| p !~ %r[railties[\w.-]*/lib/rails|rack[\w.-]*/lib/rack] })
         end
 
-        application_class.parent.send(:include, ConstantResolver)
-        application_class.parent.page_objects_application = application_class
+        application_class.universe.send(:include, Universe)
+        application_class.universe.page_objects_application_class = application_class
+      end
+
+      def universe
+        parent
+      end
+
+      def from(from_mod)
+        until from_mod == Object
+          if from_mod < AePageObjects::Universe
+            return from_mod.page_objects_application_class.instance
+          end
+
+          from_mod = from_mod.parent
+        end
+
+        nil
       end
     end
 
-    delegate :root_path, :to => :config
+    delegate :universe, :to => 'self.class'
 
+    delegate :paths,  :to => :config
     delegate :router, :to => :config
+
     delegate :path_recognizes_url?, :to => :router
-    delegate :generate_path, :to => :router
+    delegate :generate_path,        :to => :router
 
     def config
       @config ||= Configuration.new(self)
     end
 
     def initialize!
-      ActiveSupport::Dependencies.autoload_paths.unshift(root_path)
+      ActiveSupport::Dependencies.autoload_paths.unshift(*paths)
       eager_load!
+    end
+
+    def resolve_constant(from_mod, const_name)
+      resolver = ConstantResolver.new(self, from_mod, const_name)
+
+      resolved = nil
+      paths.each do |path|
+        break if resolved = resolver.load_constant_from_path(path)
+      end
+      resolved
     end
 
   private
 
     def eager_load!
-      matcher = /\A#{Regexp.escape(root_path)}\/(.*)\.rb\Z/
+      paths.each do |path|
+        matcher = /\A#{Regexp.escape(path)}\/(.*)\.rb\Z/
 
-      Dir.glob("#{root_path}/**/*.rb").sort.each do |file|
-        dependency_name = file.sub(matcher, '\1')
-        require_dependency dependency_name
+        Dir.glob("#{path}/**/*.rb").sort.each do |file|
+          dependency_name = file.sub(matcher, '\1')
+          require_dependency dependency_name
+        end
       end
     end
   end
