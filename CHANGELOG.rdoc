@@ -1,3 +1,13 @@
+== 0.1.2
+
+* fixed nokogiri dependency to ~>1.5.9 for ruby 1.8.7 support
+* reinstated multiple autoload paths support
+
+== 0.1.1
+
+* collapsed eagerload and autoload paths into a single path
+* reinstated using a root_path based on the path of where Application is subclassed.
+
 == 0.1.0
 
 * initial release
