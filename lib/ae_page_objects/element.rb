@@ -20,7 +20,7 @@ module AePageObjects
       raise ArgumentError, ":name or :locator is required" unless @name || @locator
       
       @locator ||= default_locator
-      
+
       super(scoped_node)
     end
     
@@ -38,7 +38,7 @@ module AePageObjects
 
     def __full_name__
       if parent.respond_to?(:__full_name__)
-        [ parent.__full_name__, __name__ ].compact.join('_')
+        [ parent.__full_name__, __name__ ].compact.presence.try(:join, '_')
       else
         __name__
       end
