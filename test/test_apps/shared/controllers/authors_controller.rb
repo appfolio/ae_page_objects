@@ -2,7 +2,7 @@ class AuthorsController < ApplicationController
   # GET /authors
   # GET /authors.json
   def index
-    @authors = Author.all
+    @authors = Author.all(:order => :last_name)
 
     respond_to do |format|
       format.html # index.html.erb

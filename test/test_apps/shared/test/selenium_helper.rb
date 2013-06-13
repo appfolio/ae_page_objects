@@ -18,11 +18,12 @@ module Selenium
   class TestCase < ActiveSupport::TestCase
     include Capybara::DSL
     include AfCruft
-    
-    # fixtures are added to ActiveSupport::TestCase when rails/test_help is required
+
+    self.use_transactional_fixtures = true
     self.use_instantiated_fixtures  = false
-    self.use_transactional_fixtures = false
-      
+
+    fixtures :all
+
     include Rails.application.routes.url_helpers
   end
 end
