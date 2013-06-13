@@ -13,4 +13,16 @@ Dir[File.join(File.dirname(__FILE__), 'test_helpers', '**', '*.rb')].each {|f| r
 class ActiveSupport::TestCase
   include NodeFieldTestHelpers
   include AfCruft
+
+  def capybara_stub
+    @capybara_stub ||= begin
+      browser_stub = stub
+      driver_stub = stub(:browser => browser_stub)
+      session_stub = stub(:driver => driver_stub)
+
+      Capybara.stubs(:current_session).returns(session_stub)
+
+      stub(:session => session_stub, :browser => browser_stub, :driver => driver_stub)
+    end
+  end
 end
