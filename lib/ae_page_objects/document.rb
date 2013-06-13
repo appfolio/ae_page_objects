@@ -1,11 +1,14 @@
 module AePageObjects
   class Document < Node
     include Concerns::Visitable
+
+    attr_reader :window
     
     def initialize
       super(Capybara.current_session)
 
-      AePageObjects::Application.current_document = self
+      @window = Window.current
+      @window.current_document = self
     end
     
     def document

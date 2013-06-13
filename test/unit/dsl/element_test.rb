@@ -10,14 +10,12 @@ module AePageObjects
 
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
 
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
         jon = kitty.new
       
         kind_page_object = mock
-        document_stub.expects(:find).with("#kind").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
       
@@ -28,14 +26,13 @@ module AePageObjects
 
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
         
         kind_page_object = mock
-        document_stub.expects(:find).with("#kind").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
 
         kind_in_block = nil
         kind = jon.kind do |kind|
@@ -59,14 +56,13 @@ module AePageObjects
         
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
       
         kind_page_object = mock
-        document_stub.expects(:find).with("Kind Homie").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("Kind Homie").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
     
@@ -77,15 +73,14 @@ module AePageObjects
         
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
         jon.expects(:page_local_context).returns("hello")
       
         kind_page_object = mock
-        document_stub.expects(:find).with("hello").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("hello").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
     
@@ -96,14 +91,13 @@ module AePageObjects
         
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
       
         kind_page_object = mock
-        document_stub.expects(:find).with("#kind").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Select, kind_page_object)
       end
     
@@ -114,14 +108,13 @@ module AePageObjects
         
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
       
         kind_page_object = mock
-        document_stub.expects(:find).with("#kind").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Checkbox, kind_page_object)
       end
     
@@ -134,14 +127,13 @@ module AePageObjects
         
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
       
         kind_page_object = mock
-        document_stub.expects(:find).with("#kind").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
       
         verify_field(jon, :kind, special_widget, kind_page_object)
       end
@@ -156,13 +148,12 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
       
         kind_page_object = mock
-        document_stub.expects(:find).with("As If!").returns(kind_page_object)
+        capybara_stub.session.expects(:find).with("As If!").returns(kind_page_object)
       
         verify_field(jon, :kind, special_widget, kind_page_object)
       end
@@ -184,13 +175,12 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         tail_page_object = mock
-        document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
+        capybara_stub.session.expects(:find).with("#tail_attributes").returns(tail_page_object)
 
         tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::Element, tail_page_object)
 
@@ -232,13 +222,12 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         tail_page_object = mock
-        document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
+        capybara_stub.session.expects(:find).with("#tail_attributes").returns(tail_page_object)
 
         tail = verify_field(jon, :tail, tail_class, tail_page_object)
 
@@ -280,13 +269,12 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         tail_page_object = mock
-        document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
+        capybara_stub.session.expects(:find).with("#tail_attributes").returns(tail_page_object)
 
         tail = verify_field_with_intermediary_class(jon, :tail, tail_base_class, tail_page_object)
 
@@ -326,13 +314,12 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         tail_page_object = mock
-        document_stub.expects(:find).with("what ever you want, baby").returns(tail_page_object)
+        capybara_stub.session.expects(:find).with("what ever you want, baby").returns(tail_page_object)
 
         tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::Element, tail_page_object)
 
@@ -372,13 +359,12 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         tail_page_object = mock
-        document_stub.expects(:find).with("#tail_attributes").returns(tail_page_object)
+        capybara_stub.session.expects(:find).with("#tail_attributes").returns(tail_page_object)
 
         tail = verify_field_with_intermediary_class(jon, :tail, ::AePageObjects::Element, tail_page_object)
 
