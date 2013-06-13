@@ -2,6 +2,12 @@ module AePageObjects
   module Singleton
     extend ActiveSupport::Concern
 
+    included do
+      class << self
+        private :new
+      end
+    end
+
     module ClassMethods
       def instance
         @instance ||= new

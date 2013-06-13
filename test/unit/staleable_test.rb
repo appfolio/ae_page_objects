@@ -5,15 +5,14 @@ module AePageObjects
   
     def test_stale
       kitty_class = ::AePageObjects::Document.new_subclass
-      
-      document_stub = mock
-      Capybara.stubs(:current_session).returns(document_stub)
+
+      capybara_stub.browser.expects(:window_handle).returns("window_handle")
       
       kitty_page = kitty_class.new
-      assert_equal document_stub, kitty_page.node
+      assert_equal capybara_stub.session, kitty_page.node
       assert_false kitty_page.stale?
-      
-      document_stub.expects(:find).with("whatever")
+
+      capybara_stub.session.expects(:find).with("whatever")
       kitty_page.find("whatever")
       
       kitty_page.send(:stale!)
