@@ -35,9 +35,6 @@ class PageObjectIntegrationTest < Selenium::TestCase
  
     assert_equal "Tushar's Dilemma", new_page.title.value
     assert_equal "132", new_page.index.pages.value
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_complex_form
@@ -56,9 +53,6 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "Pollan", new_author_page.last_name.value
     assert_equal "In Defense of Food", new_author_page.books.first.title.value
     assert_equal "The Omnivore's Dilemma", new_author_page.books.last.title.value
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_element_proxy
@@ -85,18 +79,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_false author.rating.star.visible?
     assert author.rating.star.not_present?
     assert author.rating.star.not_visible?
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_element_proxy__not_present
     author = TestApp::PageObjects::Authors::NewPage.visit
     assert_false author.missing.present?
     assert author.missing.not_present?
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_element_proxy__nested
@@ -114,9 +102,6 @@ class PageObjectIntegrationTest < Selenium::TestCase
     author.nested_rating.remove_star
     assert_false author.nested_rating.star.present?
     assert_false author.nested_rating.star.visible?
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_document_tracking
