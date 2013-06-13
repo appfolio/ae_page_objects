@@ -13,14 +13,13 @@ module AePageObjects
         end
         
         verify_kitty_structure(kitty)
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
       
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
       
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -51,13 +50,12 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -128,13 +126,12 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -167,13 +164,12 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -205,13 +201,11 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
-
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -241,13 +235,11 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
-
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -278,13 +270,12 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -320,13 +311,12 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
@@ -349,13 +339,12 @@ module AePageObjects
           collection :previous_owners
         end
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -374,14 +363,13 @@ module AePageObjects
         end
         
         verify_kitty_structure(kitty)
-      
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
       
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("whatever you want, baby").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("whatever you want, baby").returns(previous_owners_page_object)
       
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
@@ -409,15 +397,14 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
         
         jon.expects(:page_local_context).returns("hello")
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("hello").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("hello").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
         
