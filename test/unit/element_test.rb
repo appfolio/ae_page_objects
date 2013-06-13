@@ -108,7 +108,7 @@ module AePageObjects
         end
       end
 
-      capybara_stub
+      capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
       kitty_page = kitty_page_class.new
       capybara_stub.session.stubs(:find).returns(capybara_stub.session)
