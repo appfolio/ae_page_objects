@@ -98,5 +98,26 @@ module AePageObjects
       assert_equal kitty_page, kitty2.document
       assert_equal kitty_page, kitty3.document
     end
+
+    def test_full_name
+      kitty_page_class = AePageObjects::Document.new_subclass
+      kitty_class      = AePageObjects::Element.new_subclass do
+        def configure(*)
+          super
+          @name = nil
+        end
+      end
+
+      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+
+      kitty_page = kitty_page_class.new
+      capybara_stub.session.stubs(:find).returns(capybara_stub.session)
+
+      kitty1 = kitty_class.new(kitty_page, :locator => 'purr')
+      assert_nil kitty1.full_name
+
+      kitty2 = kitty_class.new(kitty1, :locator => 'purr')
+      assert_nil kitty2.full_name
+    end
   end
 end
