@@ -319,7 +319,9 @@ module AePageObjects
         end
 
         document_stub = mock
-        jon = kitty.new(document_stub)
+        Capybara.stubs(:current_session).returns(document_stub)
+        
+        jon = kitty.new
 
         previous_owners_page_object = mock
         document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
