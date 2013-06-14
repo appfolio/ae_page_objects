@@ -9,4 +9,4 @@ before_script:
   - bundle exec rake appraisal:install
   - bundle exec rake test:integration:selenium:install
 
-script: "bundle exec rake test:integration:units test:integration:selenium"
+script: "bundle exec rake"
