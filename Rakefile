@@ -17,6 +17,7 @@ namespace :test do
   namespace :integration do
     task :units do
       system("bundle exec rake -s appraisal test:units")
+      raise unless $?.exitstatus == 0
     end
 
     namespace :selenium do
