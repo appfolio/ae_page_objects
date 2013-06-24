@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors                   = ["Donnie Tognazzini"]
-  s.date                      = "2013-06-12"
+  s.date                      = "2013-06-24"
   s.description               = "Capybara Page Objects pattern"
   s.email                     = ["engineering@appfolio.com"]
 
