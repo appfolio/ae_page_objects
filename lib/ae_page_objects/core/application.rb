@@ -5,7 +5,7 @@ module AePageObjects
     class << self
       private :new
 
-      delegate :initialize!, :to => :instance
+      delegate :initialize!, :router=, :to => :instance
 
       def inherited(application_class)
         super
@@ -30,6 +30,8 @@ module AePageObjects
         nil
       end
     end
+
+    attr_writer :router
 
     delegate :universe, :to => 'self.class'
 
