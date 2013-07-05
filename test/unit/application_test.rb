@@ -50,26 +50,5 @@ module AePageObjects
       Ma.expects(:page_objects_application_class).returns(mock(:instance => application_instance))
       assert_equal application_instance, Application.from(Ma::Rk::Ed::Mod::Ule)
     end
-
-    module TestPageObjects
-      class MyApplication < AePageObjects::Application
-        config.paths << "hello"
-        config.paths << "kitty"
-
-        module KittyPalace
-        end
-      end
-    end
-
-    def test_resolve_constant
-      application = TestPageObjects::MyApplication.instance
-      assert_equal [TestPageObjects::MyApplication.called_from, "hello", "kitty"], application.paths
-
-      ConstantResolver.any_instance.expects(:load_constant_from_path).with(TestPageObjects::MyApplication.called_from).returns(nil)
-      ConstantResolver.any_instance.expects(:load_constant_from_path).with("hello").returns(nil)
-      ConstantResolver.any_instance.expects(:load_constant_from_path).with("kitty").returns("constant")
-
-      assert_equal "constant", application.resolve_constant(TestPageObjects::MyApplication::KittyPalace, :HelloKitty)
-    end
   end
 end

@@ -5,16 +5,12 @@ require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/hash/keys'
 require 'active_support/core_ext/object/try'
 require 'active_support/core_ext/class'
-require 'active_support/dependencies'
+require 'active_support/core_ext/module/introspection'
 
 require 'ae_page_objects/version'
 
 module AePageObjects
   autoload :Universe,             'ae_page_objects/core/universe'
-  autoload :ConstantResolver,     'ae_page_objects/core/constant_resolver'
-  autoload :DependenciesHook,     'ae_page_objects/core/dependencies_hook'
-  autoload :Installable,          'ae_page_objects/core/installable'
-  autoload :Configuration,        'ae_page_objects/core/configuration'
   autoload :Singleton,            'ae_page_objects/core/singleton'
   autoload :Application,          'ae_page_objects/core/application'
   autoload :ApplicationRouter,    'ae_page_objects/core/application_router'
@@ -43,8 +39,6 @@ module AePageObjects
   autoload :Select,            'ae_page_objects/elements/select'
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'  
 end
-
-ActiveSupport::Dependencies.extend AePageObjects::DependenciesHook
 
 
 
