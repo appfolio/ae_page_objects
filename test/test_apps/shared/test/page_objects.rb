@@ -1,12 +1,10 @@
 require 'ae_page_objects'
 
-module TestApp
-  module PageObjects
-    class Application < ::AePageObjects::Application
+ActiveSupport::Dependencies.autoload_paths << "test"
 
-      # TODO - add something to config.paths to ensure it works
-    end
+module PageObjects
+  class Application < ::AePageObjects::Application
   end
 end
 
-TestApp::PageObjects::Application.initialize!
+PageObjects::Application.initialize!

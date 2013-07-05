@@ -3,30 +3,30 @@ require 'selenium_helper'
 class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_application_setup
-    assert TestApp::PageObjects < AePageObjects::Universe
-    assert_equal TestApp::PageObjects, TestApp::PageObjects::Application.universe
-    assert_equal TestApp::PageObjects::Application.instance, TestApp::PageObjects::Authors::NewPage.send(:application)
-    assert_equal TestApp::PageObjects::Application, TestApp::PageObjects.page_objects_application_class
+    assert PageObjects < AePageObjects::Universe
+    assert_equal PageObjects, PageObjects::Application.universe
+    assert_equal PageObjects::Application.instance, PageObjects::Authors::NewPage.send(:application)
+    assert_equal PageObjects::Application, PageObjects.page_objects_application_class
   end
 
   def test_load_ensuring
     visit("/books/new")
     
     exception = assert_raises AePageObjects::LoadingFailed do
-      TestApp::PageObjects::Authors::NewPage.new
+      PageObjects::Authors::NewPage.new
     end
 
-    assert_equal "TestApp::PageObjects::Authors::NewPage cannot be loaded with url '/books/new'", exception.message
+    assert_equal "PageObjects::Authors::NewPage cannot be loaded with url '/books/new'", exception.message
 
     visit("/authors/new")
 
     assert_nothing_raised do
-      TestApp::PageObjects::Authors::NewPage.new
+      PageObjects::Authors::NewPage.new
     end
   end
   
   def test_simple_form
-    new_page = TestApp::PageObjects::Books::NewPage.visit
+    new_page = PageObjects::Books::NewPage.visit
     assert_equal "", new_page.title.value
     assert_equal "", new_page.index.pages.value
 
@@ -41,7 +41,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
   
   def test_complex_form
-    new_author_page = TestApp::PageObjects::Authors::NewPage.visit
+    new_author_page = PageObjects::Authors::NewPage.visit
     assert_equal "", new_author_page.first_name.value
     assert_equal "", new_author_page.last_name.value
     assert_equal "", new_author_page.books.first.title.value
@@ -62,7 +62,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
   
   def test_element_proxy
-    author = TestApp::PageObjects::Authors::NewPage.visit
+    author = PageObjects::Authors::NewPage.visit
     assert author.rating.star.present?
     assert author.rating.star.visible?
     assert_false author.rating.star.not_present?
@@ -91,7 +91,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
   
   def test_element_proxy__not_present
-    author = TestApp::PageObjects::Authors::NewPage.visit
+    author = PageObjects::Authors::NewPage.visit
     assert_false author.missing.present?
     assert author.missing.not_present?
   rescue => e
@@ -100,7 +100,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
   
   def test_element_proxy__nested
-    author = TestApp::PageObjects::Authors::NewPage.visit
+    author = PageObjects::Authors::NewPage.visit
     assert author.nested_rating.star.present?
     
     author.nested_rating.hide_star
