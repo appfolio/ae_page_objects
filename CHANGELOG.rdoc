@@ -1,3 +1,8 @@
+== 0.2.0
+
+* removed auto and eager loading support
+* set activesupport dependency to (~> 3.0)
+
 == 0.1.3
 
 * fixed bug relating to full_name traversal
