@@ -3,7 +3,6 @@ PATH
   specs:
     ae_page_objects (0.3.0)
       capybara (~> 1.1)
-      nokogiri (~> 1.5.9)
 
 GEM
   remote: https://rubygems.org/
