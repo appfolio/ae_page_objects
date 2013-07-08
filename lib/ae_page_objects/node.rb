@@ -13,15 +13,22 @@ module AePageObjects
         raise "Must implement!"
       end
 
-      delegate :current_url, :to => 'self.class'
-      delegate :current_url_without_params, :to => 'self.class'
+      def current_url
+        self.class.current_url
+      end
 
-      delegate :find,     :to => :node
-      delegate :all,      :to => :node
-      delegate :value,    :to => :node
-      delegate :set,      :to => :node
-      delegate :text,     :to => :node
-      delegate :visible?, :to => :node
+      def current_url_without_params
+        self.class.current_url_without_params
+      end
+
+      METHODS_TO_DELEGATE_TO_NODE = [:find, :all, :value, :set, :text, :visible?]
+      METHODS_TO_DELEGATE_TO_NODE.each do |m|
+        class_eval <<-RUBY
+          def #{m}(*args, &block)
+            node.send(:#{m}, *args, &block)
+          end
+        RUBY
+      end
 
     private
 

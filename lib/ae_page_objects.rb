@@ -1,7 +1,6 @@
 require 'capybara'
 require 'capybara/dsl'
 require 'active_support'
-require 'active_support/core_ext/module/delegation'
 
 require 'ae_page_objects/version'
 
