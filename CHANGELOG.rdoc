@@ -1,3 +1,8 @@
+== 0.3.0
+
+* removed activesupport dependency
+* added README
+
 == 0.2.0
 
 * removed auto and eager loading support
