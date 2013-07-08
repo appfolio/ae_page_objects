@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class ElementTest < ActiveSupport::TestCase
+  class ElementTest < Test::Unit::TestCase
   
     def test_new__no_name_no_locator
       pet_class   = ::AePageObjects::Document.new_subclass

@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module Dsl
-    class NodeTest < ActiveSupport::TestCase
+    class NodeTest < Test::Unit::TestCase
       def test_element__basic
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind

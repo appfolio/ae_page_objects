@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class CollectionTest < ActiveSupport::TestCase
+  class CollectionTest < Test::Unit::TestCase
   
     def test_empty
       bullets = ::AePageObjects::Element.new_subclass

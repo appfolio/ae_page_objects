@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class StaleableTest < ActiveSupport::TestCase
+  class StaleableTest < Test::Unit::TestCase
   
     def test_stale
       kitty_class = ::AePageObjects::Document.new_subclass

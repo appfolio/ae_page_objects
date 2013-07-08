@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class ElementProxyTest < ActiveSupport::TestCase
+  class ElementProxyTest < Test::Unit::TestCase
     
     def test_respond_to_can_find_methods_without_element_not_found
       proxy = new_proxy
