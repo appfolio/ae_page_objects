@@ -172,7 +172,7 @@ module AePageObjects
       klass.element_attributes.each do |element_name, element_klazz|
         class_eval <<-RUBY
           def #{element_name}(*args, &block)
-            #{form_namee}.#{element_name}(args, &block)
+            #{form_name}.#{element_name}(*args, &block)
           end
         RUBY
 
