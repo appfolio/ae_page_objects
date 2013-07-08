@@ -32,11 +32,11 @@ module AePageObjects
       end
       
       if route = @routes[named_route]
-        options = args.extract_options!
+        options = args.last.is_a?(Hash) ? args.pop : {}
         route.generate_path(options)
       end
     end
-    
+
   private
   
     class Path < String
