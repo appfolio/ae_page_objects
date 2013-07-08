@@ -12,6 +12,8 @@ module AePageObjects
   autoload :InternalHelpers,      'ae_page_objects/core/internal_helpers'
   autoload :Dsl,                  'ae_page_objects/core/dsl'
 
+  autoload :HashSymbolizer,       'ae_page_objects/hash_symbolizer'
+
   module Concerns
     autoload :LoadEnsuring,     'ae_page_objects/concerns/load_ensuring'
     autoload :Staleable,        'ae_page_objects/concerns/staleable'
@@ -29,7 +31,6 @@ module AePageObjects
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'  
 end
 
-require 'ae_page_objects/hash_extensions'
 require 'ae_page_objects/module_extensions'
 
 

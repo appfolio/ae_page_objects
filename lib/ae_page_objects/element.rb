@@ -82,7 +82,7 @@ module AePageObjects
   
     def parse_options(options_or_locator)
       if options_or_locator.is_a?( Hash )
-        options_or_locator.symbolize_keys
+        HashSymbolizer.new(options_or_locator).symbolize_keys
       else
         {:locator => options_or_locator}
       end
