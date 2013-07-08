@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module Dsl
-    class CollectionTest < ActiveSupport::TestCase
+    class CollectionTest < Test::Unit::TestCase
     
       def test_collection__no_is__no_contains__block
         kitty = ::AePageObjects::Document.new_subclass do

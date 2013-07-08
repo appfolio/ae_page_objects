@@ -5,7 +5,7 @@ module AePageObjects
     
     def initialize(rake_routes, mounted_prefix = '')
       @mounted_prefix = mounted_prefix || ""
-      @routes = ActiveSupport::OrderedHash.new
+      @routes = {}
       route_line_regex = /(\w+)(?:\s[A-Z]+)?\s+(\/.*)\(.:format\).*$/
       
       rake_routes.split("\n").each do |line|
@@ -32,11 +32,11 @@ module AePageObjects
       end
       
       if route = @routes[named_route]
-        options = args.extract_options!
+        options = args.last.is_a?(Hash) ? args.pop : {}
         route.generate_path(options)
       end
     end
-    
+
   private
   
     class Path < String
@@ -50,7 +50,7 @@ module AePageObjects
       end
       
       def generate(param_values)
-        param_values = param_values.symbolize_keys
+        param_values = HashSymbolizer.new(param_values).symbolize_keys
         @params.values.inject(self) do |path, param|
           param.substitute(path, param_values)
         end
@@ -142,7 +142,7 @@ module AePageObjects
       end
 
       def generate_path(options)
-        options = options.symbolize_keys
+        options = HashSymbolizer.new(options).symbolize_keys
         @path.generate(options)
       end
     end

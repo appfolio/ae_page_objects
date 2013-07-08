@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   
   s.files                     = `git ls-files -- lib`.split("\n")
 
-  s.add_dependency("activesupport", "~> 3.0")
   s.add_dependency("capybara", ["~> 1.1"])
   s.add_dependency("nokogiri", ["~> 1.5.9"])
 

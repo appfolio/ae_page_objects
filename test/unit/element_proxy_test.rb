@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class ElementProxyTest < ActiveSupport::TestCase
+  class ElementProxyTest < Test::Unit::TestCase
     
     def test_respond_to_can_find_methods_without_element_not_found
       proxy = new_proxy
@@ -188,9 +188,7 @@ module AePageObjects
     def element_class
       @element_class ||= Element.new_subclass do 
         def self.expect_initialize
-          silence_warnings do
-            any_instance.expects(:initialize).with(1, 2)
-          end
+          any_instance.expects(:initialize).with(1, 2)
         end
       end
     end

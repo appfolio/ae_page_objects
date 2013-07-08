@@ -2,7 +2,6 @@ PATH
   remote: ../../..
   specs:
     ae_page_objects (0.2.0)
-      activesupport (~> 3.0)
       capybara (~> 1.1)
       nokogiri (~> 1.5.9)
 
