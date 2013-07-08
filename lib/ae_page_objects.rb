@@ -3,8 +3,6 @@ require 'capybara/dsl'
 require 'active_support'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/hash/keys'
-require 'active_support/core_ext/object/try'
-require 'active_support/core_ext/class'
 require 'active_support/core_ext/module/introspection'
 
 require 'ae_page_objects/version'

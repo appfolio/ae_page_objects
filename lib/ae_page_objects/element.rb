@@ -95,7 +95,7 @@ module AePageObjects
     def scoped_node
       if @locator
         locator = eval_locator(@locator)
-        if locator.present?
+        if ! locator.empty?
           return parent.find(*locator)
         end
       end

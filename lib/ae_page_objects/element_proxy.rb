@@ -42,7 +42,7 @@ module AePageObjects
     end
 
     def present?
-      presence.present?
+      ! presence.nil?
     end
     
     def not_present?

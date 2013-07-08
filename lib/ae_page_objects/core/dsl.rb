@@ -126,8 +126,8 @@ module AePageObjects
 
       # only a collection class is specified or the item class
       # specified matches the collection's item class
-      if block.blank? && options[:is] && (
-      options[:contains].blank? || options[:is].item_class == options[:contains]
+      if ! block_given? && options[:is] && (
+      options[:contains].nil? || options[:is].item_class == options[:contains]
       )
         return element(name, options)
       end

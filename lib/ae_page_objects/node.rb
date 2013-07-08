@@ -26,7 +26,7 @@ module AePageObjects
     private
 
       def eval_locator(locator)
-        return unless locator
+        return [] unless locator
 
         if locator.respond_to?(:call)
           locator = instance_eval(&locator)
