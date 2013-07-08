@@ -2,8 +2,6 @@ require 'capybara'
 require 'capybara/dsl'
 require 'active_support'
 require 'active_support/core_ext/module/delegation'
-require 'active_support/core_ext/hash/keys'
-require 'active_support/core_ext/module/introspection'
 
 require 'ae_page_objects/version'
 
@@ -32,6 +30,9 @@ module AePageObjects
   autoload :Select,            'ae_page_objects/elements/select'
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'  
 end
+
+require 'ae_page_objects/hash_extensions'
+require 'ae_page_objects/module_extensions'
 
 
 
