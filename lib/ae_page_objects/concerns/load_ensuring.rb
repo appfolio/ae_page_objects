@@ -4,8 +4,7 @@ module AePageObjects
   
   module Concerns
     module LoadEnsuring
-      extend ActiveSupport::Concern
-    
+
       def initialize(*args)
         super
         ensure_loaded!

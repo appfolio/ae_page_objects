@@ -38,7 +38,12 @@ module AePageObjects
 
     def __full_name__
       if parent.respond_to?(:__full_name__)
-        [ parent.__full_name__, __name__ ].compact.presence.try(:join, '_')
+        name_parts = [ parent.__full_name__, __name__ ].compact
+        if name_parts.empty?
+          nil
+        else
+          name_parts.join('_')
+        end
       else
         __name__
       end
@@ -70,12 +75,14 @@ module AePageObjects
   
     def configure(options)
       @locator = options.delete(:locator)
-      @name    = options.delete(:name).try(:to_s)
+      @name    = options.delete(:name)
+
+      @name = @name.to_s if @name
     end
   
     def parse_options(options_or_locator)
       if options_or_locator.is_a?( Hash )
-        options_or_locator.symbolize_keys
+        HashSymbolizer.new(options_or_locator).symbolize_keys
       else
         {:locator => options_or_locator}
       end
@@ -88,7 +95,7 @@ module AePageObjects
     def scoped_node
       if @locator
         locator = eval_locator(@locator)
-        if locator.present?
+        if ! locator.empty?
           return parent.find(*locator)
         end
       end

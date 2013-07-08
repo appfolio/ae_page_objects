@@ -10,7 +10,7 @@ require "mocha/setup"
 
 Dir[File.join(File.dirname(__FILE__), 'test_helpers', '**', '*.rb')].each {|f| require f}
 
-class ActiveSupport::TestCase
+class Test::Unit::TestCase
   include NodeFieldTestHelpers
   include AfCruft
 

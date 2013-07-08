@@ -27,7 +27,8 @@ module AePageObjects
     # Provided so that visible? can be asked without
     # an explicit check for present? first.
     def visible?
-      !!presence.try(:visible?)
+      inst = presence
+      ! inst.nil? && inst.visible?
     end
     
     def not_visible?
@@ -41,7 +42,7 @@ module AePageObjects
     end
 
     def present?
-      presence.present?
+      ! presence.nil?
     end
     
     def not_present?

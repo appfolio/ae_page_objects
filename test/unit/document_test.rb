@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class DocumentTest < ActiveSupport::TestCase
+  class DocumentTest < Test::Unit::TestCase
   
     def test_page
       kitty_class = ::AePageObjects::Document.new_subclass

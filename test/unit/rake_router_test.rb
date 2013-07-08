@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class RakeRouterTest < ActiveSupport::TestCase
+  class RakeRouterTest < Test::Unit::TestCase
     
     def test_param
       assert_equal ::AePageObjects::RakeRouter::Param.new(:id, false), ::AePageObjects::RakeRouter::Param.new(:id, false)

@@ -1,11 +1,17 @@
 module AePageObjects
   class Application
-    include AePageObjects::Singleton
+    extend AePageObjects::Singleton
       
     class << self
       private :new
 
-      delegate :initialize!, :router=, :to => :instance
+      def initialize!
+        instance.initialize!
+      end
+
+      def router=(router)
+        instance.router = router
+      end
 
       def inherited(application_class)
         super
@@ -33,10 +39,17 @@ module AePageObjects
 
     attr_writer :router
 
-    delegate :universe, :to => 'self.class'
+    def universe
+      self.class.universe
+    end
 
-    delegate :path_recognizes_url?, :to => :router
-    delegate :generate_path,        :to => :router
+    def path_recognizes_url?(*args)
+      self.router.path_recognizes_url?(*args)
+    end
+
+    def generate_path(*args)
+      self.router.generate_path(*args)
+    end
 
     def router
       @router ||= ApplicationRouter.new

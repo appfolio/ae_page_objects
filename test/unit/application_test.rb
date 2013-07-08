@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class ApplicationTest < ActiveSupport::TestCase
+  class ApplicationTest < Test::Unit::TestCase
 
     def test_from__non_marked_module
       assert_nil Application.from(Object)
