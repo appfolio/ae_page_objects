@@ -16,13 +16,8 @@ module AePageObjects
   autoload :ApplicationRouter,    'ae_page_objects/core/application_router'
   autoload :RakeRouter,           'ae_page_objects/core/rake_router'
   autoload :InternalHelpers,      'ae_page_objects/core/internal_helpers'
-  
-  module Dsl
-    autoload :Element,            'ae_page_objects/core/dsl/element'
-    autoload :Collection,         'ae_page_objects/core/dsl/collection'
-    autoload :FormFor,            'ae_page_objects/core/dsl/form_for'
-  end
-  
+  autoload :Dsl,                  'ae_page_objects/core/dsl'
+
   module Concerns
     autoload :LoadEnsuring,     'ae_page_objects/concerns/load_ensuring'
     autoload :Staleable,        'ae_page_objects/concerns/staleable'
@@ -39,6 +34,7 @@ module AePageObjects
   autoload :Select,            'ae_page_objects/elements/select'
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'  
 end
+
 
 
 

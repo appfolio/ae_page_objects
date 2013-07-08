@@ -1,12 +1,6 @@
 module AePageObjects
   class Node
     module Methods
-      extend ActiveSupport::Concern
-
-      include Dsl::Element
-      include Dsl::Collection
-      include Dsl::FormFor
-
       def initialize(capybara_node = Capybara.current_session)
         @node = capybara_node
       end
@@ -40,26 +34,29 @@ module AePageObjects
 
         locator.is_a?(Array) ? locator : [locator.to_s]
       end
+    end
 
-      module ClassMethods
+    module ClassMethods
+      def current_url
+        Capybara.current_session.current_url.sub(/^https?:\/\/[^\/]*/, '')
+      end
 
-        def current_url
-          Capybara.current_session.current_url.sub(/^https?:\/\/[^\/]*/, '')
-        end
+      def current_url_without_params
+        current_url.sub(/\?.*/, '')
+      end
 
-        def current_url_without_params
-          current_url.sub(/\?.*/, '')
-        end
-
-        def new_subclass(&block)
-          klass = Class.new(self)
-          klass.class_eval(&block) if block
-          klass  
-        end
+      def new_subclass(&block)
+        klass = Class.new(self)
+        klass.class_eval(&block) if block
+        klass
       end
     end
-    
+
+    extend Dsl
+
     include Methods
+    extend  ClassMethods
+
     include Concerns::LoadEnsuring
     include Concerns::Staleable
   end
