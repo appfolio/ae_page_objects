@@ -2,7 +2,6 @@ PATH
   remote: ../../..
   specs:
     ae_page_objects (0.2.0)
-      activesupport (~> 3.0)
       capybara (~> 1.1)
       nokogiri (~> 1.5.9)
 
@@ -49,7 +48,7 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     erubis (2.6.6)
       abstract (>= 1.0.0)
-    ffi (1.8.1)
+    ffi (1.9.0)
     i18n (0.5.0)
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)

@@ -5,7 +5,7 @@ module AePageObjects
     
     def initialize(rake_routes, mounted_prefix = '')
       @mounted_prefix = mounted_prefix || ""
-      @routes = ActiveSupport::OrderedHash.new
+      @routes = {}
       route_line_regex = /(\w+)(?:\s[A-Z]+)?\s+(\/.*)\(.:format\).*$/
       
       rake_routes.split("\n").each do |line|

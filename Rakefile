@@ -15,11 +15,6 @@ namespace :test do
   end
   
   namespace :integration do
-    task :units do
-      system("bundle exec rake -s appraisal test:units")
-      raise unless $?.exitstatus == 0
-    end
-
     namespace :selenium do
       task :install do
         for_each_directory_of('test/test_apps/[0-9]*/**/Gemfile') do |directory|
@@ -76,4 +71,4 @@ end
 
 
 desc 'Default: run the unit and integration tests.'
-task :default => ['test:integration:units', 'test:integration:selenium']
+task :default => ['test:units', 'test:integration:selenium']

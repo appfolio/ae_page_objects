@@ -1,6 +1,5 @@
 require 'capybara'
 require 'capybara/dsl'
-require 'active_support'
 
 require 'ae_page_objects/version'
 
