@@ -4,8 +4,7 @@ module AePageObjects
 
   module Concerns  
     module Staleable
-      extend ActiveSupport::Concern
-  
+
       def stale?
         @stale
       end

@@ -1,25 +1,21 @@
 module AePageObjects
   module Singleton
-    extend ActiveSupport::Concern
+    def instance
+      @instance ||= new
+    end
 
-    module ClassMethods
-      def instance
-        @instance ||= new
-      end
-      
-      def respond_to?(*args)
-        super || instance.respond_to?(*args)
-      end
+    def respond_to?(*args)
+      super || instance.respond_to?(*args)
+    end
 
-      def configure(&block)
-        class_eval(&block)
-      end
+    def configure(&block)
+      class_eval(&block)
+    end
 
-    protected
+  protected
 
-      def method_missing(*args, &block)
-        instance.send(*args, &block)
-      end
+    def method_missing(*args, &block)
+      instance.send(*args, &block)
     end
   end
 end

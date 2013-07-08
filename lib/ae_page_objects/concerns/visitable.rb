@@ -4,8 +4,11 @@ module AePageObjects
   
   module Concerns
     module Visitable
-      extend ActiveSupport::Concern
-    
+
+      def self.included(target)
+        target.extend ClassMethods
+      end
+
     private
     
       def ensure_loaded!

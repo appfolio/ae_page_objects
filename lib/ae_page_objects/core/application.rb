@@ -1,6 +1,6 @@
 module AePageObjects
   class Application
-    include AePageObjects::Singleton
+    extend AePageObjects::Singleton
       
     class << self
       private :new
