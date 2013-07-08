@@ -1,7 +1,14 @@
 module AePageObjects
   class Collection < Element
-    class_attribute :item_class, :instance_writer => false
+    class << self
+      attr_accessor :item_class
+    end
+
     self.item_class = Element
+
+    def item_class
+      self.class.item_class
+    end
 
     def at(index, &block)
       if index >= size || index < 0
