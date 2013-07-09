@@ -1,0 +1,9 @@
+robert:
+  id: 1
+  first_name: "Robert"
+  last_name: "Paulson"
+
+paul:
+  id: 2
+  first_name: "Paul"
+  last_name: "Robertson"
