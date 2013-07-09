@@ -1,7 +1,7 @@
 module AePageObjects
-  class Application
+  class Site
     extend AePageObjects::Singleton
-      
+
     class << self
       private :new
 
@@ -13,11 +13,11 @@ module AePageObjects
         instance.router = router
       end
 
-      def inherited(application_class)
+      def inherited(site_class)
         super
 
-        application_class.universe.send(:include, Universe)
-        application_class.universe.page_objects_application_class = application_class
+        site_class.universe.send(:include, Universe)
+        site_class.universe.page_objects_site_class = site_class
       end
 
       def universe
@@ -27,7 +27,7 @@ module AePageObjects
       def from(from_mod)
         until from_mod == Object
           if from_mod < AePageObjects::Universe
-            return from_mod.page_objects_application_class.instance
+            return from_mod.page_objects_site_class.instance
           end
 
           from_mod = from_mod.parent
