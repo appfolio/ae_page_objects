@@ -143,4 +143,39 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_false author.stale?
     assert book.stale?
   end
+
+  def test_document_tracking__multiple_windows
+    authors_page = TestApp::PageObjects::Authors::IndexPage.visit
+    author_row = authors_page.authors.first
+    assert_equal "Robert", author_row.first_name.text
+
+    author_row.show_in_new_window
+
+    Capybara.current_session.driver.within_window(author_path(authors(:robert)))
+    robert_page_in2 = TestApp::PageObjects::Authors::ShowPage.new
+
+    assert_not_equal authors_page.window, robert_page_in2.window
+
+    authors_page2 = TestApp::PageObjects::Authors::IndexPage.visit
+    assert robert_page_in2.stale?
+
+    assert_not_equal authors_page.window, authors_page2.window
+
+    authors_page.window.switch_to
+    robert_page_in1 = author_row.show!
+    assert authors_page.stale?
+
+    authors_page2.window.switch_to
+    robert_page_in2 = authors_page2.authors.first.show!
+    assert authors_page2.stale?
+    assert_false robert_page_in1.stale?
+
+    assert_not_equal robert_page_in1.window, robert_page_in2.window
+
+    authors_page.window.switch_to
+
+    robert_page_in2.window.close
+    assert_false robert_page_in1.stale?
+    assert robert_page_in2.stale?
+  end
 end

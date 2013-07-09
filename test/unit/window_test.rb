@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class WindowTest < ActiveSupport::TestCase
+  class WindowTest < Test::Unit::TestCase
 
     def test_initialize
       window = Window.new("window_handle")
@@ -27,7 +27,9 @@ module AePageObjects
       window = Window.new("window_handle")
       window.current_document = "current_document"
 
-      capybara_stub.browser.expects(:switch_to).with("window_handle")
+      navigator_mock = stub
+      navigator_mock.expects(:window).with("window_handle")
+      capybara_stub.browser.expects(:switch_to).returns(navigator_mock)
 
       assert_equal "current_document", window.switch_to
     end
@@ -39,7 +41,7 @@ module AePageObjects
       document_mock = mock(:stale! => true)
       window.current_document = document_mock
 
-      capybara_stub.driver.expects(:close)
+      capybara_stub.session.expects(:execute_script).with("window.close();")
 
       window.close
 

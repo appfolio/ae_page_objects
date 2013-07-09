@@ -36,14 +36,14 @@ module AePageObjects
     end
 
     def switch_to
-      Capybara.current_session.driver.browser.switch_to(handle)
+      Capybara.current_session.driver.browser.switch_to.window(handle)
       current_document
     end
 
     def close
       self.current_document = nil
 
-      Capybara.current_session.driver.close
+      Capybara.current_session.execute_script("window.close();")
 
       self.class.all.delete(self)
     end
