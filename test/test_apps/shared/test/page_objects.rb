@@ -3,8 +3,8 @@ require 'ae_page_objects'
 ActiveSupport::Dependencies.autoload_paths << "test"
 
 module PageObjects
-  class Application < ::AePageObjects::Application
+  class Site < ::AePageObjects::Site
   end
 end
 
-PageObjects::Application.initialize!
+PageObjects::Site.initialize!

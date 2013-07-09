@@ -1,10 +1,10 @@
 require 'unit_helper'
 
 module AePageObjects
-  class ApplicationTest < Test::Unit::TestCase
+  class SiteTest < Test::Unit::TestCase
 
     def test_from__non_marked_module
-      assert_nil Application.from(Object)
+      assert_nil Site.from(Object)
     end
 
     module Fa
@@ -19,7 +19,7 @@ module AePageObjects
     end
 
     def test_from__nested_non_marked_module
-      assert_nil Application.from(Fa::So::La::Ti::Do)
+      assert_nil Site.from(Fa::So::La::Ti::Do)
     end
 
     module MarkedModule
@@ -27,9 +27,9 @@ module AePageObjects
     end
 
     def test_from__marked_module
-      application_instance = stub
-      MarkedModule.expects(:page_objects_application_class).returns(mock(:instance => application_instance))
-      assert_equal application_instance, Application.from(MarkedModule)
+      site_instance = stub
+      MarkedModule.expects(:page_objects_site_class).returns(mock(:instance => site_instance))
+      assert_equal site_instance, Site.from(MarkedModule)
     end
 
     module Ma
@@ -46,9 +46,9 @@ module AePageObjects
     end
 
     def test_from__nested_marked_module
-      application_instance = stub
-      Ma.expects(:page_objects_application_class).returns(mock(:instance => application_instance))
-      assert_equal application_instance, Application.from(Ma::Rk::Ed::Mod::Ule)
+      site_instance = stub
+      Ma.expects(:page_objects_site_class).returns(mock(:instance => site_instance))
+      assert_equal site_instance, Site.from(Ma::Rk::Ed::Mod::Ule)
     end
   end
 end

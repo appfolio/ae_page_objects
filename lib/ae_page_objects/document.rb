@@ -8,8 +8,8 @@ module AePageObjects
     
     class << self
     private
-      def application
-        @application ||= AePageObjects::Application.from(self)
+      def site
+        @site ||= AePageObjects::Site.from(self)
       end
     end
   end

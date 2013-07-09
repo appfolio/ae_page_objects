@@ -5,7 +5,7 @@ require 'ae_page_objects/version'
 
 module AePageObjects
   autoload :Universe,             'ae_page_objects/core/universe'
-  autoload :Application,          'ae_page_objects/core/application'
+  autoload :Site,                 'ae_page_objects/core/site'
   autoload :ApplicationRouter,    'ae_page_objects/core/application_router'
   autoload :RakeRouter,           'ae_page_objects/core/rake_router'
   autoload :Dsl,                  'ae_page_objects/core/dsl'
