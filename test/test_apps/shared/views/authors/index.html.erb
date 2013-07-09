@@ -1,15 +1,13 @@
 <h1>Listing authors</h1>
 
 <table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
 
 <% @authors.each do |author| %>
   <tr>
+    <td class="first_name"><%= author.first_name %></td>
+    <td class="last_name"><%= author.last_name %></td>
     <td><%= link_to 'Show', author %></td>
+    <td><%= link_to 'Show In New Window', author, :target => :blank %></td>
     <td><%= link_to 'Edit', edit_author_path(author) %></td>
     <td><%= link_to 'Destroy', author, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
