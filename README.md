@@ -127,32 +127,30 @@ AePageObjects is built to work with any Ruby project using Capybara. To install,
 add ae_page_objects to your Gemfile.
 
 You will need to designate a namespace to hold your page objects. In that
-namespace create a subclass of `AePageObjects::Application`. For example:
+namespace create a subclass of `AePageObjects::Site`. For example:
 
 ```ruby
-# test/my_page_objects/application.rb
+# test/my_page_objects/site.rb
 
 require 'ae_page_objects'
 
 module MyPageObjects
-  class Application < AePageObjects::Application
+  class Site < AePageObjects::Site
   end
 end
 ```
 
-### AePageObjects::Application
+### AePageObjects::Site
 
-`AePageObjects::Application` is similar to `Rails::Application` and is the place for configuring
-all the page objects belonging to a page object namespace. You are free to organize your page object
-source files however you like.
+`AePageObjects::Site` is the place for configuring all the page objects belonging to a remote site. You are free to
+organize your page object source files however you like.
 
 ### Initializing Page Objects
 
-Similar to `Rails::Application`, your `AePageObjects::Application` must be initialized before the
-page objects can be used:
+Your `AePageObjects::Site` must be initialized before the page objects can be used:
 
 ```ruby
-MyPageObjects::Application.initialize!
+MyPageObjects::Site.initialize!
 ```
 
 ### Rails 3.X
@@ -164,16 +162,16 @@ change from the instructions above.
 
 AePageObjects works with Rails 3.X by default. To get AePageObjects to work with non-Rails
 applications you'll need to configure a router to use other than `ApplicationRouter` in your
-`AePageObjects::Application`. For example:
+`AePageObjects::Site`. For example:
 
 ```ruby
-# test/my_page_objects/application.rb
+# test/my_page_objects/site.rb
 
 require 'ae_page_objects'
 
 module MyPageObjects
-  class Application < AePageObjects::Application
-    config.router = MyRouter.new
+  class Site < AePageObjects::Site
+    self.router = MyRouter.new
   end
 end
 ```
@@ -184,37 +182,37 @@ For more about routers see [Router](#router).
 
 AePageObjects is designed so that a single Ruby process can interact with multiple remote sites.
 The page objects for each remote site are defined in separate namespaces, each of which define
-their own `AePageObjects::Application` subclass. For example:
+their own `AePageObjects::Site` subclass. For example:
 
 ```ruby
 require 'ae_page_objects'
 
 module MyPageObjectsForSomeSite
-  class Application < AePageObjects::Application
+  class Site < AePageObjects::Site
   end
 end
 
 module MyPageObjectsForADifferentSite
-  class Application < AePageObjects::Application
+  class Site < AePageObjects::Site
   end
 end
 ```
 
 Typically, different remote sites are accessible via different URLs. Before initializing, each
-site's application can be configured with a router that uses a different URL. For example:
+Site can be configured with a router that uses a different URL. For example:
 
 ```ruby
-MyPageObjectsForSomeSite::Application.config.router       = UrlBoundRouter.new(:url => 'www.somesite.com:3000')
-MyPageObjectsForADifferentSite::Application.config.router = UrlBoundRouter.new(:url => 'www.adifferentsite.com:3000')
+MyPageObjectsForSomeSite::Site.router       = UrlBoundRouter.new(:url => 'www.somesite.com:3000')
+MyPageObjectsForADifferentSite::Site.router = UrlBoundRouter.new(:url => 'www.adifferentsite.com:3000')
 ```
 
 In the example above a hypothetical, custom Router (UrlBoundRouter) is used. For more about routers see [Router](#router).
 
-Before using a set of page objects the application has to be initialized:
+Before using a set of page objects the Site has to be initialized:
 
 ```ruby
-MyPageObjectsForSomeSite::Application.initialize!
-MyPageObjectsForADifferentSite::Application.initialize!
+MyPageObjectsForSomeSite::Site.initialize!
+MyPageObjectsForADifferentSite::Site.initialize!
 ```
 
 With the page objects setup, you can now write a test across different sites
@@ -305,7 +303,7 @@ class LoginPage < AePageObjects::Document
 end
 ```
 
-The type of arguments that `path` can take depends on the router configured for the `AePageObject::Application` of your
+The type of arguments that `path` can take depends on the router configured for the `AePageObject::Site` of your
 page objects namespace. For Rails 3.X projects, by default, `path` will accept strings and Rails URL helper names. See
 [Router](#router) for more details.
 
