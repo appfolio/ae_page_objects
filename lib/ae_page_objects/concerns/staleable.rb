@@ -6,7 +6,7 @@ module AePageObjects
     module Staleable
 
       def stale?
-        @stale
+        !!@stale
       end
 
       def node

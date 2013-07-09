@@ -1,7 +1,7 @@
 module AePageObjects
   class Node
     module Methods
-      def initialize(capybara_node = Capybara.current_session)
+      def initialize(capybara_node)
         @node = capybara_node
       end
 
