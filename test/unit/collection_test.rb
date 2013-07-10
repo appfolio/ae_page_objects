@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   class CollectionTest < Test::Unit::TestCase
-  
+
     def test_empty
       bullets = ::AePageObjects::Element.new_subclass
       clip    = ::AePageObjects::Collection.new_subclass do 

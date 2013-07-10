@@ -54,6 +54,7 @@ def run_in(directory, command)
   puts '', directory, ''
   with_pruned_env('BUNDLE_GEMFILE') do
     system("cd #{directory} && #{command}")
+    raise unless $?.exitstatus == 0
   end
 end
 
