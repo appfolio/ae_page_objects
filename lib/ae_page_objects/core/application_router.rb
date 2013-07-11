@@ -2,8 +2,61 @@ module AePageObjects
   class ApplicationRouter
 
     module Recognizer
-      class Rails23
 
+      class Base
+
+      end
+
+      class Rails23
+        def recognizes?(path, url)
+          url, router = url_and_router(url)
+
+          ["GET", "PUT", "POST", "DELETE", "PATCH"].each do |method|
+            begin
+              return true if router.recognize(request_for(url, method))# do |route, matches, params|
+              #  return true if route.name.to_s == path.to_s
+              #end
+            rescue ActionController::MethodNotAllowed, ActionController::UnknownHttpMethod
+              # ignore
+            end
+          end
+
+          false
+        end
+
+        def generate_path(named_route, *args)
+          if routes.respond_to?("#{named_route}_path")
+            routes.send("#{named_route}_path", *args)
+          end
+        end
+
+      private
+
+        def url_and_router(url)
+          #url = Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
+          router = ActionController::Routing::Routes
+
+          [url, router]
+        end
+
+        def routes
+          @routes ||= begin
+            routes_class = Class.new do
+              include ActionController::UrlWriter
+            end
+            ActionController::Routing::Routes.install_helpers(routes_class)
+            routes_class.new
+          end
+        end
+
+        def request_for(url, method)
+          url = "/#{url}" unless url.first == '/'
+
+          ActionController::TestRequest.new.tap do |request|
+            request.env["REQUEST_METHOD"] = method.to_s.upcase
+            request.path = url
+          end
+        end
       end
 
       class Rails3
