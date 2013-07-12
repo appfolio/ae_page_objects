@@ -1,14 +1,16 @@
 <% javascript_tag do %>
-  $(function() {
-  $('.hide_star').on('click', function() {
-  $('.star').hide();
-  });
-  $('.show_star').on('click', function() {
-  $('.star').show();
-  });
-  $('.remove_star').on('click', function() {
-  $('.star').remove();
-  });
+  document.observe("dom:loaded", function() {
+    Event.observe($$('.hide_star').first(), 'click', function() {
+      Element.hide($$('.star').first());
+    });
+
+    Event.observe($$('.show_star').first(), 'click', function() {
+      Element.show($$('.star').first());
+    });
+
+    Event.observe($$('.remove_star').first(), 'click', function() {
+      Element.remove($$('.star').first());
+    });
   });
 <% end %>
 
