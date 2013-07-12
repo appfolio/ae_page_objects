@@ -2,7 +2,7 @@ class AuthorsController < ApplicationController
   # GET /authors
   # GET /authors.xml
   def index
-    @authors = Author.all
+    @authors = Author.all(:order => :last_name)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -25,6 +25,8 @@ class AuthorsController < ApplicationController
   # GET /authors/new.xml
   def new
     @author = Author.new
+    @author.books.build
+    @author.books.build
 
     respond_to do |format|
       format.html # new.html.erb
