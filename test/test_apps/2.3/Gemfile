@@ -4,6 +4,8 @@ gem 'rails', '2.3.18'
 gem 'rake', '0.8.3'
 gem 'sqlite3'
 
+gem "nokogiri", "< 1.6.0"
+
 group :development do
   gem 'ae_page_objects', :path => '../../..'
   gem "mocha", "0.9.7"
