@@ -1,7 +1,4 @@
 module AePageObjects
-  class LoadingFailed < StandardError
-  end
-  
   module Concerns
     module LoadEnsuring
 

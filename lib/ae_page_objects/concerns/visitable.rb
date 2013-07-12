@@ -1,7 +1,4 @@
 module AePageObjects
-  class PathNotResolvable < StandardError
-  end
-  
   module Concerns
     module Visitable
 
