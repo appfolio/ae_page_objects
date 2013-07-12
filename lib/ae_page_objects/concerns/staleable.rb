@@ -1,8 +1,5 @@
 module AePageObjects
-  class StalePageObject < StandardError
-  end
-
-  module Concerns  
+  module Concerns
     module Staleable
 
       def stale?

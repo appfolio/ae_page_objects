@@ -2,6 +2,7 @@ require 'capybara'
 require 'capybara/dsl'
 
 require 'ae_page_objects/version'
+require 'ae_page_objects/exceptions'
 
 module AePageObjects
   autoload :Universe,             'ae_page_objects/core/universe'
