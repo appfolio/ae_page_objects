@@ -86,13 +86,12 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        document_stub = mock
-        Capybara.stubs(:current_session).returns(document_stub)
+        capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
         jon = kitty.new
 
         previous_owners_page_object = mock
-        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+        capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
