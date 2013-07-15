@@ -23,8 +23,6 @@ module Selenium
     self.use_instantiated_fixtures  = false
 
     fixtures :all
-
-    #include Rails.application.routes.url_helpers
   end
 end
 

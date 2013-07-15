@@ -7,6 +7,7 @@ gemfile:
   - Gemfile
   - Gemfile.ruby-1.9.3
 
+# for the rails 2.3 test app.
 before_install:
   - gem update --system 1.8.25
 

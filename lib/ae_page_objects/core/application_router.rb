@@ -1,13 +1,19 @@
 module AePageObjects
-  class ApplicationRouter
+  class ApplicationRouter < BasicRouter
+
+    # This whole file is a kludge and probably belongs in an ae_page_objects-rails extension
 
     module Recognizer
 
       class Base
-
+        def generate_path(named_route, *args)
+          if routes.respond_to?("#{named_route}_path")
+            routes.send("#{named_route}_path", *args)
+          end
+        end
       end
 
-      class Rails23
+      class Rails23 < Base
         def recognizes?(path, url)
           ["GET", "PUT", "POST", "DELETE", "PATCH"].map(&:downcase).map(&:to_sym).each do |method|
             route = ActionController::Routing::Routes.named_routes[path]
@@ -17,12 +23,6 @@ module AePageObjects
           end
 
           false
-        end
-
-        def generate_path(named_route, *args)
-          if routes.respond_to?("#{named_route}_path")
-            routes.send("#{named_route}_path", *args)
-          end
         end
 
       private
@@ -38,7 +38,7 @@ module AePageObjects
         end
       end
 
-      class Rails3
+      class Rails3 < Base
         def recognizes?(path, url)
           url, router = url_and_router(url)
 
@@ -51,11 +51,6 @@ module AePageObjects
           false
         end
 
-        def generate_path(named_route, *args)
-          if routes.respond_to?("#{named_route}_path")
-            routes.send("#{named_route}_path", *args)
-          end
-        end
 
       private
 
@@ -101,18 +96,18 @@ module AePageObjects
     end
 
     def path_recognizes_url?(path, url)
-      if path.is_a?(String)
-        path.sub(/\/$/, '') == url.sub(/\/$/, '')
-      elsif path.is_a?(Symbol)
+      if path.is_a?(Symbol)
         recognizer.recognizes?(path, url)
+      else
+        super
       end
     end
 
     def generate_path(named_route, *args)
-      if named_route.is_a?(String)
-        named_route
-      else
+      if named_route.is_a?(Symbol)
         recognizer.generate_path(named_route, *args)
+      else
+        super
       end
     end
 
@@ -120,11 +115,11 @@ module AePageObjects
 
     def recognizer
       @recognizer ||= begin
-        if Rails.version =~ /^2\.3/
+        if Rails.version =~ /\A2\.3/
           Recognizer::Rails23.new
-        elsif Rails.version =~ /^3\.[01]/
+        elsif Rails.version =~ /\A3\.[01]/
           Recognizer::Rails3.new
-        elsif Rails.version =~ /^3\.2/
+        elsif Rails.version =~ /\A3\.2/
           Recognizer::Rails32.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{Rails.version} and may behave in an undefined manner."
