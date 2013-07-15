@@ -1,5 +1,6 @@
 == X.X.X
 
+* added support for Rails 2.3
 * renamed Application to Site
 * removed nokogiri dependency
 
