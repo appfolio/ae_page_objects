@@ -5,8 +5,6 @@ module AePageObjects
     class << self
       private :new
 
-      attr_accessor :current_document
-
       def initialize!
         instance.initialize!
       end

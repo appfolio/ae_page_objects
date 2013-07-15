@@ -110,25 +110,25 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
   
   def test_document_tracking
-    author = TestApp::PageObjects::Authors::NewPage.visit
+    author = PageObjects::Authors::NewPage.visit
     assert_false author.stale?
     
     visit("/books/new")
     assert_false author.stale?
     
-    book = TestApp::PageObjects::Books::NewPage.new
+    book = PageObjects::Books::NewPage.new
     assert author.stale?
     assert_false book.stale?
     
-    author = TestApp::PageObjects::Authors::NewPage.visit
+    author = PageObjects::Authors::NewPage.visit
     assert_false author.stale?
     assert book.stale?
 
-    book = TestApp::PageObjects::Books::NewPage.visit
+    book = PageObjects::Books::NewPage.visit
     assert author.stale?
     assert_false book.stale?
     
-    author = TestApp::PageObjects::Authors::NewPage.visit
+    author = PageObjects::Authors::NewPage.visit
     assert_false author.stale?
     assert book.stale?
     
@@ -137,7 +137,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert book.stale?
     
     assert_raises AePageObjects::LoadingFailed do
-      TestApp::PageObjects::Books::NewPage.new
+      PageObjects::Books::NewPage.new
     end
     
     assert_false author.stale?
@@ -145,18 +145,18 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_document_tracking__multiple_windows
-    authors_page = TestApp::PageObjects::Authors::IndexPage.visit
+    authors_page = PageObjects::Authors::IndexPage.visit
     author_row = authors_page.authors.first
     assert_equal "Robert", author_row.first_name.text
 
     author_row.show_in_new_window
 
     Capybara.current_session.driver.within_window(author_path(authors(:robert)))
-    robert_page_in2 = TestApp::PageObjects::Authors::ShowPage.new
+    robert_page_in2 = PageObjects::Authors::ShowPage.new
 
     assert_not_equal authors_page.window, robert_page_in2.window
 
-    authors_page2 = TestApp::PageObjects::Authors::IndexPage.visit
+    authors_page2 = PageObjects::Authors::IndexPage.visit
     assert robert_page_in2.stale?
 
     assert_not_equal authors_page.window, authors_page2.window
