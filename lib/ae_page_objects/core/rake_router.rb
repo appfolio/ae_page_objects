@@ -1,5 +1,5 @@
 module AePageObjects
-  class RakeRouter
+  class RakeRouter < BasicRouter
     
     attr_reader :routes
     
@@ -18,11 +18,11 @@ module AePageObjects
     end
     
     def path_recognizes_url?(path, url)
-      if path.is_a?(String)
-        path.sub(/\/$/, '') == url.sub(/\/$/, '')
-      elsif path.is_a?(Symbol)
+      if path.is_a?(Symbol)
         route = @routes[path]
         route && route.matches?(url)
+      else
+        super
       end
     end
 
