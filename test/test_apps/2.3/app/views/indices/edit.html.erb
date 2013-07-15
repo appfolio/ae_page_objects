@@ -1,0 +1,12 @@
+<h1>Editing index</h1>
+
+<% form_for(@index) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @index %> |
+<%= link_to 'Back', indices_path %>

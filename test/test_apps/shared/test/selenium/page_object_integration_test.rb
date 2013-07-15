@@ -63,28 +63,31 @@ class PageObjectIntegrationTest < Selenium::TestCase
   
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
-    assert author.rating.star.present?
-    assert author.rating.star.visible?
-    assert_false author.rating.star.not_present?
-    assert_false author.rating.star.not_visible?
-    
-    author.rating.hide_star
-    assert author.rating.star.present?
-    assert_false author.rating.star.visible?
-    assert_false author.rating.star.not_present?
-    assert author.rating.star.not_visible?
-    
-    author.rating.show_star
-    assert author.rating.star.present?
-    assert author.rating.star.visible?
-    assert_false author.rating.star.not_present?
-    assert_false author.rating.star.not_visible?
-    
-    author.rating.remove_star
-    assert_false author.rating.star.present?
-    assert_false author.rating.star.visible?
-    assert author.rating.star.not_present?
-    assert author.rating.star.not_visible?
+
+    Capybara.using_wait_time(1) do
+      assert author.rating.star.present?
+      assert author.rating.star.visible?
+      assert_false author.rating.star.not_present?
+      assert_false author.rating.star.not_visible?
+
+      author.rating.hide_star
+      assert author.rating.star.present?
+      assert_false author.rating.star.visible?
+      assert_false author.rating.star.not_present?
+      assert author.rating.star.not_visible?
+
+      author.rating.show_star
+      assert author.rating.star.present?
+      assert author.rating.star.visible?
+      assert_false author.rating.star.not_present?
+      assert_false author.rating.star.not_visible?
+
+      author.rating.remove_star
+      assert_false author.rating.star.present?
+      assert_false author.rating.star.visible?
+      assert author.rating.star.not_present?
+      assert author.rating.star.not_visible?
+    end
   rescue => e
     puts e.backtrace.join("\n")
     raise e      
@@ -101,19 +104,21 @@ class PageObjectIntegrationTest < Selenium::TestCase
   
   def test_element_proxy__nested
     author = PageObjects::Authors::NewPage.visit
-    assert author.nested_rating.star.present?
-    
-    author.nested_rating.hide_star
-    assert author.nested_rating.star.present?
-    assert_false author.nested_rating.star.visible?
-    
-    author.nested_rating.show_star
-    assert author.nested_rating.star.present?
-    assert author.nested_rating.star.visible?
-    
-    author.nested_rating.remove_star
-    assert_false author.nested_rating.star.present?
-    assert_false author.nested_rating.star.visible?
+    Capybara.using_wait_time(1) do
+      assert author.nested_rating.star.present?
+
+      author.nested_rating.hide_star
+      assert author.nested_rating.star.present?
+      assert_false author.nested_rating.star.visible?
+
+      author.nested_rating.show_star
+      assert author.nested_rating.star.present?
+      assert author.nested_rating.star.visible?
+
+      author.nested_rating.remove_star
+      assert_false author.nested_rating.star.present?
+      assert_false author.nested_rating.star.visible?
+    end
   rescue => e
     puts e.backtrace.join("\n")
     raise e      

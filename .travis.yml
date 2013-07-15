@@ -7,11 +7,15 @@ gemfile:
   - Gemfile
   - Gemfile.ruby-1.9.3
 
+# for the rails 2.3 test app.
+before_install:
+  - gem update --system 1.8.25
+
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - bundle exec rake test:integration:selenium:install
-
+  
 script: "bundle exec rake"
 
 matrix:
