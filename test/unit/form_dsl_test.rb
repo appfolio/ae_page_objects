@@ -76,9 +76,6 @@ module AePageObjects
       verify_top_level_form_field(jon, :past_lives, document_stub) do |field_xpath, field_page_object|
         document_stub.stubs(:find).with("#the_kat_past_lives", anything).returns(field_page_object)
       end
-    rescue => e
-      puts e.backtrace.join("\n")
-      raise e
     end
 
     def test_form__using__locator
@@ -125,9 +122,6 @@ module AePageObjects
       verify_top_level_form_field(jon, :past_lives, kitty_box_page_stub) do |field_xpath, field_page_object|
         kitty_box_page_stub.stubs(:find).with("#the_kat_past_lives", anything).returns(field_page_object)
       end
-    rescue => e
-      puts e.backtrace.join("\n")
-      raise e
     end
 
   private

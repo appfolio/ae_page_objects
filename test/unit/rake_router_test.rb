@@ -63,9 +63,6 @@ module AePageObjects
       end
       
       assert_equal "/kessler/jon", router.generate_path("/kessler/jon")
-    rescue => e
-      puts e.backtrace.join("\n")
-      raise e
     end
     
     def test_parsing__prefix
@@ -86,9 +83,6 @@ module AePageObjects
       end
       
       assert_equal "/kessler/kessler/jon", router.generate_path("/kessler/jon")
-    rescue => e
-      puts e.backtrace.join("\n")
-      raise e
     end
     
     def test_parsing__prefix__root
@@ -109,9 +103,6 @@ module AePageObjects
       end
       
       assert_equal "/kessler/jon", router.generate_path("/kessler/jon")
-    rescue => e
-      puts e.backtrace.join("\n")
-      raise e
     end
     
   private
