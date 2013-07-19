@@ -19,8 +19,11 @@ module Selenium
     include Capybara::DSL
     include AfCruft
 
+    include ActionController::UrlWriter
+    ActionController::Routing::Routes.install_helpers(self)
+
+    self.use_transactional_fixtures = true
     self.use_instantiated_fixtures  = false
-    self.use_transactional_fixtures = false
 
     fixtures :all
   end
