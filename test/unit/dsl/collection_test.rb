@@ -76,6 +76,43 @@ module AePageObjects
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
+      def test_collection__is__no_contains__block__no_item_class
+        previous_owners_class = ::AePageObjects::Collection.new_subclass
+
+        kitty = ::AePageObjects::Document.new_subclass do
+          collection :previous_owners, :is => previous_owners_class do
+            element :owner_name
+            element :kitty_name_during_ownership
+          end
+        end
+
+        verify_kitty_structure(kitty)
+
+        document_stub = mock
+        Capybara.stubs(:current_session).returns(document_stub)
+
+        jon = kitty.new
+
+        previous_owners_page_object = mock
+        document_stub.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
+
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
+
+        first_owner_page_object = mock
+
+        previous_owners_page_object.expects(:all).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
+
+        owner_name_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
+        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+
+        kitty_name_during_ownership_page_object = mock
+        first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+      end
+
       def test_collection__is__no_contains__no_block
         previous_owner_class = ::AePageObjects::Element.new_subclass do
           element :owner_name
