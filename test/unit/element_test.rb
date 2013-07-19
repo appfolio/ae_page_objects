@@ -102,9 +102,6 @@ module AePageObjects
       assert_equal kitty_page, kitty1.document
       assert_equal kitty_page, kitty2.document
       assert_equal kitty_page, kitty3.document
-    rescue => e
-      puts e.backtrace.join("\n")
-      raise e
     end
 
     def test_full_name

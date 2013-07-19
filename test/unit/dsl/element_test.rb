@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module Dsl
-    class NodeTest < Test::Unit::TestCase
+    class ElementTest < Test::Unit::TestCase
       def test_element__basic
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind
@@ -19,9 +19,6 @@ module AePageObjects
         kind_page_object = mock
         document_stub.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
-      rescue => e
-        puts e.backtrace.join("\n")
-        raise e
       end
       
       def test_element__accessor_yields_to_block
@@ -53,9 +50,6 @@ module AePageObjects
         assert kind.is_a?(AePageObjects::Element)
         
         assert_equal kind, kind_in_block
-      rescue => e
-        puts e.backtrace.join("\n")
-        raise e
       end
     
       def test_element__locator
@@ -217,9 +211,6 @@ module AePageObjects
         width_page_object = mock
         size_page_object.expects(:find).with("#tail_attributes_size_attributes_width").returns(width_page_object)
         verify_field(size, :width, ::AePageObjects::Element, width_page_object)
-      rescue => e
-        puts e.backtrace.join("\n")
-        raise e
       end
 
       def test_nested_element__is
