@@ -1,7 +1,8 @@
-== X.X.X
+== 0.4.0
 
 * added support for Rails 2.3
 * renamed Application to Site
+* removed argument to Document.initialize
 * removed nokogiri dependency
 
 == 0.3.0
