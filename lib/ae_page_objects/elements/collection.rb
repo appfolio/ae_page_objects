@@ -2,6 +2,11 @@ module AePageObjects
   class Collection < Element
     class << self
       attr_accessor :item_class
+
+    private
+      def inherited(subclass)
+        subclass.item_class = self.item_class
+      end
     end
 
     self.item_class = Element
