@@ -1,5 +1,6 @@
 module AePageObjects
   module Singleton
+
     def instance
       @instance ||= new
     end

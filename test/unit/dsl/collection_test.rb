@@ -300,9 +300,6 @@ module AePageObjects
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
-      rescue => e
-        puts e.backtrace.join("\n")
-        raise e      
       end
       
       def test_collection__is__contains__block
@@ -345,9 +342,6 @@ module AePageObjects
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
         verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
-      rescue => e
-        puts e.backtrace.join("\n")
-        raise e      
       end
       
       def test_collection__no_is__no_contains__no_block

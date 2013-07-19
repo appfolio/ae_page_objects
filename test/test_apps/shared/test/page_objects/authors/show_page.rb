@@ -1,12 +1,10 @@
-module TestApp
-  module PageObjects
-    module Authors
-      class ShowPage < ::AePageObjects::Document
-        path :author
+module PageObjects
+  module Authors
+    class ShowPage < ::AePageObjects::Document
+      path :author
 
-        element :first_name
-        element :last_name
-      end
+      element :first_name
+      element :last_name
     end
   end
 end
