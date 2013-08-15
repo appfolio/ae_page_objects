@@ -1,5 +1,7 @@
 module AePageObjects
   class Collection < Element
+    include Enumerable
+
     class << self
       attr_accessor :item_class
 
@@ -33,18 +35,8 @@ module AePageObjects
       end
     end
 
-    def all
-      [].tap do |all|
-        self.each { |item| all << item }
-      end
-    end
-    
     def size
       node.all(:xpath, row_xpath).size
-    end
-    
-    def first(&block)
-      self.at(0, &block)
     end
 
     def last(&block)
