@@ -17,11 +17,15 @@ module AePageObjects
       self.class.item_class
     end
 
+    def item_xpath
+      @item_xpath ||= Capybara::Selector.normalize(*eval_locator(@item_locator)).xpaths.first
+    end
+
     def at(index, &block)
       if index >= size || index < 0
         nil
       else
-        self.item_class.new(self, :name => index, :locator => [:xpath, "#{row_xpath}[#{index + 1}]"], &block)
+        self.item_class.new(self, :name => index, :locator => [:xpath, "#{item_xpath}[#{index + 1}]"], &block)
       end
     end
 
@@ -36,32 +40,35 @@ module AePageObjects
     end
 
     def size
-      node.all(:xpath, row_xpath).size
+      node.all(:xpath, item_xpath).size
     end
 
     def last(&block)
       self.at(size - 1, &block)
     end
-    
+
     def add_more(&block)
       append
       last(&block)
     end
 
-    def row_xpath
-      @row_xpath || ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]"
-    end
-    
   protected
   
     def configure(options)
       super
       
-      @row_xpath = options.delete(:row_xpath)
+      @item_locator = options.delete(:item_locator) || default_item_locator
     end
   
     def append
       node.find('.js-add-item').click
     end
+
+  private
+
+    def default_item_locator
+      @default_item_locator ||= [:xpath, ".//*"]
+    end
+
   end
 end
