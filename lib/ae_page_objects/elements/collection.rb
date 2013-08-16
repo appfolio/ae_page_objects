@@ -5,7 +5,11 @@ module AePageObjects
     class << self
       attr_accessor :item_class
 
-    private
+      def default_item_locator
+        @default_item_locator ||= [:xpath, ".//*"]
+      end
+
+      private
       def inherited(subclass)
         subclass.item_class = self.item_class
       end
@@ -25,7 +29,7 @@ module AePageObjects
       if index >= size || index < 0
         nil
       else
-        self.item_class.new(self, :name => index, :locator => [:xpath, "#{item_xpath}[#{index + 1}]"], &block)
+        item_at(index, &block)
       end
     end
 
@@ -57,7 +61,7 @@ module AePageObjects
     def configure(options)
       super
       
-      @item_locator = options.delete(:item_locator) || default_item_locator
+      @item_locator = options.delete(:item_locator) || self.class.default_item_locator
     end
   
     def append
@@ -66,9 +70,16 @@ module AePageObjects
 
   private
 
-    def default_item_locator
-      @default_item_locator ||= [:xpath, ".//*"]
+    def item_at(index, &block)
+      item_class_at(index).new(self, :name => index, :locator => item_locator_at(index), &block)
     end
 
+    def item_class_at(index)
+      item_class
+    end
+
+    def item_locator_at(index)
+      [:xpath, "#{item_xpath}[#{index + 1}]"]
+    end
   end
 end
