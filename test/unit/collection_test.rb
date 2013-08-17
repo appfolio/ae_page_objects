@@ -75,6 +75,7 @@ module AePageObjects
       magazine_node.expects(:find).with(:xpath, "#{magazine.item_xpath}[2]").returns(bullet2_stub)
       each_block_call_count = 0
       magazine.each do |bullet|
+        bullet.name
         each_block_call_count += 1
       end
       assert_equal 2, each_block_call_count

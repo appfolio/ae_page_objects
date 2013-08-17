@@ -36,7 +36,7 @@ module NodeFieldTestHelpers
 
   def verify_item_field(collection, index, expected_item_type, expected_item_page)
     collection[index].tap do |item|
-      assert_false item.is_a?(AePageObjects::ElementProxy)
+      assert       item.is_a?(AePageObjects::ElementProxy)
       assert_equal expected_item_type, item.class
       assert_equal collection.item_class, item.class
       assert_equal expected_item_page, item.node
@@ -46,7 +46,7 @@ module NodeFieldTestHelpers
   
   def verify_item_field_with_intermediary_class(collection, index, expected_item_type, expected_item_page)
     collection[index].tap do |item|
-      assert_false item.is_a?(AePageObjects::ElementProxy)
+      assert       item.is_a?(AePageObjects::ElementProxy)
       assert_equal expected_item_type, item.class.superclass
       assert_equal collection.item_class, item.class
       assert_equal expected_item_page, item.node
