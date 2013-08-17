@@ -1,9 +1,15 @@
 module AePageObjects
   class Collection < Element
+    include Enumerable
+
     class << self
       attr_accessor :item_class
 
-    private
+      def default_item_locator
+        @default_item_locator ||= [:xpath, ".//*"]
+      end
+
+      private
       def inherited(subclass)
         subclass.item_class = self.item_class
       end
@@ -15,11 +21,15 @@ module AePageObjects
       self.class.item_class
     end
 
+    def item_xpath
+      @item_xpath ||= Capybara::Selector.normalize(*eval_locator(@item_locator)).xpaths.first
+    end
+
     def at(index, &block)
       if index >= size || index < 0
         nil
       else
-        self.item_class.new(self, :name => index, :locator => [:xpath, "#{row_xpath}[#{index + 1}]"], &block)
+        item_at(index, &block)
       end
     end
 
@@ -33,43 +43,32 @@ module AePageObjects
       end
     end
 
-    def all
-      [].tap do |all|
-        self.each { |item| all << item }
-      end
-    end
-    
     def size
-      node.all(:xpath, row_xpath).size
-    end
-    
-    def first(&block)
-      self.at(0, &block)
+      node.all(:xpath, item_xpath).size
     end
 
     def last(&block)
       self.at(size - 1, &block)
     end
-    
-    def add_more(&block)
-      append
-      last(&block)
-    end
 
-    def row_xpath
-      @row_xpath || ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]"
-    end
-    
-  protected
+  private
   
     def configure(options)
       super
       
-      @row_xpath = options.delete(:row_xpath)
+      @item_locator = options.delete(:item_locator) || self.class.default_item_locator
     end
-  
-    def append
-      node.find('.js-add-item').click
+
+    def item_at(index, &block)
+      ElementProxy.new(item_class_at(index), self, :name => index, :locator => item_locator_at(index), &block)
+    end
+
+    def item_class_at(index)
+      item_class
+    end
+
+    def item_locator_at(index)
+      [:xpath, "#{item_xpath}[#{index + 1}]"]
     end
   end
 end

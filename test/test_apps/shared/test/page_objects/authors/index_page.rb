@@ -22,7 +22,7 @@ module PageObjects
       collection :authors,
                  :is => Table,
                  :locator => "table",
-                 :row_xpath => "//tr" do
+                 :item_locator => [:xpath, ".//tr"] do
 
         element :first_name, :locator => '.first_name'
         element :last_name, :locator => '.last_name'
@@ -33,6 +33,8 @@ module PageObjects
 
         def show!
           node.click_link("Show")
+          stale!
+
           ShowPage.new
         end
       end

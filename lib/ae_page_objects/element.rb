@@ -96,7 +96,7 @@ module AePageObjects
       if @locator
         locator = eval_locator(@locator)
         if ! locator.empty?
-          return parent.find(*locator)
+          return parent.node.find(*locator)
         end
       end
       

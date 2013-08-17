@@ -44,15 +44,16 @@ module MyPageObjects
     path :authors
 
     collection :authors,
-               :is        => Table,
-               :locator   => "table",
-               :row_xpath => "//tr" do
+               :is           => Table,
+               :locator      => "table",
+               :item_locator => "tr" do
 
       element :first_name, :locator => '.first_name'
       element :last_name,  :locator => '.last_name'
 
       def show!
         node.click_link("Show")
+        stale!
 
         AuthorsShowPage.new
       end

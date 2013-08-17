@@ -25,8 +25,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
         
         owner_name_page_object = mock
@@ -63,8 +63,8 @@ module AePageObjects
 
         first_owner_page_object = mock
         
-        previous_owners_page_object.expects(:all).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath, ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -100,8 +100,8 @@ module AePageObjects
 
         first_owner_page_object = mock
 
-        previous_owners_page_object.expects(:all).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath, ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -139,8 +139,8 @@ module AePageObjects
         previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -178,8 +178,8 @@ module AePageObjects
         previous_owners = verify_field(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -216,8 +216,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -252,8 +252,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -289,8 +289,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -313,7 +313,9 @@ module AePageObjects
         previous_owners_class.item_class = previous_owners_class_item_class
         
         kitty = ::AePageObjects::Document.new_subclass do
-          collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class do
+          collection :previous_owners,
+                     :is => previous_owners_class,
+                     :contains => previous_owner_class do
             element :kitty_name_during_ownership
           end
         end
@@ -331,8 +333,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = mock
@@ -360,8 +362,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
       end
 
@@ -386,8 +388,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
         
         owner_name_page_object = mock
@@ -422,8 +424,8 @@ module AePageObjects
         previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
         
         first_owner_page_object = mock
-        previous_owners_page_object.expects(:all).with(:xpath,  ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))]").returns([first_owner_page_object])
-        previous_owners_page_object.expects(:find).with(:xpath, ".//*[contains(@class, 'item-list')]//*[contains(@class,'row') and not(contains(@style,'display'))][1]").returns(first_owner_page_object)
+        previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
+        previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
         first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = mock

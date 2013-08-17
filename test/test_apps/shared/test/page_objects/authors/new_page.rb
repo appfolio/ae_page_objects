@@ -9,9 +9,9 @@ module PageObjects
         element :last_name
 
         collection :books,
-                   :name      => "books_attributes",
-                   :locator   => "#author_books",
-                   :row_xpath => ".//*[contains(@class, 'some-books-fool')]//*[contains(@class,'row') and not(contains(@style,'display'))]" do
+                   :name         => "books_attributes",
+                   :locator      => "#author_books",
+                   :item_locator => ".some-books-fool .row" do
           element :title
         end
       end

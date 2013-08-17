@@ -123,4 +123,37 @@ class PageObjectIntegrationTest < Selenium::TestCase
     puts e.backtrace.join("\n")
     raise e      
   end
+
+  def test_some_collection_enumerables
+    ActiveRecord::Base.transaction do
+      Author.create!(:last_name => 'a')
+      Author.create!(:last_name => 'm')
+      Author.create!(:last_name => 'u')
+      Author.create!(:last_name => 't')
+      Author.create!(:last_name => 'z')
+      Author.create!(:last_name => '7')
+    end
+
+    index = PageObjects::Authors::IndexPage.visit
+
+    assert_equal 6, index.authors.size
+    assert_nil index.authors.find { |author|
+      author.last_name.text == 'q'
+    }
+
+    assert_not_nil index.authors.find { |author|
+      author.last_name.text == 'a'
+    }
+
+    authors = index.authors.select { |author|
+      'amutz'.include?(author.last_name.text)
+    }
+
+    assert_equal Array, authors.class
+    assert_equal 'amtuz', authors.map(&:last_name).map(&:text).join('')
+
+    assert_equal 1, index.authors.count { |author|
+      author.last_name.text == '7'
+    }
+  end
 end
