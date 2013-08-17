@@ -2,14 +2,16 @@ language: ruby
 rvm:
   - 1.8.7
   - 1.9.3
+  - 2.0.0
 
 gemfile:
   - Gemfile
   - Gemfile.ruby-1.9.3
+  - Gemfile.ruby-2.0.0
 
 # for the rails 2.3 test app.
 before_install:
-  - gem update --system 1.8.25
+  - ruby -e "exit(RUBY_VERSION == '2.0.0')" || gem update --system 1.8.25
 
 before_script:
   - export DISPLAY=:99.0
@@ -20,7 +22,15 @@ script: "bundle exec rake"
 
 matrix:
   exclude:
-    - rvm: 1.8.7
-      gemfile: Gemfile.ruby-1.9.3
     - rvm: 1.9.3
       gemfile: Gemfile
+    - rvm: 2.0.0
+      gemfile: Gemfile
+    - rvm: 1.8.7
+      gemfile: Gemfile.ruby-1.9.3
+    - rvm: 2.0.0
+      gemfile: Gemfile.ruby-1.9.3
+    - rvm: 1.8.7
+      gemfile: Gemfile.ruby-2.0.0
+    - rvm: 1.9.3
+      gemfile: Gemfile.ruby-2.0.0
