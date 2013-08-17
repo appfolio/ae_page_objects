@@ -51,24 +51,13 @@ module AePageObjects
       self.at(size - 1, &block)
     end
 
-    def add_more(&block)
-      append
-      last(&block)
-    end
-
-  protected
+  private
   
     def configure(options)
       super
       
       @item_locator = options.delete(:item_locator) || self.class.default_item_locator
     end
-  
-    def append
-      node.find('.js-add-item').click
-    end
-
-  private
 
     def item_at(index, &block)
       ElementProxy.new(item_class_at(index), self, :name => index, :locator => item_locator_at(index), &block)
