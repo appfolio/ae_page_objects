@@ -9,6 +9,8 @@ gemfile:
   - Gemfile.ruby-1.9.3
   - Gemfile.ruby-2.0.0
 
+bundler_args: ''
+
 # for the rails 2.3 test app.
 before_install:
   - ruby -e "exit(RUBY_VERSION == '2.0.0')" || gem update --system 1.8.25
