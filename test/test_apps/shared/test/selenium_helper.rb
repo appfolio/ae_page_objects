@@ -28,8 +28,20 @@ module Selenium
   end
 end
 
+class TestSeleniumDriver < Capybara::Selenium::Driver
+
+  def initialize(app, options = {})
+    options[:profile] ||= Selenium::WebDriver::Firefox::Profile.from_name("selenium") || Selenium::WebDriver::Firefox::Profile.new
+    super
+  end
+end
+
+Capybara.register_driver :ae_page_objects_test_driver do |app|
+  TestSeleniumDriver.new(app)
+end
+
 Capybara.configure do |config|
-  config.default_driver    = :selenium
+  config.default_driver    = :ae_page_objects_test_driver
   config.default_wait_time = 5
 end
 
