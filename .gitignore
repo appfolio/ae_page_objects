@@ -6,6 +6,5 @@ test/test_apps/**/tmp/**/*
 *.sqlite3
 pkg
 .idea
-Gemfile.lock
 .bundle
 
