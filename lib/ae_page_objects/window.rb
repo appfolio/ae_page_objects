@@ -60,6 +60,9 @@ module AePageObjects
       self.current_document = nil
 
       switch_to_window do
+        # Can't use browser.close here because if this is the last window, it will close the entire browser
+        # which would mess up subsequent tests.
+        # http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#close()
         Capybara.current_session.execute_script("window.close();")
       end
     end
