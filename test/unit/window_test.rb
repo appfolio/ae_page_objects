@@ -2,16 +2,15 @@ require 'unit_helper'
 
 module AePageObjects
   class WindowTest < Test::Unit::TestCase
-
     def test_initialize
-      window = Window.new("window_handle")
+      window = Window.create("window_handle")
       assert_equal "window_handle", window.handle
       assert_nil window.current_document
-      assert_equal window, Window.all[window]
+      assert_equal window, Window.registry[window.handle]
     end
 
     def test_current_document=
-      window = Window.new("window_handle")
+      window = Window.create("window_handle")
       assert_nil window.current_document
 
       document_mock = mock(:stale! => true)
@@ -24,7 +23,7 @@ module AePageObjects
     end
 
     def test_switch_to
-      window = Window.new("window_handle")
+      window = Window.create("window_handle")
       window.current_document = "current_document"
 
       navigator_mock = stub
@@ -35,33 +34,35 @@ module AePageObjects
     end
 
     def test_close
-      window = Window.new("window_handle")
-      assert_equal window, Window.all[window]
+      window = Window.create("window_handle")
+      assert_equal window, Window.registry[window]
 
       document_mock = mock(:stale! => true)
       window.current_document = document_mock
 
+      window.expects(:switch_to_window).yields
       capybara_stub.session.expects(:execute_script).with("window.close();")
 
       window.close
 
-      assert_nil Window.all[window]
+      assert_nil Window.registry[window]
     end
 
     def test_current__none
       capybara_stub.browser.expects(:window_handle).returns("window_handle")
 
       window = Window.current
-      assert_equal window, Window.all[window]
+      assert_equal window, Window.registry[window]
+      assert_equal "window_handle", window.handle
 
       capybara_stub.browser.expects(:window_handle).returns("window_handle")
       assert_equal window, Window.current
     end
 
     def test_current__many
-      window1 = Window.new("window_handle1")
-      window2 = Window.new("window_handle2")
-      window3 = Window.new("window_handle3")
+      window1 = Window.create("window_handle1")
+      window2 = Window.create("window_handle2")
+      window3 = Window.create("window_handle3")
 
       capybara_stub.browser.expects(:window_handle).returns("window_handle1")
       assert_equal window1, Window.current
