@@ -1,4 +1,5 @@
 require 'selenium_helper'
+require 'set'
 
 class PageObjectIntegrationTest < Selenium::TestCase
 
@@ -145,37 +146,80 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_document_tracking__multiple_windows
-    authors_page = PageObjects::Authors::IndexPage.visit
-    author_row = authors_page.authors.first
-    assert_equal "Robert", author_row.first_name.text
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1 = window1_authors.window
+    assert_windows(window1, :current => window1)
 
-    author_row.show_in_new_window
+    window1_authors_robert_row = window1_authors.authors.first
+    assert_equal "Robert", window1_authors_robert_row.first_name.text
+
+    window1_authors_robert_row.show_in_new_window
 
     Capybara.current_session.driver.within_window(author_path(authors(:robert)))
-    robert_page_in2 = PageObjects::Authors::ShowPage.new
+    window2_author_robert = PageObjects::Authors::ShowPage.new
 
-    assert_not_equal authors_page.window, robert_page_in2.window
+    window2 = window2_author_robert.window
+    assert_windows(window1, window2, :current => window2)
 
-    authors_page2 = PageObjects::Authors::IndexPage.visit
-    assert robert_page_in2.stale?
+    window2_authors = PageObjects::Authors::IndexPage.visit
+    assert_equal window2, window2_authors.window
 
-    assert_not_equal authors_page.window, authors_page2.window
+    assert window2_author_robert.stale?
 
-    authors_page.window.switch_to
-    robert_page_in1 = author_row.show!
-    assert authors_page.stale?
+    window1.switch_to
 
-    authors_page2.window.switch_to
-    robert_page_in2 = authors_page2.authors.first.show!
-    assert authors_page2.stale?
-    assert_false robert_page_in1.stale?
+    window1_author_robert = window1_authors_robert_row.show!
+    assert_equal window1, window1_author_robert.window
+    assert window1_authors.stale?
 
-    assert_not_equal robert_page_in1.window, robert_page_in2.window
+    window2.switch_to
 
-    authors_page.window.switch_to
+    window2_authors_robert_row = window2_authors.authors.first.show!
+    assert_equal window2, window2_authors_robert_row.window
+    assert window2_authors.stale?
+    assert_false window1_authors_robert_row.stale?
 
-    robert_page_in2.window.close
-    assert_false robert_page_in1.stale?
-    assert robert_page_in2.stale?
+    window2.close
+    assert window2_author_robert.stale?
+    assert_equal nil, window2.current_document
+    assert_windows(window1, :current => window1)
+
+    assert_false window1_author_robert.stale?
+    assert_equal window1_author_robert, window1.current_document
+
+    # close a window without an explicit switch
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors_robert_row.show_in_new_window
+
+    Capybara.current_session.driver.within_window(author_path(authors(:robert)))
+    window3_author_robert = PageObjects::Authors::ShowPage.new
+    window3 = window3_author_robert.window
+
+    assert_windows(window1, window3, :current => window3)
+
+    window1.close
+    assert window1_authors.stale?
+    assert_equal nil, window1.current_document
+    assert_windows(window3, :current => window3)
+
+    assert_false window3_author_robert.stale?
+    assert_equal window3_author_robert, window3.current_document
+
+    # close the last window
+    window3.close
+    assert_windows
+  end
+
+private
+
+  def assert_windows(*windows)
+    options = windows.extract_options!
+
+    assert_equal windows.to_set, windows.uniq.to_set
+    assert_equal windows.to_set, AePageObjects::Window.registry.values.to_set
+
+    if options[:current]
+      assert_equal options[:current], AePageObjects::Window.current
+    end
   end
 end
