@@ -1,33 +1,47 @@
 module AePageObjects
   class Window
+    class Registry < Hash
+      def [](window_or_handle)
+        if window_or_handle.is_a?(Window)
+          super(window_or_handle.handle)
+        else
+          super(window_or_handle)
+        end
+      end
+
+      def add(window)
+        self[window.handle] = window
+      end
+
+      def remove(window)
+        self.delete(window.handle)
+      end
+    end
+
     class << self
-      def all
-        @all ||= {}
+      def registry
+        @registry ||= Registry.new
       end
 
       def current
         current_handle = Capybara.current_session.driver.browser.window_handle
 
-        window = all.keys.find do |window|
-          window.handle == current_handle
-        end
+        registry[current_handle] || create(current_handle)
+      end
 
-        unless window
-          window = new(current_handle)
-          all[window] = window
-        end
-
-        window
+      def create(handle)
+        new(registry, handle)
       end
     end
 
     attr_reader :current_document, :handle
 
-    def initialize(handle)
-      @handle = handle
+    def initialize(registry, handle)
+      @registry         = registry
+      @handle           = handle
       @current_document = nil
 
-      self.class.all[self] = self
+      @registry.add(self)
     end
 
     def current_document=(document)
@@ -36,16 +50,23 @@ module AePageObjects
     end
 
     def switch_to
-      Capybara.current_session.driver.browser.switch_to.window(handle)
+      switch_to_window
       current_document
     end
 
     def close
+      @registry.remove(self)
+
       self.current_document = nil
 
-      Capybara.current_session.execute_script("window.close();")
+      switch_to_window do
+        Capybara.current_session.execute_script("window.close();")
+      end
+    end
 
-      self.class.all.delete(self)
+  private
+    def switch_to_window(&block)
+      Capybara.current_session.driver.browser.switch_to.window(handle, &block)
     end
   end
 end
