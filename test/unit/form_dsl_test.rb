@@ -21,7 +21,7 @@ module AePageObjects
       
       verify_kitty_structure(kitty_class)
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       jon = kitty_class.new
       
@@ -55,7 +55,7 @@ module AePageObjects
 
       verify_kitty_structure(kitty_class)
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       jon = kitty_class.new
 
@@ -94,7 +94,7 @@ module AePageObjects
 
       verify_kitty_structure(kitty_class)
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       jon = kitty_class.new
 

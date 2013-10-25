@@ -2,7 +2,6 @@ require 'selenium_helper'
 require 'set'
 
 class PageObjectIntegrationTest < Selenium::TestCase
-
   def test_site_setup
     assert PageObjects < AePageObjects::Universe
     assert_equal PageObjects, PageObjects::Site.universe
@@ -205,9 +204,9 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_false window3_author_robert.stale?
     assert_equal window3_author_robert, window3.current_document
 
-    # close the last window
+    # attempt to close the last window
     window3.close
-    assert_windows
+    assert_windows(window3, :current => window3)
   end
 
 private
@@ -217,6 +216,7 @@ private
 
     assert_equal windows.to_set, windows.uniq.to_set
     assert_equal windows.to_set, AePageObjects::Window.registry.values.to_set
+    assert_equal windows.to_set, AePageObjects::Window.all.to_set
 
     if options[:current]
       assert_equal options[:current], AePageObjects::Window.current
