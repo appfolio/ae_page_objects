@@ -6,7 +6,7 @@ module AePageObjects
     def test_document
       kitty_class = ::AePageObjects::Document.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       kitty_page = kitty_class.new
       
@@ -22,7 +22,7 @@ module AePageObjects
     def test_find
       kitty_class = ::AePageObjects::Document.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       kitty_page = kitty_class.new
 

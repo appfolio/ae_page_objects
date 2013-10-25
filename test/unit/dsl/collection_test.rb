@@ -14,7 +14,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
       
@@ -50,7 +50,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -86,7 +86,7 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -125,7 +125,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -163,7 +163,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -200,7 +200,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
         jon = kitty.new
 
         previous_owners_page_object = mock
@@ -234,7 +234,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
         jon = kitty.new
 
         previous_owners_page_object = mock
@@ -269,7 +269,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -312,7 +312,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -340,7 +340,7 @@ module AePageObjects
           collection :previous_owners
         end
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -365,7 +365,7 @@ module AePageObjects
         
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
       
@@ -398,7 +398,7 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
         

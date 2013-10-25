@@ -11,7 +11,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
         jon = kitty.new
       
         kind_page_object = mock
@@ -27,7 +27,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
         
@@ -57,7 +57,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
       
@@ -74,7 +74,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
         jon.expects(:page_local_context).returns("hello")
@@ -92,7 +92,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
       
@@ -109,7 +109,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
       
@@ -128,7 +128,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
       
@@ -148,7 +148,7 @@ module AePageObjects
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
       
@@ -175,7 +175,7 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -222,7 +222,7 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -269,7 +269,7 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -314,7 +314,7 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 
@@ -359,7 +359,7 @@ module AePageObjects
 
         verify_kitty_structure(kitty)
 
-        capybara_stub.browser.expects(:window_handle).returns("window_handle")
+        stub_current_window
 
         jon = kitty.new
 

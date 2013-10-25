@@ -7,7 +7,7 @@ module AePageObjects
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       pet           = pet_class.new
       
@@ -22,7 +22,7 @@ module AePageObjects
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       pet           = pet_class.new
 
@@ -41,7 +41,7 @@ module AePageObjects
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      stub_current_window
 
       pet           = pet_class.new
 
@@ -60,7 +60,8 @@ module AePageObjects
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      capybara_stub
+      Window::HandleManager.expects(:current).returns("window_handle")
 
       pet           = pet_class.new
       
@@ -79,7 +80,8 @@ module AePageObjects
       kitty_page_class = ::AePageObjects::Document.new_subclass
       kitty_class      = ::AePageObjects::Element.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      capybara_stub
+      Window::HandleManager.expects(:current).returns("window_handle")
 
       kitty_page    = kitty_page_class.new
       assert_equal kitty_page, kitty_page.document
@@ -108,7 +110,8 @@ module AePageObjects
         end
       end
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
+      capybara_stub
+      Window::HandleManager.expects(:current).returns("window_handle")
 
       kitty_page = kitty_page_class.new
       capybara_stub.session.stubs(:find).returns(capybara_stub.session)

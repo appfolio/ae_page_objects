@@ -6,8 +6,8 @@ module AePageObjects
     def test_stale
       kitty_class = ::AePageObjects::Document.new_subclass
 
-      capybara_stub.browser.expects(:window_handle).returns("window_handle")
-      
+      stub_current_window
+
       kitty_page = kitty_class.new
       assert_equal capybara_stub.session, kitty_page.node
       assert_false kitty_page.stale?
