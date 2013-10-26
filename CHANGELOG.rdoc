@@ -1,5 +1,6 @@
 == X.X.X
 
+* introduced Window management
 * Collection enhancements:
  - implements Enumerable
  - removed append support

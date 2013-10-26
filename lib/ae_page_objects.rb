@@ -23,6 +23,7 @@ module AePageObjects
     autoload :Visitable,        'ae_page_objects/concerns/visitable'
   end
   
+  autoload :Window,            'ae_page_objects/window'
   autoload :Node,              'ae_page_objects/node'
   autoload :Document,          'ae_page_objects/document'
   autoload :Element,           'ae_page_objects/element'

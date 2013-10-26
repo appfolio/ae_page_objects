@@ -6,9 +6,8 @@ module AePageObjects
     def test_new__no_name_no_locator
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
-      
-      document_stub = mock
-      Capybara.stubs(:current_session).returns(document_stub)
+
+      stub_current_window
 
       pet           = pet_class.new
       
@@ -23,13 +22,12 @@ module AePageObjects
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
 
-      document_stub = mock
-      Capybara.stubs(:current_session).returns(document_stub)
+      stub_current_window
 
       pet           = pet_class.new
 
       kitty_page_object = mock
-      document_stub.expects(:find).with("#tiger").returns(kitty_page_object)
+      capybara_stub.session.expects(:find).with("#tiger").returns(kitty_page_object)
       kitty = kitty_class.new(pet, :locator => '#tiger')
 
       assert_equal pet, kitty.parent
@@ -43,13 +41,12 @@ module AePageObjects
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
 
-      document_stub = mock
-      Capybara.stubs(:current_session).returns(document_stub)
+      stub_current_window
 
       pet           = pet_class.new
 
       kitty_page_object = mock
-      document_stub.expects(:find).with("#tiger").returns(kitty_page_object)
+      capybara_stub.session.expects(:find).with("#tiger").returns(kitty_page_object)
       kitty = kitty_class.new(pet, :name => 'tiger')
 
       assert_equal pet, kitty.parent
@@ -62,14 +59,14 @@ module AePageObjects
     def test_new__locator
       pet_class   = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Element.new_subclass
-      
-      document_stub = mock
-      Capybara.stubs(:current_session).returns(document_stub)
+
+      capybara_stub
+      Window::HandleManager.expects(:current).returns("window_handle")
 
       pet           = pet_class.new
       
       kitty_page_object = mock
-      document_stub.expects(:find).with("J 2da K").returns(kitty_page_object)
+      capybara_stub.session.expects(:find).with("J 2da K").returns(kitty_page_object)
       kitty = kitty_class.new(pet, :name => 'tiger', :locator => "J 2da K")
       
       assert_equal pet, kitty.parent
@@ -82,14 +79,14 @@ module AePageObjects
     def test_document
       kitty_page_class = ::AePageObjects::Document.new_subclass
       kitty_class      = ::AePageObjects::Element.new_subclass
-      
-      document_stub = stub
-      Capybara.stubs(:current_session).returns(document_stub)
+
+      capybara_stub
+      Window::HandleManager.expects(:current).returns("window_handle")
 
       kitty_page    = kitty_page_class.new
       assert_equal kitty_page, kitty_page.document
-      
-      document_stub.stubs(:find).returns(document_stub)
+
+      capybara_stub.session.stubs(:find).returns(capybara_stub.session)
       
       kitty1 = kitty_class.new(kitty_page, :name => 'tiger')
       kitty2 = kitty_class.new(kitty1,     :name => 'tiger')
@@ -114,6 +111,7 @@ module AePageObjects
       end
 
       capybara_stub
+      Window::HandleManager.expects(:current).returns("window_handle")
 
       kitty_page = kitty_page_class.new
       capybara_stub.session.stubs(:find).returns(capybara_stub.session)

@@ -1,7 +1,7 @@
 PATH
   remote: ../../..
   specs:
-    ae_page_objects (0.4.1)
+    ae_page_objects (0.4.1.dt4)
       capybara (~> 1.1)
 
 GEM
@@ -93,10 +93,10 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     rubyzip (0.9.9)
-    selenium-webdriver (2.33.0)
+    selenium-webdriver (2.35.1)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
-      rubyzip
+      rubyzip (< 1.0.0)
       websocket (~> 1.0.4)
     sprockets (2.0.4)
       hike (~> 1.2)

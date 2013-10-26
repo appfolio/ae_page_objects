@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ae_page_objects (0.4.1)
+    ae_page_objects (0.4.1.dt4)
       capybara (~> 1.1)
 
 GEM
@@ -48,4 +48,5 @@ DEPENDENCIES
   appraisal (~> 0.5.1)
   mocha (= 0.13.3)
   nokogiri (< 1.6.0)
+  rubyzip (< 1.0.0)
   selenium-webdriver

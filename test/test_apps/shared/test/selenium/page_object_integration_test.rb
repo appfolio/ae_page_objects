@@ -1,7 +1,7 @@
 require 'selenium_helper'
+require 'set'
 
 class PageObjectIntegrationTest < Selenium::TestCase
-
   def test_site_setup
     assert PageObjects < AePageObjects::Universe
     assert_equal PageObjects, PageObjects::Site.universe
@@ -35,9 +35,6 @@ class PageObjectIntegrationTest < Selenium::TestCase
  
     assert_equal "Tushar's Dilemma", new_page.title.value
     assert_equal "132", new_page.index.pages.value
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_complex_form
@@ -56,9 +53,6 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "Pollan", new_author_page.last_name.value
     assert_equal "In Defense of Food", new_author_page.books.first.title.value
     assert_equal "The Omnivore's Dilemma", new_author_page.books.last.title.value
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_element_proxy
@@ -88,18 +82,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
       assert author.rating.star.not_present?
       assert author.rating.star.not_visible?
     end
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_element_proxy__not_present
     author = PageObjects::Authors::NewPage.visit
     assert_false author.missing.present?
     assert author.missing.not_present?
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
   
   def test_element_proxy__nested
@@ -119,9 +107,6 @@ class PageObjectIntegrationTest < Selenium::TestCase
       assert_false author.nested_rating.star.present?
       assert_false author.nested_rating.star.visible?
     end
-  rescue => e
-    puts e.backtrace.join("\n")
-    raise e      
   end
 
   def test_some_collection_enumerables
@@ -136,7 +121,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     index = PageObjects::Authors::IndexPage.visit
 
-    assert_equal 6, index.authors.size
+    assert_equal 8, index.authors.size
     assert_nil index.authors.find { |author|
       author.last_name.text == 'q'
     }
@@ -155,5 +140,120 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal 1, index.authors.count { |author|
       author.last_name.text == '7'
     }
+  end
+  
+  def test_document_tracking
+    author = PageObjects::Authors::NewPage.visit
+    assert_false author.stale?
+    
+    visit("/books/new")
+    assert_false author.stale?
+    
+    book = PageObjects::Books::NewPage.new
+    assert author.stale?
+    assert_false book.stale?
+    
+    author = PageObjects::Authors::NewPage.visit
+    assert_false author.stale?
+    assert book.stale?
+
+    book = PageObjects::Books::NewPage.visit
+    assert author.stale?
+    assert_false book.stale?
+    
+    author = PageObjects::Authors::NewPage.visit
+    assert_false author.stale?
+    assert book.stale?
+    
+    visit("/authors/new")
+    assert_false author.stale?
+    assert book.stale?
+    
+    assert_raises AePageObjects::LoadingFailed do
+      PageObjects::Books::NewPage.new
+    end
+    
+    assert_false author.stale?
+    assert book.stale?
+  end
+
+  def test_document_tracking__multiple_windows
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1 = window1_authors.window
+    assert_windows(window1, :current => window1)
+
+    window1_authors_robert_row = window1_authors.authors.first
+    assert_equal "Robert", window1_authors_robert_row.first_name.text
+
+    window1_authors_robert_row.show_in_new_window
+
+    Capybara.current_session.driver.within_window(author_path(authors(:robert)))
+    window2_author_robert = PageObjects::Authors::ShowPage.new
+
+    window2 = window2_author_robert.window
+    assert_windows(window1, window2, :current => window2)
+
+    window2_authors = PageObjects::Authors::IndexPage.visit
+    assert_equal window2, window2_authors.window
+
+    assert window2_author_robert.stale?
+
+    window1.switch_to
+
+    window1_author_robert = window1_authors_robert_row.show!
+    assert_equal window1, window1_author_robert.window
+    assert window1_authors.stale?
+
+    window2.switch_to
+
+    window2_authors_robert_row = window2_authors.authors.first.show!
+    assert_equal window2, window2_authors_robert_row.window
+    assert window2_authors.stale?
+    assert_false window1_author_robert.stale?
+
+    window2.close
+    assert window2_author_robert.stale?
+    assert_equal nil, window2.current_document
+    assert_windows(window1, :current => window1)
+
+    assert_false window1_author_robert.stale?
+    assert_equal window1_author_robert, window1.current_document
+
+    # close a window without an explicit switch
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors_robert_row = window1_authors.authors.first
+    window1_authors_robert_row.show_in_new_window
+
+    Capybara.current_session.driver.within_window(author_path(authors(:robert)))
+    window3_author_robert = PageObjects::Authors::ShowPage.new
+    window3 = window3_author_robert.window
+
+    assert_windows(window1, window3, :current => window3)
+
+    window1.close
+    assert window1_authors.stale?
+    assert_equal nil, window1.current_document
+    assert_windows(window3, :current => window3)
+
+    assert_false window3_author_robert.stale?
+    assert_equal window3_author_robert, window3.current_document
+
+    # attempt to close the last window
+    window3.close
+    assert_windows(window3, :current => window3)
+  end
+
+private
+
+  def assert_windows(*windows)
+    options = windows.extract_options!
+
+    assert_equal windows.to_set, windows.uniq.to_set
+    assert_equal windows.to_set, AePageObjects::Window.registry.values.to_set
+    assert_equal windows.to_set, AePageObjects::Window.all.to_set
+
+    if options[:current]
+      assert_equal options[:current], AePageObjects::Window.current
+    end
   end
 end

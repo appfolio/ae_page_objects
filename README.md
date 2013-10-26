@@ -54,7 +54,6 @@ module MyPageObjects
 
       def show!
         node.click_link("Show")
-        stale!
 
         AuthorsShowPage.new
       end
@@ -411,6 +410,11 @@ If you choose to override `ensure_loaded!` you:
 - need to call super() to get the default load ensuring
 - should raise `AePageObjects::LoadingFailed` if the document should not be loaded.
 
+### Windows
+
+Every document exists within a browser window. The `window` attribute of a `AePageObject::Document` provides access to
+the window hosting the document.
+
 ### Conventions
 
 A few conventions have evolved to aid in writing maintainable page objects and test code using page objects. Methods
@@ -418,7 +422,6 @@ causing the browser to navigate to a new page should:
 
 - be ! methods
 - return an instance of the document class representing the page navigated to.
-- should stale! the current page.
 
 ```ruby
 class LoginPage < AePageObjects::Document
@@ -429,7 +432,6 @@ class LoginPage < AePageObjects::Document
     password.set password
 
     node.click_on("Log In")
-    stale!
 
     AuthorsIndex.new
   end
@@ -448,7 +450,7 @@ end
 ```
 
 Keeping the conventions in mind while reading the above test code should make it clear to the reader that the login_as!
-method will be navigating the browser to a new page and any references to the previous page will be staled. Accessing
+method will be navigating the browser to a new page; any references to the previous page will be invalid. Accessing
 the login_page reference after the browser has changed pages will result in an `AePageObjects::StalePageObject` error:
 
 

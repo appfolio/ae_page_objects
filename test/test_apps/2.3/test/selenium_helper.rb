@@ -23,6 +23,9 @@ module Selenium
     self.use_transactional_fixtures = false
 
     fixtures :all
+
+    include ActionController::UrlWriter
+    ActionController::Routing::Routes.install_helpers(self)
   end
 end
 
