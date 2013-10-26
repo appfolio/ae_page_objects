@@ -54,7 +54,6 @@ module MyPageObjects
 
       def show!
         node.click_link("Show")
-        stale!
 
         AuthorsShowPage.new
       end
@@ -423,7 +422,6 @@ causing the browser to navigate to a new page should:
 
 - be ! methods
 - return an instance of the document class representing the page navigated to.
-- should stale! the current page.
 
 ```ruby
 class LoginPage < AePageObjects::Document
@@ -434,7 +432,6 @@ class LoginPage < AePageObjects::Document
     password.set password
 
     node.click_on("Log In")
-    stale!
 
     AuthorsIndex.new
   end
@@ -453,7 +450,7 @@ end
 ```
 
 Keeping the conventions in mind while reading the above test code should make it clear to the reader that the login_as!
-method will be navigating the browser to a new page and any references to the previous page will be staled. Accessing
+method will be navigating the browser to a new page; any references to the previous page will be invalid. Accessing
 the login_page reference after the browser has changed pages will result in an `AePageObjects::StalePageObject` error:
 
 
