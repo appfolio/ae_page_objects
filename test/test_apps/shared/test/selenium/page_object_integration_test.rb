@@ -209,7 +209,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window2_authors_robert_row = window2_authors.authors.first.show!
     assert_equal window2, window2_authors_robert_row.window
     assert window2_authors.stale?
-    assert_false window1_authors_robert_row.stale?
+    assert_false window1_author_robert.stale?
 
     window2.close
     assert window2_author_robert.stale?
@@ -221,6 +221,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     # close a window without an explicit switch
     window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors_robert_row = window1_authors.authors.first
     window1_authors_robert_row.show_in_new_window
 
     Capybara.current_session.driver.within_window(author_path(authors(:robert)))
