@@ -121,7 +121,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     index = PageObjects::Authors::IndexPage.visit
 
-    assert_equal 6, index.authors.size
+    assert_equal 8, index.authors.size
     assert_nil index.authors.find { |author|
       author.last_name.text == 'q'
     }
