@@ -1,15 +1,7 @@
 module AePageObjects
   class Element < Node
     attr_reader :parent
-    
-    class << self
-      def new(*args)
-        super(*args).tap do |me|
-          yield me if block_given?
-        end
-      end
-    end
-    
+
     def initialize(parent, options_or_locator = {})
       @parent       = parent
       @locator      = nil

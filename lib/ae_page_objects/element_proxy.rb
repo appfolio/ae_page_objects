@@ -9,19 +9,9 @@ module AePageObjects
       end
     end
     
-    def initialize(element_class, *args, &block)
+    def initialize(element_class, *args)
       @element_class = element_class
       @args          = args
-      @block         = block
-      
-      # Yield to the block immediately by creating 
-      # the element. Block use assumes presence. Since
-      # the underlying element is passed when yielding
-      # the block level variable won't have access to
-      # the proxy methods, but that's ok.
-      if block_given?
-        element
-      end
     end
     
     # Provided so that visible? can be asked without
@@ -91,7 +81,7 @@ module AePageObjects
   private
   
     def element
-      @element ||= @element_class.new(*@args, &@block)
+      @element ||= @element_class.new(*@args)
     end
   end
 end
