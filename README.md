@@ -411,6 +411,11 @@ If you choose to override `ensure_loaded!` you:
 - need to call super() to get the default load ensuring
 - should raise `AePageObjects::LoadingFailed` if the document should not be loaded.
 
+### Windows
+
+Every document exists within a browser window. The `window` attribute of a `AePageObject::Document` provides access to
+the window hosting the document.
+
 ### Conventions
 
 A few conventions have evolved to aid in writing maintainable page objects and test code using page objects. Methods
