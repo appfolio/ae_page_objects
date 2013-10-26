@@ -20,6 +20,8 @@ module AePageObjects
     end
 
     class HandleManager
+      extend CapybaraDelegates
+
       def self.all
         browser.window_handles
       end
@@ -36,10 +38,6 @@ module AePageObjects
 
       def self.switch_to(handle)
         browser.switch_to.window(handle)
-      end
-
-      def self.browser
-        Capybara.current_session.driver.browser
       end
 
       def self.close(handle)

@@ -60,10 +60,10 @@ module AePageObjects
     end
 
     extend Dsl
+    extend ClassMethods
 
+    include CapybaraDelegates
     include Methods
-    extend  ClassMethods
-
     include Concerns::LoadEnsuring
     include Concerns::Staleable
   end

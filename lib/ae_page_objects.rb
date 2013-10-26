@@ -5,6 +5,7 @@ require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
 
 module AePageObjects
+  autoload :CapybaraDelegates,    'ae_page_objects/core/capybara_delegates'
   autoload :Universe,             'ae_page_objects/core/universe'
   autoload :Site,                 'ae_page_objects/core/site'
   autoload :BasicRouter,          'ae_page_objects/core/basic_router'
