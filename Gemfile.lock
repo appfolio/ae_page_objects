@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ae_page_objects (0.5.0)
+    ae_page_objects (0.5.1)
       capybara (~> 1.1)
 
 GEM
