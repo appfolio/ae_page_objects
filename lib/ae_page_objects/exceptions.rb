@@ -7,4 +7,7 @@ module AePageObjects
 
   class PathNotResolvable < StandardError
   end
+
+  class PageNotFound < StandardError
+  end
 end
