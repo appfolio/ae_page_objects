@@ -8,7 +8,7 @@ module PageObjects
       has_book_form
 
       def save!
-        node.click_button("Update Book")
+        node.find("input[type=submit]").click
 
         AePageObjects::VariableDocument.new(Books::ShowPage, self.class)
       end
