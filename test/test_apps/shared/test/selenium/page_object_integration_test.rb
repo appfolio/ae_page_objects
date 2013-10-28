@@ -35,6 +35,9 @@ class PageObjectIntegrationTest < Selenium::TestCase
  
     assert_equal "Tushar's Dilemma", new_page.title.value
     assert_equal "132", new_page.index.pages.value
+
+    show_page = new_page.save!
+    assert_equal "Tushar's Dilemma", show_page.title.text
   end
   
   def test_complex_form

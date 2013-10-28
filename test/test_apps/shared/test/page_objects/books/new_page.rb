@@ -19,6 +19,11 @@ module PageObjects
           element :first_name
         end
       end
+
+      def save!
+        node.click_button("Create Book")
+        Books::ShowPage.new
+      end
     end
   end
 end
