@@ -37,7 +37,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end.delayed_show!
     assert_equal "a", author.last_name.text
   end
-  
+
   def test_simple_form
     new_page = PageObjects::Books::NewPage.visit
     assert_equal "", new_page.title.value
@@ -69,6 +69,41 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "Pollan", new_author_page.last_name.value
     assert_equal "In Defense of Food", new_author_page.books.first.title.value
     assert_equal "The Omnivore's Dilemma", new_author_page.books.last.title.value
+  end
+
+  def test_variable_document
+    new_page = PageObjects::Books::NewPage.visit
+    new_page.index.pages.set "132"
+
+    result_page = new_page.save!
+    assert_equal true,  result_page.is_a?(AePageObjects::VariableDocument)
+    assert_equal true,  result_page.is_a?(PageObjects::Books::NewPage)
+    assert_equal false, result_page.is_a?(PageObjects::Authors::NewPage)
+
+    # test an explicit cast
+    new_page = result_page.as_a(PageObjects::Books::NewPage)
+    assert_include new_page.form.error_messages, "Title can't be blank"
+
+    new_page.title.set "Hello World"
+
+    # test an implicit cast
+    show_page = new_page.save!
+    assert_equal PageObjects::Books::ShowPage, show_page.class
+    assert_equal "Hello World", show_page.title.text
+
+    # test invalid cast
+    edit_page = show_page.edit!
+
+    result_page = edit_page.save!
+
+    assert_raises AePageObjects::InvalidCast do
+      result_page.as_a(PageObjects::Authors::NewPage)
+    end
+
+    # test an incorrect cast
+    assert_raises AePageObjects::LoadingFailed do
+      result_page.as_a(PageObjects::Books::EditPage)
+    end
   end
   
   def test_element_proxy

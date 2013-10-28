@@ -1,15 +1,15 @@
 module PageObjects
   module Books
-    class NewPage < ::AePageObjects::Document
+    class EditPage < ::AePageObjects::Document
       extend HasBookForm
 
-      path :new_book
-      path :books
+      path :edit_book
 
       has_book_form
 
       def save!
-        node.click_button("Create Book")
+        node.click_button("Update Book")
+
         AePageObjects::VariableDocument.new(Books::ShowPage, self.class)
       end
     end
