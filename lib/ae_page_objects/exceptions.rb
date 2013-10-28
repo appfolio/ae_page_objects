@@ -1,13 +1,18 @@
 module AePageObjects
-  class StalePageObject < StandardError
+  class Error < StandardError; end
+
+  class StalePageObject < Error
   end
 
-  class LoadingFailed < StandardError
+  class LoadingFailed < Error
   end
 
-  class PathNotResolvable < StandardError
+  class PathNotResolvable < Error
   end
 
-  class PageNotFound < StandardError
+  class PageNotFound < Error
+  end
+
+  class InvalidCast < Error
   end
 end
