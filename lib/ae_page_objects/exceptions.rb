@@ -13,6 +13,7 @@ module AePageObjects
   class PageNotFound < Error
   end
 
-  class InvalidCast < Error
-  end
+  class CastError     < Error; end
+  class InvalidCast   < CastError; end
+  class IncorrectCast < CastError; end
 end
