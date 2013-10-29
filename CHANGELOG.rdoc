@@ -1,3 +1,7 @@
+== 0.5.2
+
+* A few Collection improvements
+
 == 0.5.0
 
 * introduced Window management
