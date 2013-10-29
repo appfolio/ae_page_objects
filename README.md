@@ -415,13 +415,37 @@ If you choose to override `ensure_loaded!` you:
 Every document exists within a browser window. The `window` attribute of a `AePageObject::Document` provides access to
 the window hosting the document.
 
+### Multiple Windows
+
+Sometimes websites launch documents in new windows or tabs. To find a document in another window use Document.find():
+
+```ruby
+  def show_report!(report_name)
+    node.click_on("Show #{report_name}")
+
+    ReportPage.find
+  end
+```
+
+`find` can be parameterized with a block to refine the search the criteria:
+
+```ruby
+  def show_report!(report_name)
+    node.click_on("Show #{report_name}")
+
+    ReportPage.find do
+      report.filters.date.text == Time.now.to_date
+    end
+  end
+```
+
 ### Conventions
 
 A few conventions have evolved to aid in writing maintainable page objects and test code using page objects. Methods
 causing the browser to navigate to a new page should:
 
-- be ! methods
-- return an instance of the document class representing the page navigated to.
+1. be ! methods
+2. return an instance of the document class representing the page navigated to.
 
 ```ruby
 class LoginPage < AePageObjects::Document
@@ -465,6 +489,40 @@ def test_logging_in_goes_to_authors
   # AePageObjects::StalePageObject: Can't access stale page object '#<MyPageObjects::LoginPage:0x11c604268>'
   #   ae_page_objects (0.1.2) lib/ae_page_objects/concerns/staleable.rb:15:in `node'
 end
+```
+
+### Variable Documents
+
+Oftentimes the page that results from a form submission is based on the data entered into the form. This makes following
+convention #2 difficult. Additionally, the test code that is entering data into the form has the knowledge to know which
+page should result.  `AePageObjects::VariableDocument` can be used to specify the set of all possible pages that can
+result:
+
+```ruby
+def login!(username, password)
+  email.set username
+  password.set password
+
+  node.click_on("Log In")
+
+  AePageObjects::VariableDocument.new(AuthorsIndex, LoginPage, DashboardPage)
+end
+```
+
+Code calling login!() method must cast the resultant AePageObjects::VariableDocument, via:
+
+```ruby
+result = LoginPage.visit.login!("username", "invalid password")
+login_page = result.as_a(LoginPage)
+assert_equal "Invalid password", login_page.errors.first.text
+```
+
+Alternatively, the calling code could rely on implicit casting which will attempt to instantiate the first page class
+in the list:
+
+```ruby
+authors = LoginPage.visit.login!("username", "invalid password")
+assert_equal 7, authors.count
 ```
 
 ## Elements

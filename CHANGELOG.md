@@ -1,3 +1,8 @@
+## X.X.X
+
+* Added Document.find()
+* Added VariableDocument
+
 ## 1.0.2
 
 * Issue [Changed Waiter to not use Timeout #57](https://github.com/appfolio/ae_page_objects/issues/57)
