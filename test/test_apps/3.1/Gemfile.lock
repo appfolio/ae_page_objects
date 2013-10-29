@@ -1,7 +1,7 @@
 PATH
   remote: ../../..
   specs:
-    ae_page_objects (0.5.2)
+    ae_page_objects (0.5.2.mw1)
       capybara (~> 1.1)
 
 GEM
@@ -121,4 +121,5 @@ DEPENDENCIES
   jquery-rails
   mocha (= 0.13.3)
   rails (= 3.1.12)
+  rubyzip (< 1.0.0)
   sqlite3
