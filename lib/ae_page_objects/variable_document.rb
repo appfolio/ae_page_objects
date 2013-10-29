@@ -21,10 +21,12 @@ module AePageObjects
 
     def as_a(document_class)
       unless @documents.include?(document_class)
-        raise InvalidCast, "Cannot cast as #{document_class.name} from #{@documents.map(&:name)}"
+        raise InvalidCast, "Cannot cast as #{document_class.name} from #{@documents.map(&:name).inspect}"
       end
 
       document_class.new
+    rescue AePageObjects::LoadingFailed => e
+      raise IncorrectCast, "Failed instantiating a #{document_class}: #{e.message}\nDocuments: #{@documents.map(&:name).inspect}"
     end
 
   private

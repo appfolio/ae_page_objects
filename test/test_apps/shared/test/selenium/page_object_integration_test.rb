@@ -88,7 +88,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
 
     # test an incorrect cast
-    assert_raises AePageObjects::LoadingFailed do
+    assert_raises AePageObjects::IncorrectCast do
       result_page.as_a(PageObjects::Books::EditPage)
     end
   end
