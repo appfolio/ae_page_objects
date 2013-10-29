@@ -2,12 +2,10 @@ module AePageObjects
   class Collection < Element
     include Enumerable
 
+    attr_reader :item_locator
+
     class << self
       attr_accessor :item_class
-
-      def default_item_locator
-        @default_item_locator ||= [:xpath, ".//*"]
-      end
 
       private
       def inherited(subclass)
@@ -19,10 +17,6 @@ module AePageObjects
 
     def item_class
       self.class.item_class
-    end
-
-    def item_xpath
-      @item_xpath ||= Capybara::Selector.normalize(*eval_locator(@item_locator)).xpaths.first
     end
 
     def at(index, &block)
@@ -56,7 +50,7 @@ module AePageObjects
     def configure(options)
       super
       
-      @item_locator = options.delete(:item_locator) || self.class.default_item_locator
+      @item_locator = options.delete(:item_locator) || default_item_locator
     end
 
     def item_at(index, &block)
@@ -67,8 +61,16 @@ module AePageObjects
       item_class
     end
 
+    def item_xpath
+      @item_xpath ||= Capybara::Selector.normalize(*eval_locator(@item_locator)).xpaths.first
+    end
+
     def item_locator_at(index)
       [:xpath, "#{item_xpath}[#{index + 1}]"]
+    end
+
+    def default_item_locator
+      @default_item_locator ||= [:xpath, ".//*"]
     end
   end
 end
