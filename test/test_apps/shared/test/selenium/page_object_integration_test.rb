@@ -304,8 +304,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_paul_row.show_in_new_window
 
-    window3_author_paul = PageObjects::Authors::ShowPage.find do
-      first_name.text == "Paul"
+    window3_author_paul = PageObjects::Authors::ShowPage.find do |author|
+      author.first_name.text == "Paul"
     end
 
     window3 = window3_author_paul.window
@@ -313,8 +313,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_raises AePageObjects::PageNotFound do
       Capybara.using_wait_time(3) do
-        PageObjects::Authors::ShowPage.find do
-          first_name.text == "Enri"
+        PageObjects::Authors::ShowPage.find do |author|
+          author.first_name.text == "Enri"
         end
       end
     end
