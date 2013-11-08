@@ -27,6 +27,7 @@ module AePageObjects
   autoload :Window,            'ae_page_objects/window'
   autoload :Node,              'ae_page_objects/node'
   autoload :Document,          'ae_page_objects/document'
+  autoload :DocumentFinder,    'ae_page_objects/document_finder'
   autoload :VariableDocument,  'ae_page_objects/variable_document'
   autoload :Element,           'ae_page_objects/element'
   autoload :ElementProxy,      'ae_page_objects/element_proxy'
