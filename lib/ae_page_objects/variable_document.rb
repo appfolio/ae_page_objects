@@ -36,7 +36,7 @@ module AePageObjects
     end
 
     def implicit_document
-      @implicit_document ||= implicit_document_class.new
+      @implicit_document ||= as_a(implicit_document_class)
     end
 
     def method_missing(name, *args, &block)
