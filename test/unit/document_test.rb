@@ -3,16 +3,20 @@ require 'unit_helper'
 module AePageObjects
   class DocumentTest < Test::Unit::TestCase
 
-    def test_document_find__extra_condition_passed_down
+    def test_document_find__conditions_passed_down
       AePageObjects::Window.expects(:current).returns(mock)
       Capybara.expects(:wait_until).yields
-      AePageObjects::Document.expects(:find_window).yields
 
-      block_called = false
-      window = AePageObjects::Document.find do
-        block_called = true
+      conditions = nil
+      AePageObjects::Document.expects(:find_window).with do |find_window_arg|
+        conditions = find_window_arg
+        true
       end
-      assert block_called
+
+      some_block = proc { |page| }
+      AePageObjects::Document.find :url => 'hello_kitty', &some_block
+
+      assert_equal({:url => 'hello_kitty', :block => some_block}, conditions.instance_variable_get(:@conditions))
     end
 
     def test_document_find__returns_wait_until_result
@@ -61,16 +65,11 @@ module AePageObjects
       AePageObjects::Window.expects(:all).returns(all_windows)
 
       attempt_to_load_sequence = sequence('attempt_to_load')
-      AePageObjects::Document.expects(:attempt_to_load).yields.in_sequence(attempt_to_load_sequence).returns(false)
-      AePageObjects::Document.expects(:attempt_to_load).yields.in_sequence(attempt_to_load_sequence).returns(:found_it)
+      AePageObjects::Document.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(false)
+      AePageObjects::Document.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(:found_it)
 
-      block_calls = 0
-      window = AePageObjects::Document.send(:find_window) do
-        block_calls += 1
-      end
+      window = AePageObjects::Document.send(:find_window, mock)
       assert_equal :found_it, window
-
-      assert_equal 2, block_calls
     end
   
     def test_find_window__not_found
@@ -87,39 +86,34 @@ module AePageObjects
       AePageObjects::Document.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(false)
       AePageObjects::Document.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(false)
 
-      window = AePageObjects::Document.send(:find_window)
+      window = AePageObjects::Document.send(:find_window, mock)
       assert_equal nil, window
     end
 
-    def test_attempt_to_load
+    def test_attempt_to_load__success
       AePageObjects::Document.expects(:new).returns(:instance)
 
-      result = AePageObjects::Document.send(:attempt_to_load)
+      conditions = mock
+      conditions.expects(:match?).with(:instance).returns(true)
+
+      result = AePageObjects::Document.send(:attempt_to_load, conditions)
       assert_equal :instance, result
     end
 
-    def test_attempt_to_load__extra_condition__success
+    def test_attempt_to_load__failure
       AePageObjects::Document.expects(:new).returns(:instance)
 
-      result = AePageObjects::Document.send(:attempt_to_load) do
-        true
-      end
-      assert_equal :instance, result
-    end
+      conditions = mock
+      conditions.expects(:match?).with(:instance).returns(false)
 
-    def test_attempt_to_load__extra_condition__fail
-      AePageObjects::Document.expects(:new).returns(:instance)
-
-      result = AePageObjects::Document.send(:attempt_to_load) do
-        false
-      end
+      result = AePageObjects::Document.send(:attempt_to_load, conditions)
       assert_equal nil, result
     end
 
     def test_attempt_to_load__loading_failed
       AePageObjects::Document.expects(:new).raises(AePageObjects::LoadingFailed.new)
 
-      result = AePageObjects::Document.send(:attempt_to_load)
+      result = AePageObjects::Document.send(:attempt_to_load, mock())
       assert_equal nil, result
     end
 
