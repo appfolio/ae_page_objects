@@ -30,7 +30,7 @@ module AePageObjects
       Capybara.current_session.wait_until do
         Capybara.using_wait_time(0) do
           inst = presence
-          inst && inst.visible?
+          !! inst && inst.visible?
         end
       end
     rescue Capybara::TimeoutError

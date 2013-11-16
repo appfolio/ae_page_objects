@@ -102,6 +102,8 @@ module AePageObjects
 
     def test_visible
       proxy = new_proxy
+
+      stub_capybara_session_wait_until
       
       element_class.expect_initialize
       element_class.any_instance.expects(:visible?).returns(true)
@@ -110,6 +112,8 @@ module AePageObjects
     
     def test_visible__element_not_found
       proxy = new_proxy
+
+      stub_capybara_session_wait_until
       
       element_class.expects(:new).raises(Capybara::ElementNotFound)
       assert_false proxy.visible?
@@ -151,6 +155,8 @@ module AePageObjects
     
     def test_visible__false
       proxy = new_proxy
+
+      stub_capybara_session_wait_until
       
       element_class.expect_initialize
       element_class.any_instance.expects(:visible?).returns(false)
