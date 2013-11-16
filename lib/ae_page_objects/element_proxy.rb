@@ -27,18 +27,25 @@ module AePageObjects
     # Provided so that visible? can be asked without
     # an explicit check for present? first.
     def visible?
-      inst = presence
-      ! inst.nil? && inst.visible?
+      Capybara.current_session.wait_until do
+        Capybara.using_wait_time(0) do
+          inst = presence
+          inst && inst.visible?
+        end
+      end
+    rescue Capybara::TimeoutError
+      false  
     end
     
     def not_visible?
       Capybara.current_session.wait_until do
         Capybara.using_wait_time(0) do
-          ! visible?
+          inst = presence
+          inst.nil? || ! inst.visible?
         end
       end
     rescue Capybara::TimeoutError
-      false  
+      false
     end
 
     def present?
