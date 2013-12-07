@@ -3,36 +3,45 @@ require 'unit_helper'
 module AePageObjects
   class DocumentFinderTest < Test::Unit::TestCase
 
-    def test_document_find__conditions_passed_down
-      AePageObjects::Window.expects(:current).returns(mock)
-      Capybara.expects(:wait_until).yields
+    def test_find__conditions_passed_down
+      current_window = mock
+      AePageObjects::Window.expects(:current).returns(current_window)
 
-      finder = AePageObjects::DocumentFinder.new(mock)
+      document_class = mock
 
       conditions = nil
-      finder.expects(:find_window).with do |find_window_arg|
-        conditions = find_window_arg
-        true
-      end
+
+      AePageObjects::Window.expects(:all).returns([])
+      DocumentFinder::DocumentWindowScanner.expects(:new).with do |document_class_arg, current_window_arg, windows_arg, conditions_arg|
+        conditions = conditions_arg
+
+        document_class == document_class_arg && current_window == current_window_arg && [] == windows_arg
+      end.returns(mock(:find => nil))
 
       some_block = proc { |page| }
+      Capybara.expects(:wait_until).yields
+
+      finder = AePageObjects::DocumentFinder.new(document_class)
       finder.find :url => 'hello_kitty', &some_block
 
       assert_equal({:url => 'hello_kitty', :block => some_block}, conditions.instance_variable_get(:@conditions))
     end
 
-    def test_document_find__returns_wait_until_result
-      AePageObjects::Window.expects(:current).returns(mock)
-      Capybara.expects(:wait_until).yields.returns(:result)
+    def test_find__returns_wait_until_result
+      current_window = mock
+      AePageObjects::Window.expects(:current).returns(current_window)
 
       finder = AePageObjects::DocumentFinder.new(mock)
-      finder.expects(:find_window)
+
+      Capybara.expects(:wait_until).yields.returns(:result)
+      AePageObjects::Window.expects(:all).returns([])
+      DocumentFinder::DocumentWindowScanner.expects(:new).returns(mock(:find => true))
 
       document = finder.find
       assert_equal :result, document
     end
 
-    def test_document_find__timeout
+    def test_find__timeout
       current_window = mock
       current_window.expects(:switch_to)
       AePageObjects::Window.expects(:current).returns(current_window)
@@ -60,67 +69,102 @@ module AePageObjects
       assert_include raised.message, "document3"
     end
 
-    def test_find_window__found
+    def test_document_window_scanner_find__found
       all_windows = [
-        mock(:switch_to => true),
-        mock(:switch_to => true),
+        mock,
+        mock,
         mock,
       ]
 
-      AePageObjects::Window.expects(:all).returns(all_windows)
+      scanner = AePageObjects::DocumentFinder::DocumentWindowScanner.new(mock, :start_window, all_windows, mock)
 
-      finder = AePageObjects::DocumentFinder.new(mock)
+      load_from_window_sequence = sequence('load_from_window')
+      scanner.expects(:load_from_window).in_sequence(load_from_window_sequence).with(:start_window, true).returns(nil)
+      scanner.expects(:load_from_window).in_sequence(load_from_window_sequence).with(all_windows.first, false).returns(:found_it)
 
-      attempt_to_load_sequence = sequence('attempt_to_load')
-      finder.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(false)
-      finder.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(:found_it)
-
-      window = finder.send(:find_window, mock)
+      window = scanner.find
       assert_equal :found_it, window
     end
 
-    def test_find_window__not_found
+    def test_document_window_scanner_find__not_found
       all_windows = [
-        mock(:switch_to => true),
-        mock(:switch_to => true),
-        mock(:switch_to => true),
+        mock,
+        mock,
+        mock,
       ]
 
-      AePageObjects::Window.expects(:all).returns(all_windows)
+      scanner = AePageObjects::DocumentFinder::DocumentWindowScanner.new(mock, :start_window, all_windows, mock)
 
-      finder = AePageObjects::DocumentFinder.new(mock)
+      load_from_window_sequence = sequence('load_from_window')
+      scanner.expects(:load_from_window).in_sequence(load_from_window_sequence).with(:start_window, true).returns(nil)
+      scanner.expects(:load_from_window).in_sequence(load_from_window_sequence).with(all_windows[0], false).returns(nil)
+      scanner.expects(:load_from_window).in_sequence(load_from_window_sequence).with(all_windows[1], false).returns(nil)
+      scanner.expects(:load_from_window).in_sequence(load_from_window_sequence).with(all_windows[2], false).returns(nil)
 
-      attempt_to_load_sequence = sequence('attempt_to_load')
-      finder.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(false)
-      finder.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(false)
-      finder.expects(:attempt_to_load).in_sequence(attempt_to_load_sequence).returns(false)
-
-      window = finder.send(:find_window, mock)
+      window = scanner.find
       assert_equal nil, window
     end
 
-    def test_attempt_to_load__success
+    def test_document_window_scanner_load_from_window__success
+      document_class = mock(:new => :instance)
       conditions = mock
-      conditions.expects(:match?).with(:instance).returns(true)
+      conditions.expects(:match?).with(:instance, true).returns(true)
 
-      result = AePageObjects::DocumentFinder.new(mock(:new => :instance)).send(:attempt_to_load, conditions)
+      scanner = AePageObjects::DocumentFinder::DocumentWindowScanner.new(document_class, :start_window, [], conditions)
+      result = scanner.send(:load_from_window, mock(:switch_to => true), is_current = true)
       assert_equal :instance, result
     end
 
-    def test_attempt_to_load__failure
+    def test_document_window_scanner_load_from_window__failure
+      document_class = mock(:new => :instance)
       conditions = mock
-      conditions.expects(:match?).with(:instance).returns(false)
+      conditions.expects(:match?).with(:instance, true).returns(false)
 
-      result = AePageObjects::DocumentFinder.new(mock(:new => :instance)).send(:attempt_to_load, conditions)
+      scanner = AePageObjects::DocumentFinder::DocumentWindowScanner.new(document_class, :start_window, [], conditions)
+      result = scanner.send(:load_from_window, mock(:switch_to => true), is_current = true)
       assert_equal nil, result
     end
 
-    def test_attempt_to_load__loading_failed
-      document_class_mock = mock
-      document_class_mock.expects(:new).raises(AePageObjects::LoadingFailed.new)
+    def test_document_window_scanner_load_from_window__loading_failed
+      document_class = mock
+      document_class.expects(:new).raises(AePageObjects::LoadingFailed.new)
 
-      result = AePageObjects::DocumentFinder.new(document_class_mock).send(:attempt_to_load, mock())
+      scanner = AePageObjects::DocumentFinder::DocumentWindowScanner.new(document_class, :start_window, [], mock)
+      result = scanner.send(:load_from_window, mock(:switch_to => true), is_current = true)
       assert_equal nil, result
+    end
+
+    def test_conditions
+      block_condition = proc do |page|
+        page.is_starbucks?
+      end
+      conditions = DocumentFinder::Conditions.new({:ignore_current => true, :url => 'www.starbucks.com', :title => 'Coffee'}, block_condition)
+
+      page = setup_page_for_conditions
+      assert_equal true, conditions.match?(page, is_current = false)
+
+      page = setup_page_for_conditions(:ignore_current => true)
+      assert_equal false, conditions.match?(page, is_current = true)
+
+      page = setup_page_for_conditions(:current_url => "www.whatever.com/bleh")
+      assert_equal false, conditions.match?(page, is_current = false)
+
+      page = setup_page_for_conditions(:title => "Best Darn Stuff")
+      assert_equal false, conditions.match?(page, is_current = false)
+    end
+
+  private
+
+    def setup_page_for_conditions(options = {})
+      options = {
+        :current_url    => "www.starbucks.com/bleh",
+        :is_starbucks?  => true,
+        :title          => "Best Darn Coffee",
+        :ignore_current => true
+      }.merge(options)
+
+      capybara_stub.browser.stubs(:title).returns(options[:title])
+      stub(:current_url => options[:current_url], :is_starbucks? => options[:is_starbucks?])
     end
   end
 end
