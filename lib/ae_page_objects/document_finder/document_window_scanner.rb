@@ -1,22 +1,27 @@
 module AePageObjects
   class DocumentFinder
     class DocumentWindowScanner
-      def initialize(document_class, start_window, all_windows, conditions)
+      def initialize(document_class, current_window, all_windows, conditions)
         @document_class = document_class
-        @start_window   = start_window
+        @current_window = current_window
         @all_windows    = all_windows
         @conditions     = conditions
       end
 
       def find
-        if document = load_from_window(@start_window, is_current = true)
-          return document
+        # Look in the current window first unless told not to
+        unless @conditions.ignore_current?
+          if document = load_from_window(@current_window)
+            return document
+          end
         end
 
+        # Loop through all the windows and attempt to instantiate the Document. Continue to loop around
+        # until finding a Document that can be instantiated or timing out.
         @all_windows.each do |window|
-          next if window == @start_window
+          next if window == @current_window
 
-          if document = load_from_window(window, is_current = false)
+          if document = load_from_window(window)
             return document
           end
         end
@@ -26,12 +31,12 @@ module AePageObjects
 
       private
 
-      def load_from_window(window, is_current)
+      def load_from_window(window)
         window.switch_to
 
         inst = @document_class.new
 
-        if @conditions.match?(inst, is_current)
+        if @conditions.match?(inst)
           return inst
         end
 
