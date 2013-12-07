@@ -1,71 +1,7 @@
 module AePageObjects
   class DocumentFinder
-
-    class Conditions
-      def initialize(conditions, block_condition)
-        @conditions = conditions || {}
-        @conditions[:block] = block_condition if block_condition
-      end
-
-      def match?(page, is_current)
-        @conditions.each do |type, value|
-          case type
-          when :title then
-            return false unless Capybara.current_session.driver.browser.title.include?(value)
-          when :url then
-            return false unless page.current_url.include?(value)
-          when :block then
-            return false unless value.call(page)
-          when :ignore_current
-            return false if is_current && value
-          end
-        end
-
-        true
-      end
-    end
-
-    class DocumentWindowScanner
-      def initialize(document_class, start_window, all_windows, conditions)
-        @document_class = document_class
-        @start_window   = start_window
-        @all_windows    = all_windows
-        @conditions     = conditions
-      end
-
-      def find
-        if document = load_from_window(@start_window, is_current = true)
-          return document
-        end
-
-        @all_windows.each do |window|
-          next if window == @start_window
-
-          if document = load_from_window(window, is_current = false)
-            return document
-          end
-        end
-
-        nil
-      end
-
-    private
-
-      def load_from_window(window, is_current)
-        window.switch_to
-
-        inst = @document_class.new
-
-        if @conditions.match?(inst, is_current)
-          return inst
-        end
-
-        nil
-      rescue AePageObjects::LoadingFailed
-        # These will happen from the new() call above.
-        nil
-      end
-    end
+    autoload :Conditions,            'ae_page_objects/document_finder/conditions'
+    autoload :DocumentWindowScanner, 'ae_page_objects/document_finder/document_window_scanner'
 
     def initialize(document_class)
       @document_class  = document_class
