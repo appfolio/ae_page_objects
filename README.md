@@ -3,7 +3,7 @@
 _Page Objects for Capybara_
 
 [![Build Status](https://api.travis-ci.org/appfolio/ae_page_objects.png?branch=master)](http://travis-ci.org/appfolio/ae_page_objects)
-[![Code Climate](https://codeclimate.com/repos/52696f0b13d6374b6c0029ff/badges/e994b108c5e378d0dc5e/gpa.png)](https://codeclimate.com/repos/52696f0b13d6374b6c0029ff/feed)
+[![Code Climate](https://codeclimate.com/github/appfolio/ae_page_objects.png)](https://codeclimate.com/github/appfolio/ae_page_objects)
 
 AePageObjects provides a powerful and customizable implementation of the Page Object pattern built on top of Capybara to be used in automated acceptance test suites.
 
