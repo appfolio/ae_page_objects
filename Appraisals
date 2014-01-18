@@ -1,6 +1,6 @@
 if RUBY_VERSION == '1.8.7'
 
-  appraise "capybara-1.1" do
+  appraise "capybara-1.1-ruby#{RUBY_VERSION}" do
     gem "mocha", "= 0.13.3"
     gem "selenium-webdriver", ">= 0"
 
@@ -14,7 +14,7 @@ if RUBY_VERSION == '1.8.7'
 
 else
 
-  appraise "capybara-1.1" do
+  appraise "capybara-1.1-ruby#{RUBY_VERSION}" do
     gem "mocha", "= 0.13.3"
     gem "selenium-webdriver", ">= 0"
 
@@ -23,7 +23,7 @@ else
     gem 'capybara', '~> 1.1.4'
   end
 
-  appraise "capybara-2.1" do
+  appraise "capybara-2.1-ruby#{RUBY_VERSION}" do
     gem "mocha", "= 0.13.3"
     gem "selenium-webdriver", ">= 0"
 
@@ -32,7 +32,7 @@ else
     gem 'capybara', '~> 2.1.0'
   end
 
-  appraise "capybara-2.2" do
+  appraise "capybara-2.2-ruby#{RUBY_VERSION}" do
     gem "mocha", "= 0.13.3"
     gem "selenium-webdriver", ">= 0"
 
