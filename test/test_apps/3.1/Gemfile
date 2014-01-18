@@ -1,13 +1,5 @@
-source "https://rubygems.org"
+file = Dir.glob("../../../selenium_gemfiles/rails3.1/*ruby#{RUBY_VERSION}*").sort.reverse.first
+puts "Using Gemfile: #{file}"
 
-gem "rails", "3.1.12"
-gem "sqlite3"
-gem 'jquery-rails'
+eval_gemfile file
 
-gem "selenium-webdriver"
-gem 'capybara', '~> 1.1.4'
-
-group :development do
-  gem 'ae_page_objects', :path => '../../..'
-  gem "mocha", "0.13.3", :require => false
-end

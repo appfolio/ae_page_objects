@@ -1,19 +1,5 @@
-source "https://rubygems.org"
+file = Dir.glob("../../../selenium_gemfiles/rails2.3/*ruby#{RUBY_VERSION}*").sort.reverse.first
+puts "Using Gemfile: #{file}"
 
-gem 'rails', '2.3.18'
-gem 'rake'
-gem 'rdoc'
-gem 'sqlite3'
+eval_gemfile file
 
-gem "nokogiri", "< 1.6.0"
-
-gem "selenium-webdriver"
-gem 'capybara', '~> 1.1.4'
-
-gem 'mime-types', '< 2'
-
-group :development do
-  gem 'rubyzip', '< 1.0.0'
-  gem 'ae_page_objects', :path => '../../..'
-  gem "mocha", "0.9.7"
-end
