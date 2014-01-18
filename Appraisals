@@ -8,6 +8,7 @@ if RUBY_VERSION == '1.8.7'
 
     gem "nokogiri", "< 1.6.0"
     gem 'rubyzip', '< 1.0.0'
+    gem 'mime-types', '< 2'
     gem 'capybara', '~> 1.1.4'
   end
 
