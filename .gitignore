@@ -3,6 +3,8 @@ test/test_apps/**/db/*.sqlite3
 test/test_apps/**/log/*.log
 test/test_apps/**/tmp/**/*
 
+*.lock
+
 *.sqlite3
 pkg
 .idea
