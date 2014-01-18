@@ -40,6 +40,5 @@ else
 
     gem 'capybara', '~> 2.2.0'
   end
-
 end
 
