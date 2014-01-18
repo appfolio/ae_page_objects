@@ -24,6 +24,11 @@ namespace :test do
   end
   
   namespace :integration do
+    task :units do
+      system("bundle exec rake -s appraisal test:units")
+      raise unless $?.exitstatus == 0
+    end
+
     namespace :selenium do
       task :install do
         for_each_directory_of('test/test_apps/[0-9]*/**/Gemfile') do |directory|
@@ -63,6 +68,8 @@ namespace :test do
       end
     end
   end
+
+  task :ci => ['test:integration:units', 'test:integration:selenium']
 end
 
 def run_test_in(directory, *tasks)

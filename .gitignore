@@ -4,6 +4,7 @@ test/test_apps/**/log/*.log
 test/test_apps/**/tmp/**/*
 
 *.lock
+gemfiles
 
 *.sqlite3
 pkg
