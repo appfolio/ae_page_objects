@@ -1,5 +1,1 @@
-file = Dir.glob("../../../selenium_gemfiles/rails2.3/*ruby#{RUBY_VERSION}*").sort.reverse.first
-puts "Using Gemfile: #{file}"
-
-eval_gemfile file
-
+../shared/Gemfile

@@ -1,0 +1,21 @@
+rails_version = File.dirname(__FILE__).split('/').last
+
+directory =  "../../../selenium_gemfiles/rails#{rails_version}"
+
+file_pattern = "#{directory}/*ruby#{RUBY_VERSION}*"
+file = Dir.glob(file_pattern).sort.reverse.first
+
+if !file || file.empty?
+  raise <<-ERROR
+  -------------
+  Couldn't find Gemfile using pattern #{file_pattern} for Ruby#{RUBY_VERSION}.
+   Contents:
+        #{Dir.glob("#{directory}/*").join("\n        ")}"
+  -------------
+  ERROR
+end
+
+puts "Using Gemfile: #{file}"
+
+eval_gemfile file
+
