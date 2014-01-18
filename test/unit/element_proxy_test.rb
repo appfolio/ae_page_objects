@@ -59,7 +59,7 @@ module AePageObjects
     def test_not_present
       proxy = new_proxy
 
-      stub_capybara_session_wait_until
+      stub_wait_for(proxy)
 
       element_class.expect_initialize
       assert_false proxy.not_present?
@@ -68,26 +68,16 @@ module AePageObjects
     def test_not_present__element_not_found
       proxy = new_proxy
 
-      stub_capybara_session_wait_until
+      stub_wait_for(proxy)
       
       element_class.expects(:new).raises(Capybara::ElementNotFound)
       assert proxy.not_present?
-    end
-    
-    def test_not_present__timeout
-      proxy = new_proxy
-
-      fake_session = stub
-      fake_session.expects(:wait_until).raises(Capybara::TimeoutError)
-      Capybara.stubs(:current_session).returns(fake_session)
-
-      assert !proxy.not_present?
     end
 
     def test_visible
       proxy = new_proxy
 
-      stub_capybara_session_wait_until
+      stub_wait_for(proxy)
       
       element_class.expect_initialize
       element_class.any_instance.expects(:visible?).returns(true)
@@ -97,7 +87,7 @@ module AePageObjects
     def test_visible__element_not_found
       proxy = new_proxy
 
-      stub_capybara_session_wait_until
+      stub_wait_for(proxy)
       
       element_class.expects(:new).raises(Capybara::ElementNotFound)
       assert_false proxy.visible?
@@ -105,14 +95,14 @@ module AePageObjects
     
     def test_not_visible
       proxy = new_proxy
-      
-      stub_capybara_session_wait_until
+
+      stub_wait_for(proxy)
       
       element_class.expect_initialize
       element_class.any_instance.expects(:visible?).returns(false)
       assert proxy.not_visible?
-      
-      stub_capybara_session_wait_until
+
+      stub_wait_for(proxy)
       
       element_class.any_instance.expects(:visible?).returns(true)
       assert ! proxy.not_visible?
@@ -120,61 +110,58 @@ module AePageObjects
     
     def test_not_visible__element_not_found
       proxy = new_proxy
-      
-      stub_capybara_session_wait_until
+
+      stub_wait_for(proxy)
 
       element_class.expects(:new).raises(Capybara::ElementNotFound)
       assert proxy.not_visible?
     end
-    
-    def test_not_visible__timeout
-      proxy = new_proxy
-      
-      fake_session = stub
-      fake_session.expects(:wait_until).raises(Capybara::TimeoutError)
-      Capybara.stubs(:current_session).returns(fake_session)
 
-      assert !proxy.not_visible?
-    end
-    
     def test_visible__false
       proxy = new_proxy
 
-      stub_capybara_session_wait_until
+      stub_wait_for(proxy)
       
       element_class.expect_initialize
       element_class.any_instance.expects(:visible?).returns(false)
       assert_false proxy.visible?
     end
-    
-  private
-    
-    def stub_capybara_session_wait_until
-      fake_session_class = Class.new do
-        def wait_until
-          verified_called
-          yield
-        end
+
+    def test_wait_for
+      proxy = new_proxy
+
+      Capybara.expects(:default_wait_time).returns(:default_wait_time)
+      Timeout.expects(:timeout).with(:default_wait_time).yields
+
+      block_calls = sequence('calls')
+      Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false)
+      Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(true)
+
+      block = mock
+      block.expects(:called).times(2)
+      proxy.send(:wait_for) do
+        block.called
       end
-      
-      fake_session = fake_session_class.new
-      fake_session.expects :verified_called
-      Capybara.expects(:current_session).returns(fake_session)
     end
-  
-    def stub_capybara_session_wait_until
-      fake_session_class = Class.new do
-        def wait_until
-          verified_called
-          yield
-        end
+
+    def test_wait_for__timeout
+      proxy = new_proxy
+
+      Timeout.expects(:timeout).raises(Timeout::Error)
+
+      assert !proxy.send(:wait_for)
+    end
+
+    private
+
+    def stub_wait_for(proxy)
+      wait_for_mock = mock(:wait_for_called => true)
+      (class << proxy; self; end).send(:define_method, :wait_for) do |&block|
+        wait_for_mock.wait_for_called
+        block.call
       end
-    
-      fake_session = fake_session_class.new
-      fake_session.expects :verified_called
-      Capybara.stubs(:current_session).returns(fake_session)
     end
-  
+
     def element_class
       @element_class ||= Element.new_subclass do 
         def self.expect_initialize
