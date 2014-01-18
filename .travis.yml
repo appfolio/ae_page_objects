@@ -5,7 +5,7 @@ rvm:
   - 2.0.0
 
 gemfile:
-  - Gemfile
+  - Gemfile-ci
 
 bundler_args: ''
 
@@ -17,6 +17,7 @@ before_install:
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+  - bundle exec rake appraisal:cleanup
   - bundle exec rake appraisal:gemfiles
   - bundle exec rake appraisal:install
   - bundle exec rake test:integration:selenium:install
