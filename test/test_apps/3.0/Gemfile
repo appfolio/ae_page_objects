@@ -4,6 +4,9 @@ gem 'rails', '3.0.20'
 gem 'sqlite3'
 gem 'jquery-rails'
 
+gem "selenium-webdriver"
+gem 'capybara', '~> 1.1.4'
+
 group :development do
   gem 'ae_page_objects', :path => '../../..'
   gem "mocha", "0.13.3", :require => false

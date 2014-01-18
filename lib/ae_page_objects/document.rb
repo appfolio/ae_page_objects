@@ -2,13 +2,19 @@ module AePageObjects
   class Document < Node
     include Concerns::Visitable
 
-    attr_reader :window
-    
     def initialize
       super(Capybara.current_session)
+    end
 
-      @window = Window.current
-      @window.current_document = self
+    if defined? Selenium::WebDriver
+      attr_reader :window
+    
+      def initialize
+        super(Capybara.current_session)
+
+        @window = Window.current
+        @window.current_document = self
+      end
     end
     
     def document

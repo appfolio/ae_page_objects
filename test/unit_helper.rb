@@ -4,6 +4,7 @@ $LOAD_PATH << File.join(File.dirname(__FILE__))
 
 require 'rubygems'
 
+require 'selenium-webdriver'
 require 'ae_page_objects'
 require 'test/unit'
 require "mocha/setup"
