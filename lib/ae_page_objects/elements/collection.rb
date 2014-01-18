@@ -63,7 +63,15 @@ module AePageObjects
     end
 
     def item_xpath
-      @item_xpath ||= Capybara::Selector.normalize(*eval_locator(@item_locator)).xpaths.first
+      @item_xpath ||= begin
+        evaled_locator = eval_locator(@item_locator)
+
+        if Capybara::VERSION =~ /\A1/
+          Capybara::Selector.normalize(*evaled_locator).xpaths.first
+        else
+          Capybara::Query.new(*evaled_locator).xpath.to_s
+        end
+      end
     end
 
     def item_locator_at(index)

@@ -16,5 +16,17 @@ else
     gem 'capybara', '~> 1.1.4'
   end
 
+  appraise "capybara-2.1" do
+    gemfile.gemspec
+
+    gem 'capybara', '~> 2.1.0'
+  end
+
+  appraise "capybara-2.2" do
+    gemfile.gemspec
+
+    gem 'capybara', '~> 2.2.0'
+  end
+
 end
 
