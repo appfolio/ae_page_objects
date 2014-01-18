@@ -10,6 +10,8 @@ gem "nokogiri", "< 1.6.0"
 gem "selenium-webdriver"
 gem 'capybara', '~> 1.1.4'
 
+gem 'mime-types', '< 2'
+
 group :development do
   gem 'rubyzip', '< 1.0.0'
   gem 'ae_page_objects', :path => '../../..'
