@@ -152,7 +152,7 @@ namespace :test do
     end
   end
 
-  task :ci => ['test:integration:units', 'test:integration:selenium']
+  task :ci => ['test:integration:selenium:cleanup', 'test:integration:units', 'test:integration:selenium']
 end
 
 desc 'Default: run the unit and integration tests.'

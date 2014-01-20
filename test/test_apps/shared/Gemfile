@@ -2,7 +2,7 @@ rails_version = File.dirname(__FILE__).split('/').last
 
 directory =  File.expand_path("../../../../selenium_gemfiles/rails#{rails_version}", __FILE__)
 
-file_pattern = "#{directory}/*ruby#{RUBY_VERSION}*"
+file_pattern = "#{directory}/*ruby#{RUBY_VERSION}*.gemfile"
 file = Dir.glob(file_pattern).sort.reverse.first
 
 if !file || file.empty?
