@@ -21,23 +21,25 @@ before_script:
 
 script: "bundle exec rake test:ci"
 
-# For all the integration tests
-env:
-  matrix:
-    - RAILS_VERSION=2.3
-    - RAILS_VERSION=3.0
-    - RAILS_VERSION=3.1
-    - RAILS_VERSION=3.2
-    - UNITS=true
-
-matrix:
-  exclude:
-    - rvm: 2.0.0
-      gemfile: Gemfile
-      env: RAILS_VERSION=2.3
-    - rvm: 2.0.0
-      gemfile: Gemfile
-      env: RAILS_VERSION=3.0
-    - rvm: 2.0.0
-      gemfile: Gemfile
-      env: RAILS_VERSION=3.1
+# With the below you get a build that takes about 15 mins elapsed time and 46.5 mins worker time:
+#https://travis-ci.org/appfolio/ae_page_objects/builds/17328226
+## For all the integration tests
+#env:
+#  matrix:
+#    - RAILS_VERSION=2.3
+#    - RAILS_VERSION=3.0
+#    - RAILS_VERSION=3.1
+#    - RAILS_VERSION=3.2
+#    - UNITS=true
+#
+#matrix:
+#  exclude:
+#    - rvm: 2.0.0
+#      gemfile: Gemfile
+#      env: RAILS_VERSION=2.3
+#    - rvm: 2.0.0
+#      gemfile: Gemfile
+#      env: RAILS_VERSION=3.0
+#    - rvm: 2.0.0
+#      gemfile: Gemfile
+#      env: RAILS_VERSION=3.1
