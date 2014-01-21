@@ -1,0 +1,4 @@
+eval_gemfile File.expand_path("../Gemfile", __FILE__)
+
+gem 'capybara', '~> 2.1'
+

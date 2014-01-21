@@ -18,13 +18,7 @@ module AePageObjects
 
       magazine = clip.new(parent, :name => "18_holder", :item_locator => ".some_class")
 
-      if Capybara::VERSION =~ /\A1/
-        Capybara::Selector.expects(:normalize).returns(stub(:xpaths => ['item_xpath']))
-      else
-        Capybara::Query.any_instance.expects(:xpath).returns('item_xpath')
-      end
-
-      assert_equal "item_xpath", magazine.send(:item_xpath)
+      assert_equal ".//*[contains(concat(' ', normalize-space(@class), ' '), ' some_class ')]", magazine.send(:item_xpath)
     end
 
     def test_empty

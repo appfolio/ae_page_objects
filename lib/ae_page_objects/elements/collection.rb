@@ -69,7 +69,18 @@ module AePageObjects
         if Capybara::VERSION =~ /\A1/
           Capybara::Selector.normalize(*evaled_locator).xpaths.first
         else
-          Capybara::Query.new(*evaled_locator).xpath.to_s
+          query_args = evaled_locator + [{:exact => true}]
+          query = Capybara::Query.new(*query_args)
+
+          result = query.xpath
+
+          # if it's CSS, we need to run it through XPath as Capybara::Query#xpath only
+          # works when the selector is xpath. Lame.
+          if query.selector.format == :css
+            result = XPath.css(query.xpath).to_xpath
+          end
+
+          result
         end
       end
     end
