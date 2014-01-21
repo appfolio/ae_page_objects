@@ -18,16 +18,13 @@ class SeleniumRunner
 
   TestConfig = Struct.new(:rails_version, :gemfile)
 
-  SELENIUM_GEMFILES_PATH = File.expand_path("../selenium_gemfiles", __FILE__)
-
   def initialize(options = {})
     @options       = options
-    @gemfiles_path = SELENIUM_GEMFILES_PATH
     @matrix        = read_matrix
   end
 
   def cleanup
-    glob_pattern = "#{@gemfiles_path}/**/*.lock"
+    glob_pattern = "test/test_apps/**/gemfiles/*.lock"
     puts "Removing '#{glob_pattern}'"
 
     FileUtils.rm_f Dir[glob_pattern]
@@ -84,39 +81,36 @@ private
   end
 
   def run_test(gemfile, directory, command)
-    puts 'Test Config',
-         "---------------------",
+    puts "---------------------",
+         'Test Config',
          "Gemfile: #{gemfile}",
          "Command: '#{command}'",
          "---------------------"
 
-
-    if !@options[:dry]
-      with_gemfile_symlink(directory, gemfile, "Gemfile") do
+    with_gemfile_symlink(directory, gemfile, "Gemfile") do
+      if !@options[:dry]
         Command.new("cd #{directory} && #{command}", gemfile).run
       end
     end
   end
 
   def with_gemfile_symlink(directory, use_gemfile, app_gemfile)
-    current_link = run_command("readlink #{directory}/#{app_gemfile}").strip
-
     run_command("cd #{directory} && ln -sf #{use_gemfile} #{app_gemfile}")
     run_command("cd #{directory} && ln -sf #{use_gemfile}.lock #{app_gemfile}.lock")
 
     yield
 
-    run_command("cd #{directory} && ln -sf #{current_link} #{app_gemfile}")
+    run_command("cd #{directory} && git checkout -- #{app_gemfile}")
     run_command("rm -f #{directory}/#{app_gemfile}.lock")
   end
 
   def read_matrix
-    file_pattern = "#{@gemfiles_path}/**/*ruby#{RUBY_VERSION}*.gemfile"
+    file_pattern = "test/test_apps/**/gemfiles/*ruby#{RUBY_VERSION}*.gemfile"
 
     matrix = {}
 
     Dir.glob(file_pattern).each do |file|
-      matches = file.match(/#{@gemfiles_path}\/rails(\d\.\d)\/(.*ruby(\d\.\d\.\d)\.gemfile)/)
+      matches = file.match(%r{test/test_apps/(\d\.\d)/gemfiles/(.*ruby(\d\.\d\.\d)\.gemfile)})
 
       gemfile_path  = matches[0]
       rails_version = matches[1]
@@ -124,7 +118,7 @@ private
       ruby_version  = matches[3]
 
       matrix[rails_version] ||= []
-      matrix[rails_version] << TestConfig.new(rails_version, gemfile_path)
+      matrix[rails_version] << TestConfig.new(rails_version, File.expand_path("../#{gemfile_path}", __FILE__))
     end
 
     matrix
@@ -132,9 +126,11 @@ private
 
   def run_command(command)
     puts "Running '#{command}'"
-    output = `#{command}`
-    raise unless $?.exitstatus == 0
-    output
+
+    if ! @options[:dry]
+      `#{command}`
+      raise unless $?.exitstatus == 0
+    end
   end
 end
 
