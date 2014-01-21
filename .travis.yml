@@ -21,3 +21,25 @@ before_script:
   - bundle exec rake test:integration:selenium:install
   
 script: "bundle exec rake test:ci"
+
+# For all the integration tests
+env:
+ - RAILS_VERSION=2.3
+ - RAILS_VERSION=3.0
+ - RAILS_VERSION=3.1
+ - RAILS_VERSION=3.2
+
+# For all the unit tests (via absence of RAILS_VERSION)
+include:
+  - rvm: 1.8.7
+  - rvm: 1.9.3
+  - rvm: 2.0.0
+
+exclude:
+ - rvm: 2.0.0
+   env: RAILS_VERSION=2.3
+ - rvm: 2.0.0
+   env: RAILS_VERSION=3.0
+ - rvm: 2.0.0
+   env: RAILS_VERSION=3.1
+

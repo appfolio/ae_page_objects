@@ -172,7 +172,11 @@ namespace :test do
     end
   end
 
-  task :ci => ['test:integration:units', 'test:integration:selenium']
+  if ENV['RAILS_VERSION']
+    task :ci => ['test:integration:selenium']
+  else
+    task :ci => ['test:integration:units']
+  end
 end
 
 desc 'Default: run the unit and integration tests.'
