@@ -18,23 +18,7 @@ module AePageObjects
       element_class.expects(:new).returns(:yay)
       assert_equal :yay, proxy.send(:element)
     end
-    
-    def test_initialize__block
-      element_class.expect_initialize
-      
-      instance_passed_to_block = nil
-      proxy = new_proxy do |element|
-        instance_passed_to_block = element
-      end
-      assert_is_proxy proxy
-      
-      assert_is_element instance_passed_to_block
-      assert_is_element proxy.presence
-      
-      assert_equal instance_passed_to_block, proxy.presence
-      assert proxy.present?
-    end
-    
+
     def test_methods_forwarded
       proxy = new_proxy
       
@@ -199,8 +183,8 @@ module AePageObjects
       end
     end
   
-    def new_proxy(&block)
-      ElementProxy.new(element_class, 1, 2, &block)
+    def new_proxy
+      ElementProxy.new(element_class, 1, 2)
     end
   
     def assert_is_proxy(proxy)

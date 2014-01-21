@@ -18,36 +18,6 @@ module AePageObjects
         capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
-      
-      def test_element__accessor_yields_to_block
-        kitty = ::AePageObjects::Document.new_subclass do
-          element :kind
-        end
-
-        assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
-
-        stub_current_window
-
-        jon = kitty.new
-        
-        kind_page_object = mock
-        capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
-
-        kind_in_block = nil
-        kind = jon.kind do |kind|
-          kind_in_block = kind
-          "hello"
-        end
-        
-        assert_false kind_in_block.is_a?(AePageObjects::ElementProxy)
-        assert kind_in_block.is_a?(AePageObjects::Element)
-
-        assert kind.is_a?(AePageObjects::ElementProxy)
-        assert kind.is_a?(AePageObjects::Element)
-        
-        assert_equal kind, kind_in_block
-      end
     
       def test_element__locator
         kitty = ::AePageObjects::Document.new_subclass do

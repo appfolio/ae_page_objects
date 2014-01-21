@@ -19,19 +19,20 @@ module AePageObjects
       self.class.item_class
     end
 
-    def at(index, &block)
+
+    def at(index)
       if index >= size || index < 0
         nil
       else
-        item_at(index, &block)
+        item_at(index)
       end
     end
 
-    def [](index, &block)
-      at(index, &block)
+    def [](index)
+      at(index)
     end
     
-    def each(&block)
+    def each
       (0..(size - 1)).each do |index|
         yield at(index)
       end
@@ -41,8 +42,8 @@ module AePageObjects
       node.all(:xpath, item_xpath).size
     end
 
-    def last(&block)
-      self.at(size - 1, &block)
+    def last
+      self.at(size - 1)
     end
 
   private
@@ -53,8 +54,8 @@ module AePageObjects
       @item_locator = options.delete(:item_locator) || default_item_locator
     end
 
-    def item_at(index, &block)
-      ElementProxy.new(item_class_at(index), self, :name => index, :locator => item_locator_at(index), &block)
+    def item_at(index)
+      ElementProxy.new(item_class_at(index), self, :name => index, :locator => item_locator_at(index))
     end
 
     def item_class_at(index)
