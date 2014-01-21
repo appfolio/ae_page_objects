@@ -1,6 +1,8 @@
 == X.X.X
 
 * Support Capybara 2
+* Removed block support from Element.new
+* Change ElementProxy visibility methods to wait
 
 == 0.5.2
 
