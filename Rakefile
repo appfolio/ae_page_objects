@@ -33,20 +33,14 @@ class SeleniumRunner
   def install_all
     @matrix.values.each do |test_configs|
       test_configs.each do |test_config|
-        appraisal = Appraisal::Appraisal.new("name", test_config.gemfile)
-
-        def appraisal.gemfile_path
-          @gemfile_path
-        end
-
-        appraisal.instance_variable_set(:@gemfile_path, test_config.gemfile)
-
-        if @options[:dry]
-          puts "Installing: #{test_config.gemfile}"
-        else
-          appraisal.install
-        end
+        install_config(test_config)
       end
+    end
+  end
+
+  def install_all_for(rails_version)
+    @matrix[rails_version].each do |test_config|
+      install_config(test_config)
     end
   end
 
@@ -69,6 +63,22 @@ class SeleniumRunner
   end
 
 private
+
+ def install_config(test_config)
+   appraisal = Appraisal::Appraisal.new("name", test_config.gemfile)
+
+   def appraisal.gemfile_path
+     @gemfile_path
+   end
+
+   appraisal.instance_variable_set(:@gemfile_path, test_config.gemfile)
+
+   if @options[:dry]
+     puts "Installing: #{test_config.gemfile}"
+   else
+     appraisal.install
+   end
+ end
 
   # Appraisal::Command almost has what I need: a way to run things without Bundler/Ruby
   # Env variables. The subclassing is to override the initializer to not modify the command.
@@ -153,7 +163,13 @@ namespace :test do
 
     namespace :selenium do
       task :install do
-        selenium_runner.install_all
+        rails_version = ENV['RAILS_VERSION']
+        if rails_version
+          selenium_runner.install_all_for(rails_version)
+        else
+          selenium_runner.install_all
+        end
+
       end
 
       task :cleanup do
@@ -173,8 +189,14 @@ namespace :test do
   end
 
   if ENV['RAILS_VERSION']
+    namespace :ci do
+      task :install => ["test:integration:selenium:install"]
+    end
     task :ci => ['test:integration:selenium']
   else
+    namespace :ci do
+      task :install => ["appraisal:install"]
+    end
     task :ci => ['test:integration:units']
   end
 end
