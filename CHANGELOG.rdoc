@@ -1,4 +1,4 @@
-== X.X.X
+== 1.0.0
 
 * Support Capybara 2
 * Removed block support from Element.new
