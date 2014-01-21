@@ -188,17 +188,25 @@ namespace :test do
     end
   end
 
-  if ENV['RAILS_VERSION']
-    namespace :ci do
-      task :install => ["test:integration:selenium:install"]
-    end
-    task :ci => ['test:integration:selenium']
-  else
-    namespace :ci do
-      task :install => ["appraisal:install"]
-    end
-    task :ci => ['test:integration:units']
+  ci_install = nil
+  ci_task    = nil
+
+  if ! (ENV['RAILS_VERSION'].nil? ^ ENV['UNITS'].nil?)
+    ci_install = ["appraisal:install", "test:integration:selenium:install"]
+    ci_task    = ['test:integration:units', 'test:integration:selenium']
+  elsif ENV['RAILS_VERSION']
+    ci_install = "test:integration:selenium:install"
+    ci_task    = 'test:integration:selenium'
+  elsif ENV['UNITS']
+    ci_install = "appraisal:install"
+    ci_task    = 'test:integration:units'
   end
+
+  namespace :ci do
+    task :install => ci_install
+  end
+
+  task :ci => ci_task
 end
 
 desc 'Default: run the unit and integration tests.'

@@ -28,7 +28,7 @@ env:
     - RAILS_VERSION=3.0
     - RAILS_VERSION=3.1
     - RAILS_VERSION=3.2
-    - UNITS_ONLY=true
+    - UNITS=true
 
 matrix:
   exclude:
