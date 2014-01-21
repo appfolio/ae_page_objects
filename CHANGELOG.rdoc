@@ -1,3 +1,7 @@
+== X.X.X
+
+* Support Capybara 2
+
 == 0.5.2
 
 * A few Collection improvements

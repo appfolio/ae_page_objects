@@ -6,8 +6,6 @@ rvm:
 
 gemfile:
   - Gemfile
-  - Gemfile.ruby-1.9.3
-  - Gemfile.ruby-2.0.0
 
 bundler_args: ''
 
@@ -19,21 +17,37 @@ before_install:
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - bundle exec rake test:integration:selenium:install
-  
-script: "bundle exec rake"
+  - bundle exec rake test:ci:install
 
-matrix:
-  exclude:
-    - rvm: 1.9.3
-      gemfile: Gemfile
-    - rvm: 2.0.0
-      gemfile: Gemfile
-    - rvm: 1.8.7
-      gemfile: Gemfile.ruby-1.9.3
-    - rvm: 2.0.0
-      gemfile: Gemfile.ruby-1.9.3
-    - rvm: 1.8.7
-      gemfile: Gemfile.ruby-2.0.0
-    - rvm: 1.9.3
-      gemfile: Gemfile.ruby-2.0.0
+script: "bundle exec rake test:ci"
+
+# Without the below, Travis runs 3 builds, that take about 14 mins elapsed time and 22 mins worker time:
+#https://travis-ci.org/appfolio/ae_page_objects/builds/17328803
+#
+# With the below you get a build that takes about 15 mins elapsed time and 46.5 mins worker time:
+#https://travis-ci.org/appfolio/ae_page_objects/builds/17328226
+#
+# It might be worth trying targetting the Appraisal gemfiles directly...
+#
+# - "The Below" -
+#
+## For all the integration tests
+#env:
+#  matrix:
+#    - RAILS_VERSION=2.3
+#    - RAILS_VERSION=3.0
+#    - RAILS_VERSION=3.1
+#    - RAILS_VERSION=3.2
+#    - UNITS=true
+#
+#matrix:
+#  exclude:
+#    - rvm: 2.0.0
+#      gemfile: Gemfile
+#      env: RAILS_VERSION=2.3
+#    - rvm: 2.0.0
+#      gemfile: Gemfile
+#      env: RAILS_VERSION=3.0
+#    - rvm: 2.0.0
+#      gemfile: Gemfile
+#      env: RAILS_VERSION=3.1

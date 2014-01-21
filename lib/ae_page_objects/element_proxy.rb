@@ -1,3 +1,5 @@
+require 'timeout'
+
 module AePageObjects
   class ElementProxy
     
@@ -17,25 +19,17 @@ module AePageObjects
     # Provided so that visible? can be asked without
     # an explicit check for present? first.
     def visible?
-      Capybara.current_session.wait_until do
-        Capybara.using_wait_time(0) do
-          inst = presence
-          !! inst && inst.visible?
-        end
+      wait_for do
+        inst = presence
+        !! inst && inst.visible?
       end
-    rescue Capybara::TimeoutError
-      false  
     end
     
     def not_visible?
-      Capybara.current_session.wait_until do
-        Capybara.using_wait_time(0) do
-          inst = presence
-          inst.nil? || ! inst.visible?
-        end
+      wait_for do
+        inst = presence
+        inst.nil? || ! inst.visible?
       end
-    rescue Capybara::TimeoutError
-      false
     end
 
     def present?
@@ -43,13 +37,9 @@ module AePageObjects
     end
     
     def not_present?
-      Capybara.current_session.wait_until do
-        Capybara.using_wait_time(0) do
-          ! present?
-        end
+      wait_for do
+        ! present?
       end
-    rescue Capybara::TimeoutError
-      false
     end
     
     def presence
@@ -79,7 +69,16 @@ module AePageObjects
     end
     
   private
-  
+
+    def wait_for(&block)
+      Timeout.timeout(Capybara.default_wait_time) do
+        sleep(0.05) until value = Capybara.using_wait_time(0, &block)
+        value
+      end
+    rescue Timeout::Error
+      false
+    end
+
     def element
       @element ||= @element_class.new(*@args)
     end

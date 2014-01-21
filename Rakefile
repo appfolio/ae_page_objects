@@ -2,19 +2,151 @@
 
 require 'rubygems'
 require 'bundler'
+require 'fileutils'
 
 require 'rake'
 require 'appraisal'
 
 require 'rake/testtask'
 
+require 'pp'
+
+
 Bundler::GemHelper.install_tasks
 
-selenium_matrix = {
-  '1.8.7' => ['2.3', '3.0', '3.1', '3.2'],
-  '1.9.3' => ['2.3', '3.0', '3.1', '3.2'],
-  '2.0.0' => ['3.2']
-}
+class SeleniumRunner
+
+  TestConfig = Struct.new(:rails_version, :gemfile)
+
+  def initialize(options = {})
+    @options       = options
+    @matrix        = read_matrix
+  end
+
+  def cleanup
+    glob_pattern = "test/test_apps/**/gemfiles/*.lock"
+    puts "Removing '#{glob_pattern}'"
+
+    FileUtils.rm_f Dir[glob_pattern]
+  end
+
+  def install_all
+    @matrix.values.each do |test_configs|
+      test_configs.each do |test_config|
+        install_config(test_config)
+      end
+    end
+  end
+
+  def install_all_for(rails_version)
+    @matrix[rails_version].each do |test_config|
+      install_config(test_config)
+    end
+  end
+
+  def run_all_tests
+    @matrix.keys.sort.each do |rails_version|
+      run_all_tests_for(rails_version)
+    end
+  end
+
+  def run_all_tests_for(rails_version)
+    rails_versions = @matrix[rails_version]
+    if !rails_versions || rails_versions.empty?
+      puts "Tests for #{rails_version} can't run on #{RUBY_VERSION}"
+      return
+    end
+
+    rails_versions.each do |test_config|
+      run_test(test_config.gemfile, "test/test_apps/#{rails_version}", "bundle exec rake test:selenium")
+    end
+  end
+
+private
+
+ def install_config(test_config)
+   appraisal = Appraisal::Appraisal.new("name", test_config.gemfile)
+
+   def appraisal.gemfile_path
+     @gemfile_path
+   end
+
+   appraisal.instance_variable_set(:@gemfile_path, test_config.gemfile)
+
+   if @options[:dry]
+     puts "Installing: #{test_config.gemfile}"
+   else
+     appraisal.install
+   end
+ end
+
+  # Appraisal::Command almost has what I need: a way to run things without Bundler/Ruby
+  # Env variables. The subclassing is to override the initializer to not modify the command.
+  class Command < Appraisal::Command
+    def initialize(command, gemfile = nil)
+      @original_env = {}
+      @gemfile = gemfile
+      @command = command
+    end
+  end
+
+  def run_test(gemfile, directory, command)
+    puts "---------------------",
+         'Test Config',
+         "Gemfile: #{gemfile}",
+         "Command: '#{command}'",
+         "---------------------"
+
+    with_gemfile_symlink(directory, gemfile, "Gemfile") do
+      if !@options[:dry]
+        Command.new("cd #{directory} && #{command}", gemfile).run
+      end
+    end
+  end
+
+  def with_gemfile_symlink(directory, use_gemfile, app_gemfile)
+    run_command("cd #{directory} && ln -sf #{use_gemfile} #{app_gemfile}")
+    run_command("cd #{directory} && ln -sf #{use_gemfile}.lock #{app_gemfile}.lock")
+
+    yield
+
+    run_command("cd #{directory} && git checkout -- #{app_gemfile}")
+    run_command("rm -f #{directory}/#{app_gemfile}.lock")
+  end
+
+  def read_matrix
+    file_pattern = "test/test_apps/**/gemfiles/*ruby#{RUBY_VERSION}*.gemfile"
+
+    matrix = {}
+
+    Dir.glob(file_pattern).each do |file|
+      matches = file.match(%r{test/test_apps/(\d\.\d)/gemfiles/(.*ruby(\d\.\d\.\d)\.gemfile)})
+
+      gemfile_path  = matches[0]
+      rails_version = matches[1]
+      gemfile       = matches[2]
+      ruby_version  = matches[3]
+
+      matrix[rails_version] ||= []
+      matrix[rails_version] << TestConfig.new(rails_version, File.expand_path("../#{gemfile_path}", __FILE__))
+    end
+
+    matrix
+  end
+
+  def run_command(command)
+    puts "Running '#{command}'"
+
+    if ! @options[:dry]
+      `#{command}`
+      raise unless $?.exitstatus == 0
+    end
+  end
+end
+
+def selenium_runner
+  SeleniumRunner.new(:dry => ENV['DRY'])
+end
 
 namespace :test do
   Rake::TestTask.new(:units) do |test|
@@ -22,74 +154,60 @@ namespace :test do
     test.pattern = 'test/unit/**/*_test.rb'
     test.verbose = true
   end
-  
+
   namespace :integration do
+    task :units do
+      system("bundle exec rake -s appraisal test:units")
+      raise unless $?.exitstatus == 0
+    end
+
     namespace :selenium do
       task :install do
-        for_each_directory_of('test/test_apps/[0-9]*/**/Gemfile') do |directory|
-          app_version = File.basename(directory)
-          if selenium_matrix[RUBY_VERSION].include?(app_version)
-            gemfile_path = File.join(directory, 'Gemfile')
-            appraisal = Appraisal::Appraisal.new("name", File.join(directory, 'Gemfile'))
-
-            def appraisal.gemfile_path
-              @gemfile_path
-            end
-
-            appraisal.instance_variable_set(:@gemfile_path, gemfile_path)
-
-            appraisal.install
-          end
+        rails_version = ENV['RAILS_VERSION']
+        if rails_version
+          selenium_runner.install_all_for(rails_version)
+        else
+          selenium_runner.install_all
         end
+
+      end
+
+      task :cleanup do
+        selenium_runner.cleanup
       end
     end
 
     desc "Run selenium tests on all apps."
-    task :selenium do 
-      app_version = ENV['APP_VERSION'] 
-      if app_version
-        if selenium_matrix[RUBY_VERSION].include?(app_version)
-          run_test_in "test/test_apps/#{app_version}", 'test:selenium'
-        else
-          puts "Tests for #{app_version} can't run on #{RUBY_VERSION}"
-        end
+    task :selenium do
+      rails_version = ENV['RAILS_VERSION']
+      if rails_version
+        selenium_runner.run_all_tests_for(rails_version)
       else
-        for_each_directory_of('test/test_apps/[0-9]*/**/Rakefile') do |directory|
-          app_version = File.basename(directory)
-          if selenium_matrix[RUBY_VERSION].include?(app_version)
-            run_test_in directory, 'test:selenium'
-          end
-        end
+        selenium_runner.run_all_tests
       end
     end
   end
-end
 
-def run_test_in(directory, *tasks)
-  env = "TEST=../../#{ENV['TEST']} " if ENV['TEST']
-  run_in(directory, "#{env} bundle exec rake #{tasks.join(' ')}")
-end
+  ci_install = nil
+  ci_task    = nil
 
-def run_in(directory, command)
-  puts '', directory, ''
-  with_pruned_env('BUNDLE_GEMFILE') do
-    system("cd #{directory} && #{command}")
-    raise unless $?.exitstatus == 0
+  if ! (ENV['RAILS_VERSION'].nil? ^ ENV['UNITS'].nil?)
+    ci_install = ["appraisal:install", "test:integration:selenium:install"]
+    ci_task    = ['test:integration:units', 'test:integration:selenium']
+  elsif ENV['RAILS_VERSION']
+    ci_install = "test:integration:selenium:install"
+    ci_task    = 'test:integration:selenium'
+  elsif ENV['UNITS']
+    ci_install = "appraisal:install"
+    ci_task    = 'test:integration:units'
   end
-end
 
-def for_each_directory_of(path, &block)
-  Dir[path].sort.each do |rakefile|
-    directory = File.dirname(rakefile)
-    block.call(directory)
+  namespace :ci do
+    task :install => ci_install
   end
-end
 
-def with_pruned_env(key_to_withhold, &block)
-  withholding = ENV.delete(key_to_withhold)
-  tap{ |r| r = yield; ENV[key_to_withhold] = withholding }
+  task :ci => ci_task
 end
-
 
 desc 'Default: run the unit and integration tests.'
 task :default => ['test:units', 'test:integration:selenium']

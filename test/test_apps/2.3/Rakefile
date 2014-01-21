@@ -9,6 +9,8 @@ require 'rdoc/task'
 
 require 'tasks/rails'
 
+require 'appraisal'
+
 namespace :test do
   Rake::TestTask.new(:selenium) do |t|
     t.libs << "test"
