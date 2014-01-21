@@ -21,8 +21,16 @@ before_script:
 
 script: "bundle exec rake test:ci"
 
+# Without the below, Travis runs 3 builds, that take about 14 mins elapsed time and 22 mins worker time:
+#https://travis-ci.org/appfolio/ae_page_objects/builds/17328803
+#
 # With the below you get a build that takes about 15 mins elapsed time and 46.5 mins worker time:
 #https://travis-ci.org/appfolio/ae_page_objects/builds/17328226
+#
+# It might be worth trying targetting the Appraisal gemfiles directly...
+#
+# - "The Below" -
+#
 ## For all the integration tests
 #env:
 #  matrix:
