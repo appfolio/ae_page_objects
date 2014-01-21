@@ -24,17 +24,17 @@ class SeleniumRunner
     @options       = options
     @gemfiles_path = SELENIUM_GEMFILES_PATH
     @matrix        = read_matrix
-
-    puts "Test Matrix:"
-    pp @matrix
   end
 
   def cleanup
-    FileUtils.rm_f Dir["#{@gemfiles_path}/**/*.lock"]
+    glob_pattern = "#{@gemfiles_path}/**/*.lock"
+    puts "Removing '#{glob_pattern}'"
+
+    FileUtils.rm_f Dir[glob_pattern]
   end
 
   def install_all
-    @matrix.each do |rails_version, test_configs|
+    @matrix.values.each do |test_configs|
       test_configs.each do |test_config|
         appraisal = Appraisal::Appraisal.new("name", test_config.gemfile)
 
@@ -54,7 +54,7 @@ class SeleniumRunner
   end
 
   def run_all_tests
-    @matrix.keys.each do |rails_version|
+    @matrix.keys.sort.each do |rails_version|
       run_all_tests_for(rails_version)
     end
   end
@@ -67,30 +67,47 @@ class SeleniumRunner
     end
 
     rails_versions.each do |test_config|
-      run_test_in test_config.gemfile, "test/test_apps/#{rails_version}"
+      run_test(test_config.gemfile, "test/test_apps/#{rails_version}", "bundle exec rake test:selenium")
     end
   end
 
 private
 
-  def run_test_in(gemfile, directory)
-    env = ["BUNDLE_GEMFILE=#{gemfile}"]
-    env << "TEST=../../#{ENV['TEST']} " if ENV['TEST']
-    run_in(directory, "#{env.join(" ")} bundle exec rake test:selenium")
-  end
-
-  def run_in(directory, command)
-    puts '', directory, ' ', command
-    with_pruned_env('BUNDLE_GEMFILE') do
-      return if @options[:dry]
-      system("cd #{directory} && #{command}")
-      raise unless $?.exitstatus == 0
+  # Appraisal::Command almost has what I need: a way to run things without Bundler/Ruby
+  # Env variables. The subclassing is to override the initializer to not modify the command.
+  class Command < Appraisal::Command
+    def initialize(command, gemfile = nil)
+      @original_env = {}
+      @gemfile = gemfile
+      @command = command
     end
   end
 
-  def with_pruned_env(key_to_withhold, &block)
-    withholding = ENV.delete(key_to_withhold)
-    tap{ |r| r = yield; ENV[key_to_withhold] = withholding }
+  def run_test(gemfile, directory, command)
+    puts 'Test Config',
+         "---------------------",
+         "Gemfile: #{gemfile}",
+         "Command: '#{command}'",
+         "---------------------"
+
+
+    if !@options[:dry]
+      with_gemfile_symlink(directory, gemfile, "Gemfile") do
+        Command.new("cd #{directory} && #{command}", gemfile).run
+      end
+    end
+  end
+
+  def with_gemfile_symlink(directory, use_gemfile, app_gemfile)
+    current_link = run_command("readlink #{directory}/#{app_gemfile}").strip
+
+    run_command("cd #{directory} && ln -sf #{use_gemfile} #{app_gemfile}")
+    run_command("cd #{directory} && ln -sf #{use_gemfile}.lock #{app_gemfile}.lock")
+
+    yield
+
+    run_command("cd #{directory} && ln -sf #{current_link} #{app_gemfile}")
+    run_command("rm -f #{directory}/#{app_gemfile}.lock")
   end
 
   def read_matrix
@@ -111,6 +128,13 @@ private
     end
 
     matrix
+  end
+
+  def run_command(command)
+    puts "Running '#{command}'"
+    output = `#{command}`
+    raise unless $?.exitstatus == 0
+    output
   end
 end
 
@@ -143,7 +167,7 @@ namespace :test do
 
     desc "Run selenium tests on all apps."
     task :selenium do
-      rails_version = ENV['APP_VERSION']
+      rails_version = ENV['RAILS_VERSION']
       if rails_version
         selenium_runner.run_all_tests_for(rails_version)
       else
@@ -152,7 +176,7 @@ namespace :test do
     end
   end
 
-  task :ci => ['test:integration:selenium:cleanup', 'test:integration:units', 'test:integration:selenium']
+  task :ci => ['test:integration:units', 'test:integration:selenium']
 end
 
 desc 'Default: run the unit and integration tests.'

@@ -1,4 +1,14 @@
-eval_gemfile File.expand_path("../Gemfile", __FILE__)
+source "https://rubygems.org"
+
+gem "rails", "3.1.12"
+gem "sqlite3"
+gem 'jquery-rails'
+
+gem "selenium-webdriver"
+
+gem "mocha", "0.13.3", :require => false
+
+gem 'ae_page_objects', :path => "../../.."
 
 gem 'capybara', '~> 1.1.4'
 
