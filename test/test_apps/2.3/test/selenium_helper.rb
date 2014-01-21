@@ -31,6 +31,7 @@ end
 
 Capybara.configure do |config|
   config.default_driver    = :selenium
+  config.ignore_hidden_elements = false
   config.default_wait_time = 5
 end
 
