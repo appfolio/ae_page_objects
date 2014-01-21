@@ -5,7 +5,7 @@ rvm:
   - 2.0.0
 
 gemfile:
-  - Gemfile-ci
+  - Gemfile
 
 bundler_args: ''
 
