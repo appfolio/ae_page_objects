@@ -16,6 +16,7 @@ module AePageObjects
   autoload :InternalHelpers,      'ae_page_objects/util/internal_helpers'
   autoload :HashSymbolizer,       'ae_page_objects/util/hash_symbolizer'
   autoload :Inflector,            'ae_page_objects/util/inflector'
+  autoload :Waiter,               'ae_page_objects/util/waiter'
 
   module Concerns
     autoload :LoadEnsuring,     'ae_page_objects/concerns/load_ensuring'
