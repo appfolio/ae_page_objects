@@ -31,6 +31,13 @@ module PageObjects
           node.click_link("Show In New Window")
         end
 
+        def delayed_show!
+          node.find(".js-delay-show").click
+          stale!
+
+          ShowPage.new
+        end
+
         def show!
           node.click_link("Show")
           stale!

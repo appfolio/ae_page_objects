@@ -24,6 +24,19 @@ class PageObjectIntegrationTest < Selenium::TestCase
       PageObjects::Authors::NewPage.new
     end
   end
+
+  def test_load_ensuring__waits_for_page
+    ActiveRecord::Base.transaction do
+      Author.create!(:last_name => 'a')
+    end
+
+    index = PageObjects::Authors::IndexPage.visit
+
+    author = index.authors.find do |author|
+      author.last_name.text == 'a'
+    end.delayed_show!
+    assert_equal "a", author.last_name.text
+  end
   
   def test_simple_form
     new_page = PageObjects::Books::NewPage.visit

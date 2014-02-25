@@ -59,107 +59,97 @@ module AePageObjects
     def test_not_present
       proxy = new_proxy
 
-      stub_wait_for(proxy)
-
-      element_class.expect_initialize
-      assert_false proxy.not_present?
+      with_stubbed_wait_for do
+        element_class.expect_initialize
+        assert_false proxy.not_present?
+      end
     end
 
     def test_not_present__element_not_found
       proxy = new_proxy
 
-      stub_wait_for(proxy)
-      
-      element_class.expects(:new).raises(Capybara::ElementNotFound)
-      assert proxy.not_present?
+      with_stubbed_wait_for do
+        element_class.expects(:new).raises(Capybara::ElementNotFound)
+        assert proxy.not_present?
+      end
     end
 
     def test_visible
       proxy = new_proxy
 
-      stub_wait_for(proxy)
-      
-      element_class.expect_initialize
-      element_class.any_instance.expects(:visible?).returns(true)
-      assert proxy.visible?
+      with_stubbed_wait_for do
+        element_class.expect_initialize
+        element_class.any_instance.expects(:visible?).returns(true)
+        assert proxy.visible?
+      end
     end
     
     def test_visible__element_not_found
       proxy = new_proxy
 
-      stub_wait_for(proxy)
-      
-      element_class.expects(:new).raises(Capybara::ElementNotFound)
-      assert_false proxy.visible?
+      with_stubbed_wait_for do
+        element_class.expects(:new).raises(Capybara::ElementNotFound)
+        assert_false proxy.visible?
+      end
     end
     
     def test_not_visible
       proxy = new_proxy
 
-      stub_wait_for(proxy)
-      
-      element_class.expect_initialize
-      element_class.any_instance.expects(:visible?).returns(false)
-      assert proxy.not_visible?
+      with_stubbed_wait_for do
+        element_class.expect_initialize
+        element_class.any_instance.expects(:visible?).returns(false)
+        assert proxy.not_visible?
+      end
 
-      stub_wait_for(proxy)
-      
-      element_class.any_instance.expects(:visible?).returns(true)
-      assert ! proxy.not_visible?
+      with_stubbed_wait_for do
+        element_class.any_instance.expects(:visible?).returns(true)
+        assert ! proxy.not_visible?
+      end
     end
     
     def test_not_visible__element_not_found
       proxy = new_proxy
 
-      stub_wait_for(proxy)
-
-      element_class.expects(:new).raises(Capybara::ElementNotFound)
-      assert proxy.not_visible?
+      with_stubbed_wait_for do
+        element_class.expects(:new).raises(Capybara::ElementNotFound)
+        assert proxy.not_visible?
+      end
     end
 
     def test_visible__false
       proxy = new_proxy
 
-      stub_wait_for(proxy)
-      
-      element_class.expect_initialize
-      element_class.any_instance.expects(:visible?).returns(false)
-      assert_false proxy.visible?
-    end
-
-    def test_wait_for
-      proxy = new_proxy
-
-      Capybara.expects(:default_wait_time).returns(:default_wait_time)
-      Timeout.expects(:timeout).with(:default_wait_time).yields
-
-      block_calls = sequence('calls')
-      Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false)
-      Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(true)
-
-      block = mock
-      block.expects(:called).times(2)
-      proxy.send(:wait_for) do
-        block.called
+      with_stubbed_wait_for do
+        element_class.expect_initialize
+        element_class.any_instance.expects(:visible?).returns(false)
+        assert_false proxy.visible?
       end
-    end
-
-    def test_wait_for__timeout
-      proxy = new_proxy
-
-      Timeout.expects(:timeout).raises(Timeout::Error)
-
-      assert !proxy.send(:wait_for)
     end
 
     private
 
-    def stub_wait_for(proxy)
+    def unstub_wait_for
+      (class << Waiter; self; end).send(:alias_method, :wait_for, :wait_for_whatever)
+
+      (class << Waiter; self; end).send(:undef_method, :wait_for_whatever)
+    end
+
+    def stub_wait_for
       wait_for_mock = mock(:wait_for_called => true)
-      (class << proxy; self; end).send(:define_method, :wait_for) do |&block|
+      (class << Waiter; self; end).send(:alias_method, :wait_for_whatever, :wait_for)
+
+      (class << Waiter; self; end).send(:define_method, :wait_for) do |&block|
         wait_for_mock.wait_for_called
         block.call
       end
+    end
+
+    def with_stubbed_wait_for
+      stub_wait_for
+      yield
+    ensure
+      unstub_wait_for
     end
 
     def element_class

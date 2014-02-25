@@ -19,14 +19,14 @@ module AePageObjects
     # Provided so that visible? can be asked without
     # an explicit check for present? first.
     def visible?
-      wait_for do
+      Waiter.wait_for do
         inst = presence
         !! inst && inst.visible?
       end
     end
     
     def not_visible?
-      wait_for do
+      Waiter.wait_for do
         inst = presence
         inst.nil? || ! inst.visible?
       end
@@ -37,7 +37,7 @@ module AePageObjects
     end
     
     def not_present?
-      wait_for do
+      Waiter.wait_for do
         ! present?
       end
     end
@@ -69,15 +69,6 @@ module AePageObjects
     end
     
   private
-
-    def wait_for(&block)
-      Timeout.timeout(Capybara.default_wait_time) do
-        sleep(0.05) until value = Capybara.using_wait_time(0, &block)
-        value
-      end
-    rescue Timeout::Error
-      false
-    end
 
     def element
       @element ||= @element_class.new(*@args)

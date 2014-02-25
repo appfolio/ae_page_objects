@@ -9,10 +9,10 @@ module AePageObjects
     private
     
       def ensure_loaded!
-        unless self.class.can_load_from_current_url?
+        unless Waiter.wait_for { self.class.can_load_from_current_url? }
           raise LoadingFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
         end
-      
+
         super
       end
     
