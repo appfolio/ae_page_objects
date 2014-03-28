@@ -19,7 +19,7 @@ module AePageObjects
       end.returns(mock(:find => nil))
 
       some_block = proc { |page| }
-      Capybara.expects(:wait_until).yields
+      Waiter.expects(:wait_for).yields.returns(true)
 
       finder = AePageObjects::DocumentFinder.new(document_class)
       finder.find :url => 'hello_kitty', &some_block
@@ -27,13 +27,13 @@ module AePageObjects
       assert_equal({:url => 'hello_kitty', :block => some_block}, conditions.instance_variable_get(:@conditions))
     end
 
-    def test_find__returns_wait_until_result
+    def test_find__returns_wait_for_result
       current_window = mock
       AePageObjects::Window.expects(:current).returns(current_window)
 
       finder = AePageObjects::DocumentFinder.new(mock)
 
-      Capybara.expects(:wait_until).yields.returns(:result)
+      Waiter.expects(:wait_for).yields.returns(:result)
       AePageObjects::Window.expects(:all).returns([])
       DocumentFinder::DocumentWindowScanner.expects(:new).returns(mock(:find => true))
 
@@ -54,7 +54,7 @@ module AePageObjects
                                                     stub(:handle => "window3", :current_document => document_stub.new("document3")),
                                                   ])
 
-      Capybara.expects(:wait_until).raises(Capybara::TimeoutError)
+      Waiter.expects(:wait_for).returns(nil)
 
       raised = assert_raises AePageObjects::PageNotFound do
         AePageObjects::DocumentFinder.new(mock(:name => "hello")).find

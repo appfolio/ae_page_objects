@@ -11,11 +11,12 @@ module AePageObjects
     def find(conditions = {}, &conditions_block)
       conditions = Conditions.from(conditions, &conditions_block)
 
-      Capybara.wait_until do
+      result = Waiter.wait_for do
         DocumentWindowScanner.new(@document_class, @original_window, AePageObjects::Window.all, conditions).find
       end
 
-    rescue Capybara::TimeoutError
+      return result if result
+
       @original_window.switch_to
 
       all_windows = AePageObjects::Window.all.map do |window|
