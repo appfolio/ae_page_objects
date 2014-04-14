@@ -9,8 +9,7 @@ module PageObjects
 
       def save!
         node.find("input[type=submit]").click
-
-        AePageObjects::VariableDocument.new(Books::ShowPage, self.class)
+        window.document_as(Books::ShowPage, self.class)
       end
     end
   end

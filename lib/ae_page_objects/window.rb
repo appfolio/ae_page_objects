@@ -116,6 +116,10 @@ module AePageObjects
       current_document
     end
 
+    def document_as(*document_classes)
+      AePageObjects::VariableDocument.new(*document_classes)
+    end
+
     def close
       if HandleManager.close(@handle)
         self.current_document = nil
