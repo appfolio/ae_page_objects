@@ -12,21 +12,19 @@ module AePageObjects
       def initialize
         super(Capybara.current_session)
 
-        @window = Window.current
+        @window = windows.current_window
         @window.current_document = self
       end
 
-      class << self
-        def find(*args, &block)
-          DocumentFinder.new(self).find(*args, &block)
-        end
+      def windows
+        Window.all
       end
     end
     
     def document
       self
     end
-    
+
     class << self
     private
       def site

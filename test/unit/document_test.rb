@@ -3,21 +3,6 @@ require 'unit_helper'
 module AePageObjects
   class DocumentTest < Test::Unit::TestCase
 
-    def test_document_find
-      finder_mock = mock
-      finder_mock.expects(:find).with(:url => 'hello_kitty').yields.returns(:found)
-
-      AePageObjects::DocumentFinder.expects(:new).with(AePageObjects::Document).returns(finder_mock)
-
-      block_called = false
-      result = AePageObjects::Document.find :url => 'hello_kitty' do
-        block_called = true
-      end
-
-      assert_equal :found, result
-      assert block_called
-    end
-
     def test_document
       kitty_class = ::AePageObjects::Document.new_subclass
 

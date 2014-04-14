@@ -5,13 +5,15 @@ module AePageObjects
 
     def test_find__conditions_passed_down
       current_window = mock
-      AePageObjects::Window.expects(:current).returns(current_window)
+
+      windows_list = mock
+      windows_list.expects(:current_window).returns(current_window)
+      windows_list.expects(:opened_windows).returns([])
 
       document_class = mock
 
       conditions = nil
 
-      AePageObjects::Window.expects(:all).returns([])
       DocumentFinder::DocumentWindowScanner.expects(:new).with do |document_class_arg, current_window_arg, windows_arg, conditions_arg|
         conditions = conditions_arg
 
@@ -21,20 +23,20 @@ module AePageObjects
       some_block = proc { |page| }
       Waiter.expects(:wait_for).yields.returns(true)
 
-      finder = AePageObjects::DocumentFinder.new(document_class)
+      finder = AePageObjects::DocumentFinder.new(windows_list, document_class)
       finder.find :url => 'hello_kitty', &some_block
 
       assert_equal({:url => 'hello_kitty', :block => some_block}, conditions.instance_variable_get(:@conditions))
     end
 
     def test_find__returns_wait_for_result
-      current_window = mock
-      AePageObjects::Window.expects(:current).returns(current_window)
+      windows_list = mock
+      windows_list.expects(:current_window).returns(mock)
+      windows_list.expects(:opened_windows).returns([])
 
-      finder = AePageObjects::DocumentFinder.new(mock)
+      finder = AePageObjects::DocumentFinder.new(windows_list, mock)
 
       Waiter.expects(:wait_for).yields.returns(:result)
-      AePageObjects::Window.expects(:all).returns([])
       DocumentFinder::DocumentWindowScanner.expects(:new).returns(mock(:find => true))
 
       document = finder.find
@@ -44,20 +46,22 @@ module AePageObjects
     def test_find__timeout
       current_window = mock
       current_window.expects(:switch_to)
-      AePageObjects::Window.expects(:current).returns(current_window)
+
+      windows_list = mock
+      windows_list.expects(:current_window).returns(current_window)
 
       document_stub = Struct.new(:name)
 
-      AePageObjects::Window.expects(:all).returns([
-                                                    stub(:handle => "window1", :current_document => document_stub.new("document1")),
-                                                    stub(:handle => "window2", :current_document => nil),
-                                                    stub(:handle => "window3", :current_document => document_stub.new("document3")),
-                                                  ])
+      windows_list.expects(:opened_windows).returns([
+                                                      stub(:handle => "window1", :current_document => document_stub.new("document1")),
+                                                      stub(:handle => "window2", :current_document => nil),
+                                                      stub(:handle => "window3", :current_document => document_stub.new("document3")),
+                                                    ])
 
       Waiter.expects(:wait_for).returns(nil)
 
       raised = assert_raises AePageObjects::PageNotFound do
-        AePageObjects::DocumentFinder.new(mock(:name => "hello")).find
+        AePageObjects::DocumentFinder.new(windows_list, mock(:name => "hello")).find
       end
 
       assert_include raised.message, "hello"

@@ -32,6 +32,10 @@ module AePageObjects
       def window
         @window ||= document.window
       end
+
+      def windows
+        @windows ||= document.windows
+      end
     end
 
     def __full_name__

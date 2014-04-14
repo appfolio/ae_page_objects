@@ -28,6 +28,7 @@ module AePageObjects
   
   if WINDOWS_SUPPORTED
     autoload :Window,            'ae_page_objects/window'
+    autoload :Windows,           'ae_page_objects/windows'
   end
 
   autoload :Node,              'ae_page_objects/node'

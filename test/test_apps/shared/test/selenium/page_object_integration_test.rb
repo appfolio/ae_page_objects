@@ -303,7 +303,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_robert_row.show_in_new_window
 
-    window2_author_robert = PageObjects::Authors::ShowPage.find
+    window2_author_robert = AePageObjects::Window.all.find_document(PageObjects::Authors::ShowPage)
     assert_equal "Robert", window2_author_robert.first_name.text
     window2 = window2_author_robert.window
 
@@ -317,7 +317,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_paul_row.show_in_new_window
 
-    window3_author_paul = PageObjects::Authors::ShowPage.find do |author|
+    window3_author_paul = AePageObjects::Window.all.find_document(PageObjects::Authors::ShowPage) do |author|
       author.first_name.text == "Paul"
     end
 
@@ -326,7 +326,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_raises AePageObjects::PageNotFound do
       Capybara.using_wait_time(3) do
-        PageObjects::Authors::ShowPage.find do |author|
+        AePageObjects::Window.all.find_document(PageObjects::Authors::ShowPage) do |author|
           author.first_name.text == "Enri"
         end
       end
@@ -334,7 +334,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_windows(window1, window2, window3, :current => window3)
 
-    index_page = PageObjects::Authors::IndexPage.find
+    index_page = AePageObjects::Window.all.find_document(PageObjects::Authors::IndexPage)
     assert_equal window1, index_page.window
   end
 
@@ -344,11 +344,11 @@ private
     options = windows.extract_options!
 
     assert_equal windows.size, windows.uniq.to_set.size
-    assert_equal windows.to_set, AePageObjects::Window.registry.values.to_set
-    assert_equal windows.to_set, AePageObjects::Window.all.to_set
+    assert_equal windows.to_set, AePageObjects::Window.all.instance_variable_get(:@windows).values.to_set
+    assert_equal windows.to_set, AePageObjects::Window.all.opened_windows.to_set
 
     if options[:current]
-      assert_equal options[:current], AePageObjects::Window.current
+      assert_equal options[:current], AePageObjects::Window.all.current_window
     end
   end
 end

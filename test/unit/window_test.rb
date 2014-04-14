@@ -4,16 +4,15 @@ module AePageObjects
   class WindowTest < Test::Unit::TestCase
 
     def test_all
-      Window::HandleManager.expects(:all).returns(["handle1", "handle2", "handle3"])
-      assert_equal [], Window.registry.keys
-
       windows = Window.all
-      assert_equal ["handle1", "handle2", "handle3"], windows.map(&:handle)
-      assert_equal ["handle1", "handle2", "handle3"], Window.registry.keys.sort
+      assert_equal Windows, windows.class
+
+      # is singleton
+      assert_equal windows, Window.all
     end
 
     def test_close_all
-      Window.expects(:all).returns([mock(:close => true), mock(:close => true), mock(:close => true)])
+      Window.all.expects(:close_all)
 
       assert_nothing_raised do
         Window.close_all
@@ -21,14 +20,26 @@ module AePageObjects
     end
 
     def test_initialize
-      window = Window.create("window_handle")
+      registered_window = nil
+
+      registry = mock
+      registry.expects(:add).with do |w|
+        registered_window = w
+        true
+      end
+
+      window = Window.new(registry, "window_handle")
+
+      assert_equal registered_window, window
       assert_equal "window_handle", window.handle
       assert_nil window.current_document
-      assert_equal window, Window.registry[window.handle]
     end
 
     def test_current_document=
-      window = Window.create("window_handle")
+      registry = mock(:add => nil)
+
+      window = Window.new(registry, "window_handle")
+
       assert_nil window.current_document
 
       document_mock = mock(:stale! => true)
@@ -41,7 +52,10 @@ module AePageObjects
     end
 
     def test_switch_to
-      window = Window.create("window_handle")
+      registry = mock(:add => nil)
+
+      window = Window.new(registry, "window_handle")
+
       window.current_document = "current_document"
 
       navigator_mock = stub
@@ -52,55 +66,35 @@ module AePageObjects
     end
 
     def test_close__window_closed
-      window = Window.create("window_handle")
-      assert_equal window, Window.registry[window]
+      registry = mock(:add => nil)
+
+      window = Window.new(registry, "window_handle")
 
       document_mock = mock(:stale! => true)
       window.current_document = document_mock
 
       Window::HandleManager.expects(:close).with("window_handle").returns(true)
 
+      unregistered_window = nil
+      registry.expects(:remove).with do |w|
+        unregistered_window = w
+        true
+      end
       window.close
 
-      assert_nil Window.registry[window]
+      assert_equal unregistered_window, window
     end
 
     def test_close__window_not_closed
-      window = Window.create("window_handle")
-      assert_equal window, Window.registry[window]
+      registry = mock(:add => nil)
+
+      window = Window.new(registry, "window_handle")
 
       window.expects(:current_document=).never
       Window::HandleManager.expects(:close).with("window_handle").returns(false)
 
+      registry.expects(:remove).never
       window.close
-
-      assert_equal window, Window.registry[window]
-    end
-
-    def test_current__none
-      Window::HandleManager.expects(:current).returns("window_handle")
-
-      window = Window.current
-      assert_equal window, Window.registry[window]
-      assert_equal "window_handle", window.handle
-
-      Window::HandleManager.expects(:current).returns("window_handle")
-      assert_equal window, Window.current
-    end
-
-    def test_current__many
-      window1 = Window.create("window_handle1")
-      window2 = Window.create("window_handle2")
-      window3 = Window.create("window_handle3")
-
-      Window::HandleManager.expects(:current).returns("window_handle1")
-      assert_equal window1, Window.current
-
-      Window::HandleManager.expects(:current).returns("window_handle2")
-      assert_equal window2, Window.current
-
-      Window::HandleManager.expects(:current).returns("window_handle3")
-      assert_equal window3, Window.current
     end
   end
 end
