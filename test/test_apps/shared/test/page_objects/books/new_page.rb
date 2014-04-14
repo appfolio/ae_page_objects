@@ -9,8 +9,19 @@ module PageObjects
       has_book_form
 
       def save!
+        title = self.title.value
+
         node.find("input[type=submit]").click
-        window.document_as(Books::ShowPage, self.class)
+
+        window.document_as do |document_class|
+          document_class.matches(Books::ShowPage) do |page|
+            page.title.text == title
+          end
+
+          document_class.matches(self.class) do |page|
+            ! page.form.error_messages.empty?
+          end
+        end
       end
     end
   end

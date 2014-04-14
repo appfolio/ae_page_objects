@@ -9,8 +9,8 @@ module AePageObjects
       end
     end
 
-    def initialize(*documents)
-      @documents = documents
+    def initialize(query)
+      @query = query
     end
 
     def is_a?(document_class)
@@ -20,23 +20,35 @@ module AePageObjects
     end
 
     def as_a(document_class)
-      unless @documents.include?(document_class)
-        raise InvalidCast, "Cannot cast as #{document_class.name} from #{@documents.map(&:name).inspect}"
+      matching_document_conditions = @query.conditions.select do |document_condition|
+        document_condition.document_class == document_class
       end
 
-      document_class.new
-    rescue AePageObjects::LoadingFailed => e
-      raise IncorrectCast, "Failed instantiating a #{document_class}: #{e.message}\nDocuments: #{@documents.map(&:name).inspect}"
+      if matching_document_conditions.empty?
+        raise InvalidCast, "Cannot cast as #{document_class.name} from #{allowed_types_dump}"
+      end
+
+      matching_document_conditions.each do |document_condition|
+        if page = document_condition.load_page
+          return page
+        end
+      end
+
+      raise IncorrectCast, "Failed instantiating a #{document_class.name} from #{allowed_types_dump}"
     end
 
   private
 
-    def implicit_document_class
-      @implicit_document_class ||= @documents.first
-    end
-
     def implicit_document
       @implicit_document ||= as_a(implicit_document_class)
+    end
+
+    def implicit_document_class
+      @implicit_document_class ||= @query.conditions.first.document_class
+    end
+
+    def allowed_types_dump
+      @allowed_types ||= @query.conditions.map(&:document_class).map(&:name).inspect
     end
 
     def method_missing(name, *args, &block)

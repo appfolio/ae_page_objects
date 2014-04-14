@@ -32,8 +32,8 @@ module AePageObjects
       current_document
     end
 
-    def document_as(*document_classes)
-      AePageObjects::VariableDocument.new(*document_classes)
+    def document_as(*document_classes, &block)
+      VariableDocument.new(DocumentQuery.new(*document_classes, &block))
     end
 
     def close
