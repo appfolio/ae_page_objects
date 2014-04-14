@@ -5,6 +5,8 @@ require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
 
 module AePageObjects
+  WINDOWS_SUPPORTED = defined?(Selenium::WebDriver)
+
   autoload :Universe,             'ae_page_objects/core/universe'
   autoload :Site,                 'ae_page_objects/core/site'
   autoload :BasicRouter,          'ae_page_objects/core/basic_router'
@@ -24,7 +26,10 @@ module AePageObjects
     autoload :Visitable,        'ae_page_objects/concerns/visitable'
   end
   
-  autoload :Window,            'ae_page_objects/window'
+  if WINDOWS_SUPPORTED
+    autoload :Window,            'ae_page_objects/window'
+  end
+
   autoload :Node,              'ae_page_objects/node'
   autoload :Document,          'ae_page_objects/document'
   autoload :DocumentFinder,    'ae_page_objects/document_finder'
@@ -35,7 +40,7 @@ module AePageObjects
   autoload :Collection,        'ae_page_objects/elements/collection'
   autoload :Form,              'ae_page_objects/elements/form'
   autoload :Select,            'ae_page_objects/elements/select'
-  autoload :Checkbox,          'ae_page_objects/elements/checkbox'  
+  autoload :Checkbox,          'ae_page_objects/elements/checkbox'
 end
 
 require 'ae_page_objects/core_ext/module'
