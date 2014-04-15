@@ -71,12 +71,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "The Omnivore's Dilemma", new_author_page.books.last.title.value
   end
 
-  def test_variable_document
+  def test_document_proxy
     new_page = PageObjects::Books::NewPage.visit
     new_page.index.pages.set "132"
 
     result_page = new_page.save!
-    assert_equal true,  result_page.is_a?(AePageObjects::VariableDocument)
+    assert_equal true,  result_page.is_a?(AePageObjects::DocumentProxy)
     assert_equal true,  result_page.is_a?(PageObjects::Books::NewPage)
     assert_equal false, result_page.is_a?(PageObjects::Authors::NewPage)
 

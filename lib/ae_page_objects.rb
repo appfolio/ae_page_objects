@@ -31,11 +31,12 @@ module AePageObjects
     autoload :Windows,           'ae_page_objects/windows'
   end
 
+  autoload :DocumentQuery,     'ae_page_objects/document_query'
+  autoload :PageLoader,        'ae_page_objects/page_loader'
+
   autoload :Node,              'ae_page_objects/node'
   autoload :Document,          'ae_page_objects/document'
-  autoload :DocumentFinder,    'ae_page_objects/document_finder'
-  autoload :DocumentQuery,     'ae_page_objects/document_query'
-  autoload :VariableDocument,  'ae_page_objects/variable_document'
+  autoload :DocumentProxy,     'ae_page_objects/document_proxy'
   autoload :Element,           'ae_page_objects/element'
   autoload :ElementProxy,      'ae_page_objects/element_proxy'
   

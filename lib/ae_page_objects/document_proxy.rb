@@ -1,5 +1,5 @@
 module AePageObjects
-  class VariableDocument
+  class DocumentProxy
 
     # Remove all instance methods so even things like class()
     # get handled by method_missing(). <lifted from activerecord>
@@ -9,8 +9,8 @@ module AePageObjects
       end
     end
 
-    def initialize(query)
-      @query = query
+    def initialize(page_loader)
+      @page_loader = page_loader
     end
 
     def is_a?(document_class)
@@ -20,21 +20,9 @@ module AePageObjects
     end
 
     def as_a(document_class)
-      matching_document_conditions = @query.conditions.select do |document_condition|
-        document_condition.document_class == document_class
-      end
-
-      if matching_document_conditions.empty?
-        raise InvalidCast, "Cannot cast as #{document_class.name} from #{allowed_types_dump}"
-      end
-
-      matching_document_conditions.each do |document_condition|
-        if page = document_condition.load_page
-          return page
-        end
-      end
-
-      raise IncorrectCast, "Failed instantiating a #{document_class.name} from #{allowed_types_dump}"
+      @page_loader.load_page(document_class)
+    rescue AePageObjects::PageNotExpected
+      raise InvalidCast, "Allowed types: #{@page_loader.permitted_types_dump}"
     end
 
   private
@@ -44,11 +32,7 @@ module AePageObjects
     end
 
     def implicit_document_class
-      @implicit_document_class ||= @query.conditions.first.document_class
-    end
-
-    def allowed_types_dump
-      @allowed_types ||= @query.conditions.map(&:document_class).map(&:name).inspect
+      @implicit_document_class ||= @page_loader.default_document_class
     end
 
     def method_missing(name, *args, &block)

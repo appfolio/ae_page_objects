@@ -33,7 +33,9 @@ module AePageObjects
     end
 
     def document_as(*document_classes, &block)
-      VariableDocument.new(DocumentQuery.new(*document_classes, &block))
+      query       = DocumentQuery.new(*document_classes, &block)
+      page_loader = PageLoader::SameWindow.new(query)
+      DocumentProxy.new(page_loader)
     end
 
     def close
