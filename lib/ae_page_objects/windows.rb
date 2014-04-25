@@ -28,12 +28,6 @@ module AePageObjects
       opened_windows.each(&:close)
     end
 
-    def find_document(*document_classes, &block)
-      query       = DocumentQuery.new(*document_classes, &block)
-      page_loader = PageLoader.new(query, PageLoader::CrossWindow.new(self))
-      DocumentProxy.new(page_loader)
-    end
-
   private
 
     def find(handle)

@@ -28,13 +28,13 @@ module AePageObjects
       end
     end
 
+    def browser
+      @browser ||= document.browser
+    end
+
     if WINDOWS_SUPPORTED
       def window
         @window ||= document.window
-      end
-
-      def windows
-        @windows ||= document.windows
       end
     end
 

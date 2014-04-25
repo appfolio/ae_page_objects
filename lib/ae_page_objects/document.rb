@@ -12,15 +12,15 @@ module AePageObjects
       def initialize
         super(Capybara.current_session)
 
-        @window = windows.current_window
+        @window = Window.all.current_window
         @window.current_document = self
       end
-
-      def windows
-        Window.all
-      end
     end
-    
+
+    def browser
+      Browser.instance
+    end
+
     def document
       self
     end

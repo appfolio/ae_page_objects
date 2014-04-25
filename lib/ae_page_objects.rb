@@ -25,6 +25,8 @@ module AePageObjects
     autoload :Staleable,        'ae_page_objects/concerns/staleable'
     autoload :Visitable,        'ae_page_objects/concerns/visitable'
   end
+
+  autoload :Browser,             'ae_page_objects/browser'
   
   if WINDOWS_SUPPORTED
     autoload :Window,            'ae_page_objects/window'

@@ -303,7 +303,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_robert_row.show_in_new_window
 
-    window2_author_robert = AePageObjects::Window.all.find_document(PageObjects::Authors::ShowPage)
+    window2_author_robert = AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage)
     assert_equal "Robert", window2_author_robert.first_name.text
     window2 = window2_author_robert.window
 
@@ -317,7 +317,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_paul_row.show_in_new_window
 
-    window3_author_paul = AePageObjects::Window.all.find_document(PageObjects::Authors::ShowPage) do |author|
+    window3_author_paul = AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage) do |author|
       author.first_name.text == "Paul"
     end
 
@@ -326,7 +326,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_raises AePageObjects::PageLoadError do
       Capybara.using_wait_time(3) do
-        the_page = AePageObjects::Window.all.find_document(PageObjects::Authors::ShowPage) do |author|
+        the_page = AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage) do |author|
           author.first_name.text == "Enri"
         end
 
@@ -336,7 +336,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_windows(window1, window2, window3, :current => window3)
 
-    index_page = AePageObjects::Window.all.find_document(PageObjects::Authors::IndexPage)
+    index_page = AePageObjects::Browser.instance.find_document(PageObjects::Authors::IndexPage)
     assert_equal window1, index_page.window
   end
 
