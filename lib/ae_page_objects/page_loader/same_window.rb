@@ -1,13 +1,20 @@
 module AePageObjects
   class PageLoader
-    class SameWindow < PageLoader
-      private
-      def page_not_loaded(document_class)
-        raise IncorrectCast, "Failed instantiating a #{document_class.name} from #{permitted_types_dump}"
+    class SameWindow
+      def load_page_with_condition(condition)
+          page = condition.document_class.new
+
+          return page if condition.match?(page)
+
+          nil
+        rescue AePageObjects::LoadingFailed
+          # These will happen from the new() call above.
+          nil
+        end
       end
 
-      def load_page_with_condition(condition)
-        condition.load_page
+      def page_not_loaded_error(document_class, page_loader)
+        PageLoadError.new("Failed instantiating a #{document_class.name} in the current window from #{page_loader.permitted_types_dump}")
       end
     end
   end

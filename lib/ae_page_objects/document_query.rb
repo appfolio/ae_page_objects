@@ -10,19 +10,6 @@ module AePageObjects
         @page_conditions[:block] = block_condition if block_condition
       end
 
-      def load_page
-        page = @document_class.new
-
-        return page if match?(page)
-
-        nil
-      rescue AePageObjects::LoadingFailed
-        # These will happen from the new() call above.
-        nil
-      end
-
-    private
-
       def match?(page)
         @page_conditions.each do |type, value|
           case type

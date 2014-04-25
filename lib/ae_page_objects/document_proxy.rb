@@ -21,8 +21,6 @@ module AePageObjects
 
     def as_a(document_class)
       @page_loader.load_page(document_class)
-    rescue AePageObjects::PageNotExpected
-      raise InvalidCast, "Allowed types: #{@page_loader.permitted_types_dump}"
     end
 
   private

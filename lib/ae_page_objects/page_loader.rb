@@ -5,8 +5,9 @@ module AePageObjects
     end
     autoload :SameWindow, 'ae_page_objects/page_loader/same_window'
 
-    def initialize(query)
-      @query = query
+    def initialize(query, strategy)
+      @query    = query
+      @strategy = strategy
     end
 
     def default_document_class
@@ -23,27 +24,18 @@ module AePageObjects
       end
 
       if matching_document_conditions.empty?
-        raise PageNotExpected, document_class.name
+        raise PageLoadError, "#{document_class.name} not expected. Allowed types: #{permitted_types_dump}"
       end
 
       Waiter.wait_for do
         matching_document_conditions.each do |document_condition|
-          if page = load_page_with_condition(document_condition)
+          if page = @strategy.load_page_with_condition(document_condition)
             return page
           end
         end
       end
 
-      page_not_loaded(document_class)
-    end
-
-  private
-    def page_not_loaded(document_class)
-      raise "must implement"
-    end
-
-    def load_page_with_condition(condition)
-      raise "must implement"
+      raise @strategy.page_not_loaded_error(document_class, self)
     end
   end
 end

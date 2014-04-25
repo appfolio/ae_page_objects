@@ -12,14 +12,4 @@ module AePageObjects
 
   class PageLoadError < Error
   end
-
-  class PageNotFound < PageLoadError
-  end
-
-  class PageNotExpected < PageLoadError
-  end
-
-  class CastError     < PageLoadError; end
-  class InvalidCast   < CastError; end
-  class IncorrectCast < CastError; end
 end
