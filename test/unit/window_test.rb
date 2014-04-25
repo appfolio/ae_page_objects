@@ -4,16 +4,20 @@ module AePageObjects
   class WindowTest < Test::Unit::TestCase
 
     def test_all
+      Window.expects(:warn)
+
       windows = Window.all
       assert_equal WindowList, windows.class
 
       # is singleton
+      Window.expects(:warn)
       assert_equal windows, Window.all
     end
 
     def test_close_all
-      Window.all.expects(:close_all)
+      Browser.instance.windows.expects(:close_all)
 
+      Window.expects(:warn).times(2)
       assert_nothing_raised do
         Window.close_all
       end

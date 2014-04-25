@@ -6,11 +6,21 @@ module AePageObjects
       end
     end
 
-    if WINDOWS_SUPPORTED
+    def current_window
+      @current_window ||= Window.new
+    end
+
+    if MULTIPLE_WINDOWS_SUPPORT
+      require 'ae_page_objects/window_list'
+
       attr_reader :windows
 
       def initialize
         @windows = WindowList.new
+      end
+
+      def current_window
+        @windows.current_window
       end
 
       def find_document(*document_classes, &block)

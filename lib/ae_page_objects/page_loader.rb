@@ -1,6 +1,6 @@
 module AePageObjects
   class PageLoader
-    if WINDOWS_SUPPORTED
+    if MULTIPLE_WINDOWS_SUPPORT
       autoload :CrossWindow, 'ae_page_objects/page_loader/cross_window'
     end
     autoload :SameWindow, 'ae_page_objects/page_loader/same_window'

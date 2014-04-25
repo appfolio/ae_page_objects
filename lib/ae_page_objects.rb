@@ -5,7 +5,7 @@ require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
 
 module AePageObjects
-  WINDOWS_SUPPORTED = defined?(Selenium::WebDriver)
+  MULTIPLE_WINDOWS_SUPPORT = defined?(Selenium::WebDriver)
 
   autoload :Universe,             'ae_page_objects/core/universe'
   autoload :Site,                 'ae_page_objects/core/site'
@@ -27,12 +27,8 @@ module AePageObjects
   end
 
   autoload :Browser,             'ae_page_objects/browser'
+  autoload :Window,              'ae_page_objects/window'
   
-  if WINDOWS_SUPPORTED
-    autoload :Window,            'ae_page_objects/window'
-    autoload :WindowList,        'ae_page_objects/window_list'
-  end
-
   autoload :DocumentQuery,     'ae_page_objects/document_query'
   autoload :PageLoader,        'ae_page_objects/page_loader'
 

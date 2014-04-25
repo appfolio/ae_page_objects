@@ -2,19 +2,13 @@ module AePageObjects
   class Document < Node
     include Concerns::Visitable
 
+    attr_reader :window
+
     def initialize
       super(Capybara.current_session)
-    end
 
-    if WINDOWS_SUPPORTED
-      attr_reader :window
-    
-      def initialize
-        super(Capybara.current_session)
-
-        @window = browser.windows.current_window
-        @window.current_document = self
-      end
+      @window = browser.current_window
+      @window.current_document = self
     end
 
     def browser

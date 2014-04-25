@@ -32,10 +32,8 @@ module AePageObjects
       @browser ||= document.browser
     end
 
-    if WINDOWS_SUPPORTED
-      def window
-        @window ||= document.window
-      end
+    def window
+      @window ||= document.window
     end
 
     def __full_name__
