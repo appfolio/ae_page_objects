@@ -33,12 +33,12 @@ module PageObjects
 
         def delayed_show!
           node.find(".js-delay-show").click
-          window.document_as(ShowPage)
+          window.change_to(ShowPage)
         end
 
         def show!
           node.click_link("Show")
-          window.document_as(ShowPage)
+          window.change_to(ShowPage)
         end
       end
     end

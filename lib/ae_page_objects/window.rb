@@ -32,7 +32,7 @@ module AePageObjects
       current_document
     end
 
-    def document_as(*document_classes, &block)
+    def change_to(*document_classes, &block)
       query       = DocumentQuery.new(*document_classes, &block)
       page_loader = PageLoader.new(query, PageLoader::SameWindow.new)
       DocumentProxy.new(page_loader)

@@ -9,7 +9,7 @@ module PageObjects
 
       def save!
         node.find("input[type=submit]").click
-        window.document_as(Books::ShowPage, self.class)
+        window.change_to(Books::ShowPage, self.class)
       end
     end
   end

@@ -7,7 +7,7 @@ module PageObjects
 
       def edit!
         node.click_link("Edit")
-        window.document_as(Books::EditPage)
+        window.change_to(Books::EditPage)
       end
     end
   end

@@ -13,12 +13,12 @@ module PageObjects
 
         node.find("input[type=submit]").click
 
-        window.document_as do |current_document|
-          current_document.matches(Books::ShowPage) do |page|
+        window.change_to do |window|
+          window.matches(Books::ShowPage) do |page|
             page.title.text == title
           end
 
-          current_document.matches(self.class) do |page|
+          window.matches(self.class) do |page|
             ! page.form.error_messages.empty?
           end
         end
