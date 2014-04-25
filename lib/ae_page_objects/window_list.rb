@@ -1,5 +1,5 @@
 module AePageObjects
-  class Windows
+  class WindowList
     def initialize
       @windows = {}
     end
@@ -12,7 +12,7 @@ module AePageObjects
       @windows.delete(window.handle)
     end
 
-    def opened_windows
+    def opened
       Window::HandleManager.all.map do |handle|
         find(handle)
       end
@@ -25,7 +25,7 @@ module AePageObjects
     end
 
     def close_all
-      opened_windows.each(&:close)
+      opened.each(&:close)
     end
 
   private

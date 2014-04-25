@@ -21,7 +21,7 @@ module AePageObjects
 
         # Loop through all the windows and attempt to instantiate the Document. Continue to loop around
         # until finding a Document that can be instantiated or timing out.
-        @window_list.opened_windows.each do |window|
+        @window_list.opened.each do |window|
           next if window == @original_window
 
           window.switch_to
@@ -37,7 +37,7 @@ module AePageObjects
       end
 
       def page_not_loaded_error(document_class, page_loader)
-        all_windows = @window_list.opened_windows.map do |window|
+        all_windows = @window_list.opened.map do |window|
           name = window.current_document && window.current_document.to_s || "<none>"
           {:window_handle => window.handle, :document => name }
         end

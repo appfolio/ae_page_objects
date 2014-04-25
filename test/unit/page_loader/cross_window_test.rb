@@ -9,7 +9,7 @@ module AePageObjects
       def test_load_page_with_condition__found__current_window
         current_window = mock
 
-        window_list = AePageObjects::Windows.new
+        window_list = AePageObjects::WindowList.new
         window_list.expects(:current_window).returns(current_window)
 
         loader = AePageObjects::PageLoader::CrossWindow.new(window_list)
@@ -29,9 +29,9 @@ module AePageObjects
         current_window = mock
         other_window   = mock
 
-        window_list = AePageObjects::Windows.new
+        window_list = AePageObjects::WindowList.new
         window_list.expects(:current_window).returns(current_window)
-        window_list.expects(:opened_windows).returns([
+        window_list.expects(:opened).returns([
           current_window,
           other_window,
         ])
@@ -57,9 +57,9 @@ module AePageObjects
         current_window = mock
         other_window   = mock
 
-        window_list = AePageObjects::Windows.new
+        window_list = AePageObjects::WindowList.new
         window_list.expects(:current_window).returns(current_window)
-        window_list.expects(:opened_windows).returns([
+        window_list.expects(:opened).returns([
           current_window,
           other_window,
         ])
@@ -82,9 +82,9 @@ module AePageObjects
         current_window = mock
         other_window   = mock
 
-        window_list = AePageObjects::Windows.new
+        window_list = AePageObjects::WindowList.new
         window_list.expects(:current_window).returns(current_window)
-        window_list.expects(:opened_windows).returns([
+        window_list.expects(:opened).returns([
                                                        current_window,
                                                        other_window,
                                                      ])
@@ -111,7 +111,7 @@ module AePageObjects
       def test_page_not_loaded_error
         window_list = stub(
           :current_window => true,
-          :opened_windows => [
+          :opened => [
             stub(:handle => "window1", :current_document => "Document1"),
             stub(:handle => "window2", :current_document => nil),
             stub(:handle => "window3", :current_document => "Document3"),

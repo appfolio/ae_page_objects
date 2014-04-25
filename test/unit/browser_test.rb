@@ -5,15 +5,12 @@ module AePageObjects
 
     def test_find_document
       document_class = Class.new(AePageObjects::Document)
-      windows = Windows.new
-      windows.expects(:current_window).returns(:current_window)
 
       the_block = proc do
       end
 
       browser = Browser.new
-
-      Window.expects(:all).returns(windows)
+      browser.windows.expects(:current_window).returns(:current_window)
 
       proxy = browser.find_document(document_class, :ignore_current => true, &the_block)
 
@@ -37,7 +34,7 @@ module AePageObjects
       assert_equal PageLoader::CrossWindow, strategy.class
 
       window_list = strategy.instance_variable_get(:@window_list)
-      assert_equal windows, window_list
+      assert_equal browser.windows, window_list
     end
   end
 end

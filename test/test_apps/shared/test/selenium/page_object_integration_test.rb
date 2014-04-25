@@ -346,11 +346,11 @@ private
     options = windows.extract_options!
 
     assert_equal windows.size, windows.uniq.to_set.size
-    assert_equal windows.to_set, AePageObjects::Window.all.instance_variable_get(:@windows).values.to_set
-    assert_equal windows.to_set, AePageObjects::Window.all.opened_windows.to_set
+    assert_equal windows.to_set, AePageObjects::Browser.instance.windows.instance_variable_get(:@windows).values.to_set
+    assert_equal windows.to_set, AePageObjects::Browser.instance.windows.opened.to_set
 
     if options[:current]
-      assert_equal options[:current], AePageObjects::Window.all.current_window
+      assert_equal options[:current], AePageObjects::Browser.instance.windows.current_window
     end
   end
 end

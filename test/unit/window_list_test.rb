@@ -1,18 +1,18 @@
 require 'unit_helper'
 
 module AePageObjects
-  class WindowsTest < Test::Unit::TestCase
+  class WindowListTest < Test::Unit::TestCase
 
     def test_opened_windows
-      windows = Windows.new
+      windows = WindowList.new
 
       Window::HandleManager.expects(:all).returns(["handle1", "handle2", "handle3"])
-      assert_equal ["handle1", "handle2", "handle3"], windows.opened_windows.map(&:handle).sort
+      assert_equal ["handle1", "handle2", "handle3"], windows.opened.map(&:handle).sort
     end
 
     def test_close_all
-      windows = Windows.new
-      windows.expects(:opened_windows).returns([mock(:close => true), mock(:close => true), mock(:close => true)])
+      windows = WindowList.new
+      windows.expects(:opened).returns([mock(:close => true), mock(:close => true), mock(:close => true)])
 
       assert_nothing_raised do
         windows.close_all
@@ -20,7 +20,7 @@ module AePageObjects
     end
 
     def test_current_window__none
-      windows = Windows.new
+      windows = WindowList.new
 
       Window::HandleManager.expects(:current).returns("window_handle")
       window = windows.current_window
@@ -33,7 +33,7 @@ module AePageObjects
     end
 
     def test_current_window__many
-      windows = Windows.new
+      windows = WindowList.new
 
       window1 = windows.send(:create_window, "window_handle1")
       window2 = windows.send(:create_window, "window_handle2")

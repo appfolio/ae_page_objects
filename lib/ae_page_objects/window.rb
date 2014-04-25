@@ -4,7 +4,7 @@ module AePageObjects
   class Window
     class << self
       def all
-        @windows ||= Windows.new
+        @windows ||= Browser.instance.windows
       end
 
       def close_all

@@ -30,7 +30,7 @@ module AePageObjects
   
   if WINDOWS_SUPPORTED
     autoload :Window,            'ae_page_objects/window'
-    autoload :Windows,           'ae_page_objects/windows'
+    autoload :WindowList,        'ae_page_objects/window_list'
   end
 
   autoload :DocumentQuery,     'ae_page_objects/document_query'

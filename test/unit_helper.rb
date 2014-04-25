@@ -15,17 +15,9 @@ class Test::Unit::TestCase
   include NodeFieldTestHelpers
   include AfCruft
 
-  def setup
-    reset_window_registry
-  end
-
   def stub_current_window
     capybara_stub
     AePageObjects::Window::HandleManager.stubs(:current).returns("window_handle")
-  end
-
-  def reset_window_registry
-    AePageObjects::Window.instance_variable_set(:@registry, nil)
   end
 
   def capybara_stub

@@ -5,7 +5,7 @@ module AePageObjects
 
     def test_all
       windows = Window.all
-      assert_equal Windows, windows.class
+      assert_equal WindowList, windows.class
 
       # is singleton
       assert_equal windows, Window.all
