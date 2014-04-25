@@ -4,7 +4,7 @@ module AePageObjects
     # Remove all instance methods so even things like class()
     # get handled by method_missing(). <lifted from activerecord>
     instance_methods.each do |m|
-      unless m.to_s =~ /^(?:nil\?|send|object_id|to_a|tap)$|^__|^respond_to|is_a?/
+      unless m.to_s =~ /^(?:nil\?|send|object_id|to_a|tap)$|^__|^respond_to|is_a?|instance_variable_get/
         undef_method m
       end
     end

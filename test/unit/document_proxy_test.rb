@@ -54,17 +54,18 @@ module AePageObjects
     def test_as_a__error
       document_class = Class.new
 
+      error = AePageObjects::PageLoadError.new
+
       page_loader = mock
-      page_loader.expects(:load_page).with(document_class).raises(AePageObjects::PageNotExpected)
-      page_loader.expects(:permitted_types_dump).returns("<dump>")
+      page_loader.expects(:load_page).with(document_class).raises(error)
 
       proxy = DocumentProxy.new(page_loader)
 
-      raised = assert_raise AePageObjects::InvalidCast do
+      raised = assert_raise error.class do
         proxy.as_a(document_class)
       end
 
-      assert_equal "Allowed types: <dump>", raised.message
+      assert_equal error, raised
     end
 
     def test_methods_are_forwarded
