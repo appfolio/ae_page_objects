@@ -912,7 +912,7 @@ end
 ### Staling
 
 Sometimes an element only exists on a page temporarily. In such cases, it's a good practice to stale the instance of the
-element when it can not longer be interacted with:
+element when it can no longer be interacted with:
 
 ```ruby
 class AlertBox < AePageObjects::Element

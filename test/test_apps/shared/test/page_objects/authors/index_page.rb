@@ -33,16 +33,12 @@ module PageObjects
 
         def delayed_show!
           node.find(".js-delay-show").click
-          stale!
-
-          ShowPage.new
+          window.document_as(ShowPage)
         end
 
         def show!
           node.click_link("Show")
-          stale!
-
-          ShowPage.new
+          window.document_as(ShowPage)
         end
       end
     end

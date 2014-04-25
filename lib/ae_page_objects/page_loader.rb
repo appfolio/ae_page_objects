@@ -33,6 +33,8 @@ module AePageObjects
             return page
           end
         end
+
+        nil
       end
 
       raise @strategy.page_not_loaded_error(document_class, self)
