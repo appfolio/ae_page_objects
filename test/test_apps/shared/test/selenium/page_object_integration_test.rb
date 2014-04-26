@@ -338,6 +338,42 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal window1, index_page.window
   end
 
+  def test_finding_windows__using_find_document_in_page_objects
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1 = window1_authors.window
+
+    window1_authors_robert_row = window1_authors.authors.first
+    assert_equal "Robert", window1_authors_robert_row.first_name.text
+
+    window2_author_robert = window1_authors_robert_row.show_in_new_window!
+
+    assert_equal "Robert", window2_author_robert.first_name.text
+    window2 = window2_author_robert.window
+
+    assert_windows(window1, window2, :current => window2)
+
+    window1.switch_to
+
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors_paul_row = window1_authors.authors[1]
+    assert_equal "Paul", window1_authors_paul_row.first_name.text
+
+    window3_author_paul = window1_authors_paul_row.show_in_new_window_with_name!("Paul")
+
+    window3 = window3_author_paul.window
+    assert_windows(window1, window2, window3, :current => window3)
+
+    window3_authors = PageObjects::Authors::IndexPage.visit
+    window3_authors_paul_row = window1_authors.authors[1]
+    assert_equal "Paul", window3_authors_paul_row.first_name.text
+
+    assert_raises AePageObjects::DocumentLoadError do
+      Capybara.using_wait_time(3) do
+        window3_authors_paul_row.show_in_new_window_with_name!("Enri")
+      end
+    end
+  end
+
 private
 
   def assert_windows(*windows)

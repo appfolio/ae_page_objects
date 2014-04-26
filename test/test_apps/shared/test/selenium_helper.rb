@@ -25,6 +25,10 @@ module Selenium
     fixtures :all
 
     include Rails.application.routes.url_helpers
+
+    teardown do
+      AePageObjects::Browser.instance.windows.close_all
+    end
   end
 end
 
