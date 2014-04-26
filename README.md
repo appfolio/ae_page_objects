@@ -37,7 +37,7 @@ module MyPageObjects
 
       node.click_on("Log In")
 
-      AuthorsIndex.new
+      window.change_to(AuthorsIndexPage)
     end
   end
 
@@ -55,7 +55,7 @@ module MyPageObjects
       def show!
         node.click_link("Show")
 
-        AuthorsShowPage.new
+        window.change_to(AuthorsShowPage)
       end
     end
   end
@@ -76,7 +76,7 @@ def test_logging_in_goes_to_authors
   login_page = MyPageObjects::LoginPage.visit
   authors_page = login_page.login_as!('admin', 'password')
 
-  assert_equal MyPageObjects::AuthorsIndex, authors_page.class
+  assert_equal MyPageObjects::AuthorsIndexPage, authors_page.class
 end
 
 def test_authors_are_sorted_by_last_name
@@ -416,24 +416,25 @@ Every document exists within a browser window. The `window` attribute of a `AePa
 the window hosting the document.
 
 ### Multiple Windows
+_only works when using Selenium::WebDriver_
 
-Sometimes websites launch documents in new windows or tabs. To find a document in another window use Document.find():
+Sometimes websites launch documents in new windows or tabs. To find a document in another window use `browser.find_document`:
 
 ```ruby
   def show_report!(report_name)
     node.click_on("Show #{report_name}")
 
-    ReportPage.find
+    browser.find_document(ReportPage)
   end
 ```
 
-`find` can be parameterized with a block to refine the search the criteria:
+`browser.find_document` can be parameterized with a block to refine the search criteria:
 
 ```ruby
   def show_report!(report_name)
     node.click_on("Show #{report_name}")
 
-    ReportPage.find do
+    browser.find_document(ReportPage) do |report|
       report.filters.date.text == Time.now.to_date
     end
   end
@@ -444,8 +445,10 @@ Sometimes websites launch documents in new windows or tabs. To find a document i
 A few conventions have evolved to aid in writing maintainable page objects and test code using page objects. Methods
 causing the browser to navigate to a new page should:
 
-1. be ! methods
-2. return an instance of the document class representing the page navigated to.
+1. Be ! methods
+2. Return a handle to the resulting page by either:
+ - calling `window.change_to`, OR
+ - calling `browser.find_document`
 
 ```ruby
 class LoginPage < AePageObjects::Document
@@ -457,25 +460,37 @@ class LoginPage < AePageObjects::Document
 
     node.click_on("Log In")
 
-    AuthorsIndex.new
+    window.change_to(AuthorsIndexPage)
+  end
+end
+
+class AuthorsIndexPage < AePageObjects::Document
+  def show_report!(report_name)
+    node.click_on("Show #{report_name}")
+
+    browser.find_document(ReportPage)
   end
 end
 ```
 
-Some test code using this page object:
+Some test code using these page objects:
 
 ```ruby
 def test_logging_in_goes_to_authors
   login_page = MyPageObjects::LoginPage.visit
-  authors_page = login_page.login_as!('admin', 'password')
 
-  assert_equal MyPageObjects::AuthorsIndex, authors_page.class
+  authors_page = login_page.login_as!('admin', 'password')
+  assert_equal MyPageObjects::AuthorsIndexPage, authors_page.class
+
+  books_page = authors_page.show_report!("Book Report")
+  assert_equal MyPageObjects::ReportPage, books_page.class
 end
 ```
 
 Keeping the conventions in mind while reading the above test code should make it clear to the reader that the login_as!
-method will be navigating the browser to a new page; any references to the previous page will be invalid. Accessing
-the login_page reference after the browser has changed pages will result in an `AePageObjects::StalePageObject` error:
+method will be navigating the browser to a new page within the current window; any references to the previous page will
+be invalid. Accessing the login_page reference after the browser has changed pages will result in an
+`AePageObjects::StalePageObject` error:
 
 
 ```ruby
@@ -491,12 +506,16 @@ def test_logging_in_goes_to_authors
 end
 ```
 
-### Variable Documents
+The same is true for the show_report!() method: the report page will open up in a new window, and the caller needs to
+use the returned handle to this page.
+
+#### Variable Results
 
 Oftentimes the page that results from a form submission is based on the data entered into the form. This makes following
 convention #2 difficult. Additionally, the test code that is entering data into the form has the knowledge to know which
-page should result.  `AePageObjects::VariableDocument` can be used to specify the set of all possible pages that can
-result:
+page should result. Both `window.change_to` and `browser.find_document` handle this case by accepting the set of all
+possible pages that can result:
+
 
 ```ruby
 def login!(username, password)
@@ -505,25 +524,46 @@ def login!(username, password)
 
   node.click_on("Log In")
 
-  AePageObjects::VariableDocument.new(AuthorsIndex, LoginPage, DashboardPage)
+  window.change_to(AuthorsIndexPage, LoginPage, DashboardPage)
 end
+
+def show_report!(report_name)
+  node.click_on("Show #{report_name}")
+
+  browser.find_document(ReportPage, DashboardPage)
+end
+
 ```
 
-Code calling login!() method must cast the resultant AePageObjects::VariableDocument, via:
+In both cases (`window.change_to` or `browser.find_document`) will return a handle to a document matching the parameter
+ set: `window.change_to` will only look in the current window while `browser.find_document` will look across all open
+ windows. The first parameter to these methods is considered the default page.
+
+Code calling the login!() method can inspect the resultant page before proceeding:
 
 ```ruby
 result = LoginPage.visit.login!("username", "invalid password")
-login_page = result.as_a(LoginPage)
-assert_equal "Invalid password", login_page.errors.first.text
+assert result.is_a?(AuthorsIndexPage)
+
+author_page = result
+author_page.first_name.set "New Name"
+...
 ```
 
-Alternatively, the calling code could rely on implicit casting which will attempt to instantiate the first page class
-in the list:
+Alternatively, the calling code can use `as_a`:
 
 ```ruby
-authors = LoginPage.visit.login!("username", "invalid password")
-assert_equal 7, authors.count
+author_page = LoginPage.visit.login!("username", "invalid password").as_a(AuthorsIndexPage)
+author_page.first_name.set "New Name"
+...
 ```
+
+`as_a` will fail with `AePageObjects::DocumentLoadError` if the page in the browser is not of the specified type.
+
+When `as_a` is not used, an internal implicit cast is made to the default page which ensures that the page is of the
+default document type (the first document specified through the parameters of `window.change_to` or
+`browser.find_document`). If the check fails, a `AePageObjects::DocumentLoadError` will raise.
+
 
 ## Elements
 
