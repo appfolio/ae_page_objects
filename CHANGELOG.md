@@ -1,7 +1,8 @@
 ## X.X.X
 
-* Added Document.find()
-* Added VariableDocument
+* Multiple window support:
+ - window.change_to
+ - browser.find_document
 
 ## 1.0.2
 
