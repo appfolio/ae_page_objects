@@ -35,7 +35,7 @@ module AePageObjects
 
       proxy = DocumentProxy.new(loaded_page, page_loader)
 
-      raised = assert_raise PageLoadError do
+      raised = assert_raise DocumentLoadError do
         proxy.as_a(DocumentClass2)
       end
 

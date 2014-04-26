@@ -1,8 +1,8 @@
 require 'unit_helper'
 
 module AePageObjects
-  class PageLoader
-    class SameWindowTest < Test::Unit::TestCase
+  class DocumentLoader
+    class SameWindowLoaderStrategyTest < Test::Unit::TestCase
 
       class DocumentClass
       end
@@ -13,8 +13,8 @@ module AePageObjects
         condition = DocumentQuery::Condition.new(DocumentClass)
         condition.expects(:match?).with(:instance).returns(true)
 
-        loader = SameWindow.new
-        result = loader.load_page_with_condition(condition)
+        loader = SameWindowLoaderStrategy.new
+        result = loader.load_document_with_condition(condition)
         assert_equal :instance, result
       end
 
@@ -24,8 +24,8 @@ module AePageObjects
         condition = DocumentQuery::Condition.new(DocumentClass)
         condition.expects(:match?).with(:instance).returns(false)
 
-        loader = SameWindow.new
-        result = loader.load_page_with_condition(condition)
+        loader = SameWindowLoaderStrategy.new
+        result = loader.load_document_with_condition(condition)
         assert_equal nil, result
       end
 
@@ -34,18 +34,18 @@ module AePageObjects
 
         condition = DocumentQuery::Condition.new(DocumentClass)
 
-        loader = SameWindow.new
-        result = loader.load_page_with_condition(condition)
+        loader = SameWindowLoaderStrategy.new
+        result = loader.load_document_with_condition(condition)
         assert_equal nil, result
       end
 
-      def test_page_not_loaded_error
-        loader = SameWindow.new
+      def test_document_not_loaded_error
+        loader = SameWindowLoaderStrategy.new
         page_loader = mock(:permitted_types_dump => "permitted_types_dump")
 
-        error = loader.page_not_loaded_error(page_loader)
+        error = loader.document_not_loaded_error(page_loader)
 
-        assert_equal "Current window does not contain page with type in permitted_types_dump.", error.message
+        assert_equal "Current window does not contain document with type in permitted_types_dump.", error.message
       end
     end
   end

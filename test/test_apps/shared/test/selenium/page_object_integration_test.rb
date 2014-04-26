@@ -96,12 +96,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     result_page = edit_page.save!
 
-    assert_raises AePageObjects::PageLoadError do
+    assert_raises AePageObjects::DocumentLoadError do
       result_page.as_a(PageObjects::Authors::NewPage)
     end
 
     # test an incorrect cast
-    assert_raises AePageObjects::PageLoadError do
+    assert_raises AePageObjects::DocumentLoadError do
       result_page.as_a(PageObjects::Books::EditPage)
     end
   end
@@ -324,7 +324,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window3 = window3_author_paul.window
     assert_windows(window1, window2, window3, :current => window3)
 
-    assert_raises AePageObjects::PageLoadError do
+    assert_raises AePageObjects::DocumentLoadError do
       Capybara.using_wait_time(3) do
         AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage) do |author|
           author.first_name.text == "Enri"

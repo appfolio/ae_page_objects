@@ -26,7 +26,7 @@ module AePageObjects
 
       query = DocumentQuery.new(kitty_class, bunny_class)
       assert_equal [kitty_class, bunny_class], query.conditions.map(&:document_class)
-      assert_equal([{}, {}], query.conditions.map(&:page_conditions))
+      assert_equal([{}, {}], query.conditions.map(&:document_conditions))
     end
 
     def test_new__document_class__page_condition
@@ -35,7 +35,7 @@ module AePageObjects
 
       query = DocumentQuery.new(kitty_class, :url => "somewhere")
       assert_equal [kitty_class], query.conditions.map(&:document_class)
-      assert_equal({:url => "somewhere"}, query.conditions.first.page_conditions)
+      assert_equal({:url => "somewhere"}, query.conditions.first.document_conditions)
     end
 
     def test_new__document_class__page_condition__block
@@ -48,7 +48,7 @@ module AePageObjects
       query = DocumentQuery.new(kitty_class, :url => "somewhere", &block_condition)
 
       assert_equal [kitty_class], query.conditions.map(&:document_class)
-      assert_equal({:url => "somewhere", :block => block_condition}, query.conditions.first.page_conditions)
+      assert_equal({:url => "somewhere", :block => block_condition}, query.conditions.first.document_conditions)
     end
 
     def test_new__document_class__block
@@ -61,7 +61,7 @@ module AePageObjects
       query = DocumentQuery.new(kitty_class, &block_condition)
 
       assert_equal [kitty_class], query.conditions.map(&:document_class)
-      assert_equal({:block => block_condition}, query.conditions.first.page_conditions)
+      assert_equal({:block => block_condition}, query.conditions.first.document_conditions)
     end
 
     def test_new__block__matches
@@ -72,7 +72,7 @@ module AePageObjects
       end
 
       assert_equal [kitty_class], query.conditions.map(&:document_class)
-      assert_equal({}, query.conditions.first.page_conditions)
+      assert_equal({}, query.conditions.first.document_conditions)
     end
 
     def test_new__block__no_matches

@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class PageLoaderTest < Test::Unit::TestCase
+  class DocumentLoaderTest < Test::Unit::TestCase
 
     def setup
       super
@@ -24,7 +24,7 @@ module AePageObjects
       query    = mock(:conditions => [mock(:document_class => DocumentClass1), stub(:document_class => DocumentClass2)])
       strategy = mock
 
-      loader = PageLoader.new(query, strategy)
+      loader = DocumentLoader.new(query, strategy)
       assert_equal DocumentClass1, loader.default_document_class
 
       # it's memoized
@@ -35,11 +35,11 @@ module AePageObjects
       query    = mock(:conditions => [mock(:document_class => DocumentClass1), mock(:document_class => DocumentClass2)])
       strategy = mock
 
-      loader = PageLoader.new(query, strategy)
-      assert_equal ["AePageObjects::PageLoaderTest::DocumentClass1", "AePageObjects::PageLoaderTest::DocumentClass2"].inspect, loader.permitted_types_dump
+      loader = DocumentLoader.new(query, strategy)
+      assert_equal ["AePageObjects::DocumentLoaderTest::DocumentClass1", "AePageObjects::DocumentLoaderTest::DocumentClass2"].inspect, loader.permitted_types_dump
 
       # it's memoized
-      assert_equal ["AePageObjects::PageLoaderTest::DocumentClass1", "AePageObjects::PageLoaderTest::DocumentClass2"].inspect, loader.permitted_types_dump
+      assert_equal ["AePageObjects::DocumentLoaderTest::DocumentClass1", "AePageObjects::DocumentLoaderTest::DocumentClass2"].inspect, loader.permitted_types_dump
     end
 
     def test_load_page
@@ -50,18 +50,18 @@ module AePageObjects
 
       strategy = mock
 
-      loader = PageLoader.new(query, strategy)
+      loader = DocumentLoader.new(query, strategy)
 
       Waiter.expects(:wait_for).yields
 
-      strategy.expects(:load_page_with_condition).with(query.conditions.first).returns(nil)
-      strategy.expects(:load_page_with_condition).with(query.conditions.last).returns(:page)
+      strategy.expects(:load_document_with_condition).with(query.conditions.first).returns(nil)
+      strategy.expects(:load_document_with_condition).with(query.conditions.last).returns(:page)
 
-      page = loader.load_page
+      page = loader.load
       assert_equal :page, page
     end
 
-    def test_load_page__page_not_loaded_error
+    def test_load_page__document_not_loaded_error
       query = stub(:conditions => [
         stub(:document_class => DocumentClass1),
         stub(:document_class => DocumentClass2),
@@ -70,18 +70,18 @@ module AePageObjects
 
       strategy = mock
 
-      loader = PageLoader.new(query, strategy)
+      loader = DocumentLoader.new(query, strategy)
 
       sequence = sequence('sequence')
-      strategy.expects(:load_page_with_condition).in_sequence(sequence).with(query.conditions[0]).returns(nil)
-      strategy.expects(:load_page_with_condition).in_sequence(sequence).with(query.conditions[1]).returns(nil)
-      strategy.expects(:load_page_with_condition).in_sequence(sequence).with(query.conditions[2]).returns(nil)
+      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[0]).returns(nil)
+      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[1]).returns(nil)
+      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[2]).returns(nil)
 
       error = RuntimeError.new("Hello")
-      strategy.expects(:page_not_loaded_error).with(loader).returns(error)
+      strategy.expects(:document_not_loaded_error).with(loader).returns(error)
 
       raised = assert_raise error.class do
-        loader.load_page
+        loader.load
       end
 
       assert_equal error, raised
@@ -95,21 +95,21 @@ module AePageObjects
 
       strategy = mock
 
-      loader = PageLoader.new(query, strategy)
+      loader = DocumentLoader.new(query, strategy)
 
       Waiter.expects(:wait_for).multiple_yields(nil, nil)
 
       sequence = sequence('sequence')
-      strategy.expects(:load_page_with_condition).in_sequence(sequence).with(query.conditions.first).returns(nil)
-      strategy.expects(:load_page_with_condition).in_sequence(sequence).with(query.conditions.last).returns(nil)
-      strategy.expects(:load_page_with_condition).in_sequence(sequence).with(query.conditions.first).returns(nil)
-      strategy.expects(:load_page_with_condition).in_sequence(sequence).with(query.conditions.last).returns(nil)
+      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.first).returns(nil)
+      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.last).returns(nil)
+      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.first).returns(nil)
+      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.last).returns(nil)
 
       error = RuntimeError.new("")
-      strategy.expects(:page_not_loaded_error).with(loader).returns(error)
+      strategy.expects(:document_not_loaded_error).with(loader).returns(error)
 
       raised = assert_raise error.class do
-        loader.load_page
+        loader.load
       end
 
       assert_equal error, raised

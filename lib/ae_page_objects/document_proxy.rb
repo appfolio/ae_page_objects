@@ -9,9 +9,9 @@ module AePageObjects
       end
     end
 
-    def initialize(loaded_page, page_loader)
-      @loaded_page = loaded_page
-      @page_loader = page_loader
+    def initialize(loaded_page, document_loader)
+      @loaded_page     = loaded_page
+      @document_loader = document_loader
     end
 
     def is_a?(document_class)
@@ -23,7 +23,7 @@ module AePageObjects
         return @loaded_page
       end
 
-      raise PageLoadError, "#{document_class.name} not expected. Allowed types: #{@page_loader.permitted_types_dump}"
+      raise DocumentLoadError, "#{document_class.name} not expected. Allowed types: #{@document_loader.permitted_types_dump}"
     end
 
   private
@@ -33,7 +33,7 @@ module AePageObjects
     end
 
     def implicit_document_class
-      @implicit_document_class ||= @page_loader.default_document_class
+      @implicit_document_class ||= @document_loader.default_document_class
     end
 
     def method_missing(name, *args, &block)

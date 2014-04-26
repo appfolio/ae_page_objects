@@ -1,24 +1,24 @@
 module AePageObjects
   class DocumentQuery
     class Condition
-      attr_reader :document_class, :page_conditions
+      attr_reader :document_class, :document_conditions
 
-      def initialize(document_class, page_conditions = {}, &block_condition)
+      def initialize(document_class, document_conditions = {}, &block_condition)
         @document_class    = document_class
 
-        @page_conditions = page_conditions || {}
-        @page_conditions[:block] = block_condition if block_condition
+        @document_conditions = document_conditions || {}
+        @document_conditions[:block] = block_condition if block_condition
       end
 
-      def match?(page)
-        @page_conditions.each do |type, value|
+      def match?(document)
+        @document_conditions.each do |type, value|
           case type
           when :title then
             return false unless Capybara.current_session.driver.browser.title.include?(value)
           when :url then
-            return false unless page.current_url.include?(value)
+            return false unless document.current_url.include?(value)
           when :block then
-            return false unless value.call(page)
+            return false unless value.call(document)
           end
         end
 
@@ -53,8 +53,8 @@ module AePageObjects
             end
           end
         else
-          raise ArgumentError, "Expected (Document, page_options)" unless document_classes.size == 2
-          raise ArgumentError, "Expected (Document, page_options)" unless (document_classes.first < Document) && document_classes.last.is_a?(Hash)
+          raise ArgumentError, "Expected (Document, document_options)" unless document_classes.size == 2
+          raise ArgumentError, "Expected (Document, document_options)" unless (document_classes.first < Document) && document_classes.last.is_a?(Hash)
 
           matches(document_classes.first, document_classes.last, &block)
         end

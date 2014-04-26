@@ -10,6 +10,6 @@ module AePageObjects
   class PathNotResolvable < Error
   end
 
-  class PageLoadError < Error
+  class DocumentLoadError < Error
   end
 end

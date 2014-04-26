@@ -30,7 +30,7 @@ module AePageObjects
   autoload :Window,              'ae_page_objects/window'
   
   autoload :DocumentQuery,     'ae_page_objects/document_query'
-  autoload :PageLoader,        'ae_page_objects/page_loader'
+  autoload :DocumentLoader,    'ae_page_objects/document_loader'
 
   autoload :Node,              'ae_page_objects/node'
   autoload :Document,          'ae_page_objects/document'
