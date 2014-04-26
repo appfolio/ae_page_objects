@@ -18,17 +18,9 @@ module AePageObjects
       @permitted_types_dump ||= @query.conditions.map(&:document_class).map(&:name).inspect
     end
 
-    def load_page(document_class)
-      matching_document_conditions = @query.conditions.select do |document_condition|
-        document_condition.document_class == document_class
-      end
-
-      if matching_document_conditions.empty?
-        raise PageLoadError, "#{document_class.name} not expected. Allowed types: #{permitted_types_dump}"
-      end
-
+    def load_page
       Waiter.wait_for do
-        matching_document_conditions.each do |document_condition|
+        @query.conditions.each do |document_condition|
           if page = @strategy.load_page_with_condition(document_condition)
             return page
           end
@@ -37,7 +29,7 @@ module AePageObjects
         nil
       end
 
-      raise @strategy.page_not_loaded_error(document_class, self)
+      raise @strategy.page_not_loaded_error(self)
     end
   end
 end

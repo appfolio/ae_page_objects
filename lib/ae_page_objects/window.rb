@@ -14,7 +14,8 @@ module AePageObjects
     def change_to(*document_classes, &block)
       query       = DocumentQuery.new(*document_classes, &block)
       page_loader = PageLoader.new(query, PageLoader::SameWindow.new)
-      DocumentProxy.new(page_loader)
+
+      DocumentProxy.new(page_loader.load_page, page_loader)
     end
 
     if MULTIPLE_WINDOWS_SUPPORT

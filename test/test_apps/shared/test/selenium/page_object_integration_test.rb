@@ -326,11 +326,9 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_raises AePageObjects::PageLoadError do
       Capybara.using_wait_time(3) do
-        the_page = AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage) do |author|
+        AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage) do |author|
           author.first_name.text == "Enri"
         end
-
-        the_page.first_name
       end
     end
 

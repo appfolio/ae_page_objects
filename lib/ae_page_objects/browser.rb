@@ -26,7 +26,8 @@ module AePageObjects
       def find_document(*document_classes, &block)
         query       = DocumentQuery.new(*document_classes, &block)
         page_loader = PageLoader.new(query, PageLoader::CrossWindow.new(@windows))
-        DocumentProxy.new(page_loader)
+
+        DocumentProxy.new(page_loader.load_page, page_loader)
       end
     end
   end

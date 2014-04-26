@@ -3,83 +3,56 @@ require 'unit_helper'
 module AePageObjects
   class DocumentProxyTest < Test::Unit::TestCase
 
+    class DocumentClass
+    end
+
+    class DocumentClass2
+    end
+
     def test_is_a
-      document_class = Class.new
-
       page_loader = mock
-      loaded_page = mock
-      page_loader.expects(:load_page).with(document_class).returns(loaded_page)
+      loaded_page = DocumentClass.new
 
-      proxy = DocumentProxy.new(page_loader)
+      proxy = DocumentProxy.new(loaded_page, page_loader)
 
-      assert proxy.is_a?(DocumentProxy)
-      assert proxy.is_a?(document_class)
-    end
-
-    def test_is_a__false
-      document_class = Class.new
-
-      page_loader = mock
-      page_loader.expects(:load_page).with(document_class).returns(false)
-
-      proxy = DocumentProxy.new(page_loader)
-
-      assert proxy.is_a?(DocumentProxy)
-      assert_equal false, proxy.is_a?(document_class)
-    end
-
-    def test_is_a__error
-      document_class = Class.new
-
-      page_loader = mock
-      page_loader.expects(:load_page).with(document_class).raises(AePageObjects::Error.new)
-
-      proxy = DocumentProxy.new(page_loader)
-
-      assert proxy.is_a?(DocumentProxy)
-      assert_equal false, proxy.is_a?(document_class)
+      assert_equal true,  proxy.is_a?(DocumentProxy)
+      assert_equal true,  proxy.is_a?(DocumentClass)
+      assert_equal false, proxy.is_a?(DocumentClass2)
     end
 
     def test_as_a
-      document_class = Class.new
-
       page_loader = mock
-      loaded_page = mock
-      page_loader.expects(:load_page).with(document_class).returns(loaded_page)
+      loaded_page = DocumentClass.new
 
-      proxy = DocumentProxy.new(page_loader)
-      assert_equal loaded_page, proxy.as_a(document_class)
+      proxy = DocumentProxy.new(loaded_page, page_loader)
+
+      assert_equal loaded_page, proxy.as_a(DocumentClass)
     end
 
     def test_as_a__error
-      document_class = Class.new
+      page_loader = mock(:permitted_types_dump => "permitted_types_dump")
+      loaded_page = DocumentClass.new
 
-      error = AePageObjects::PageLoadError.new
+      proxy = DocumentProxy.new(loaded_page, page_loader)
 
-      page_loader = mock
-      page_loader.expects(:load_page).with(document_class).raises(error)
-
-      proxy = DocumentProxy.new(page_loader)
-
-      raised = assert_raise error.class do
-        proxy.as_a(document_class)
+      raised = assert_raise PageLoadError do
+        proxy.as_a(DocumentClass2)
       end
 
-      assert_equal error, raised
+      assert_equal "AePageObjects::DocumentProxyTest::DocumentClass2 not expected. Allowed types: permitted_types_dump", raised.message
     end
 
     def test_methods_are_forwarded
-      default_document_class = Class.new do
+      loaded_page = Class.new(DocumentClass) do
         def hello_kitty
           :meow
         end
-      end
+      end.new
 
       page_loader = mock
-      page_loader.expects(:default_document_class).returns(default_document_class)
-      page_loader.expects(:load_page).with(default_document_class).returns(default_document_class.new)
+      page_loader.expects(:default_document_class).returns(DocumentClass)
 
-      proxy = DocumentProxy.new(page_loader)
+      proxy = DocumentProxy.new(loaded_page, page_loader)
       assert_equal :meow, proxy.hello_kitty
 
       # memoized

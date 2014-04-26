@@ -1,4 +1,5 @@
 require 'unit_helper'
+require 'ae_page_objects/window_list'
 
 module AePageObjects
   class PageLoader
@@ -121,7 +122,7 @@ module AePageObjects
         loader = AePageObjects::PageLoader::CrossWindow.new(window_list)
         page_loader = mock(:permitted_types_dump => "permitted_types_dump")
 
-        error = loader.page_not_loaded_error(DocumentClass, page_loader)
+        error = loader.page_not_loaded_error(page_loader)
 
         all_windows_dump = [
           {:window_handle => "window1", :document => "Document1"},
@@ -129,7 +130,7 @@ module AePageObjects
           {:window_handle => "window3", :document => "Document3"},
         ]
 
-        assert_equal "Couldn't find page AePageObjects::PageLoader::CrossWindowTest::DocumentClass in any of the open windows: #{all_windows_dump.inspect} using permitted_types_dump", error.message
+        assert_equal "Couldn't find page with type in permitted_types_dump in any of the open windows: #{all_windows_dump.inspect}", error.message
       end
     end
   end

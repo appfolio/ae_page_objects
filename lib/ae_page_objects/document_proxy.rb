@@ -9,18 +9,21 @@ module AePageObjects
       end
     end
 
-    def initialize(page_loader)
+    def initialize(loaded_page, page_loader)
+      @loaded_page = loaded_page
       @page_loader = page_loader
     end
 
     def is_a?(document_class)
-      super || !! as_a(document_class)
-    rescue AePageObjects::Error
-      false
+      super || @loaded_page.is_a?(document_class)
     end
 
     def as_a(document_class)
-      @page_loader.load_page(document_class)
+      if @loaded_page.is_a?(document_class)
+        return @loaded_page
+      end
+
+      raise PageLoadError, "#{document_class.name} not expected. Allowed types: #{@page_loader.permitted_types_dump}"
     end
 
   private

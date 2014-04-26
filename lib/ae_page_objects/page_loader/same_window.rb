@@ -12,8 +12,8 @@ module AePageObjects
         nil
       end
 
-      def page_not_loaded_error(document_class, page_loader)
-        PageLoadError.new("Failed instantiating a #{document_class.name} in the current window from #{page_loader.permitted_types_dump}")
+      def page_not_loaded_error(page_loader)
+        PageLoadError.new("Current window does not contain page with type in #{page_loader.permitted_types_dump}.")
       end
     end
   end

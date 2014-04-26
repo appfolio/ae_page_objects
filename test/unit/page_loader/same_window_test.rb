@@ -43,11 +43,10 @@ module AePageObjects
         loader = SameWindow.new
         page_loader = mock(:permitted_types_dump => "permitted_types_dump")
 
-        error = loader.page_not_loaded_error(DocumentClass, page_loader)
+        error = loader.page_not_loaded_error(page_loader)
 
-        assert_equal "Failed instantiating a AePageObjects::PageLoader::SameWindowTest::DocumentClass in the current window from permitted_types_dump", error.message
+        assert_equal "Current window does not contain page with type in permitted_types_dump.", error.message
       end
-
     end
   end
 end

@@ -36,13 +36,13 @@ module AePageObjects
         nil
       end
 
-      def page_not_loaded_error(document_class, page_loader)
+      def page_not_loaded_error(page_loader)
         all_windows = @window_list.opened.map do |window|
           name = window.current_document && window.current_document.to_s || "<none>"
           {:window_handle => window.handle, :document => name }
         end
 
-        PageLoadError.new("Couldn't find page #{document_class.name} in any of the open windows: #{all_windows.inspect} using #{page_loader.permitted_types_dump}")
+        PageLoadError.new("Couldn't find page with type in #{page_loader.permitted_types_dump} in any of the open windows: #{all_windows.inspect}")
       end
     end
   end
