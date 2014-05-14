@@ -93,6 +93,19 @@ module AePageObjects
           [url, router]
         end
       end
+
+      class Rails4 < Rails32
+
+        private
+        def url_and_router(url)
+          require 'action_dispatch/journey'
+          url = ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
+          router = Rails.application.routes.router
+
+          [url, router]
+        end
+      end
+
     end
 
     def path_recognizes_url?(path, url)
@@ -121,6 +134,9 @@ module AePageObjects
           Recognizer::Rails3.new
         elsif Rails.version =~ /\A3\.2/
           Recognizer::Rails32.new
+        elsif Rails.version =~ /\A4\.[01]/
+          warn "[WARNING]: AePageObjects works but is not thoroughly tested against Rails 4. Caveat emptor."
+          Recognizer::Rails4.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{Rails.version} and may behave in an undefined manner."
           Recognizer::Rails32.new
