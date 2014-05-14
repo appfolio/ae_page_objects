@@ -15,10 +15,7 @@ class Test::Unit::TestCase
   include NodeFieldTestHelpers
   include AfCruft
 
-  def setup
-    super
-    reset_browser
-  end
+  setup :reset_browser
 
   def reset_browser
     AePageObjects.instance_variable_set(:@browser, nil)
