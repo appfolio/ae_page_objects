@@ -1,6 +1,6 @@
 module AePageObjects
-  class Window
-    class HandleManager
+  module MultipleWindows
+    class WindowHandleManager
       def self.all
         browser.window_handles
       end

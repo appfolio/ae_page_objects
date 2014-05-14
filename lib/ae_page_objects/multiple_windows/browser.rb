@@ -1,18 +1,6 @@
 module AePageObjects
-  class Browser
-    class << self
-      def instance
-        @instance ||= new
-      end
-    end
-
-    def current_window
-      @current_window ||= Window.new
-    end
-
-    if MULTIPLE_WINDOWS_SUPPORT
-      require 'ae_page_objects/window_list'
-
+  module MultipleWindows
+    class Browser
       attr_reader :windows
 
       def initialize
@@ -25,7 +13,7 @@ module AePageObjects
 
       def find_document(*document_classes, &block)
         query           = DocumentQuery.new(*document_classes, &block)
-        document_loader = DocumentLoader.new(query, DocumentLoader::CrossWindowLoaderStrategy.new(@windows))
+        document_loader = DocumentLoader.new(query, CrossWindowLoaderStrategy.new(@windows))
 
         DocumentProxy.new(document_loader.load, document_loader)
       end

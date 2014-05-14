@@ -1,12 +1,12 @@
 module AePageObjects
-  class DocumentLoader
+  module MultipleWindows
     class CrossWindowLoaderStrategy
 
       def initialize(window_list)
         @window_list     = window_list
         @original_window = window_list.current_window
 
-        @current_window_loader = SameWindowLoaderStrategy.new
+        @current_window_loader = SingleWindow::SameWindowLoaderStrategy.new
       end
 
       def load_document_with_condition(condition)

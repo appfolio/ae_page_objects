@@ -15,9 +15,18 @@ class Test::Unit::TestCase
   include NodeFieldTestHelpers
   include AfCruft
 
+  def setup
+    super
+    reset_browser
+  end
+
+  def reset_browser
+    AePageObjects.instance_variable_set(:@browser, nil)
+  end
+
   def stub_current_window
     capybara_stub
-    AePageObjects::Window::HandleManager.stubs(:current).returns("window_handle")
+    AePageObjects::MultipleWindows::WindowHandleManager.stubs(:current).returns("window_handle")
   end
 
   def capybara_stub

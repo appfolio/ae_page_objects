@@ -5,8 +5,6 @@ require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
 
 module AePageObjects
-  MULTIPLE_WINDOWS_SUPPORT = defined?(Selenium::WebDriver)
-
   autoload :Universe,             'ae_page_objects/core/universe'
   autoload :Site,                 'ae_page_objects/core/site'
   autoload :BasicRouter,          'ae_page_objects/core/basic_router'
@@ -26,8 +24,21 @@ module AePageObjects
     autoload :Visitable,        'ae_page_objects/concerns/visitable'
   end
 
-  autoload :Browser,             'ae_page_objects/browser'
-  autoload :Window,              'ae_page_objects/window'
+  module MultipleWindows
+    autoload :Browser,                   'ae_page_objects/multiple_windows/browser'
+    autoload :Window,                    'ae_page_objects/multiple_windows/window'
+    autoload :CrossWindowLoaderStrategy, 'ae_page_objects/multiple_windows/cross_window_loader_strategy'
+    autoload :WindowList,                'ae_page_objects/multiple_windows/window_list'
+    autoload :WindowHandleManager,       'ae_page_objects/multiple_windows/window_handle_manager'
+  end
+
+  module SingleWindow
+    autoload :Browser,                   'ae_page_objects/single_window/browser'
+    autoload :Window,                    'ae_page_objects/single_window/window'
+    autoload :SameWindowLoaderStrategy,  'ae_page_objects/single_window/same_window_loader_strategy'
+  end
+
+  autoload :Window,            'ae_page_objects/window'
   
   autoload :DocumentQuery,     'ae_page_objects/document_query'
   autoload :DocumentLoader,    'ae_page_objects/document_loader'
@@ -42,6 +53,19 @@ module AePageObjects
   autoload :Form,              'ae_page_objects/elements/form'
   autoload :Select,            'ae_page_objects/elements/select'
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'
+
+  def self.browser
+    @browser ||= begin
+      driver = Capybara.current_session.driver
+
+      case driver
+      when Capybara::Selenium::Driver then
+        MultipleWindows::Browser.new
+      else
+        SingleWindow::Browser.new
+      end
+    end
+  end
 end
 
 require 'ae_page_objects/core_ext/module'

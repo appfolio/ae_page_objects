@@ -303,7 +303,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_robert_row.show_in_new_window
 
-    window2_author_robert = AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage)
+    window2_author_robert = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage)
     assert_equal "Robert", window2_author_robert.first_name.text
     window2 = window2_author_robert.window
 
@@ -317,7 +317,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_paul_row.show_in_new_window
 
-    window3_author_paul = AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage) do |author|
+    window3_author_paul = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
       author.first_name.text == "Paul"
     end
 
@@ -326,7 +326,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_raises AePageObjects::DocumentLoadError do
       Capybara.using_wait_time(3) do
-        AePageObjects::Browser.instance.find_document(PageObjects::Authors::ShowPage) do |author|
+        AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
           author.first_name.text == "Enri"
         end
       end
@@ -334,7 +334,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_windows(window1, window2, window3, :current => window3)
 
-    index_page = AePageObjects::Browser.instance.find_document(PageObjects::Authors::IndexPage)
+    index_page = AePageObjects.browser.find_document(PageObjects::Authors::IndexPage)
     assert_equal window1, index_page.window
   end
 
@@ -380,11 +380,11 @@ private
     options = windows.extract_options!
 
     assert_equal windows.size, windows.uniq.to_set.size
-    assert_equal windows.to_set, AePageObjects::Browser.instance.windows.instance_variable_get(:@windows).values.to_set
-    assert_equal windows.to_set, AePageObjects::Browser.instance.windows.opened.to_set
+    assert_equal windows.to_set, AePageObjects.browser.windows.instance_variable_get(:@windows).values.to_set
+    assert_equal windows.to_set, AePageObjects.browser.windows.opened.to_set
 
     if options[:current]
-      assert_equal options[:current], AePageObjects::Browser.instance.windows.current_window
+      assert_equal options[:current], AePageObjects.browser.windows.current_window
     end
   end
 end

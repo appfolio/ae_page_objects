@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class DocumentLoader
+  module SingleWindow
     class SameWindowLoaderStrategyTest < Test::Unit::TestCase
 
       class DocumentClass

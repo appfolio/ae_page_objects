@@ -1,8 +1,7 @@
 require 'unit_helper'
-require 'ae_page_objects/window_list'
 
 module AePageObjects
-  class DocumentLoader
+  module MultipleWindows
     class CrossWindowLoaderStrategyTest < Test::Unit::TestCase
       class DocumentClass
       end
@@ -10,7 +9,7 @@ module AePageObjects
       def test_load_page_with_condition__found__current_window
         current_window = mock
 
-        window_list = AePageObjects::WindowList.new
+        window_list = WindowList.new
         window_list.expects(:current_window).returns(current_window)
 
         loader = CrossWindowLoaderStrategy.new(window_list)
@@ -30,7 +29,7 @@ module AePageObjects
         current_window = mock
         other_window   = mock
 
-        window_list = AePageObjects::WindowList.new
+        window_list = WindowList.new
         window_list.expects(:current_window).returns(current_window)
         window_list.expects(:opened).returns([
           current_window,
@@ -58,7 +57,7 @@ module AePageObjects
         current_window = mock
         other_window   = mock
 
-        window_list = AePageObjects::WindowList.new
+        window_list = WindowList.new
         window_list.expects(:current_window).returns(current_window)
         window_list.expects(:opened).returns([
           current_window,
@@ -83,7 +82,7 @@ module AePageObjects
         current_window = mock
         other_window   = mock
 
-        window_list = AePageObjects::WindowList.new
+        window_list = WindowList.new
         window_list.expects(:current_window).returns(current_window)
         window_list.expects(:opened).returns([
                                                        current_window,

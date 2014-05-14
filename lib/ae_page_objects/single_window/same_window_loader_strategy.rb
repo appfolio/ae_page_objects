@@ -1,5 +1,5 @@
 module AePageObjects
-  class DocumentLoader
+  module SingleWindow
     class SameWindowLoaderStrategy
       def load_document_with_condition(condition)
         document = condition.document_class.new

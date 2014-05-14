@@ -61,7 +61,6 @@ module AePageObjects
       kitty_class = ::AePageObjects::Element.new_subclass
 
       capybara_stub
-      Window::HandleManager.expects(:current).returns("window_handle")
 
       pet           = pet_class.new
       
@@ -81,7 +80,6 @@ module AePageObjects
       kitty_class      = ::AePageObjects::Element.new_subclass
 
       capybara_stub
-      Window::HandleManager.expects(:current).returns("window_handle")
 
       kitty_page    = kitty_page_class.new
       assert_equal kitty_page, kitty_page.document
@@ -111,7 +109,6 @@ module AePageObjects
       end
 
       capybara_stub
-      Window::HandleManager.expects(:current).returns("window_handle")
 
       kitty_page = kitty_page_class.new
       capybara_stub.session.stubs(:find).returns(capybara_stub.session)

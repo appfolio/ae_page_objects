@@ -27,7 +27,7 @@ module Selenium
     include Rails.application.routes.url_helpers
 
     teardown do
-      AePageObjects::Browser.instance.windows.close_all
+      AePageObjects.browser.windows.close_all
     end
   end
 end

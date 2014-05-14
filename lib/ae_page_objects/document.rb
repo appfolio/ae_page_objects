@@ -12,7 +12,7 @@ module AePageObjects
     end
 
     def browser
-      @browser ||= Browser.instance
+      AePageObjects.browser
     end
 
     def document

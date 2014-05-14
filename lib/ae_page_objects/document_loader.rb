@@ -1,10 +1,5 @@
 module AePageObjects
   class DocumentLoader
-    if MULTIPLE_WINDOWS_SUPPORT
-      autoload :CrossWindowLoaderStrategy, 'ae_page_objects/document_loader/cross_window_loader_strategy'
-    end
-    autoload :SameWindowLoaderStrategy, 'ae_page_objects/document_loader/same_window_loader_strategy'
-
     def initialize(query, strategy)
       @query    = query
       @strategy = strategy
