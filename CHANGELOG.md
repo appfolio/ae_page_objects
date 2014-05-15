@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Issue [Changed Waiter to not use Timeout #57](https://github.com/appfolio/ae_page_objects/issues/57)
+
 ## 1.0.1
 
 * Issue [Load ensuring for documents should poll on the url #53](https://github.com/appfolio/ae_page_objects/issues/53)
