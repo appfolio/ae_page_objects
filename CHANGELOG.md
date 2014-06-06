@@ -1,4 +1,4 @@
-## X.X.X
+## 1.1.0
 
 * Multiple window support:
  - window.change_to
