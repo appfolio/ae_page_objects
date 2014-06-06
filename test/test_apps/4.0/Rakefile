@@ -3,4 +3,12 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Bleh::Application.load_tasks
+TestApp::Application.load_tasks
+
+namespace :test do
+  Rake::TestTask.new(:selenium) do |t|
+    t.libs << "test"
+    t.pattern = 'test/selenium/**/*_test.rb'
+    t.verbose = true
+  end
+end
