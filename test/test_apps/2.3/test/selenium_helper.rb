@@ -26,6 +26,10 @@ module Selenium
 
     include ActionController::UrlWriter
     ActionController::Routing::Routes.install_helpers(self)
+
+    teardown do
+      AePageObjects.browser.windows.close_all
+    end
   end
 end
 

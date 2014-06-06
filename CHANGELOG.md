@@ -1,3 +1,9 @@
+## X.X.X
+
+* Multiple window support:
+ - window.change_to
+ - browser.find_document
+
 ## 1.0.2
 
 * Issue [Changed Waiter to not use Timeout #57](https://github.com/appfolio/ae_page_objects/issues/57)

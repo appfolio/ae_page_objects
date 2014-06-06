@@ -1,7 +1,22 @@
 <p id="notice"><%= notice %></p>
 
 <span id="first_name"><%= @author.first_name %></span><br/>
-<span id="last_name"><%= @author.last_name %></span>
+
+<% if @last_name_display_delay_ms.present? %>
+
+  <script>
+    $(function() {
+      setTimeout(function() {
+        $('#last_name_place').replaceWith('<span id="last_name"><%=j @author.last_name %></span>');
+      }, <%= @last_name_display_delay_ms %>);
+    });
+  </script>
+
+  <div id="last_name_place"></div>
+
+<% else %>
+  <span id="last_name"><%= @author.last_name %></span>
+<% end %>
 
 <%= link_to 'Edit', edit_author_path(@author) %> |
 <%= link_to 'Back', authors_path %>

@@ -37,7 +37,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end.delayed_show!
     assert_equal "a", author.last_name.text
   end
-  
+
   def test_simple_form
     new_page = PageObjects::Books::NewPage.visit
     assert_equal "", new_page.title.value
@@ -48,6 +48,9 @@ class PageObjectIntegrationTest < Selenium::TestCase
  
     assert_equal "Tushar's Dilemma", new_page.title.value
     assert_equal "132", new_page.index.pages.value
+
+    show_page = new_page.save!
+    assert_equal "Tushar's Dilemma", show_page.title.text
   end
   
   def test_complex_form
@@ -66,6 +69,41 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "Pollan", new_author_page.last_name.value
     assert_equal "In Defense of Food", new_author_page.books.first.title.value
     assert_equal "The Omnivore's Dilemma", new_author_page.books.last.title.value
+  end
+
+  def test_document_proxy
+    new_page = PageObjects::Books::NewPage.visit
+    new_page.index.pages.set "132"
+
+    result_page = new_page.save!
+    assert_equal true,  result_page.is_a?(AePageObjects::DocumentProxy)
+    assert_equal true,  result_page.is_a?(PageObjects::Books::NewPage)
+    assert_equal false, result_page.is_a?(PageObjects::Authors::NewPage)
+
+    # test an explicit cast
+    new_page = result_page.as_a(PageObjects::Books::NewPage)
+    assert_include new_page.form.error_messages, "Title can't be blank"
+
+    new_page.title.set "Hello World"
+
+    # test an implicit cast
+    show_page = new_page.save!
+    assert_equal PageObjects::Books::ShowPage, show_page.class
+    assert_equal "Hello World", show_page.title.text
+
+    # test invalid cast
+    edit_page = show_page.edit!
+
+    result_page = edit_page.save!
+
+    assert_raises AePageObjects::DocumentLoadError do
+      result_page.as_a(PageObjects::Authors::NewPage)
+    end
+
+    # test an incorrect cast
+    assert_raises AePageObjects::DocumentLoadError do
+      result_page.as_a(PageObjects::Books::EditPage)
+    end
   end
   
   def test_element_proxy
@@ -256,17 +294,207 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_windows(window3, :current => window3)
   end
 
+  def test_finding_windows
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1 = window1_authors.window
+
+    window1_authors_robert_row = window1_authors.authors.first
+    assert_equal "Robert", window1_authors_robert_row.first_name.text
+
+    window1_authors_robert_row.show_in_new_window
+
+    window2_author_robert = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage)
+    assert_equal "Robert", window2_author_robert.first_name.text
+    window2 = window2_author_robert.window
+
+    assert_windows(window1, window2, :current => window2)
+
+    window1.switch_to
+
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors_paul_row = window1_authors.authors[1]
+    assert_equal "Paul", window1_authors_paul_row.first_name.text
+
+    window1_authors_paul_row.show_in_new_window
+
+    window3_author_paul = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+      author.first_name.text == "Paul"
+    end
+
+    window3 = window3_author_paul.window
+    assert_windows(window1, window2, window3, :current => window3)
+
+    assert_raises AePageObjects::DocumentLoadError do
+      Capybara.using_wait_time(3) do
+        AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+          author.first_name.text == "Enri"
+        end
+      end
+    end
+
+    assert_windows(window1, window2, window3, :current => window3)
+
+    index_page = AePageObjects.browser.find_document(PageObjects::Authors::IndexPage)
+    assert_equal window1, index_page.window
+  end
+
+  def test_finding_windows__using_find_document_in_page_objects
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1 = window1_authors.window
+
+    window1_authors_robert_row = window1_authors.authors.first
+    assert_equal "Robert", window1_authors_robert_row.first_name.text
+
+    window2_author_robert = window1_authors_robert_row.show_in_new_window!
+
+    assert_equal "Robert", window2_author_robert.first_name.text
+    window2 = window2_author_robert.window
+
+    assert_windows(window1, window2, :current => window2)
+
+    window1.switch_to
+
+    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors_paul_row = window1_authors.authors[1]
+    assert_equal "Paul", window1_authors_paul_row.first_name.text
+
+    window3_author_paul = window1_authors_paul_row.show_in_new_window_with_name!("Paul")
+
+    window3 = window3_author_paul.window
+    assert_windows(window1, window2, window3, :current => window3)
+
+    window3_authors = PageObjects::Authors::IndexPage.visit
+    window3_authors_paul_row = window1_authors.authors[1]
+    assert_equal "Paul", window3_authors_paul_row.first_name.text
+
+    assert_raises AePageObjects::DocumentLoadError do
+      Capybara.using_wait_time(3) do
+        window3_authors_paul_row.show_in_new_window_with_name!("Enri")
+      end
+    end
+  end
+
+  def test_find_document_iterates_over_all_windows__element_not_found
+    ActiveRecord::Base.transaction do
+      Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+    end
+
+    authors = PageObjects::Authors::IndexPage.visit
+    window1 = authors.window
+
+    # open 3 more windows
+
+    robert = authors.authors[0].show_in_new_window_with_name!("Robert")
+    window2 = robert.window
+
+    window1.switch_to
+
+    andrew = authors.authors[1].show_in_new_window_with_name!("Andrew")
+    window3 = andrew.window
+
+    window1.switch_to
+
+    default_wait_time = 7
+
+    # Setup 4th window to delay displaying last_name
+    AuthorsController.last_name_display_delay_ms = (default_wait_time - 2) * 1000
+
+    authors.authors[2].show_in_new_window!
+
+    AuthorsController.last_name_display_delay_ms = nil
+
+    # Look for the last name in window 4.
+    window_visit_registry = {}
+    found = Capybara.using_wait_time(default_wait_time) do
+      AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+        # track counts to verify windows are flipped through
+        window_visit_registry[author.window.handle] ||= 0
+        window_visit_registry[author.window.handle] += 1
+
+        author.last_name.text == "Robertson"
+      end
+    end
+
+    window4 = found.window
+
+    # Since the document we're looking for is in the 4th window, we should have
+    # visited all the windows the number of times we visited the 4th window
+    assert_equal window_visit_registry[window4.handle], window_visit_registry[window2.handle]
+    assert_equal window_visit_registry[window4.handle], window_visit_registry[window3.handle]
+
+    # we should have iterated over the windows more than once.
+    assert_operator window_visit_registry[window4.handle], :>, 1
+
+    assert_windows(window1, window2, window3, window4, :current => window4)
+  end
+
+  def test_find_document_iterates_over_all_windows__window_loading_lags
+    ActiveRecord::Base.transaction do
+      Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+    end
+
+    authors = PageObjects::Authors::IndexPage.visit
+    window1 = authors.window
+
+    robert = authors.authors[0].show_in_new_window_with_name!("Robert")
+    window2 = robert.window
+
+    window1.switch_to
+
+    andrew = authors.authors[1].show_in_new_window_with_name!("Andrew")
+    window3 = andrew.window
+
+    opened_windows = [window1, window2]
+
+    windows = AePageObjects.browser.windows
+
+    call = 0
+    windows.singleton_class.send(:define_method, :opened) do
+      call += 1
+
+      if call == 1
+        opened_windows
+      else
+        super()
+      end
+    end
+
+    window1.switch_to
+
+    # Look for the last name in window 4.
+    window_visit_registry = {}
+    found = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+      # track counts to verify windows are flipped through
+      window_visit_registry[author.window.handle] ||= 0
+      window_visit_registry[author.window.handle] += 1
+
+      author.last_name.text == "Putz"
+    end
+
+    assert_equal window3, found.window
+
+    # window1 has IndexPage, so the block above isn't called
+    assert_equal nil, window_visit_registry[window1.handle]
+    assert_equal 2, window_visit_registry[window2.handle]
+    assert_equal 1, window_visit_registry[window3.handle]
+
+    assert_windows(window1, window2, window3, :current => window3)
+  ensure
+    windows = AePageObjects.browser.windows
+    windows.singleton_class.send(:remove_method, :opened)
+  end
+
 private
 
   def assert_windows(*windows)
     options = windows.extract_options!
 
-    assert_equal windows.to_set, windows.uniq.to_set
-    assert_equal windows.to_set, AePageObjects::Window.registry.values.to_set
-    assert_equal windows.to_set, AePageObjects::Window.all.to_set
+    assert_equal windows.size, windows.uniq.to_set.size
+    assert_equal windows.to_set, AePageObjects.browser.windows.instance_variable_get(:@windows).values.to_set
+    assert_equal windows.to_set, AePageObjects.browser.windows.opened.to_set
 
     if options[:current]
-      assert_equal options[:current], AePageObjects::Window.current
+      assert_equal options[:current], AePageObjects.browser.windows.current_window
     end
   end
 end

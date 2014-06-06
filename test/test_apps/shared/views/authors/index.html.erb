@@ -12,7 +12,7 @@
     <td class="last_name"><%= author.last_name %></td>
     <td><%= link_to 'Show', author %></td>
     <td><span class="js-delay-show" data-href="<%= url_for author %>">Delayed Show</span></td>
-    <td><%= link_to 'Show In New Window', author, :target => :blank %></td>
+    <td><%= link_to 'Show In New Window', author, :target => '_blank' %></td>
     <td><%= link_to 'Edit', edit_author_path(author) %></td>
     <td><%= link_to 'Destroy', author, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>

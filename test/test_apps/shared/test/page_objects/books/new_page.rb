@@ -1,22 +1,26 @@
 module PageObjects
   module Books
     class NewPage < ::AePageObjects::Document
+      extend HasBookForm
 
       path :new_book
+      path :books
 
-      def loaded_locator
-        "form#new_book"
-      end
+      has_book_form
 
-      form_for "book" do
-        element :title
+      def save!
+        title = self.title.value
 
-        element :index, :name => "index_attributes", :locator => "#book_index" do
-          element :pages
-        end
+        node.find("input[type=submit]").click
 
-        element :author, :name => "author_attributes" do
-          element :first_name
+        window.change_to do |window|
+          window.matches(Books::ShowPage) do |page|
+            page.title.text == title
+          end
+
+          window.matches(self.class) do |page|
+            ! page.form.error_messages.empty?
+          end
         end
       end
     end

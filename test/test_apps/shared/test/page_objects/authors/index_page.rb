@@ -31,18 +31,28 @@ module PageObjects
           node.click_link("Show In New Window")
         end
 
+        def show_in_new_window!
+          node.click_link("Show In New Window")
+
+          browser.find_document(ShowPage)
+        end
+
+        def show_in_new_window_with_name!(name)
+          node.click_link("Show In New Window")
+
+          browser.find_document(PageObjects::Authors::ShowPage) do |author|
+            author.first_name.text == name
+          end
+        end
+
         def delayed_show!
           node.find(".js-delay-show").click
-          stale!
-
-          ShowPage.new
+          window.change_to(ShowPage)
         end
 
         def show!
           node.click_link("Show")
-          stale!
-
-          ShowPage.new
+          window.change_to(ShowPage)
         end
       end
     end

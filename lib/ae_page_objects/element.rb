@@ -28,6 +28,14 @@ module AePageObjects
       end
     end
 
+    def browser
+      @browser ||= document.browser
+    end
+
+    def window
+      @window ||= document.window
+    end
+
     def __full_name__
       if parent.respond_to?(:__full_name__)
         name_parts = [ parent.__full_name__, __name__ ].compact

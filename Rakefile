@@ -45,7 +45,8 @@ class SeleniumRunner
   end
 
   def run_all_tests
-    @matrix.keys.sort.each do |rails_version|
+    # Run tests for newest Rails' versions first
+    @matrix.keys.sort.reverse.each do |rails_version|
       run_all_tests_for(rails_version)
     end
   end
