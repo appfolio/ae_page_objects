@@ -374,6 +374,116 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
   end
 
+  def test_find_document_iterates_over_all_windows__element_not_found
+    ActiveRecord::Base.transaction do
+      Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+    end
+
+    authors = PageObjects::Authors::IndexPage.visit
+    window1 = authors.window
+
+    # open 3 more windows
+
+    robert = authors.authors[0].show_in_new_window_with_name!("Robert")
+    window2 = robert.window
+
+    window1.switch_to
+
+    andrew = authors.authors[1].show_in_new_window_with_name!("Andrew")
+    window3 = andrew.window
+
+    window1.switch_to
+
+    default_wait_time = 7
+
+    # Setup 4th window to delay displaying last_name
+    AuthorsController.last_name_display_delay_ms = (default_wait_time - 2) * 1000
+
+    authors.authors[2].show_in_new_window!
+
+    AuthorsController.last_name_display_delay_ms = nil
+
+    # Look for the last name in window 4.
+    window_visit_registry = {}
+    found = Capybara.using_wait_time(default_wait_time) do
+      AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+        # track counts to verify windows are flipped through
+        window_visit_registry[author.window.handle] ||= 0
+        window_visit_registry[author.window.handle] += 1
+
+        author.last_name.text == "Robertson"
+      end
+    end
+
+    window4 = found.window
+
+    # Since the document we're looking for is in the 4th window, we should have
+    # visited all the windows the number of times we visited the 4th window
+    assert_equal window_visit_registry[window4.handle], window_visit_registry[window2.handle]
+    assert_equal window_visit_registry[window4.handle], window_visit_registry[window3.handle]
+
+    # we should have iterated over the windows more than once.
+    assert_operator window_visit_registry[window4.handle], :>, 1
+
+    assert_windows(window1, window2, window3, window4, :current => window4)
+  end
+
+  def test_find_document_iterates_over_all_windows__window_loading_lags
+    ActiveRecord::Base.transaction do
+      Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+    end
+
+    authors = PageObjects::Authors::IndexPage.visit
+    window1 = authors.window
+
+    robert = authors.authors[0].show_in_new_window_with_name!("Robert")
+    window2 = robert.window
+
+    window1.switch_to
+
+    andrew = authors.authors[1].show_in_new_window_with_name!("Andrew")
+    window3 = andrew.window
+
+    opened_windows = [window1, window2]
+
+    windows = AePageObjects.browser.windows
+
+    call = 0
+    windows.singleton_class.send(:define_method, :opened) do
+      call += 1
+
+      if call == 1
+        opened_windows
+      else
+        super()
+      end
+    end
+
+    window1.switch_to
+
+    # Look for the last name in window 4.
+    window_visit_registry = {}
+    found = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+      # track counts to verify windows are flipped through
+      window_visit_registry[author.window.handle] ||= 0
+      window_visit_registry[author.window.handle] += 1
+
+      author.last_name.text == "Putz"
+    end
+
+    assert_equal window3, found.window
+
+    # window1 has IndexPage, so the block above isn't called
+    assert_equal nil, window_visit_registry[window1.handle]
+    assert_equal 2, window_visit_registry[window2.handle]
+    assert_equal 1, window_visit_registry[window3.handle]
+
+    assert_windows(window1, window2, window3, :current => window3)
+  ensure
+    windows = AePageObjects.browser.windows
+    windows.singleton_class.send(:remove_method, :opened)
+  end
+
 private
 
   def assert_windows(*windows)

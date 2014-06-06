@@ -10,9 +10,15 @@ class AuthorsController < ApplicationController
     end
   end
 
+  class << self
+    attr_accessor :last_name_display_delay_ms
+  end
+
   # GET /authors/1
   # GET /authors/1.json
   def show
+    @last_name_display_delay_ms = self.class.last_name_display_delay_ms
+
     @author = Author.find(params[:id])
 
     respond_to do |format|
