@@ -1,3 +1,7 @@
+## X.X.X
+
+* Rails 4 support
+
 ## 1.1.0
 
 * Multiple window support:
