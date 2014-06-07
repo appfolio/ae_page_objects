@@ -15,14 +15,21 @@ module AePageObjects
 
       def opened
         WindowHandleManager.all.map do |handle|
-          find(handle)
+          window_for(handle)
         end
       end
 
       def current_window
         current_handle = WindowHandleManager.current
 
-        find(current_handle) if current_handle
+        window_for(current_handle) if current_handle
+      rescue WindowNotFound
+        synchronize_windows
+
+        if current_window = @windows[@windows.keys.sort.first]
+          current_window.switch_to
+          current_window
+        end
       end
 
       def close_all
@@ -31,12 +38,22 @@ module AePageObjects
 
     private
 
-      def find(handle)
-        @windows[handle] || create_window(handle)
+      def synchronize_windows
+        existence_unverified_window_handles = @windows.keys
+
+        WindowHandleManager.all.map do |handle|
+          # If it exists in the browser, it's been verified
+          existence_unverified_window_handles.delete(handle)
+        end
+
+        # Remove the windows that no longer exist.
+        existence_unverified_window_handles.each do |non_existing_window_handle|
+          @windows.delete(non_existing_window_handle)
+        end
       end
 
-      def create_window(handle)
-        Window.new(self, handle)
+      def window_for(handle)
+        @windows[handle] ||= Window.new(self, handle)
       end
     end
   end

@@ -27,4 +27,7 @@ module AePageObjects
 
   class CastError < Error
   end
+
+  class WindowNotFound < Error
+  end
 end

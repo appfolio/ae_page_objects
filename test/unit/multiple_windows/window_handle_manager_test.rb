@@ -28,6 +28,17 @@ module AePageObjects
         assert_equal nil, WindowHandleManager.current
       end
 
+      def test_current__not_found
+        WindowHandleManager.expects(:all).returns([:handle])
+
+        capybara_stub.browser.expects(:window_handle).raises(Selenium::WebDriver::Error::NoSuchWindowError)
+        capybara_stub.driver.expects(:is_a?).with(Capybara::Selenium::Driver).returns(true)
+
+        assert_raises WindowNotFound do
+          WindowHandleManager.current
+        end
+      end
+
       def test_close__last_window
         WindowHandleManager.expects(:all).returns([:handle1])
         WindowHandleManager.expects(:current).never
