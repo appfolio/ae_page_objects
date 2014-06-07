@@ -55,7 +55,7 @@ module AePageObjects
       private
 
         def request_for(url, method)
-          Rails.application.routes.request_class.new(env_for(url, method))
+          ::Rails.application.routes.request_class.new(env_for(url, method))
         end
 
         def env_for(url, method)
@@ -68,7 +68,7 @@ module AePageObjects
 
         def url_and_router(url)
           url = Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
-          router = Rails.application.routes.set
+          router = ::Rails.application.routes.set
 
           [url, router]
         end
@@ -76,7 +76,7 @@ module AePageObjects
         def routes
           @routes ||= begin
             routes_class = Class.new do
-              include Rails.application.routes.url_helpers
+              include ::Rails.application.routes.url_helpers
             end
             routes_class.new
           end
@@ -88,7 +88,7 @@ module AePageObjects
       private
         def url_and_router(url)
           url = Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = Rails.application.routes.router
+          router = ::Rails.application.routes.router
 
           [url, router]
         end
@@ -100,7 +100,7 @@ module AePageObjects
         def url_and_router(url)
           require 'action_dispatch/journey'
           url = ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = Rails.application.routes.router
+          router = ::Rails.application.routes.router
 
           [url, router]
         end
@@ -128,18 +128,17 @@ module AePageObjects
 
     def recognizer
       @recognizer ||= begin
-        if Rails.version =~ /\A2\.3/
+        if ::Rails.version =~ /\A2\.3/
           Recognizer::Rails23.new
-        elsif Rails.version =~ /\A3\.[01]/
+        elsif ::Rails.version =~ /\A3\.[01]/
           Recognizer::Rails3.new
-        elsif Rails.version =~ /\A3\.2/
+        elsif ::Rails.version =~ /\A3\.2/
           Recognizer::Rails32.new
-        elsif Rails.version =~ /\A4\.[01]/
-          warn "[WARNING]: AePageObjects works but is not thoroughly tested against Rails 4. Caveat emptor."
+        elsif ::Rails.version =~ /\A4\.[01]/
           Recognizer::Rails4.new
         else
-          warn "[WARNING]: AePageObjects is not tested against Rails #{Rails.version} and may behave in an undefined manner."
-          Recognizer::Rails32.new
+          warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."
+          Recognizer::Rails4.new
         end
       end
     end

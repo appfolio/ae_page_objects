@@ -38,6 +38,7 @@ script: "bundle exec rake test:ci"
 #    - RAILS_VERSION=3.0
 #    - RAILS_VERSION=3.1
 #    - RAILS_VERSION=3.2
+#    - RAILS_VERSION=4.0
 #    - UNITS=true
 #
 #matrix:
