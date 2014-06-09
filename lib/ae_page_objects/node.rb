@@ -13,13 +13,21 @@ module AePageObjects
         raise "Must implement!"
       end
 
+      def window
+        @window ||= document.window
+      end
+
+      def browser
+        @browser ||= window.browser
+      end
+
       def current_url
-        warn '[DEPRECATION WARNING]: AePageObjects::Node#current_url is deprecated. Use Node#window.url'
+        AePageObjects::InternalHelpers.deprecation_warning("#{self.class}#current_url is deprecated. Use #{self.class}#window.url")
         window.url
       end
 
       def current_url_without_params
-        warn '[DEPRECATION WARNING]: AePageObjects::Node#current_url_without_params is deprecated. Use Node#window.url_without_params'
+        AePageObjects::InternalHelpers.deprecation_warning("#{self.class}#current_url_without_params is deprecated. Use #{self.class}#window.url_without_params")
         window.url_without_params
       end
 
@@ -49,12 +57,12 @@ module AePageObjects
 
     module ClassMethods
       def current_url
-        warn "[DEPRECATION WARNING]: AePageObjects::Node.current_url is deprecated. Use Node#window.url"
+        AePageObjects::InternalHelpers.deprecation_warning("Node.current_url is deprecated. Use Node#window.url")
         AePageObjects.browser.current_window.url
       end
 
       def current_url_without_params
-        warn "[DEPRECATION WARNING]: AePageObjects::Node.current_url_without_params is deprecated. Use Node#window.url_without_params"
+        AePageObjects::InternalHelpers.deprecation_warning("Node.current_url_without_params is deprecated. Use Node#window.url_without_params")
         AePageObjects.browser.current_window.url_without_params
       end
     end

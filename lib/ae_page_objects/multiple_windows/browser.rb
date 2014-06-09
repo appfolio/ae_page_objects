@@ -4,7 +4,7 @@ module AePageObjects
       attr_reader :windows
 
       def initialize
-        @windows = WindowList.new
+        @windows = WindowList.new(self)
       end
 
       def current_window

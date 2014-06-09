@@ -33,7 +33,6 @@ module AePageObjects
 
   module SingleWindow
     autoload :Browser,                   'ae_page_objects/single_window/browser'
-    autoload :Window,                    'ae_page_objects/single_window/window'
     autoload :SameWindowLoaderStrategy,  'ae_page_objects/single_window/same_window_loader_strategy'
   end
 

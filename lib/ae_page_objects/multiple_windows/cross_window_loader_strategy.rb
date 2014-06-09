@@ -6,7 +6,7 @@ module AePageObjects
         @window_list     = window_list
         @original_window = window_list.current_window
 
-        @current_window_loader = SingleWindow::SameWindowLoaderStrategy.new
+        @current_window_loader = SingleWindow::SameWindowLoaderStrategy.new(@original_window)
       end
 
       def load_document_with_condition(condition)
@@ -26,7 +26,9 @@ module AePageObjects
 
           window.switch_to
 
-          if document = @current_window_loader.load_document_with_condition(condition)
+          loader = SingleWindow::SameWindowLoaderStrategy.new(window)
+
+          if document = loader.load_document_with_condition(condition)
             return document
           end
         end

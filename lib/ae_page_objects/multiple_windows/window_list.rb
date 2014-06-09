@@ -1,7 +1,8 @@
 module AePageObjects
   module MultipleWindows
     class WindowList
-      def initialize
+      def initialize(browser)
+        @browser = browser
         @windows = {}
       end
 
@@ -36,7 +37,7 @@ module AePageObjects
       end
 
       def create_window(handle)
-        Window.new(self, handle)
+        Window.new(@browser, self, handle)
       end
     end
   end

@@ -1,6 +1,10 @@
 module AePageObjects
   module SingleWindow
     class SameWindowLoaderStrategy
+      def initialize(window)
+        @window = window
+      end
+
       def load_document_with_condition(condition)
         document = load_document(condition.document_class)
 
@@ -18,7 +22,16 @@ module AePageObjects
     private
 
       def load_document(document_class)
-        document_class.new
+        current_document = @window.current_document
+
+        # preserve the existing document if it matches
+        # the type we're looking for
+        # TODO - add test case
+        if current_document && current_document.class == document_class
+          current_document
+        else
+          @window.load(document_class)
+        end
       rescue AePageObjects::LoadingPageFailed
         nil
       end
