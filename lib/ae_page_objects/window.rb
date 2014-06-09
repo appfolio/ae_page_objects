@@ -56,28 +56,30 @@ module AePageObjects
       end
 
       def resolve
-        path = options.delete(:path)
-        path ||= @document_class.paths.first
+        path = @options.delete(:path)
+        path ||= @document_class.default_path
 
-        generated_path = @document_class.generate_path(path, options)
+        generated_path = @document_class.generate_path(path, @options)
 
         unless generated_path
           raise PathNotResolvable, "#{@document_class.name} not visitable via #{path.first}(#{@options.inspect})"
         end
+
+        generated_path
       end
     end
 
     def visit(document_class, options = {})
       path_resolver = PathResolver.new(document_class, options)
 
-      Capybara.current_session.visit(path_resolver.path)
+      Capybara.current_session.visit(path_resolver.resolve)
 
       load(document_class)
     end
 
     def change_to(*document_classes, &block)
       query           = DocumentQuery.new(*document_classes, &block)
-      document_loader = DocumentLoader.new(query, SameWindowLoaderStrategy.new(self))
+      document_loader = DocumentLoader.new(query, SingleWindow::SameWindowLoaderStrategy.new(self))
       loaded_page     = document_loader.load
 
       DocumentProxy.new(loaded_page, query)

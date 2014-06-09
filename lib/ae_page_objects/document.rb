@@ -40,13 +40,15 @@ module AePageObjects
 
     class << self
       def can_load_from_url?(url)
-        paths = self.paths
-
         return true if paths.empty?
 
         paths.any? do |path|
           site.path_recognizes_url?(path, url)
         end
+      end
+
+      def default_path
+        paths.first
       end
 
       def generate_path(path, *args)

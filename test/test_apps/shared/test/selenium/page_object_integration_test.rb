@@ -11,9 +11,9 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_load_ensuring
     visit("/books/new")
-
+    
     exception = assert_raises AePageObjects::LoadingPageFailed do
-      PageObjects::Authors::NewPage.new
+      aepos.window.load(PageObjects::Authors::NewPage)
     end
 
     assert_equal "PageObjects::Authors::NewPage cannot be loaded with url '/books/new'", exception.message
@@ -21,7 +21,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     visit("/authors/new")
 
     assert_nothing_raised do
-      PageObjects::Authors::NewPage.new
+      aepos.window.load(PageObjects::Authors::NewPage)
     end
   end
 
@@ -30,7 +30,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       Author.create!(:last_name => 'a')
     end
 
-    index = PageObjects::Authors::IndexPage.visit
+    index = aepos.visit(PageObjects::Authors::IndexPage)
 
     author = index.authors.find do |author|
       author.last_name.text == 'a'
@@ -39,7 +39,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_simple_form
-    new_page = PageObjects::Books::NewPage.visit
+
+    new_page = aepos.visit(PageObjects::Books::NewPage)
     assert_equal "", new_page.title.value
     assert_equal "", new_page.index.pages.value
 
@@ -54,7 +55,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_complex_form
-    new_author_page = PageObjects::Authors::NewPage.visit
+    new_author_page = aepos.visit(PageObjects::Authors::NewPage)
     assert_equal "", new_author_page.first_name.value
     assert_equal "", new_author_page.last_name.value
     assert_equal "", new_author_page.books.first.title.value
@@ -72,7 +73,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_document_proxy
-    new_page = PageObjects::Books::NewPage.visit
+    new_page = aepos.visit(PageObjects::Books::NewPage)
     new_page.index.pages.set "132"
 
     result_page = new_page.save!
@@ -109,8 +110,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_window_change_to
     visit("/books/new")
 
-    result_page = AePageObjects.browser.current_window.change_to(PageObjects::Authors::NewPage,
-                                                                 PageObjects::Books::NewPage)
+    result_page = aepos.window.change_to(PageObjects::Authors::NewPage, PageObjects::Books::NewPage)
 
     assert_equal true, result_page.is_a?(PageObjects::Books::NewPage)
 
@@ -127,7 +127,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_element_proxy
-    author = PageObjects::Authors::NewPage.visit
+    author = aepos.visit(PageObjects::Authors::NewPage)
 
     Capybara.using_wait_time(1) do
       assert author.rating.star.present?
@@ -156,13 +156,15 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_element_proxy__not_present
-    author = PageObjects::Authors::NewPage.visit
+    author = aepos.visit(PageObjects::Authors::NewPage)
+
     assert_false author.missing.present?
     assert author.missing.not_present?
   end
 
   def test_element_proxy__nested
-    author = PageObjects::Authors::NewPage.visit
+    author = aepos.visit(PageObjects::Authors::NewPage)
+
     Capybara.using_wait_time(1) do
       assert author.nested_rating.star.present?
 
@@ -190,7 +192,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       Author.create!(:last_name => '7')
     end
 
-    index = PageObjects::Authors::IndexPage.visit
+    index = aepos.visit(PageObjects::Authors::IndexPage)
 
     assert_equal 8, index.authors.size
     assert_nil index.authors.find { |author|
@@ -214,34 +216,34 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_document_tracking
-    author = PageObjects::Authors::NewPage.visit
+    author = aepos.visit(PageObjects::Authors::NewPage)
     assert_false author.stale?
 
     visit("/books/new")
     assert_false author.stale?
-
-    book = PageObjects::Books::NewPage.new
+    
+    book = aepos.window.load(PageObjects::Books::NewPage)
     assert author.stale?
     assert_false book.stale?
-
-    author = PageObjects::Authors::NewPage.visit
+    
+    author = aepos.visit(PageObjects::Authors::NewPage)
     assert_false author.stale?
     assert book.stale?
 
-    book = PageObjects::Books::NewPage.visit
+    book = aepos.visit(PageObjects::Books::NewPage)
     assert author.stale?
     assert_false book.stale?
-
-    author = PageObjects::Authors::NewPage.visit
+    
+    author = aepos.visit(PageObjects::Authors::NewPage)
     assert_false author.stale?
     assert book.stale?
 
     visit("/authors/new")
     assert_false author.stale?
     assert book.stale?
-
+    
     assert_raises AePageObjects::LoadingPageFailed do
-      PageObjects::Books::NewPage.new
+      aepos.window.load(PageObjects::Books::NewPage)
     end
 
     assert_false author.stale?
@@ -249,7 +251,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_document_tracking__multiple_windows
-    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1 = window1_authors.window
     assert_windows(window1, :current => window1)
 
@@ -259,12 +261,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window1_authors_robert_row.show_in_new_window
 
     Capybara.current_session.driver.within_window(author_path(authors(:robert)))
-    window2_author_robert = PageObjects::Authors::ShowPage.new
+    window2_author_robert = aepos.window.load(PageObjects::Authors::ShowPage)
 
     window2 = window2_author_robert.window
     assert_windows(window1, window2, :current => window2)
 
-    window2_authors = PageObjects::Authors::IndexPage.visit
+    window2_authors = aepos.visit(PageObjects::Authors::IndexPage)
     assert_equal window2, window2_authors.window
 
     assert window2_author_robert.stale?
@@ -291,12 +293,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal window1_author_robert, window1.current_document
 
     # close a window without an explicit switch
-    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1_authors_robert_row = window1_authors.authors.first
     window1_authors_robert_row.show_in_new_window
 
     Capybara.current_session.driver.within_window(author_path(authors(:robert)))
-    window3_author_robert = PageObjects::Authors::ShowPage.new
+    window3_author_robert = aepos.window.load(PageObjects::Authors::ShowPage)
     window3 = window3_author_robert.window
 
     assert_windows(window1, window3, :current => window3)
@@ -315,7 +317,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_finding_windows
-    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1 = window1_authors.window
 
     window1_authors_robert_row = window1_authors.authors.first
@@ -323,7 +325,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_robert_row.show_in_new_window
 
-    window2_author_robert = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage)
+    window2_author_robert = aepos.find_document(PageObjects::Authors::ShowPage)
     assert_equal "Robert", window2_author_robert.first_name.text
     window2 = window2_author_robert.window
 
@@ -331,13 +333,13 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1.switch_to
 
-    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1_authors_paul_row = window1_authors.authors[1]
     assert_equal "Paul", window1_authors_paul_row.first_name.text
 
     window1_authors_paul_row.show_in_new_window
 
-    window3_author_paul = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+    window3_author_paul = aepos.find_document(PageObjects::Authors::ShowPage) do |author|
       author.first_name.text == "Paul"
     end
 
@@ -346,7 +348,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_raises AePageObjects::DocumentLoadError do
       Capybara.using_wait_time(3) do
-        AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+        aepos.find_document(PageObjects::Authors::ShowPage) do |author|
           author.first_name.text == "Enri"
         end
       end
@@ -354,12 +356,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_windows(window1, window2, window3, :current => window3)
 
-    index_page = AePageObjects.browser.find_document(PageObjects::Authors::IndexPage)
+    index_page = aepos.find_document(PageObjects::Authors::IndexPage)
     assert_equal window1, index_page.window
   end
 
   def test_finding_windows__using_find_document_in_page_objects
-    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1 = window1_authors.window
 
     window1_authors_robert_row = window1_authors.authors.first
@@ -374,7 +376,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1.switch_to
 
-    window1_authors = PageObjects::Authors::IndexPage.visit
+    window1_authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1_authors_paul_row = window1_authors.authors[1]
     assert_equal "Paul", window1_authors_paul_row.first_name.text
 
@@ -383,7 +385,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window3 = window3_author_paul.window
     assert_windows(window1, window2, window3, :current => window3)
 
-    window3_authors = PageObjects::Authors::IndexPage.visit
+    window3_authors = aepos.visit(PageObjects::Authors::IndexPage)
     window3_authors_paul_row = window1_authors.authors[1]
     assert_equal "Paul", window3_authors_paul_row.first_name.text
 
@@ -399,7 +401,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       Author.create!(:first_name => 'Andrew', :last_name => "Putz")
     end
 
-    authors = PageObjects::Authors::IndexPage.visit
+    authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1 = authors.window
 
     # open 3 more windows
@@ -426,7 +428,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     # Look for the last name in window 4.
     window_visit_registry = {}
     found = Capybara.using_wait_time(default_wait_time) do
-      AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+      aepos.find_document(PageObjects::Authors::ShowPage) do |author|
         # track counts to verify windows are flipped through
         window_visit_registry[author.window.handle] ||= 0
         window_visit_registry[author.window.handle] += 1
@@ -453,7 +455,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       Author.create!(:first_name => 'Andrew', :last_name => "Putz")
     end
 
-    authors = PageObjects::Authors::IndexPage.visit
+    authors = aepos.visit(PageObjects::Authors::IndexPage)
     window1 = authors.window
 
     robert = authors.authors[0].show_in_new_window_with_name!("Robert")
@@ -483,7 +485,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     # Look for the last name in window 4.
     window_visit_registry = {}
-    found = AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+    found = aepos.find_document(PageObjects::Authors::ShowPage) do |author|
       # track counts to verify windows are flipped through
       window_visit_registry[author.window.handle] ||= 0
       window_visit_registry[author.window.handle] += 1
@@ -516,5 +518,31 @@ private
     if options[:current]
       assert_equal options[:current], AePageObjects.browser.windows.current_window
     end
+  end
+
+  class Helpers
+    def browser
+      AePageObjects.browser
+    end
+
+    def window
+      browser.current_window
+    end
+
+    def load(*args)
+      window.load(*args)
+    end
+
+    def visit(*args)
+      window.visit(*args)
+    end
+
+    def find_document(*args)
+      browser.find_document(*args)
+    end
+  end
+
+  def aepos
+    @aepos ||= Helpers.new
   end
 end
