@@ -1,6 +1,6 @@
 module AePageObjects
   module SingleWindow
-    class Window
+    class Window < AePageObjects::Window
       attr_reader :current_document
 
       def initialize

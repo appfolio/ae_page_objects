@@ -21,7 +21,6 @@ module AePageObjects
   module Concerns
     autoload :LoadEnsuring,     'ae_page_objects/concerns/load_ensuring'
     autoload :Staleable,        'ae_page_objects/concerns/staleable'
-    autoload :Visitable,        'ae_page_objects/concerns/visitable'
   end
 
   module MultipleWindows

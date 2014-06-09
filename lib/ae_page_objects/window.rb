@@ -15,5 +15,13 @@ module AePageObjects
         all.close_all
       end
     end
+
+    def url
+      Capybara.current_session.current_url.sub(/^https?:\/\/[^\/]*/, '')
+    end
+
+    def url_without_params
+      url.sub(/\?.*/, '')
+    end
   end
 end

@@ -14,11 +14,13 @@ module AePageObjects
       end
 
       def current_url
-        self.class.current_url
+        warn '[DEPRECATION WARNING]: AePageObjects::Node#current_url is deprecated. Use Node#window.url'
+        window.url
       end
 
       def current_url_without_params
-        self.class.current_url_without_params
+        warn '[DEPRECATION WARNING]: AePageObjects::Node#current_url_without_params is deprecated. Use Node#window.url_without_params'
+        window.url_without_params
       end
 
       METHODS_TO_DELEGATE_TO_NODE = [:find, :all, :value, :set, :text, :visible?]
@@ -47,11 +49,13 @@ module AePageObjects
 
     module ClassMethods
       def current_url
-        Capybara.current_session.current_url.sub(/^https?:\/\/[^\/]*/, '')
+        warn "[DEPRECATION WARNING]: AePageObjects::Node.current_url is deprecated. Use Node#window.url"
+        AePageObjects.browser.current_window.url
       end
 
       def current_url_without_params
-        current_url.sub(/\?.*/, '')
+        warn "[DEPRECATION WARNING]: AePageObjects::Node.current_url_without_params is deprecated. Use Node#window.url_without_params"
+        AePageObjects.browser.current_window.url_without_params
       end
     end
 

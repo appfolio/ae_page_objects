@@ -43,12 +43,13 @@ module AePageObjects
           "#hello"
         end
       end
-      some_document_class.expects(:can_load_from_current_url?).returns(true)
+      some_document_class.expects(:can_load_in_window?).returns(true)
 
       element_error = LoadingElementFailed.new("Twas an error")
       some_document_class.any_instance.expects(:find).with("#hello").raises(element_error)
 
       raised = assert_raises LoadingPageFailed do
+        stub_current_window
         some_document_class.new
       end
 
