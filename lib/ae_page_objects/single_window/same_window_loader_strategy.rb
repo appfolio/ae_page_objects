@@ -19,13 +19,13 @@ module AePageObjects
 
       def load_document(document_class)
         document_class.new
-      rescue AePageObjects::LoadingFailed
+      rescue AePageObjects::LoadingPageFailed
         nil
       end
 
       def condition_matches?(document, condition)
         condition.match?(document)
-      rescue Capybara::ElementNotFound
+      rescue AePageObjects::LoadingElementFailed
         false
       end
     end

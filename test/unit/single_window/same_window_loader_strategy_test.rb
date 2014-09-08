@@ -30,7 +30,7 @@ module AePageObjects
       end
 
       def test_load_page_with_condition__loading_failed
-        DocumentClass.expects(:new).raises(AePageObjects::LoadingFailed.new)
+        DocumentClass.expects(:new).raises(AePageObjects::LoadingPageFailed.new)
 
         condition = DocumentQuery::Condition.new(DocumentClass)
 

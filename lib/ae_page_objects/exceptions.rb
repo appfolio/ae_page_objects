@@ -7,6 +7,12 @@ module AePageObjects
   class LoadingFailed < Error
   end
 
+  class LoadingPageFailed < LoadingFailed
+  end
+
+  class LoadingElementFailed < LoadingFailed
+  end
+
   class PathNotResolvable < Error
   end
 

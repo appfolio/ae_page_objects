@@ -38,7 +38,7 @@ module AePageObjects
     def test_presence__element_not_found
       proxy = new_proxy
       
-      element_class.expects(:new).raises(Capybara::ElementNotFound)
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
       assert_nil proxy.presence
     end
     
@@ -52,7 +52,7 @@ module AePageObjects
     def test_present__element_not_found
       proxy = new_proxy
       
-      element_class.expects(:new).raises(Capybara::ElementNotFound)
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
       assert_false proxy.present?
     end
 
@@ -69,7 +69,7 @@ module AePageObjects
       proxy = new_proxy
 
       with_stubbed_wait_for do
-        element_class.expects(:new).raises(Capybara::ElementNotFound)
+        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
         assert proxy.not_present?
       end
     end
@@ -88,7 +88,7 @@ module AePageObjects
       proxy = new_proxy
 
       with_stubbed_wait_for do
-        element_class.expects(:new).raises(Capybara::ElementNotFound)
+        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
         assert_false proxy.visible?
       end
     end
@@ -112,7 +112,7 @@ module AePageObjects
       proxy = new_proxy
 
       with_stubbed_wait_for do
-        element_class.expects(:new).raises(Capybara::ElementNotFound)
+        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
         assert proxy.not_visible?
       end
     end

@@ -101,6 +101,8 @@ module AePageObjects
       end
       
       parent.node
+    rescue Capybara::ElementNotFound => e
+      raise LoadingElementFailed, e.message
     end
   end
 end
