@@ -10,10 +10,14 @@ module AePageObjects
     
       def ensure_loaded!
         unless Waiter.wait_for { self.class.can_load_from_current_url? }
-          raise LoadingFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
+          raise LoadingPageFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
         end
 
-        super
+        begin
+          super
+        rescue LoadingElementFailed
+          raise LoadingPageFailed, e.message
+        end
       end
     
       module VisitMethod

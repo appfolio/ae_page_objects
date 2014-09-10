@@ -12,7 +12,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_load_ensuring
     visit("/books/new")
     
-    exception = assert_raises AePageObjects::LoadingFailed do
+    exception = assert_raises AePageObjects::LoadingPageFailed do
       PageObjects::Authors::NewPage.new
     end
 
@@ -220,10 +220,10 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_false author.stale?
     assert book.stale?
     
-    assert_raises AePageObjects::LoadingFailed do
+    assert_raises AePageObjects::LoadingPageFailed do
       PageObjects::Books::NewPage.new
-    end
-    
+    end 
+
     assert_false author.stale?
     assert book.stale?
   end

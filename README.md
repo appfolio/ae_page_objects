@@ -344,7 +344,7 @@ will fail:
 
 ```ruby
 login_page = LoginPage.new
-AePageObjects::LoadingFailed: MyPageObjects::LoginPage cannot be loaded with url '/dashboard/statistics'
+AePageObjects::LoadingPageFailed: MyPageObjects::LoginPage cannot be loaded with url '/dashboard/statistics'
   test/selenium/login_test.rb:16:in `new'
 ```
 
@@ -399,7 +399,7 @@ private
 
     # do custom load ensuring
     unless current_url =~ /\?debug\=true/
-      raise AePageObjects::LoadingFailed, "Should be in debug mode"
+      raise AePageObjects::LoadingPageFailed, "Should be in debug mode"
     end
   end
 end
@@ -408,7 +408,7 @@ end
 If you choose to override `ensure_loaded!` you:
 
 - need to call super() to get the default load ensuring
-- should raise `AePageObjects::LoadingFailed` if the document should not be loaded.
+- should raise `AePageObjects::LoadingPageFailed` if the document should not be loaded.
 
 ### Windows
 

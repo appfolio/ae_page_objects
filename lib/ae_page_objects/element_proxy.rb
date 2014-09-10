@@ -44,7 +44,7 @@ module AePageObjects
     
     def presence
       element
-    rescue Capybara::ElementNotFound
+    rescue AePageObjects::LoadingElementFailed
       nil
     end
     
