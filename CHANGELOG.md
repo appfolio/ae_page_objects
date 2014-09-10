@@ -1,6 +1,7 @@
-## X.X.X
+## 1.1.1
 
-* Rails 4 support
+* Test against Rails 4
+* Issue [Wrapped Capybara::ElementNotFound error in AePageObjects::LoadingElementFailed](https://github.com/appfolio/ae_page_objects/pull/67)
 
 ## 1.1.0
 
