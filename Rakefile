@@ -14,6 +14,11 @@ require 'pp'
 
 Bundler::GemHelper.install_tasks
 
+def remove_files(glob_pattern)
+  puts "Removing '#{glob_pattern}'"
+  FileUtils.rm_f Dir[glob_pattern]
+end
+
 class SeleniumRunner
 
   TestConfig = Struct.new(:rails_version, :gemfile)
@@ -23,11 +28,8 @@ class SeleniumRunner
     @matrix        = read_matrix
   end
 
-  def cleanup
-    glob_pattern = "test/test_apps/**/gemfiles/*.lock"
-    puts "Removing '#{glob_pattern}'"
-
-    FileUtils.rm_f Dir[glob_pattern]
+  def clean
+    remove_files("test/test_apps/**/gemfiles/*.lock")
   end
 
   def install_all
@@ -173,8 +175,8 @@ namespace :test do
 
       end
 
-      task :cleanup do
-        selenium_runner.cleanup
+      task :clean do
+        selenium_runner.clean
       end
     end
 
@@ -204,6 +206,11 @@ namespace :test do
   end
 
   namespace :ci do
+    task :clean => ["test:integration:selenium:clean"] do
+      remove_files("test/test_apps/**/Gemfile.lock")
+      remove_files("gemfiles/*.lock")
+      remove_files("Gemfile.lock")
+    end
     task :install => ci_install
   end
 
