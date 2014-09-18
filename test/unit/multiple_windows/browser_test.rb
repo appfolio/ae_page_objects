@@ -28,7 +28,7 @@ module AePageObjects
         proxy = browser.find_document(document_class, :ignore_current => true, &the_block)
 
         assert_equal true,        proxy.is_a?(DocumentProxy)
-        assert_equal document_loader, proxy.instance_variable_get(:@document_loader)
+        assert_equal :loaded_page, proxy.instance_variable_get(:@loaded_page)
 
         query_conditions = query.conditions
         assert_equal 1, query_conditions.size

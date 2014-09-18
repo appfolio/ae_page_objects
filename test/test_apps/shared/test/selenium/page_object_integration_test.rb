@@ -96,16 +96,36 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     result_page = edit_page.save!
 
-    assert_raises AePageObjects::DocumentLoadError do
+    assert_raises AePageObjects::CastError do
       result_page.as_a(PageObjects::Authors::NewPage)
     end
 
     # test an incorrect cast
-    assert_raises AePageObjects::DocumentLoadError do
+    assert_raises AePageObjects::CastError do
       result_page.as_a(PageObjects::Books::EditPage)
     end
   end
-  
+
+  def test_window_change_to
+    visit("/books/new")
+
+    result_page = AePageObjects.browser.current_window.change_to(PageObjects::Authors::NewPage,
+                                                                 PageObjects::Books::NewPage)
+
+    assert_equal true, result_page.is_a?(PageObjects::Books::NewPage)
+
+    # implicit access attempts to use default document class
+    raised = assert_raises AePageObjects::CastError do
+      result_page.rating
+    end
+
+    assert_equal "PageObjects::Authors::NewPage expected, but PageObjects::Books::NewPage loaded", raised.message
+
+    books_new_page = result_page.as_a(PageObjects::Books::NewPage)
+
+    assert_equal PageObjects::Books::NewPage, books_new_page.class
+  end
+
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
 

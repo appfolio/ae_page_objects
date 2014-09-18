@@ -15,8 +15,9 @@ module AePageObjects
       def change_to(*document_classes, &block)
         query           = DocumentQuery.new(*document_classes, &block)
         document_loader = DocumentLoader.new(query, SameWindowLoaderStrategy.new)
+        loaded_page     = document_loader.load
 
-        DocumentProxy.new(document_loader.load, document_loader)
+        DocumentProxy.new(loaded_page, query)
       end
     end
   end

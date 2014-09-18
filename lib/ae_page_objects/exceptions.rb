@@ -18,4 +18,6 @@ module AePageObjects
 
   class DocumentLoadError < Error
   end
+  class CastError < Error
+  end
 end
