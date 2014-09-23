@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.require_paths             = ["lib"]
   s.rubygems_version          = "1.8.24"
   s.summary                   = "Capybara Page Objects pattern"
-  
+
   s.files                     = `git ls-files -- lib`.split("\n")
 
   s.add_dependency('capybara', ['>= 1.1', '< 2.3'])

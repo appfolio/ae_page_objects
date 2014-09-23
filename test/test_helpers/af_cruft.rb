@@ -1,23 +1,23 @@
 module AfCruft
   def assert_sets_equal(expected, actual)
     missing = expected.reject{|value| actual.include?(value)}
-    missing.map! do |o| 
+    missing.map! do |o|
       if expected.respond_to? :index
         "#{expected.index(o)} - #{o.inspect}"
       else
         o.inspect
       end
     end
-    
+
     extra = actual.reject{|value| expected.include?(value)}
-    extra.map! do |o| 
+    extra.map! do |o|
       if actual.respond_to? :index
         "#{actual.index(o)} - #{o.inspect}"
       else
         o.inspect
       end
     end
-    
+
     errors = []
     errors << "The following items were expected, but not found: #{missing.inspect}" unless missing.empty?
     errors << "The following items were found, but not expected: #{extra.inspect}" unless extra.empty?
@@ -31,7 +31,7 @@ module AfCruft
       end
     end
   end
-  
+
   def assert_false(thingy, message = nil)
     assert_equal false, thingy, message
   end

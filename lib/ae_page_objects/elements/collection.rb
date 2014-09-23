@@ -31,7 +31,7 @@ module AePageObjects
     def [](index)
       at(index)
     end
-    
+
     def each
       (0..(size - 1)).each do |index|
         yield at(index)
@@ -47,10 +47,10 @@ module AePageObjects
     end
 
   private
-  
+
     def configure(options)
       super
-      
+
       @item_locator = options.delete(:item_locator) || default_item_locator
     end
 

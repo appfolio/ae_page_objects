@@ -7,7 +7,7 @@ module AePageObjects
       end
 
     private
-    
+
       def ensure_loaded!
         unless Waiter.wait_for { self.class.can_load_from_current_url? }
           raise LoadingPageFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
@@ -19,7 +19,7 @@ module AePageObjects
           raise LoadingPageFailed, e.message
         end
       end
-    
+
       module VisitMethod
         def visit(*args)
           raise ArgumentError, "Cannot pass block to visit()" if block_given?
@@ -31,9 +31,9 @@ module AePageObjects
           new
         end
       end
-    
+
       module ClassMethods
-      
+
         def can_load_from_current_url?
           return true if paths.empty?
 
@@ -43,18 +43,18 @@ module AePageObjects
             site.path_recognizes_url?(path, url)
           end
         end
-      
+
       private
-          
+
         def paths
           @paths ||= []
         end
-      
+
         def path(path_method)
           raise ArgumentError, "path must be a symbol or string" if ! path_method.is_a?(Symbol) && ! path_method.is_a?(String)
 
           paths << path_method
-        
+
           extend VisitMethod
         end
       end

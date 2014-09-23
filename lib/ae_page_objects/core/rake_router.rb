@@ -1,13 +1,13 @@
 module AePageObjects
   class RakeRouter < BasicRouter
-    
+
     attr_reader :routes
-    
+
     def initialize(rake_routes, mounted_prefix = '')
       @mounted_prefix = mounted_prefix || ""
       @routes = {}
       route_line_regex = /(\w+)(?:\s[A-Z]+)?\s+(\/.*)\(.:format\).*$/
-      
+
       rake_routes.split("\n").each do |line|
         line = line.strip
         matches = route_line_regex.match(line)
@@ -16,7 +16,7 @@ module AePageObjects
         end
       end
     end
-    
+
     def path_recognizes_url?(path, url)
       if path.is_a?(Symbol)
         route = @routes[path]
@@ -30,7 +30,7 @@ module AePageObjects
       if named_route.is_a?(String)
         return Path.new(@mounted_prefix + named_route)
       end
-      
+
       if route = @routes[named_route]
         options = args.last.is_a?(Hash) ? args.pop : {}
         route.generate_path(options)
@@ -38,17 +38,17 @@ module AePageObjects
     end
 
   private
-  
+
     class Path < String
       attr_reader :params, :regex
-      
+
       def initialize(value)
         super(value.gsub(/(\/)+/, '/').sub(/\(\.\:format\)$/, ''))
-        
+
         @params = parse_params
         @regex  = generate_regex
       end
-      
+
       def generate(param_values)
         param_values = HashSymbolizer.new(param_values).symbolize_keys
         @params.values.inject(self) do |path, param|
@@ -61,11 +61,11 @@ module AePageObjects
         # overwrite the required status with the optional
         {}.merge(required_params).merge(optional_params)
       end
-      
+
       def find_params(using_regex)
         scan(using_regex).flatten.map(&:to_sym)
       end
-      
+
       def optional_params
         {}.tap do |optional_params|
           find_params(/\(\/\:(\w+)\)/).each do |param_name|
@@ -73,7 +73,7 @@ module AePageObjects
           end
         end
       end
-      
+
       def required_params
         {}.tap do |required_params|
           find_params(/\:(\w+)/).each do |param_name|
@@ -85,30 +85,30 @@ module AePageObjects
       def generate_regex
         regex_spec = @params.values.inject(self) do |regex_spec, param|
           param.replace_param_in_url(regex_spec)
-        end 
+        end
         Regexp.new regex_spec
       end
     end
-    
+
     class Param < Struct.new(:name, :optional)
       include Comparable
 
       def optional?
         optional
       end
-      
+
       def <=>(other)
         name.to_s <=> other.name.to_s
       end
-      
+
       def eql?(other)
         name == other.name
       end
-      
+
       def hash
         name.hash
       end
-      
+
       def replace_param_in_url(url)
         if optional?
           url.gsub("(/:#{name})", '(\/.+)?')
@@ -116,7 +116,7 @@ module AePageObjects
           url.gsub(":#{name}", '(.+)')
         end
       end
-      
+
       def substitute(url, values)
         if optional?
           if values[name]
@@ -130,13 +130,13 @@ module AePageObjects
         end
       end
     end
-  
+
     class Route
       def initialize(spec, mounted_prefix)
         @path = Path.new(mounted_prefix + spec)
         @path.freeze
       end
-    
+
       def matches?(url)
         url =~ @path.regex
       end
