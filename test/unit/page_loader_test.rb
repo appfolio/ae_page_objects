@@ -54,14 +54,13 @@ module AePageObjects
       strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[1]).returns(nil)
       strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[2]).returns(nil)
 
-      error = DocumentLoadError.new('hello')
       strategy.expects(:document_not_loaded_error_message).with(query).returns("hello")
 
-      raised = assert_raise error.class do
+      raised = assert_raise DocumentLoadError do
         loader.load
       end
 
-      assert_equal error.message, raised.message
+      assert_equal "hello", raised.message
     end
 
     def test_load_page__timeout
@@ -82,14 +81,13 @@ module AePageObjects
       strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.first).returns(nil)
       strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.last).returns(nil)
 
-      error = DocumentLoadError.new("hello")
       strategy.expects(:document_not_loaded_error_message).with(query).returns("hello")
 
-      raised = assert_raise error.class do
+      raised = assert_raise DocumentLoadError do
         loader.load
       end
 
-      assert_equal error.message, raised.message
+      assert_equal "hello", raised.message
     end
   end
 end

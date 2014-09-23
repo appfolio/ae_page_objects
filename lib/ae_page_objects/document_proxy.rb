@@ -15,7 +15,7 @@ module AePageObjects
     end
 
     def is_a?(document_class)
-       super || @loaded_page.is_a?(document_class)
+      super || @loaded_page.is_a?(document_class)
     end
 
     def as_a(document_class)

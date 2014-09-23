@@ -1,12 +1,11 @@
 require 'unit_helper'
+
 module AePageObjects
   class DocumentQueryTest < Test::Unit::TestCase
-
 
     def test_default_document_class
       hello_class = ::AePageObjects::Document.new_subclass
       kitty_class = ::AePageObjects::Document.new_subclass
-
 
       document_query = DocumentQuery.new do |query|
         query.matches(hello_class)
@@ -17,7 +16,6 @@ module AePageObjects
     end
 
     def test_permitted_types_dump
-
       hello_class = ::AePageObjects::Document.new_subclass do
         def self.name
           "hello"
@@ -38,7 +36,7 @@ module AePageObjects
       assert_equal ["hello", "kitty"].inspect, document_query.permitted_types_dump
 
       # it's memoized
-      #assert_equal ["AePageObjects::DocumentLoaderTest::DocumentClass1", "AePageObjects::DocumentLoaderTest::DocumentClass2"].inspect, loader.permitted_types_dump
+      assert_equal ["hello", "kitty"].inspect, document_query.permitted_types_dump
     end
 
     def test_query_conditions
