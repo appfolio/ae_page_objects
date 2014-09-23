@@ -2,6 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   class DocumentTest < Test::Unit::TestCase
+    include NodeInterfaceTests
 
     def test_document
       kitty_class = ::AePageObjects::Document.new_subclass
@@ -52,6 +53,14 @@ module AePageObjects
       end
 
       assert_equal element_error.message, raised.message
+    end
+
+  private
+
+    def node_for_node_tests
+      page_klass = AePageObjects::Document.new_subclass
+      stub_current_window
+      page_klass.new
     end
   end
 end
