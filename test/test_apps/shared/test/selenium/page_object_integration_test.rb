@@ -11,7 +11,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_load_ensuring
     visit("/books/new")
-    
+
     exception = assert_raises AePageObjects::LoadingPageFailed do
       PageObjects::Authors::NewPage.new
     end
@@ -45,14 +45,14 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     new_page.title.set "Tushar's Dilemma"
     new_page.index.pages.set "132"
- 
+
     assert_equal "Tushar's Dilemma", new_page.title.value
     assert_equal "132", new_page.index.pages.value
 
     show_page = new_page.save!
     assert_equal "Tushar's Dilemma", show_page.title.text
   end
-  
+
   def test_complex_form
     new_author_page = PageObjects::Authors::NewPage.visit
     assert_equal "", new_author_page.first_name.value
@@ -64,7 +64,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     new_author_page.last_name.set "Pollan"
     new_author_page.books.first.title.set "In Defense of Food"
     new_author_page.books.last.title.set "The Omnivore's Dilemma"
- 
+
     assert_equal "Michael", new_author_page.first_name.value
     assert_equal "Pollan", new_author_page.last_name.value
     assert_equal "In Defense of Food", new_author_page.books.first.title.value
@@ -96,16 +96,36 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     result_page = edit_page.save!
 
-    assert_raises AePageObjects::DocumentLoadError do
+    assert_raises AePageObjects::CastError do
       result_page.as_a(PageObjects::Authors::NewPage)
     end
 
     # test an incorrect cast
-    assert_raises AePageObjects::DocumentLoadError do
+    assert_raises AePageObjects::CastError do
       result_page.as_a(PageObjects::Books::EditPage)
     end
   end
-  
+
+  def test_window_change_to
+    visit("/books/new")
+
+    result_page = AePageObjects.browser.current_window.change_to(PageObjects::Authors::NewPage,
+                                                                 PageObjects::Books::NewPage)
+
+    assert_equal true, result_page.is_a?(PageObjects::Books::NewPage)
+
+    # implicit access attempts to use default document class
+    raised = assert_raises AePageObjects::CastError do
+      result_page.rating
+    end
+
+    assert_equal "PageObjects::Authors::NewPage expected, but PageObjects::Books::NewPage loaded", raised.message
+
+    books_new_page = result_page.as_a(PageObjects::Books::NewPage)
+
+    assert_equal PageObjects::Books::NewPage, books_new_page.class
+  end
+
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
 
@@ -134,13 +154,13 @@ class PageObjectIntegrationTest < Selenium::TestCase
       assert author.rating.star.not_visible?
     end
   end
-  
+
   def test_element_proxy__not_present
     author = PageObjects::Authors::NewPage.visit
     assert_false author.missing.present?
     assert author.missing.not_present?
   end
-  
+
   def test_element_proxy__nested
     author = PageObjects::Authors::NewPage.visit
     Capybara.using_wait_time(1) do
@@ -192,18 +212,18 @@ class PageObjectIntegrationTest < Selenium::TestCase
       author.last_name.text == '7'
     }
   end
-  
+
   def test_document_tracking
     author = PageObjects::Authors::NewPage.visit
     assert_false author.stale?
-    
+
     visit("/books/new")
     assert_false author.stale?
-    
+
     book = PageObjects::Books::NewPage.new
     assert author.stale?
     assert_false book.stale?
-    
+
     author = PageObjects::Authors::NewPage.visit
     assert_false author.stale?
     assert book.stale?
@@ -211,18 +231,18 @@ class PageObjectIntegrationTest < Selenium::TestCase
     book = PageObjects::Books::NewPage.visit
     assert author.stale?
     assert_false book.stale?
-    
+
     author = PageObjects::Authors::NewPage.visit
     assert_false author.stale?
     assert book.stale?
-    
+
     visit("/authors/new")
     assert_false author.stale?
     assert book.stale?
-    
+
     assert_raises AePageObjects::LoadingPageFailed do
       PageObjects::Books::NewPage.new
-    end 
+    end
 
     assert_false author.stale?
     assert book.stale?

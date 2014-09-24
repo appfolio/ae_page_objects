@@ -119,9 +119,9 @@ module AePageObjects
         )
 
         loader = CrossWindowLoaderStrategy.new(window_list)
-        page_loader = mock(:permitted_types_dump => "permitted_types_dump")
+        query = mock(:permitted_types_dump => "permitted_types_dump")
 
-        error = loader.document_not_loaded_error(page_loader)
+        error_message = loader.document_not_loaded_error_message(query)
 
         all_windows_dump = [
           {:window_handle => "window1", :document => "Document1"},
@@ -129,7 +129,7 @@ module AePageObjects
           {:window_handle => "window3", :document => "Document3"},
         ]
 
-        assert_equal "Couldn't find document with type in permitted_types_dump in any of the open windows: #{all_windows_dump.inspect}", error.message
+        assert_equal "Couldn't find document with type in permitted_types_dump in any of the open windows: #{all_windows_dump.inspect}", error_message
       end
     end
   end

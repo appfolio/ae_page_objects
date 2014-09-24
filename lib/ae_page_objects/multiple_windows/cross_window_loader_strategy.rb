@@ -36,13 +36,13 @@ module AePageObjects
         nil
       end
 
-      def document_not_loaded_error(document_loader)
+      def document_not_loaded_error_message(query)
         all_windows = @window_list.opened.map do |window|
           name = window.current_document && window.current_document.to_s || "<none>"
           {:window_handle => window.handle, :document => name }
         end
 
-        DocumentLoadError.new("Couldn't find document with type in #{document_loader.permitted_types_dump} in any of the open windows: #{all_windows.inspect}")
+        "Couldn't find document with type in #{query.permitted_types_dump} in any of the open windows: #{all_windows.inspect}"
       end
     end
   end

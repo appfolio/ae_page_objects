@@ -2,58 +2,58 @@ require 'unit_helper'
 
 module AePageObjects
   class RakeRouterTest < Test::Unit::TestCase
-    
+
     def test_param
       assert_equal ::AePageObjects::RakeRouter::Param.new(:id, false), ::AePageObjects::RakeRouter::Param.new(:id, false)
       assert_equal ::AePageObjects::RakeRouter::Param.new(:id, false), ::AePageObjects::RakeRouter::Param.new(:id, true)
     end
-    
+
     def test_path__required
       path = ::AePageObjects::RakeRouter::Path.new("/hello/kitty/:id(.:format)")
       assert_equal "/hello/kitty/:id", path
       assert_equal [::AePageObjects::RakeRouter::Param.new(:id, false)], path.params.values
       assert_equal '(?-mix:\\/hello\\/kitty\\/(.+))', path.regex.to_s
-      
+
       assert_raises ArgumentError do
         path.generate({:whatever => 1})
       end
-      
+
       assert_equal '/hello/kitty/EYE', path.generate({:id => 'EYE', :whatever => 1})
     end
-    
+
     def test_path__optional
       path = ::AePageObjects::RakeRouter::Path.new("/hello/kitty(/:id)(.:format)")
       assert_equal "/hello/kitty(/:id)", path
       assert_equal [::AePageObjects::RakeRouter::Param.new(:id, true)], path.params.values
       assert_equal '(?-mix:\\/hello\\/kitty(\\/.+)?)', path.regex.to_s
-      
+
       assert_equal '/hello/kitty', path.generate({:whatever => 1})
       assert_equal '/hello/kitty/EYE', path.generate({:id => 'EYE', :whatever => 1})
     end
-    
+
     def test_path__mixed
       path = ::AePageObjects::RakeRouter::Path.new("/hello(/:homie_id)/kitty/:id(.:format)")
       assert_equal "/hello(/:homie_id)/kitty/:id", path
       assert_sets_equal [::AePageObjects::RakeRouter::Param.new(:id, false), ::AePageObjects::RakeRouter::Param.new(:homie_id, true)], path.params.values
       assert_equal '(?-mix:\\/hello(\\/.+)?\\/kitty\\/(.+))', path.regex.to_s
-      
+
       assert_raises ArgumentError do
         path.generate({:homie_id => 'JK', :whatever => 1})
       end
-      
+
       assert_equal '/hello/JK/kitty/EYE', path.generate({:id => 'EYE', :homie_id => 'JK', :whatever => 1})
       assert_equal '/hello/kitty/EYE', path.generate({:id => 'EYE', :whatever => 1})
     end
-    
+
     def test_parsing
       router = ::AePageObjects::RakeRouter.new(routes)
-            
+
       assert router.path_recognizes_url?(:unhide_property, "/properties/12/unhide")
       assert router.path_recognizes_url?(:past_occupants_property_unit, "/properties/123/units/23/past_occupants")
       assert ! router.path_recognizes_url?(:past_occupants_property_unit, "/properties/12/unhide")
       assert router.path_recognizes_url?(:new_applications_applicants, "/applications/12/applicants/new")
       assert router.path_recognizes_url?(:new_applications_applicants, "/applications/applicants/new")
-      
+
       assert_equal "/properties/123/units/whatever/past_occupants", router.generate_path(:past_occupants_property_unit, :property_id => "123", :id => "whatever")
       assert_equal "/applications/123/applicants/new", router.generate_path(:new_applications_applicants, :web_flow_id => "123")
       assert_equal "/applications/applicants/new", router.generate_path(:new_applications_applicants)
@@ -61,10 +61,10 @@ module AePageObjects
       assert_raises ArgumentError do
         router.generate_path(:past_occupants_property_unit)
       end
-      
+
       assert_equal "/kessler/jon", router.generate_path("/kessler/jon")
     end
-    
+
     def test_parsing__prefix
       router = ::AePageObjects::RakeRouter.new(routes, "/kessler")
 
@@ -73,7 +73,7 @@ module AePageObjects
       assert ! router.path_recognizes_url?(:past_occupants_property_unit, "/kessler/properties/12/unhide")
       assert router.path_recognizes_url?(:new_applications_applicants, "/kessler/applications/12/applicants/new")
       assert router.path_recognizes_url?(:new_applications_applicants, "/kessler/applications/applicants/new")
-      
+
       assert_equal "/kessler/properties/123/units/whatever/past_occupants", router.generate_path(:past_occupants_property_unit, :property_id => "123", :id => "whatever")
       assert_equal "/kessler/applications/123/applicants/new", router.generate_path(:new_applications_applicants, :web_flow_id => "123")
       assert_equal "/kessler/applications/applicants/new", router.generate_path(:new_applications_applicants)
@@ -81,19 +81,19 @@ module AePageObjects
       assert_raises ArgumentError do
         router.generate_path(:past_occupants_property_unit)
       end
-      
+
       assert_equal "/kessler/kessler/jon", router.generate_path("/kessler/jon")
     end
-    
+
     def test_parsing__prefix__root
       router = ::AePageObjects::RakeRouter.new(routes, "/")
-      
+
       assert router.path_recognizes_url?(:unhide_property, "/properties/12/unhide")
       assert router.path_recognizes_url?(:past_occupants_property_unit, "/properties/123/units/23/past_occupants")
       assert ! router.path_recognizes_url?(:past_occupants_property_unit, "/properties/12/unhide")
       assert router.path_recognizes_url?(:new_applications_applicants, "/applications/12/applicants/new")
       assert router.path_recognizes_url?(:new_applications_applicants, "/applications/applicants/new")
-      
+
       assert_equal "/properties/123/units/whatever/past_occupants", router.generate_path(:past_occupants_property_unit, :property_id => "123", :id => "whatever")
       assert_equal "/applications/123/applicants/new", router.generate_path(:new_applications_applicants, :web_flow_id => "123")
       assert_equal "/applications/applicants/new", router.generate_path(:new_applications_applicants)
@@ -101,12 +101,12 @@ module AePageObjects
       assert_raises ArgumentError do
         router.generate_path(:past_occupants_property_unit)
       end
-      
+
       assert_equal "/kessler/jon", router.generate_path("/kessler/jon")
     end
-    
+
   private
-    
+
     def routes
       <<-ROUTES
                       unhide_property POST   /properties/:id/unhide(.:format)                            {:action=>"unhide", :controller=>"properties"}

@@ -41,11 +41,11 @@ module AePageObjects
 
       def test_document_not_loaded_error
         loader = SameWindowLoaderStrategy.new
-        page_loader = mock(:permitted_types_dump => "permitted_types_dump")
+        query = mock(:permitted_types_dump => "permitted_types_dump")
 
-        error = loader.document_not_loaded_error(page_loader)
+        error_message = loader.document_not_loaded_error_message(query)
 
-        assert_equal "Current window does not contain document with type in permitted_types_dump.", error.message
+        assert_equal "Current window does not contain document with type in permitted_types_dump.", error_message
       end
     end
   end

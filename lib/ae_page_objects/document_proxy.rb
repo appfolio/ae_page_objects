@@ -9,9 +9,9 @@ module AePageObjects
       end
     end
 
-    def initialize(loaded_page, document_loader)
-      @loaded_page     = loaded_page
-      @document_loader = document_loader
+    def initialize(loaded_page, query)
+      @loaded_page = loaded_page
+      @query = query
     end
 
     def is_a?(document_class)
@@ -23,25 +23,25 @@ module AePageObjects
         return @loaded_page
       end
 
-      raise DocumentLoadError, "#{document_class.name} not expected. Allowed types: #{@document_loader.permitted_types_dump}"
+      raise CastError, "Loaded page is not a #{document_class.name}. Allowed pages: #{@query.permitted_types_dump}"
     end
 
   private
 
     def implicit_document
-      @implicit_document ||= as_a(implicit_document_class)
-    end
-
-    def implicit_document_class
-      @implicit_document_class ||= @document_loader.default_document_class
+      if @loaded_page.is_a? @query.default_document_class
+        @loaded_page
+      else
+        raise CastError, "#{@query.default_document_class} expected, but #{@loaded_page.class} loaded"
+      end
     end
 
     def method_missing(name, *args, &block)
       implicit_document.__send__(name, *args, &block)
     end
 
-    def respond_to?(*args)
-      super || implicit_document_class.allocate.respond_to?(*args)
+    def respond_to_missing?(*args)
+      super || implicit_document.respond_to?(*args)
     end
   end
 end

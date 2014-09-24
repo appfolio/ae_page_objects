@@ -35,24 +35,23 @@ module AePageObjects
 
       proxy = DocumentProxy.new(loaded_page, page_loader)
 
-      raised = assert_raise DocumentLoadError do
+      raised = assert_raise CastError do
         proxy.as_a(DocumentClass2)
       end
 
-      assert_equal "AePageObjects::DocumentProxyTest::DocumentClass2 not expected. Allowed types: permitted_types_dump", raised.message
+      assert_equal "Loaded page is not a AePageObjects::DocumentProxyTest::DocumentClass2. Allowed pages: permitted_types_dump", raised.message
     end
 
     def test_methods_are_forwarded
-      loaded_page = Class.new(DocumentClass) do
-        def hello_kitty
-          :meow
-        end
-      end.new
+      loaded_page = DocumentClass.new
+      def loaded_page.hello_kitty
+        :meow
+      end
 
-      page_loader = mock
-      page_loader.expects(:default_document_class).returns(DocumentClass)
+      query = mock
+      query.expects(:default_document_class).times(3).returns(DocumentClass)
 
-      proxy = DocumentProxy.new(loaded_page, page_loader)
+      proxy = DocumentProxy.new(loaded_page, query)
       assert_equal :meow, proxy.hello_kitty
 
       # memoized

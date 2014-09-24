@@ -6,24 +6,24 @@ module AePageObjects
       @parent       = parent
       @locator      = nil
       @name         = nil
-      
+
       configure(parse_options(options_or_locator))
 
       raise ArgumentError, ":name or :locator is required" unless @name || @locator
-      
+
       @locator ||= default_locator
 
       super(scoped_node)
     end
-    
+
     def document
       @document ||= begin
         node = self.parent
-        
+
         until node.is_a?(::AePageObjects::Document)
           node = node.parent
         end
-        
+
         node
       end
     end
@@ -60,26 +60,26 @@ module AePageObjects
     def name
       __name__
     end
-    
+
     def to_s
       super.tap do |str|
         str << "@name:<#{@name}>; #@locator:<#{@locator}>"
       end
     end
-    
+
     def using_default_locator?
       @locator == default_locator
     end
-    
+
   private
-  
+
     def configure(options)
       @locator = options.delete(:locator)
       @name    = options.delete(:name)
 
       @name = @name.to_s if @name
     end
-  
+
     def parse_options(options_or_locator)
       if options_or_locator.is_a?( Hash )
         HashSymbolizer.new(options_or_locator).symbolize_keys
@@ -87,11 +87,11 @@ module AePageObjects
         {:locator => options_or_locator}
       end
     end
-    
+
     def default_locator
       @default_locator ||= Proc.new { "##{__full_name__}" }
     end
-    
+
     def scoped_node
       if @locator
         locator = eval_locator(@locator)
@@ -99,7 +99,7 @@ module AePageObjects
           return parent.node.find(*locator)
         end
       end
-      
+
       parent.node
     rescue Capybara::ElementNotFound => e
       raise LoadingElementFailed, e.message

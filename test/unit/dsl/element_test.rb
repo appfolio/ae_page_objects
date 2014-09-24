@@ -13,34 +13,34 @@ module AePageObjects
 
         stub_current_window
         jon = kitty.new
-      
+
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
-    
+
       def test_element__locator
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind, :locator => "Kind Homie"
         end
-        
+
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
         jon = kitty.new
-      
+
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("Kind Homie").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
-    
+
       def test_element__locator__proc
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind, :locator => Proc.new { parent.page_local_context }
         end
-        
+
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
@@ -48,86 +48,86 @@ module AePageObjects
 
         jon = kitty.new
         jon.expects(:page_local_context).returns("hello")
-      
+
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("hello").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Element, kind_page_object)
       end
-    
+
       def test_element__is__select
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind, :is => ::AePageObjects::Select
         end
-        
+
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
         jon = kitty.new
-      
+
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Select, kind_page_object)
       end
-    
+
       def test_element__is__checkbox
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind, :is => ::AePageObjects::Checkbox
         end
-        
+
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
         jon = kitty.new
-      
+
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
         verify_field(jon, :kind, ::AePageObjects::Checkbox, kind_page_object)
       end
-    
+
       def test_element__is__special_widget
         special_widget = ::AePageObjects::Element.new_subclass
-      
+
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind, :is => special_widget
         end
-        
+
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
         jon = kitty.new
-      
+
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
-      
+
         verify_field(jon, :kind, special_widget, kind_page_object)
       end
-    
+
       def test_element__is__special_widget__with_locator
         special_widget = ::AePageObjects::Element.new_subclass
-      
+
         kitty = ::AePageObjects::Document.new_subclass do
           element :kind, :is => special_widget, :locator => "As If!"
         end
-        
+
         assert kitty.method_defined?(:kind)
         assert_sets_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
         jon = kitty.new
-      
+
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("As If!").returns(kind_page_object)
-      
+
         verify_field(jon, :kind, special_widget, kind_page_object)
       end
-      
+
       def test_nested_element__block
         kitty = ::AePageObjects::Document.new_subclass do
           element :tail, :name => "tail_attributes" do
@@ -222,7 +222,7 @@ module AePageObjects
 
       def test_nested_element__is__block
         tail_base_class = ::AePageObjects::Element.new_subclass
-        
+
         kitty = ::AePageObjects::Document.new_subclass do
           element :tail, :name => "tail_attributes", :is => tail_base_class do
             element :color

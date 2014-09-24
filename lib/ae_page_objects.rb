@@ -39,7 +39,7 @@ module AePageObjects
   end
 
   autoload :Window,            'ae_page_objects/window'
-  
+
   autoload :DocumentQuery,     'ae_page_objects/document_query'
   autoload :DocumentLoader,    'ae_page_objects/document_loader'
 
@@ -48,7 +48,7 @@ module AePageObjects
   autoload :DocumentProxy,     'ae_page_objects/document_proxy'
   autoload :Element,           'ae_page_objects/element'
   autoload :ElementProxy,      'ae_page_objects/element_proxy'
-  
+
   autoload :Collection,        'ae_page_objects/elements/collection'
   autoload :Form,              'ae_page_objects/elements/form'
   autoload :Select,            'ae_page_objects/elements/select'

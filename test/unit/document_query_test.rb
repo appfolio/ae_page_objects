@@ -3,6 +3,39 @@ require 'unit_helper'
 module AePageObjects
   class DocumentQueryTest < Test::Unit::TestCase
 
+    def test_default_document_class
+      hello_class = ::AePageObjects::Document.new_subclass
+      kitty_class = ::AePageObjects::Document.new_subclass
+
+      document_query = DocumentQuery.new do |query|
+        query.matches(hello_class)
+        query.matches(kitty_class)
+      end
+
+      assert_equal hello_class, document_query.default_document_class
+    end
+
+    def test_permitted_types_dump
+      hello_class = ::AePageObjects::Document.new_subclass do
+        def self.name
+          "hello"
+        end
+      end
+
+      kitty_class = ::AePageObjects::Document.new_subclass do
+        def self.name
+          "kitty"
+        end
+      end
+
+      document_query = DocumentQuery.new do |query|
+        query.matches(hello_class)
+        query.matches(kitty_class)
+      end
+
+      assert_equal ["hello", "kitty"].inspect, document_query.permitted_types_dump
+    end
+
     def test_query_conditions
       block_condition = proc do |page|
         page.is_starbucks?

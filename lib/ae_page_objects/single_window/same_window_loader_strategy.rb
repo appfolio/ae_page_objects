@@ -11,8 +11,8 @@ module AePageObjects
         end
       end
 
-      def document_not_loaded_error(document_loader)
-        DocumentLoadError.new("Current window does not contain document with type in #{document_loader.permitted_types_dump}.")
+      def document_not_loaded_error_message(query)
+        "Current window does not contain document with type in #{query.permitted_types_dump}."
       end
 
     private
