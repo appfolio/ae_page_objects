@@ -1,3 +1,7 @@
+## 1.1.2
+
+* Issue [69](https://github.com/appfolio/ae_page_objects/pull/69)
+
 ## 1.1.1
 
 * Test against Rails 4
