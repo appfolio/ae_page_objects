@@ -34,9 +34,6 @@ module AePageObjects
       end
 
       assert_equal ["hello", "kitty"].inspect, document_query.permitted_types_dump
-
-      # it's memoized
-      assert_equal ["hello", "kitty"].inspect, document_query.permitted_types_dump
     end
 
     def test_query_conditions

@@ -66,11 +66,11 @@ module AePageObjects
     end
 
     def default_document_class
-      @default_document_class ||= conditions.first.document_class
+      conditions.first.document_class
     end
 
     def permitted_types_dump
-      @permitted_types_dump ||= conditions.map(&:document_class).map(&:name).inspect
+      conditions.map(&:document_class).map(&:name).inspect
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'unit_helper'
+
 module AePageObjects
   class DocumentLoaderTest < Test::Unit::TestCase
 
