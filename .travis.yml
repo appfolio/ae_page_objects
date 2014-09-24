@@ -21,7 +21,7 @@ bundler_args: ''
 
 # for the rails 2.3 test app.
 before_install:
-  - ruby -e "exit(RUBY_VERSION == '2.0.0')" || gem update --system 1.8.25
+  - ruby -e "exit(RUBY_VERSION.to_f >= 2.0)" || gem update --system 1.8.25
   - gem --version
 
 before_script:
