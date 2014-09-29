@@ -4,7 +4,7 @@ module AePageObjects
   module Dsl
     class ElementTest < Test::Unit::TestCase
       def test_element__basic
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :kind
         end
 
@@ -20,7 +20,7 @@ module AePageObjects
       end
 
       def test_element__locator
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :kind, :locator => "Kind Homie"
         end
 
@@ -37,7 +37,7 @@ module AePageObjects
       end
 
       def test_element__locator__proc
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :kind, :locator => Proc.new { parent.page_local_context }
         end
 
@@ -55,7 +55,7 @@ module AePageObjects
       end
 
       def test_element__is__select
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :kind, :is => ::AePageObjects::Select
         end
 
@@ -72,7 +72,7 @@ module AePageObjects
       end
 
       def test_element__is__checkbox
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :kind, :is => ::AePageObjects::Checkbox
         end
 
@@ -89,9 +89,9 @@ module AePageObjects
       end
 
       def test_element__is__special_widget
-        special_widget = ::AePageObjects::Element.new_subclass
+        special_widget = Class.new(AePageObjects::Element)
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :kind, :is => special_widget
         end
 
@@ -109,9 +109,9 @@ module AePageObjects
       end
 
       def test_element__is__special_widget__with_locator
-        special_widget = ::AePageObjects::Element.new_subclass
+        special_widget = Class.new(AePageObjects::Element)
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :kind, :is => special_widget, :locator => "As If!"
         end
 
@@ -129,7 +129,7 @@ module AePageObjects
       end
 
       def test_nested_element__block
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :tail, :name => "tail_attributes" do
             element :color
             element :size, :name => "size_attributes" do
@@ -174,7 +174,7 @@ module AePageObjects
       end
 
       def test_nested_element__is
-        tail_class = ::AePageObjects::Element.new_subclass do
+        tail_class = Class.new(AePageObjects::Element) do
           element :color
           element :size, :name => "size_attributes" do
             element :length
@@ -186,7 +186,7 @@ module AePageObjects
           end
         end
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :tail, :is => tail_class, :name => 'tail_attributes'
         end
 
@@ -221,9 +221,9 @@ module AePageObjects
       end
 
       def test_nested_element__is__block
-        tail_base_class = ::AePageObjects::Element.new_subclass
+        tail_base_class = Class.new(AePageObjects::Element)
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :tail, :name => "tail_attributes", :is => tail_base_class do
             element :color
             element :size, :name => "size_attributes" do
@@ -268,7 +268,7 @@ module AePageObjects
       end
 
       def test_nested_element__locator
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :tail, :locator => "what ever you want, baby", :name => 'tail_attributes' do
             element :color
             element :size, :locator => "Size", :name => 'size_attributes' do
@@ -313,7 +313,7 @@ module AePageObjects
       end
 
       def test_nested_element__locator__proc
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           element :tail, :name => 'tail_attributes' do
             element :color
             element :size, :name => 'size_attributes' do

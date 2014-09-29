@@ -153,7 +153,7 @@ module AePageObjects
     end
 
     def element_class
-      @element_class ||= Element.new_subclass do
+      @element_class ||= Class.new(Element) do
         def self.expect_initialize
           any_instance.expects(:initialize).with(1, 2)
         end

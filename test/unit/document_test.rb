@@ -4,7 +4,7 @@ module AePageObjects
   class DocumentTest < Test::Unit::TestCase
 
     def test_document
-      kitty_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
 
       stub_current_window
 
@@ -20,7 +20,7 @@ module AePageObjects
     end
 
     def test_find
-      kitty_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
 
       stub_current_window
 

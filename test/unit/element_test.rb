@@ -4,8 +4,8 @@ module AePageObjects
   class ElementTest < Test::Unit::TestCase
 
     def test_new__no_name_no_locator
-      pet_class   = ::AePageObjects::Document.new_subclass
-      kitty_class = ::AePageObjects::Element.new_subclass
+      pet_class   = Class.new(AePageObjects::Document)
+      kitty_class = Class.new(AePageObjects::Element)
 
       stub_current_window
 
@@ -19,8 +19,8 @@ module AePageObjects
     end
 
     def test_new
-      pet_class   = ::AePageObjects::Document.new_subclass
-      kitty_class = ::AePageObjects::Element.new_subclass
+      pet_class   = Class.new(AePageObjects::Document)
+      kitty_class = Class.new(AePageObjects::Element)
 
       stub_current_window
 
@@ -38,8 +38,8 @@ module AePageObjects
     end
 
     def test_new__with_name
-      pet_class   = ::AePageObjects::Document.new_subclass
-      kitty_class = ::AePageObjects::Element.new_subclass
+      pet_class   = Class.new(AePageObjects::Document)
+      kitty_class = Class.new(AePageObjects::Element)
 
       stub_current_window
 
@@ -57,8 +57,8 @@ module AePageObjects
     end
 
     def test_new__locator
-      pet_class   = ::AePageObjects::Document.new_subclass
-      kitty_class = ::AePageObjects::Element.new_subclass
+      pet_class   = Class.new(AePageObjects::Document)
+      kitty_class = Class.new(AePageObjects::Element)
 
       capybara_stub
 
@@ -76,8 +76,8 @@ module AePageObjects
     end
 
     def test_document
-      kitty_page_class = ::AePageObjects::Document.new_subclass
-      kitty_class      = ::AePageObjects::Element.new_subclass
+      kitty_page_class = Class.new(AePageObjects::Document)
+      kitty_class      = Class.new(AePageObjects::Element)
 
       capybara_stub
 
@@ -100,8 +100,8 @@ module AePageObjects
     end
 
     def test_full_name
-      kitty_page_class = AePageObjects::Document.new_subclass
-      kitty_class      = AePageObjects::Element.new_subclass do
+      kitty_page_class = AePageObjects::Document
+      kitty_class      = Class.new(AePageObjects::Element) do
         def configure(*)
           super
           @name = nil

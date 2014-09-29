@@ -4,7 +4,7 @@ module PageObjects
       path :authors
 
       class Table < AePageObjects::Collection
-        self.item_class = AePageObjects::Element.new_subclass do
+        self.item_class = Class.new(AePageObjects::Element) do
         private
           def configure(*)
             super

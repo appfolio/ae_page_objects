@@ -4,8 +4,8 @@ module AePageObjects
   class CollectionTest < Test::Unit::TestCase
 
     def test_css_item_locator
-      bullets = ::AePageObjects::Element.new_subclass
-      clip    = ::AePageObjects::Collection.new_subclass do
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
         self.item_class = bullets
       end
 
@@ -22,8 +22,8 @@ module AePageObjects
     end
 
     def test_empty
-      bullets = ::AePageObjects::Element.new_subclass
-      clip    = ::AePageObjects::Collection.new_subclass do
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
         self.item_class = bullets
       end
 
@@ -53,8 +53,8 @@ module AePageObjects
     end
 
     def test_non_empty
-      bullets = ::AePageObjects::Element.new_subclass
-      clip    = ::AePageObjects::Collection.new_subclass do
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
         self.item_class = bullets
       end
 
