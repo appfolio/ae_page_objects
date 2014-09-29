@@ -35,5 +35,23 @@ module AePageObjects
       capybara_stub.session.expects(:find).with(:xpath, "yo").returns("result")
       kitty_page.find(:xpath, "yo")
     end
+
+    def test_ensure_loaded
+      some_document_class = Class.new(AePageObjects::Document) do
+        def loaded_locator
+          "#hello"
+        end
+      end
+      some_document_class.expects(:can_load_from_current_url?).returns(true)
+
+      element_error = LoadingElementFailed.new("Twas an error")
+      some_document_class.any_instance.expects(:find).with("#hello").raises(element_error)
+
+      raised = assert_raises LoadingPageFailed do
+        some_document_class.new
+      end
+
+      assert_equal element_error.message, raised.message
+    end
   end
 end
