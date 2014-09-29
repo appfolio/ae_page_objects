@@ -15,7 +15,7 @@ module AePageObjects
 
         begin
           super
-        rescue LoadingElementFailed
+        rescue LoadingElementFailed => e
           raise LoadingPageFailed, e.message
         end
       end
