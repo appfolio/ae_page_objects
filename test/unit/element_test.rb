@@ -2,6 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   class ElementTest < Test::Unit::TestCase
+    include NodeInterfaceTests
 
     def test_new__no_name_no_locator
       pet_class   = ::AePageObjects::Document.new_subclass
@@ -118,6 +119,18 @@ module AePageObjects
 
       kitty2 = kitty_class.new(kitty1, :locator => 'purr')
       assert_nil kitty2.full_name
+    end
+
+  private
+
+    def node_for_node_tests
+      page_klass    = AePageObjects::Document.new_subclass
+      element_klass = AePageObjects::Element.new_subclass
+      stub_current_window
+
+      element_klass.any_instance.stubs(:scoped_node => capybara_stub.session)
+
+      element_klass.new(page_klass.new, :locator => "#foo")
     end
   end
 end
