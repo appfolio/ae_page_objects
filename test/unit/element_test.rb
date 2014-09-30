@@ -124,8 +124,8 @@ module AePageObjects
   private
 
     def node_for_node_tests
-      page_klass    = AePageObjects::Document.new_subclass
-      element_klass = AePageObjects::Element.new_subclass
+      page_klass    = Class.new(AePageObjects::Document)
+      element_klass = Class.new(AePageObjects::Element)
       stub_current_window
 
       element_klass.any_instance.stubs(:scoped_node => capybara_stub.session)

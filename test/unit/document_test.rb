@@ -58,7 +58,7 @@ module AePageObjects
   private
 
     def node_for_node_tests
-      page_klass = AePageObjects::Document.new_subclass
+      page_klass = Class.new(AePageObjects::Document)
       stub_current_window
       page_klass.new
     end
