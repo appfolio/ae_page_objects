@@ -38,22 +38,6 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "a", author.last_name.text
   end
 
-  def test_document_find__throw_exception
-     index = PageObjects::Authors::IndexPage.visit
-
-     assert_raises AePageObjects::LoadingElementFailed do
-       index.find("invalid_locator")
-     end
-   end
-
-   def test_element_find__throw_exception
-     index = PageObjects::Authors::IndexPage.visit
-
-     assert_raises AePageObjects::LoadingElementFailed do
-       index.authors.first.first_name.find("invalid_locator")
-     end
-   end
-
   def test_simple_form
     new_page = PageObjects::Books::NewPage.visit
     assert_equal "", new_page.title.value
