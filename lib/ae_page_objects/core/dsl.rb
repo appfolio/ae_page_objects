@@ -143,14 +143,14 @@ module AePageObjects
 
       item_class = options.delete(:contains) || options[:is].item_class
       if block_given?
-        item_class = item_class.new_subclass(&block).tap do |new_item_class|
+        item_class = Class.new(item_class, &block).tap do |new_item_class|
           new_item_class.element_attributes.merge!(item_class.element_attributes)
         end
       end
 
       # since we are creating a new item class, we need to subclass the collection class
       # so we can parameterize the collection class with an item class
-      options[:is] = options[:is].new_subclass
+      options[:is] = Class.new(options[:is])
       options[:is].item_class = item_class
 
       element(name, options)
@@ -162,7 +162,7 @@ module AePageObjects
       raise ArgumentError, ":is option not supported" if options[:is]
       raise ArgumentError, "Block required." if block.nil?
 
-      klass = ::AePageObjects::Form.new_subclass(&block)
+      klass = Class.new(::AePageObjects::Form, &block)
 
       options      = options.dup
       options[:is] = klass
@@ -186,7 +186,7 @@ module AePageObjects
       klass = options.delete(:is) || ::AePageObjects::Element
 
       if block_given?
-        klass.new_subclass(&block)
+        Class.new(klass, &block)
       else
         klass
       end

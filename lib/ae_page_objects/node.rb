@@ -53,12 +53,6 @@ module AePageObjects
       def current_url_without_params
         current_url.sub(/\?.*/, '')
       end
-
-      def new_subclass(&block)
-        klass = Class.new(self)
-        klass.class_eval(&block) if block
-        klass
-      end
     end
 
     extend Dsl

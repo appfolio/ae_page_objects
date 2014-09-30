@@ -4,7 +4,7 @@ module AePageObjects
   class StaleableTest < Test::Unit::TestCase
 
     def test_stale
-      kitty_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
 
       stub_current_window
 

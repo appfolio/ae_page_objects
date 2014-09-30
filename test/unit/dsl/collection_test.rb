@@ -5,7 +5,7 @@ module AePageObjects
     class CollectionTest < Test::Unit::TestCase
 
       def test_collection__no_is__no_contains__block
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners do
             element :owner_name
             element :kitty_name_during_ownership
@@ -38,10 +38,10 @@ module AePageObjects
       end
 
       def test_collection__is__no_contains__block
-        previous_owners_class = ::AePageObjects::Collection.new_subclass
-        previous_owners_class.item_class = ::AePageObjects::Element.new_subclass
+        previous_owners_class = Class.new(AePageObjects::Collection)
+        previous_owners_class.item_class = Class.new(AePageObjects::Element)
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :is => previous_owners_class do
             element :owner_name
             element :kitty_name_during_ownership
@@ -75,9 +75,9 @@ module AePageObjects
       end
 
       def test_collection__is__no_contains__block__no_item_class
-        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class = Class.new(AePageObjects::Collection)
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :is => previous_owners_class do
             element :owner_name
             element :kitty_name_during_ownership
@@ -111,15 +111,15 @@ module AePageObjects
       end
 
       def test_collection__is__no_contains__no_block
-        previous_owner_class = ::AePageObjects::Element.new_subclass do
+        previous_owner_class = Class.new(AePageObjects::Element) do
           element :owner_name
           element :kitty_name_during_ownership
         end
 
-        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class = Class.new(AePageObjects::Collection)
         previous_owners_class.item_class = previous_owner_class
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :is => previous_owners_class
         end
 
@@ -149,15 +149,15 @@ module AePageObjects
       end
 
       def test_collection__is__contains__no_block__same_item_class
-        previous_owner_class = ::AePageObjects::Element.new_subclass do
+        previous_owner_class = Class.new(AePageObjects::Element) do
           element :owner_name
           element :kitty_name_during_ownership
         end
 
-        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class = Class.new(AePageObjects::Collection)
         previous_owners_class.item_class = previous_owner_class
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class
         end
 
@@ -187,14 +187,14 @@ module AePageObjects
       end
 
       def test_collection__is__contains__no_block__different_item_class
-        previous_owner_class = ::AePageObjects::Element.new_subclass do
+        previous_owner_class = Class.new(AePageObjects::Element) do
           element :owner_name
           element :kitty_name_during_ownership
         end
 
-        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class = Class.new(AePageObjects::Collection)
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :is => previous_owners_class, :contains => previous_owner_class
         end
 
@@ -223,12 +223,12 @@ module AePageObjects
       end
 
       def test_collection__no_is__contains__no_block
-        previous_owner_class = ::AePageObjects::Element.new_subclass do
+        previous_owner_class = Class.new(AePageObjects::Element) do
           element :owner_name
           element :kitty_name_during_ownership
         end
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :contains => previous_owner_class
         end
 
@@ -257,11 +257,11 @@ module AePageObjects
       end
 
       def test_collection__no_is__contains__block
-        previous_owner_class = ::AePageObjects::Element.new_subclass do
+        previous_owner_class = Class.new(AePageObjects::Element) do
           element :owner_name
         end
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :contains => previous_owner_class do
             element :kitty_name_during_ownership
           end
@@ -293,16 +293,16 @@ module AePageObjects
       end
 
       def test_collection__is__contains__block
-        previous_owner_class = ::AePageObjects::Element.new_subclass do
+        previous_owner_class = Class.new(AePageObjects::Element) do
           element :owner_name
         end
 
-        previous_owners_class_item_class = ::AePageObjects::Element.new_subclass
+        previous_owners_class_item_class = Class.new(AePageObjects::Element)
 
-        previous_owners_class = ::AePageObjects::Collection.new_subclass
+        previous_owners_class = Class.new(AePageObjects::Collection)
         previous_owners_class.item_class = previous_owners_class_item_class
 
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners,
                      :is => previous_owners_class,
                      :contains => previous_owner_class do
@@ -336,7 +336,7 @@ module AePageObjects
       end
 
       def test_collection__no_is__no_contains__no_block
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners
         end
 
@@ -356,7 +356,7 @@ module AePageObjects
       end
 
       def test_collection__locator
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :locator => "whatever you want, baby" do
             element :owner_name
             element :kitty_name_during_ownership, :locator => "Kitty Name"
@@ -389,7 +389,7 @@ module AePageObjects
       end
 
       def test_nested_element__locator__proc
-        kitty = ::AePageObjects::Document.new_subclass do
+        kitty = Class.new(AePageObjects::Document) do
           collection :previous_owners, :locator => Proc.new { parent.page_local_context } do
             element :owner_name
             element :kitty_name_during_ownership, :locator => Proc.new { parent.page_local_context }

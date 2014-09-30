@@ -4,7 +4,7 @@ module AePageObjects
   class FormDslTest < Test::Unit::TestCase
 
     def test_form
-      kitty_class = ::AePageObjects::Document.new_subclass do
+      kitty_class = Class.new(AePageObjects::Document) do
         form_for "kitty" do
           element :name
           element :age
@@ -38,7 +38,7 @@ module AePageObjects
     end
 
     def test_form__using
-      kitty_class = ::AePageObjects::Document.new_subclass do
+      kitty_class = Class.new(AePageObjects::Document) do
         form_for "kitty", :name => "the_kat" do
           element :name
           element :age
@@ -77,7 +77,7 @@ module AePageObjects
     end
 
     def test_form__using__locator
-      kitty_class = ::AePageObjects::Document.new_subclass do
+      kitty_class = Class.new(AePageObjects::Document) do
         form_for "kitty", :locator => [:css, "#my_kitty_box"], :name => "the_kat" do
           element :name
           element :age

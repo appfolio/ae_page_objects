@@ -4,8 +4,8 @@ module AePageObjects
   class DocumentQueryTest < Test::Unit::TestCase
 
     def test_default_document_class
-      hello_class = ::AePageObjects::Document.new_subclass
-      kitty_class = ::AePageObjects::Document.new_subclass
+      hello_class = Class.new(AePageObjects::Document)
+      kitty_class = Class.new(AePageObjects::Document)
 
       document_query = DocumentQuery.new do |query|
         query.matches(hello_class)
@@ -16,13 +16,13 @@ module AePageObjects
     end
 
     def test_permitted_types_dump
-      hello_class = ::AePageObjects::Document.new_subclass do
+      hello_class = Class.new(AePageObjects::Document) do
         def self.name
           "hello"
         end
       end
 
-      kitty_class = ::AePageObjects::Document.new_subclass do
+      kitty_class = Class.new(AePageObjects::Document) do
         def self.name
           "kitty"
         end
@@ -54,8 +54,8 @@ module AePageObjects
     end
 
     def test_new__document_classes
-      kitty_class = AePageObjects::Document.new_subclass
-      bunny_class = AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
+      bunny_class = Class.new(AePageObjects::Document)
 
       query = DocumentQuery.new(kitty_class, bunny_class)
       assert_equal [kitty_class, bunny_class], query.conditions.map(&:document_class)
@@ -63,8 +63,8 @@ module AePageObjects
     end
 
     def test_new__document_class__page_condition
-      kitty_class = ::AePageObjects::Document.new_subclass
-      bunny_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
+      bunny_class = Class.new(AePageObjects::Document)
 
       query = DocumentQuery.new(kitty_class, :url => "somewhere")
       assert_equal [kitty_class], query.conditions.map(&:document_class)
@@ -72,7 +72,7 @@ module AePageObjects
     end
 
     def test_new__document_class__page_condition__block
-      kitty_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
 
       block_condition = proc do |page|
         page.is_starbucks?
@@ -85,7 +85,7 @@ module AePageObjects
     end
 
     def test_new__document_class__block
-      kitty_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
 
       block_condition = proc do |page|
         page.is_starbucks?
@@ -98,7 +98,7 @@ module AePageObjects
     end
 
     def test_new__block__matches
-      kitty_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
 
       query = DocumentQuery.new do |query|
         query.matches(kitty_class)
@@ -109,7 +109,7 @@ module AePageObjects
     end
 
     def test_new__block__no_matches
-      kitty_class = ::AePageObjects::Document.new_subclass
+      kitty_class = Class.new(AePageObjects::Document)
 
       assert_raise ArgumentError do
         query = DocumentQuery.new do |query|
