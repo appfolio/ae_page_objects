@@ -27,5 +27,42 @@ module AePageObjects
 
       assert_equal false, result
     end
+
+    def test_wait_for__set_wait_time
+      Capybara.expects(:default_wait_time).never
+
+      block_calls = sequence('calls')
+      time_calls  = sequence('time')
+
+      10.times {|n| Time.expects(:now).in_sequence(time_calls).returns(n)}
+      9.times { Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false) }
+      Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(true)
+
+      block = mock
+      block.expects(:called).times(10)
+      result = Waiter.wait_for(10) do
+        block.called
+      end
+
+      assert_equal true, result
+    end
+
+    def test_wait_for__set_wait_time_time_out
+      Capybara.expects(:default_wait_time).never
+
+      block_calls = sequence('calls')
+      time_calls  = sequence('time')
+
+      11.times { |n| Time.expects(:now).in_sequence(time_calls).returns(n) }
+      10.times { Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false) }
+
+      block = mock
+      block.expects(:called).times(10)
+      result = Waiter.wait_for(10) do
+        block.called
+      end
+
+      assert_equal false, result
+    end
   end
 end
