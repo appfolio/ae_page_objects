@@ -59,12 +59,12 @@ module AePageObjects
           element :kind, :is => AePageObjects::Select
         end
 
-        assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert document_class.method_defined?(:select)
+        assert_sets_equal [:select], document_class.element_attributes.keys
 
         stub_current_window
 
-        jon = kitty.new
+        document = document_class.new
 
         kind_page_object = mock
         capybara_stub.session.expects(:find).with("#kind").returns(kind_page_object)
