@@ -135,6 +135,16 @@ class PageObjectIntegrationTest < Selenium::TestCase
       assert_false author.rating.star.not_present?
       assert_false author.rating.star.not_visible?
 
+      assert_nothing_raised do
+        Capybara.using_wait_time(0) do
+          author.rating.star.wait_for_presence
+        end
+      end
+
+      assert_raises AePageObjects::ElementNotAbsent do
+        author.rating.star.wait_for_absence
+      end
+
       author.rating.hide_star
       assert author.rating.star.present?
       assert_false author.rating.star.visible?
@@ -176,6 +186,18 @@ class PageObjectIntegrationTest < Selenium::TestCase
     author = PageObjects::Authors::NewPage.visit
     assert_false author.missing.present?
     assert author.missing.not_present?
+
+    assert_nothing_raised do
+      Capybara.using_wait_time(0) do
+        author.missing.wait_for_absence
+      end
+    end
+
+    assert_raises AePageObjects::ElementNotPresent do
+      Capybara.using_wait_time(2) do
+        author.missing.wait_for_presence
+      end
+    end
   end
 
   def test_element_proxy__nested

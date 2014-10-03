@@ -52,8 +52,10 @@ module AePageObjects
     def test_present__element_not_found
       proxy = new_proxy
 
-      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-      assert_false proxy.present?
+      with_stubbed_wait_for do
+        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+        assert_false proxy.present?
+      end
     end
 
     def test_not_present
@@ -125,6 +127,31 @@ module AePageObjects
         element_class.any_instance.expects(:visible?).returns(false)
         assert_false proxy.visible?
       end
+    end
+
+    def test_wait_for_presence
+      proxy = new_proxy
+
+      element_class.expect_initialize
+      assert_nothing_raised do
+        proxy.wait_for_presence
+      end
+    end
+
+    def test_wait_for_presence__not_present
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+
+      raised = nil
+
+      with_stubbed_wait_for do
+        raised = assert_raise ElementNotPresent do
+          proxy.wait_for_presence
+        end
+      end
+
+      assert_includes raised.message, element_class.to_s
     end
 
     def test_wait_for_absence

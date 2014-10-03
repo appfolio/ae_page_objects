@@ -13,6 +13,9 @@ module AePageObjects
   class LoadingElementFailed < LoadingFailed
   end
 
+  class ElementNotPresent < Error
+  end
+
   class ElementNotAbsent < Error
   end
 

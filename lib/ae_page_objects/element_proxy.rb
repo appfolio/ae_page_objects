@@ -35,31 +35,10 @@ module AePageObjects
     end
 
     def present?
-      ! presence.nil?
-    end
-
-    def wait_for_absence
-      absent = Waiter.wait_for do
-        begin
-          load_element
-
-          false
-        rescue LoadingElementFailed
-          true
-        rescue => e
-          if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&
-             e.is_a?(Selenium::WebDriver::Error::StaleElementReferenceError)
-            # ignore and spin around for another check
-            false
-          else
-            raise
-          end
-        end
-      end
-
-      unless absent
-        raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
-      end
+      wait_for_presence
+      true
+    rescue ElementNotPresent
+      false
     end
 
     def not_present?
@@ -71,8 +50,28 @@ module AePageObjects
 
     def presence
       implicit_element
-    rescue AePageObjects::LoadingElementFailed
+    rescue LoadingElementFailed
       nil
+    end
+
+    def wait_for_presence
+      is_present = Waiter.wait_for do
+        ! presence.nil?
+      end
+
+      unless is_present
+        raise ElementNotPresent, "element_class: #{@element_class}, options: #{@options.inspect}"
+      end
+    end
+
+    def wait_for_absence
+      absent = Waiter.wait_for do
+        check_absence
+      end
+
+      unless absent
+        raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
+      end
     end
 
     def is_a?(type)
@@ -103,6 +102,22 @@ module AePageObjects
 
     def implicit_element
       @loaded_element ||= load_element
+    end
+
+    def check_absence
+      load_element
+
+      false
+    rescue LoadingElementFailed
+      true
+    rescue => e
+      if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&
+        e.is_a?(Selenium::WebDriver::Error::StaleElementReferenceError)
+        # ignore and spin around for another check
+        false
+      else
+        raise
+      end
     end
   end
 end
