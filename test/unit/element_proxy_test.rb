@@ -138,6 +138,17 @@ module AePageObjects
       end
     end
 
+    def test_wait_for_presence__with_timeout
+      proxy = new_proxy
+
+      element_class.expect_initialize
+      assert_nothing_raised do
+        with_stubbed_wait_for(20) do
+          proxy.wait_for_presence(20)
+        end
+      end
+    end
+
     def test_wait_for_presence__not_present
       proxy = new_proxy
 
@@ -160,6 +171,17 @@ module AePageObjects
       element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
       assert_nothing_raised do
         proxy.wait_for_absence
+      end
+    end
+
+    def test_wait_for_absence__with_timeout
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert_nothing_raised do
+        with_stubbed_wait_for(20) do
+          proxy.wait_for_absence(20)
+        end
       end
     end
 
@@ -194,23 +216,32 @@ module AePageObjects
     private
 
     def unstub_wait_for
-      (class << Waiter; self; end).send(:alias_method, :wait_for, :wait_for_whatever)
-
-      (class << Waiter; self; end).send(:undef_method, :wait_for_whatever)
+      waiter_singleton_class.class_eval do
+        alias_method :wait_for, :wait_for_whatever
+        undef_method :wait_for_whatever
+      end
     end
 
-    def stub_wait_for
-      wait_for_mock = mock(:wait_for_called => true)
-      (class << Waiter; self; end).send(:alias_method, :wait_for_whatever, :wait_for)
+    def waiter_singleton_class
+      (class << Waiter; self; end)
+    end
 
-      (class << Waiter; self; end).send(:define_method, :wait_for) do |&block|
-        wait_for_mock.wait_for_called
+    def stub_wait_for(expected_timeout = nil)
+      wait_for_mock = mock
+      wait_for_mock.expects(:wait_for_called).with(expected_timeout)
+
+      waiter_singleton_class.class_eval do
+        alias_method :wait_for_whatever, :wait_for
+      end
+
+      waiter_singleton_class.send(:define_method, :wait_for) do |*timeout, &block|
+        wait_for_mock.wait_for_called(*timeout)
         block.call
       end
     end
 
-    def with_stubbed_wait_for
-      stub_wait_for
+    def with_stubbed_wait_for(expected_timeout = nil)
+      stub_wait_for(expected_timeout)
       yield
     ensure
       unstub_wait_for

@@ -54,8 +54,8 @@ module AePageObjects
       nil
     end
 
-    def wait_for_presence
-      is_present = Waiter.wait_for do
+    def wait_for_presence(timeout = nil)
+      is_present = Waiter.wait_for(timeout) do
         ! presence.nil?
       end
 
@@ -64,8 +64,8 @@ module AePageObjects
       end
     end
 
-    def wait_for_absence
-      absent = Waiter.wait_for do
+    def wait_for_absence(timeout = nil)
+      absent = Waiter.wait_for(timeout) do
         check_absence
       end
 
