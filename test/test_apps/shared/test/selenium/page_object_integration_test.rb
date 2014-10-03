@@ -155,6 +155,23 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
   end
 
+  def test_element_proxy__present_then_absent
+    author = PageObjects::Authors::NewPage.visit
+
+    author.rating.show_star
+
+    star = author.rating.star
+    assert star.present?
+
+    author.rating.remove_star
+
+    # use new object
+    assert author.rating.star.not_present?
+
+    # use existing object
+    assert star.not_present?
+  end
+
   def test_element_proxy__not_present
     author = PageObjects::Authors::NewPage.visit
     assert_false author.missing.present?

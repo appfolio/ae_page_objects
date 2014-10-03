@@ -16,7 +16,7 @@ module AePageObjects
       assert_is_proxy proxy
 
       element_class.expects(:new).returns(:yay)
-      assert_equal :yay, proxy.send(:element)
+      assert_equal :yay, proxy.send(:implicit_element)
     end
 
     def test_methods_forwarded
@@ -125,6 +125,43 @@ module AePageObjects
         element_class.any_instance.expects(:visible?).returns(false)
         assert_false proxy.visible?
       end
+    end
+
+    def test_wait_for_absence
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert_nothing_raised do
+        proxy.wait_for_absence
+      end
+    end
+
+    def test_wait_for_absence__present
+      proxy = new_proxy
+
+      raised = assert_raise ElementNotAbsent do
+        with_stubbed_wait_for do
+          element_class.expect_initialize
+          proxy.wait_for_absence
+        end
+      end
+
+      assert_includes raised.message, element_class.to_s
+    end
+
+    def test_wait_for_absence__unknown
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(Selenium::WebDriver::Error::StaleElementReferenceError)
+      capybara_stub.driver.expects(:is_a?).with(Capybara::Selenium::Driver).returns(true)
+
+      raised = assert_raise ElementNotAbsent do
+        with_stubbed_wait_for do
+          proxy.wait_for_absence
+        end
+      end
+
+      assert_includes raised.message, element_class.to_s
     end
 
     private
