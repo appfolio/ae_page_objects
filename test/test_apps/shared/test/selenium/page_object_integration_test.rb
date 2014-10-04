@@ -134,17 +134,17 @@ class PageObjectIntegrationTest < Selenium::TestCase
       assert author.rating.star.visible?
       assert_false author.rating.star.not_present?
       assert_false author.rating.star.not_visible?
+    end
 
-      assert_nothing_raised do
-        Capybara.using_wait_time(0) do
-          author.rating.star.wait_for_presence
-        end
-      end
+    assert_nothing_raised do
+      author.rating.star.wait_for_presence(0)
+    end
 
-      assert_raises AePageObjects::ElementNotAbsent do
-        author.rating.star.wait_for_absence
-      end
+    assert_raises AePageObjects::ElementNotAbsent do
+      author.rating.star.wait_for_absence(1)
+    end
 
+    Capybara.using_wait_time(1) do
       author.rating.hide_star
       assert author.rating.star.present?
       assert_false author.rating.star.visible?
@@ -188,15 +188,11 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert author.missing.not_present?
 
     assert_nothing_raised do
-      Capybara.using_wait_time(0) do
-        author.missing.wait_for_absence
-      end
+      author.missing.wait_for_absence(0)
     end
 
     assert_raises AePageObjects::ElementNotPresent do
-      Capybara.using_wait_time(2) do
-        author.missing.wait_for_presence
-      end
+      author.missing.wait_for_presence(2)
     end
   end
 

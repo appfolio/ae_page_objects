@@ -1,5 +1,3 @@
-require 'timeout'
-
 module AePageObjects
   class ElementProxy
 
@@ -65,11 +63,11 @@ module AePageObjects
     end
 
     def wait_for_absence(timeout = nil)
-      absent = Waiter.wait_for(timeout) do
+      is_absent = Waiter.wait_for(timeout) do
         check_absence
       end
 
-      unless absent
+      unless is_absent
         raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
       end
     end
