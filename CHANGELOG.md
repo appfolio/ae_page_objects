@@ -1,3 +1,21 @@
+## Version 1.2.0
+
+### Bugs
+
+* [63](https://github.com/appfolio/ae_page_objects/issues/63) Routing incorrectly matches documents
+* [64](https://github.com/appfolio/ae_page_objects/issues/64) browser.find_document should ignore Selenium::WebDriver::Error::NoSuchWindowError
+* [65](https://github.com/appfolio/ae_page_objects/issues/65) ElementProxy#not_present? does not wait for element to be absent.
+
+### Added
+
+* [72](https://github.com/appfolio/ae_page_objects/pull/72) & [74](https://github.com/appfolio/ae_page_objects/pull/74) Wrap Capybara exceptions
+* [77](https://github.com/appfolio/ae_page_objects/pull/77) Update Waiter.wait_for to accept timeout argument
+* [78](https://github.com/appfolio/ae_page_objects/pull/78) Add wait_for_* methods to ElementProxy
+
+### Maintenance
+
+* [75](https://github.com/appfolio/ae_page_objects/pull/75) & [76](https://github.com/appfolio/ae_page_objects/pull/76) Remove Node.new_subclass
+
 ## 1.1.3
 
 * Issue [74](https://github.com/appfolio/ae_page_objects/pull/74)
