@@ -539,6 +539,38 @@ class PageObjectIntegrationTest < Selenium::TestCase
     windows.singleton_class.send(:remove_method, :opened)
   end
 
+  def test_find_document__ignores_stale_windows
+    Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+
+    authors = PageObjects::Authors::IndexPage.visit
+    window1 = authors.window
+
+    robert = authors.authors[0].show_in_new_window_with_name!("Robert")
+    window2 = robert.window
+
+    window1.switch_to
+
+    andrew = authors.authors[1].show_in_new_window_with_name!("Andrew")
+    window3 = andrew.window
+
+    assert_windows(window1, window2, window3, :current => window3)
+
+    window3.switch_to
+
+    andrew.close_via_js!
+
+    # walk the windows
+    assert_nothing_raised do
+      AePageObjects.browser.find_document(PageObjects::Authors::IndexPage)
+      AePageObjects.browser.find_document(PageObjects::Authors::ShowPage) do |author|
+        author.first_name.text == "Robert"
+      end
+      AePageObjects.browser.find_document(PageObjects::Authors::IndexPage)
+    end
+
+    assert_windows(window1, window2, :current => window1)
+  end
+
 private
 
   def assert_windows(*windows)

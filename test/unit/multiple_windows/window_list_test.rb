@@ -36,9 +36,9 @@ module AePageObjects
       def test_current_window__many
         windows = WindowList.new
 
-        window1 = windows.send(:create_window, "window_handle1")
-        window2 = windows.send(:create_window, "window_handle2")
-        window3 = windows.send(:create_window, "window_handle3")
+        window1 = windows.send(:window_for, "window_handle1")
+        window2 = windows.send(:window_for, "window_handle2")
+        window3 = windows.send(:window_for, "window_handle3")
 
         WindowHandleManager.expects(:current).returns("window_handle1")
         assert_equal window1, windows.current_window
@@ -48,6 +48,37 @@ module AePageObjects
 
         WindowHandleManager.expects(:current).returns("window_handle3")
         assert_equal window3, windows.current_window
+      end
+
+      def current_window
+        current_handle = WindowHandleManager.current
+
+        window_for(current_handle) if current_handle
+      rescue WindowNotFound
+        synchronize_windows
+
+        if current_window = @windows.values.first
+          current_window.switch_to
+          current_window
+        end
+      end
+
+      def test_current_window__not_found__causes_synchronize
+        window1 = stub(:handle => "1")
+        window2 = stub(:handle => "2")
+        window3 = stub(:handle => "3")
+
+        windows = WindowList.new
+        windows.add(window1)
+        windows.add(window2)
+        windows.add(window3)
+
+        WindowHandleManager.expects(:current).raises(WindowNotFound)
+        WindowHandleManager.expects(:all).returns(["3", "1"])
+        window1.expects(:switch_to)
+        current = windows.current_window
+
+        assert_equal window1, current
       end
     end
   end

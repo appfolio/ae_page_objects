@@ -13,6 +13,13 @@ module AePageObjects
         else
           browser.window_handle
         end
+      rescue => e
+        if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&
+           e.is_a?(Selenium::WebDriver::Error::NoSuchWindowError)
+          raise WindowNotFound
+        end
+
+        raise
       end
 
       def self.switch_to(handle)
