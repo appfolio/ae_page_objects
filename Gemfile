@@ -7,17 +7,8 @@ gem 'gem-release'
 
 gemspec
 
-if RUBY_VERSION =~ /\A1\.8/
-  gem 'capybara', '~> 1.1.4'
-  gem "nokogiri", "< 1.6.0"
-  gem 'rubyzip', '< 1.0.0'
-  gem 'mime-types', '< 2'
-  gem 'rake', '~> 10.0'
-  gem "test-unit", "< 3.0.0"
-else
-  gem 'rake'
-  gem 'test-unit'
-end
+gem 'rake', '~> 11.0'
+gem 'test-unit', '~> 3.0' 
 
 if RUBY_VERSION =~ /\A1\.9/
   gem 'mime-types', '< 3'
