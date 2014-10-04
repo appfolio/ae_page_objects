@@ -35,6 +35,7 @@
 
   <%= f.text_field :first_name %>
   <%= f.text_field :last_name %>
+  <%= f.select :suffix, Author::SUFFIX_OPTIONS_FOR_SELECT %>
 
   <div id="author_books">
     <div class="some-books-fool">

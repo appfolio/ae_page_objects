@@ -571,6 +571,13 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_windows(window1, window2, :current => window1)
   end
 
+  def test_select_element
+    new_page = PageObjects::Authors::NewPage.visit
+    assert_equal ["Junior", "Senior", "The third", "Esq."], new_page.suffix.options.map(&:text)
+    new_page.suffix.set("Senior")
+    assert_equal "Senior", new_page.suffix.selected_option.text
+  end
+
 private
 
   def assert_windows(*windows)

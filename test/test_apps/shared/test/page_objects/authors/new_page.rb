@@ -7,6 +7,7 @@ module PageObjects
       form_for "author" do
         element :first_name
         element :last_name
+        element :suffix, :is => ::AePageObjects::Select
 
         collection :books,
                    :name         => "books_attributes",
