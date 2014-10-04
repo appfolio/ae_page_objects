@@ -16,7 +16,7 @@ module AePageObjects
       assert_is_proxy proxy
 
       element_class.expects(:new).returns(:yay)
-      assert_equal :yay, proxy.send(:element)
+      assert_equal :yay, proxy.send(:implicit_element)
     end
 
     def test_methods_forwarded
@@ -52,8 +52,10 @@ module AePageObjects
     def test_present__element_not_found
       proxy = new_proxy
 
-      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-      assert_false proxy.present?
+      with_stubbed_wait_for do
+        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+        assert_false proxy.present?
+      end
     end
 
     def test_not_present
@@ -127,26 +129,119 @@ module AePageObjects
       end
     end
 
+    def test_wait_for_presence
+      proxy = new_proxy
+
+      element_class.expect_initialize
+      assert_nothing_raised do
+        proxy.wait_for_presence
+      end
+    end
+
+    def test_wait_for_presence__with_timeout
+      proxy = new_proxy
+
+      element_class.expect_initialize
+      assert_nothing_raised do
+        with_stubbed_wait_for(20) do
+          proxy.wait_for_presence(20)
+        end
+      end
+    end
+
+    def test_wait_for_presence__not_present
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+
+      raised = nil
+
+      with_stubbed_wait_for do
+        raised = assert_raise ElementNotPresent do
+          proxy.wait_for_presence
+        end
+      end
+
+      assert_includes raised.message, element_class.to_s
+    end
+
+    def test_wait_for_absence
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert_nothing_raised do
+        proxy.wait_for_absence
+      end
+    end
+
+    def test_wait_for_absence__with_timeout
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert_nothing_raised do
+        with_stubbed_wait_for(20) do
+          proxy.wait_for_absence(20)
+        end
+      end
+    end
+
+    def test_wait_for_absence__present
+      proxy = new_proxy
+
+      raised = assert_raise ElementNotAbsent do
+        with_stubbed_wait_for do
+          element_class.expect_initialize
+          proxy.wait_for_absence
+        end
+      end
+
+      assert_includes raised.message, element_class.to_s
+    end
+
+    def test_wait_for_absence__unknown
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(Selenium::WebDriver::Error::StaleElementReferenceError)
+      capybara_stub.driver.expects(:is_a?).with(Capybara::Selenium::Driver).returns(true)
+
+      raised = assert_raise ElementNotAbsent do
+        with_stubbed_wait_for do
+          proxy.wait_for_absence
+        end
+      end
+
+      assert_includes raised.message, element_class.to_s
+    end
+
     private
 
     def unstub_wait_for
-      (class << Waiter; self; end).send(:alias_method, :wait_for, :wait_for_whatever)
-
-      (class << Waiter; self; end).send(:undef_method, :wait_for_whatever)
+      waiter_singleton_class.class_eval do
+        alias_method :wait_for, :wait_for_whatever
+        undef_method :wait_for_whatever
+      end
     end
 
-    def stub_wait_for
-      wait_for_mock = mock(:wait_for_called => true)
-      (class << Waiter; self; end).send(:alias_method, :wait_for_whatever, :wait_for)
+    def waiter_singleton_class
+      (class << Waiter; self; end)
+    end
 
-      (class << Waiter; self; end).send(:define_method, :wait_for) do |&block|
-        wait_for_mock.wait_for_called
+    def stub_wait_for(expected_timeout = nil)
+      wait_for_mock = mock
+      wait_for_mock.expects(:wait_for_called).with(expected_timeout)
+
+      waiter_singleton_class.class_eval do
+        alias_method :wait_for_whatever, :wait_for
+      end
+
+      waiter_singleton_class.send(:define_method, :wait_for) do |*timeout, &block|
+        wait_for_mock.wait_for_called(*timeout)
         block.call
       end
     end
 
-    def with_stubbed_wait_for
-      stub_wait_for
+    def with_stubbed_wait_for(expected_timeout = nil)
+      stub_wait_for(expected_timeout)
       yield
     ensure
       unstub_wait_for
