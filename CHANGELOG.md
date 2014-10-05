@@ -1,3 +1,9 @@
+## Version 1.2.1
+
+### Bugs
+
+* Reverted fix for [63](https://github.com/appfolio/ae_page_objects/issues/63) Routing incorrectly matches documents
+
 ## Version 1.2.0
 
 ### Bugs
