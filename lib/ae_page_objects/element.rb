@@ -20,7 +20,7 @@ module AePageObjects
       @document ||= begin
         node = self.parent
 
-        until node.is_a?(::AePageObjects::Document)
+        until node.is_a?(Document)
           node = node.parent
         end
 

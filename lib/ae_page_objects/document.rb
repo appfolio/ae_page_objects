@@ -22,7 +22,7 @@ module AePageObjects
     class << self
     private
       def site
-        @site ||= AePageObjects::Site.from(self)
+        @site ||= Site.from(self)
       end
     end
   end

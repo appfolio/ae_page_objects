@@ -1,6 +1,6 @@
 module PageObjects
   module Books
-    class NewPage < ::AePageObjects::Document
+    class NewPage < AePageObjects::Document
       extend HasBookForm
 
       path :new_book

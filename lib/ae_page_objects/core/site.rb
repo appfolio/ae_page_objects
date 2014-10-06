@@ -26,7 +26,7 @@ module AePageObjects
 
       def from(from_mod)
         until from_mod == Object
-          if from_mod < AePageObjects::Universe
+          if from_mod < Universe
             return from_mod.page_objects_site_class.instance
           end
 

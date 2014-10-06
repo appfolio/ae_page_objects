@@ -1,6 +1,6 @@
 module PageObjects
   module Authors
-    class NewPage < ::AePageObjects::Document
+    class NewPage < AePageObjects::Document
 
       path :new_author
 
@@ -16,7 +16,7 @@ module PageObjects
         end
       end
 
-      class Rating < ::AePageObjects::Element
+      class Rating < AePageObjects::Element
         element :star, :locator => ".star"
 
         def show_star
