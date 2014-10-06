@@ -29,8 +29,32 @@ module AePageObjects
         assert_equal nil, result
       end
 
-      def test_load_page_with_condition__loading_failed
-        DocumentClass.expects(:new).raises(AePageObjects::LoadingPageFailed.new)
+      def test_load_page_with_condition__loading_element_failed
+        DocumentClass.expects(:new).returns(:instance)
+
+        condition = DocumentQuery::Condition.new(DocumentClass)
+        condition.expects(:match?).with(:instance).raises(LoadingElementFailed)
+
+
+        loader = SameWindowLoaderStrategy.new
+        result = loader.load_document_with_condition(condition)
+        assert_equal nil, result
+      end
+
+      def test_load_page_with_condition__element_expectation_error
+        DocumentClass.expects(:new).returns(:instance)
+
+        condition = DocumentQuery::Condition.new(DocumentClass)
+        condition.expects(:match?).with(:instance).raises(ElementExpectationError)
+
+
+        loader = SameWindowLoaderStrategy.new
+        result = loader.load_document_with_condition(condition)
+        assert_equal nil, result
+      end
+
+      def test_load_page_with_condition__loading_document_failed
+        DocumentClass.expects(:new).raises(LoadingPageFailed.new)
 
         condition = DocumentQuery::Condition.new(DocumentClass)
 
@@ -39,7 +63,7 @@ module AePageObjects
         assert_equal nil, result
       end
 
-      def test_document_not_loaded_error
+      def test_document_not_loaded_error_message
         loader = SameWindowLoaderStrategy.new
         query = mock(:permitted_types_dump => "permitted_types_dump")
 

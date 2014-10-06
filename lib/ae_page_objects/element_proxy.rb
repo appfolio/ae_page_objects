@@ -16,34 +16,40 @@ module AePageObjects
       @loaded_element = nil
     end
 
-    # Provided so that visible? can be asked without
-    # an explicit check for present? first.
     def visible?
-      Waiter.wait_for do
-        inst = presence
-        !! inst && inst.visible?
-      end
+      wait_until_visible
+      true
+    rescue ElementNotVisible
+      false
+    end
+
+    def hidden?
+      wait_until_hidden
+      true
+    rescue ElementNotHidden
+      false
     end
 
     def not_visible?
-      Waiter.wait_for do
-        inst = presence
-        inst.nil? || ! inst.visible?
-      end
+      hidden?
     end
 
     def present?
-      wait_for_presence
+      wait_until_present
       true
     rescue ElementNotPresent
       false
     end
 
-    def not_present?
-      wait_for_absence
+    def absent?
+      wait_until_absent
       true
     rescue ElementNotAbsent
       false
+    end
+
+    def not_present?
+      absent?
     end
 
     def presence
@@ -52,7 +58,29 @@ module AePageObjects
       nil
     end
 
-    def wait_for_presence(timeout = nil)
+    def wait_until_visible(timeout = nil)
+      is_visible = Waiter.wait_for(timeout) do
+        inst = presence
+        ! inst.nil? && inst.visible?
+      end
+
+      unless is_visible
+        raise ElementNotVisible, "element_class: #{@element_class}, options: #{@options.inspect}"
+      end
+    end
+
+    def wait_until_hidden(timeout = nil)
+      is_hidden = Waiter.wait_for(timeout) do
+        inst = presence
+        inst.nil? || ! inst.visible?
+      end
+
+      unless is_hidden
+        raise ElementNotHidden, "element_class: #{@element_class}, options: #{@options.inspect}"
+      end
+    end
+
+    def wait_until_present(timeout = nil)
       is_present = Waiter.wait_for(timeout) do
         ! presence.nil?
       end
@@ -62,7 +90,11 @@ module AePageObjects
       end
     end
 
-    def wait_for_absence(timeout = nil)
+    def wait_for_presence(timeout = nil)
+      wait_until_present(timeout)
+    end
+
+    def wait_until_absent(timeout = nil)
       is_absent = Waiter.wait_for(timeout) do
         check_absence
       end
@@ -70,6 +102,10 @@ module AePageObjects
       unless is_absent
         raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
       end
+    end
+
+    def wait_for_absence(timeout = nil)
+      wait_until_absent(timeout)
     end
 
     def is_a?(type)
