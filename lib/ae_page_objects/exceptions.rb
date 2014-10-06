@@ -30,4 +30,7 @@ module AePageObjects
 
   class WindowNotFound < Error
   end
+
+  class WaitTimeoutError < Error
+  end
 end

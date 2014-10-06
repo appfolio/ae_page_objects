@@ -16,5 +16,17 @@ module AePageObjects
 
       result
     end
+
+    def self.wait_for!
+      result = wait_for do
+        yield
+      end
+
+      unless result
+        raise WaitTimeoutError, "Timed out waiting for condition"
+      end
+
+      result
+    end
   end
 end
