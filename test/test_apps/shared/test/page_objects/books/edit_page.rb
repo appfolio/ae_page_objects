@@ -1,6 +1,6 @@
 module PageObjects
   module Books
-    class EditPage < ::AePageObjects::Document
+    class EditPage < AePageObjects::Document
       extend HasBookForm
 
       path :edit_book

@@ -1,6 +1,6 @@
 module PageObjects
   module Books
-    class ShowPage < ::AePageObjects::Document
+    class ShowPage < AePageObjects::Document
       path :book
 
       element :title

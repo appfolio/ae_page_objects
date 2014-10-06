@@ -1,6 +1,6 @@
 module PageObjects
   module Authors
-    class ShowPage < ::AePageObjects::Document
+    class ShowPage < AePageObjects::Document
       path :author
 
       element :first_name

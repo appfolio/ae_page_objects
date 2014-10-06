@@ -13,10 +13,19 @@ module AePageObjects
   class LoadingElementFailed < LoadingFailed
   end
 
-  class ElementNotPresent < Error
+  class ElementExpectationError < Error
   end
 
-  class ElementNotAbsent < Error
+  class ElementNotVisible < ElementExpectationError
+  end
+
+  class ElementNotHidden < ElementExpectationError
+  end
+
+  class ElementNotPresent < ElementExpectationError
+  end
+
+  class ElementNotAbsent < ElementExpectationError
   end
 
   class PathNotResolvable < Error
@@ -29,5 +38,8 @@ module AePageObjects
   end
 
   class WindowNotFound < Error
+  end
+
+  class WaitTimeoutError < Error
   end
 end

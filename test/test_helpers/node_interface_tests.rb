@@ -3,11 +3,14 @@ module NodeInterfaceTests
     subject = node_for_node_tests
 
     AePageObjects::Node::METHODS_TO_DELEGATE_TO_NODE.each do |method|
-      capybara_stub.session.expects(method).with(:args).raises(Capybara::ElementNotFound)
+      error = Capybara::ElementNotFound.new("The message")
+      capybara_stub.session.expects(method).with(:args).raises(error)
 
-      assert_raises AePageObjects::LoadingElementFailed do
+      raised = assert_raises AePageObjects::LoadingElementFailed do
         subject.send(method, :args)
       end
+
+      assert_equal error.message, raised.message
     end
   end
 

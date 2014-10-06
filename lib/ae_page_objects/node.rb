@@ -26,8 +26,8 @@ module AePageObjects
         class_eval <<-RUBY
           def #{m}(*args, &block)
             node.send(:#{m}, *args, &block)
-          rescue Capybara::ElementNotFound
-            raise AePageObjects::LoadingElementFailed
+          rescue Capybara::ElementNotFound => e
+            raise LoadingElementFailed, e.message
           end
         RUBY
       end

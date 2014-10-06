@@ -3,6 +3,15 @@ require 'unit_helper'
 module AePageObjects
   class WaiterTest < Test::Unit::TestCase
     def test_wait_for
+      Waiter.expects(:wait_until).yields.returns("stuff")
+
+      block = mock(:called => true)
+      result = Waiter.wait_for do
+        block.called
+      end
+    end
+
+    def test_wait_until
       Capybara.expects(:default_wait_time).returns(5)
 
       block_calls = sequence('calls')
@@ -11,24 +20,24 @@ module AePageObjects
 
       block = mock
       block.expects(:called).times(2)
-      result = Waiter.wait_for do
+      result = Waiter.wait_until do
         block.called
       end
 
       assert_equal true, result
     end
 
-    def test_wait_for__timeout
+    def test_wait_until__timeout
       Capybara.stubs(:default_wait_time).returns(1)
 
-      result = Waiter.wait_for do
+      result = Waiter.wait_until do
         false
       end
 
       assert_equal false, result
     end
 
-    def test_wait_for__set_wait_time
+    def test_wait_until__set_wait_time
       Capybara.expects(:default_wait_time).never
 
       block_calls = sequence('calls')
@@ -40,14 +49,14 @@ module AePageObjects
 
       block = mock
       block.expects(:called).times(10)
-      result = Waiter.wait_for(10) do
+      result = Waiter.wait_until(10) do
         block.called
       end
 
       assert_equal true, result
     end
 
-    def test_wait_for__set_wait_time_time_out
+    def test_wait_until__set_wait_time_time_out
       Capybara.expects(:default_wait_time).never
 
       block_calls = sequence('calls')
@@ -58,11 +67,42 @@ module AePageObjects
 
       block = mock
       block.expects(:called).times(10)
-      result = Waiter.wait_for(10) do
+      result = Waiter.wait_until(10) do
         block.called
       end
 
       assert_equal false, result
+    end
+
+    def test_wait_until_bang
+      Capybara.stubs(:default_wait_time).returns(1)
+
+      my_obj = Object.new
+
+      result = Waiter.wait_until! do
+        my_obj
+      end
+
+      assert_equal my_obj, result
+    end
+
+    def test_wait_until_bang__exception
+      Capybara.stubs(:default_wait_time).returns(1)
+
+      assert_raises WaitTimeoutError do
+        Waiter.wait_until! do
+          false
+        end
+      end
+    end
+
+    def test_wait_until_bang__set_timeout
+      my_obj = Object.new
+      Waiter.expects(:wait_until).with(20).returns(my_obj)
+
+      result = Waiter.wait_until!(20) {}
+
+      assert_equal my_obj, result
     end
   end
 end

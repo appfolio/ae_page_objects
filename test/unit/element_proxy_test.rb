@@ -28,18 +28,57 @@ module AePageObjects
       assert_equal :my_deepest_wishes, proxy.kesslerize_my_love!
     end
 
-    def test_presence
+    def test_visible
       proxy = new_proxy
 
-      element_class.expect_initialize
-      assert_is_element proxy.presence
+      with_stubbed_wait_for do
+        element_class.expect_initialize
+        element_class.any_instance.expects(:visible?).returns(true)
+        assert proxy.visible?
+      end
     end
 
-    def test_presence__element_not_found
+    def test_visible__false
       proxy = new_proxy
 
-      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-      assert_nil proxy.presence
+      with_stubbed_wait_for do
+        element_class.expect_initialize
+        element_class.any_instance.expects(:visible?).returns(false)
+        assert_false proxy.visible?
+      end
+    end
+
+    def test_visible__element_not_found
+      proxy = new_proxy
+
+      with_stubbed_wait_for do
+        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+        assert_false proxy.visible?
+      end
+    end
+
+    def test_hidden
+      proxy = new_proxy
+
+      with_stubbed_wait_for do
+        element_class.expect_initialize
+        element_class.any_instance.expects(:visible?).returns(false)
+        assert proxy.hidden?
+      end
+
+      with_stubbed_wait_for do
+        element_class.any_instance.expects(:visible?).returns(true)
+        assert ! proxy.hidden?
+      end
+    end
+
+    def test_hidden__element_not_found
+      proxy = new_proxy
+
+      with_stubbed_wait_for do
+        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+        assert proxy.hidden?
+      end
     end
 
     def test_present
@@ -58,98 +97,119 @@ module AePageObjects
       end
     end
 
-    def test_not_present
+    def test_absent
       proxy = new_proxy
 
       with_stubbed_wait_for do
         element_class.expect_initialize
-        assert_false proxy.not_present?
+        assert_false proxy.absent?
       end
     end
 
-    def test_not_present__element_not_found
+    def test_absent__element_not_found
       proxy = new_proxy
 
       with_stubbed_wait_for do
         element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-        assert proxy.not_present?
+        assert proxy.absent?
       end
     end
 
-    def test_visible
+    def test_presence
+      proxy = new_proxy
+
+      element_class.expect_initialize
+      assert_is_element proxy.presence
+    end
+
+    def test_presence__element_not_found
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert_nil proxy.presence
+    end
+
+    def test_wait_until_visible
       proxy = new_proxy
 
       with_stubbed_wait_for do
         element_class.expect_initialize
         element_class.any_instance.expects(:visible?).returns(true)
-        assert proxy.visible?
+
+        assert_nothing_raised do
+          proxy.wait_until_visible
+        end
       end
     end
 
-    def test_visible__element_not_found
+    def test_wait_until_visible__timeout
       proxy = new_proxy
 
+      element_class.expect_initialize
+      element_class.any_instance.expects(:visible?).returns(false)
+
+      raised = nil
+
       with_stubbed_wait_for do
-        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-        assert_false proxy.visible?
+        raised = assert_raise ElementNotVisible do
+          proxy.wait_until_visible
+        end
       end
+
+      assert_includes raised.message, element_class.to_s
     end
 
-    def test_not_visible
-      proxy = new_proxy
-
-      with_stubbed_wait_for do
-        element_class.expect_initialize
-        element_class.any_instance.expects(:visible?).returns(false)
-        assert proxy.not_visible?
-      end
-
-      with_stubbed_wait_for do
-        element_class.any_instance.expects(:visible?).returns(true)
-        assert ! proxy.not_visible?
-      end
-    end
-
-    def test_not_visible__element_not_found
-      proxy = new_proxy
-
-      with_stubbed_wait_for do
-        element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-        assert proxy.not_visible?
-      end
-    end
-
-    def test_visible__false
+    def test_wait_until_hidden
       proxy = new_proxy
 
       with_stubbed_wait_for do
         element_class.expect_initialize
         element_class.any_instance.expects(:visible?).returns(false)
-        assert_false proxy.visible?
+
+        assert_nothing_raised do
+          proxy.wait_until_hidden
+        end
       end
     end
 
-    def test_wait_for_presence
+    def test_wait_until_hidden__timeout
+      proxy = new_proxy
+
+      element_class.expect_initialize
+      element_class.any_instance.expects(:visible?).returns(true)
+
+      raised = nil
+
+      with_stubbed_wait_for do
+        raised = assert_raise ElementNotHidden do
+          proxy.wait_until_hidden
+        end
+      end
+
+      assert_includes raised.message, element_class.to_s
+    end
+
+    def test_wait_until_present
       proxy = new_proxy
 
       element_class.expect_initialize
       assert_nothing_raised do
-        proxy.wait_for_presence
+        proxy.wait_until_present
       end
     end
 
-    def test_wait_for_presence__with_timeout
+    def test_wait_until_present__with_timeout
       proxy = new_proxy
 
       element_class.expect_initialize
       assert_nothing_raised do
         with_stubbed_wait_for(20) do
-          proxy.wait_for_presence(20)
+          proxy.wait_until_present(20)
         end
       end
     end
 
-    def test_wait_for_presence__not_present
+    def test_wait_until_present__absent
       proxy = new_proxy
 
       element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
@@ -158,47 +218,47 @@ module AePageObjects
 
       with_stubbed_wait_for do
         raised = assert_raise ElementNotPresent do
-          proxy.wait_for_presence
+          proxy.wait_until_present
         end
       end
 
       assert_includes raised.message, element_class.to_s
     end
 
-    def test_wait_for_absence
+    def test_wait_until_absent
       proxy = new_proxy
 
       element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
       assert_nothing_raised do
-        proxy.wait_for_absence
+        proxy.wait_until_absent
       end
     end
 
-    def test_wait_for_absence__with_timeout
+    def test_wait_until_absent__with_timeout
       proxy = new_proxy
 
       element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
       assert_nothing_raised do
         with_stubbed_wait_for(20) do
-          proxy.wait_for_absence(20)
+          proxy.wait_until_absent(20)
         end
       end
     end
 
-    def test_wait_for_absence__present
+    def test_wait_until_absent__present
       proxy = new_proxy
 
       raised = assert_raise ElementNotAbsent do
         with_stubbed_wait_for do
           element_class.expect_initialize
-          proxy.wait_for_absence
+          proxy.wait_until_absent
         end
       end
 
       assert_includes raised.message, element_class.to_s
     end
 
-    def test_wait_for_absence__unknown
+    def test_wait_until_absent__unknown
       proxy = new_proxy
 
       element_class.expects(:new).raises(Selenium::WebDriver::Error::StaleElementReferenceError)
@@ -206,7 +266,7 @@ module AePageObjects
 
       raised = assert_raise ElementNotAbsent do
         with_stubbed_wait_for do
-          proxy.wait_for_absence
+          proxy.wait_until_absent
         end
       end
 
@@ -217,8 +277,8 @@ module AePageObjects
 
     def unstub_wait_for
       waiter_singleton_class.class_eval do
-        alias_method :wait_for, :wait_for_whatever
-        undef_method :wait_for_whatever
+        alias_method :wait_until, :wait_until_whatever
+        undef_method :wait_until_whatever
       end
     end
 
@@ -231,10 +291,10 @@ module AePageObjects
       wait_for_mock.expects(:wait_for_called).with(expected_timeout)
 
       waiter_singleton_class.class_eval do
-        alias_method :wait_for_whatever, :wait_for
+        alias_method :wait_until_whatever, :wait_until
       end
 
-      waiter_singleton_class.send(:define_method, :wait_for) do |*timeout, &block|
+      waiter_singleton_class.send(:define_method, :wait_until) do |*timeout, &block|
         wait_for_mock.wait_for_called(*timeout)
         block.call
       end

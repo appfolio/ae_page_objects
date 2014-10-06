@@ -38,8 +38,8 @@ module AePageObjects
     #
     #     collection :addresses
     #
-    #   Collection class: ::AePageObjects::Collection
-    #   Item class:       ::AePageObjects::Element
+    #   Collection class: Collection
+    #   Item class:       Element
     #
     # ------------------------------------------------
     # Signature: (no :is, no :contains, block)
@@ -49,18 +49,18 @@ module AePageObjects
     #       element :state
     #     end
     #
-    #   Collection class: one-off subclass of ::AePageObjects::Collection
-    #   Item class:       one-off subclass of ::AePageObjects::Element
+    #   Collection class: one-off subclass of Collection
+    #   Item class:       one-off subclass of Element
     #   Methods defined on item class:
-    #     city()  # -> instance of ::AePageObjects::Element
-    #     state() # -> instance of ::AePageObjects::Element
+    #     city()  # -> instance of Element
+    #     state() # -> instance of Element
     #
     # ------------------------------------------------
     # Signature: (no :is, :contains, no block)
     #
     #     collection :addresses, :contains => Address
     #
-    #   Collection class: one-off subclass of ::AePageObjects::Collection
+    #   Collection class: one-off subclass of Collection
     #   Item class:       Address
     #
     # ------------------------------------------------
@@ -71,11 +71,11 @@ module AePageObjects
     #     element :latitude
     #   end
     #
-    #   Collection class: one-off subclass of ::AePageObjects::Collection  element
+    #   Collection class: one-off subclass of Collection  element
     #   Item class:       one-off subclass of Address
     #   Methods defined on item class:
-    #     longitude()  # -> instance of ::AePageObjects::Element
-    #     latitude() # -> instance of ::AePageObjects::Element
+    #     longitude()  # -> instance of Element
+    #     latitude() # -> instance of Element
     #
     # ------------------------------------------------
     # Signature: (:is, no :contains, no block)
@@ -96,8 +96,8 @@ module AePageObjects
     #   Collection class: one-off subclass of AddressList
     #   Item class:       one-off subclass of AddressList.item_class
     #   Methods defined on item class:
-    #     longitude()  # -> instance of ::AePageObjects::Element
-    #     latitude() # -> instance of ::AePageObjects::Element
+    #     longitude()  # -> instance of Element
+    #     latitude() # -> instance of Element
     #
     # ------------------------------------------------
     # Signature: (:is, :contains, no block)
@@ -118,8 +118,8 @@ module AePageObjects
     #   Collection class: one-off subclass of AddressList
     #   Item class:       one-off subclass of Address
     #   Methods defined on item class:
-    #     longitude()  # -> instance of ::AePageObjects::Element
-    #     latitude() # -> instance of ::AePageObjects::Element
+    #     longitude()  # -> instance of Element
+    #     latitude() # -> instance of Element
     #
     def collection(name, options = {}, &block)
       options ||= {}
@@ -136,9 +136,9 @@ module AePageObjects
 
       # create/get the collection class
       if options[:is]
-        ensure_class_for_param!(:is, options[:is], ::AePageObjects::Collection)
+        ensure_class_for_param!(:is, options[:is], Collection)
       else
-        options[:is] = ::AePageObjects::Collection
+        options[:is] = Collection
       end
 
       item_class = options.delete(:contains) || options[:is].item_class
@@ -162,7 +162,7 @@ module AePageObjects
       raise ArgumentError, ":is option not supported" if options[:is]
       raise ArgumentError, "Block required." if block.nil?
 
-      klass = Class.new(::AePageObjects::Form, &block)
+      klass = Class.new(Form, &block)
 
       options      = options.dup
       options[:is] = klass
@@ -183,7 +183,7 @@ module AePageObjects
   private
 
     def field_klass(options, &block)
-      klass = options.delete(:is) || ::AePageObjects::Element
+      klass = options.delete(:is) || Element
 
       if block_given?
         Class.new(klass, &block)

@@ -4,14 +4,14 @@ module AePageObjects
   class RakeRouterTest < Test::Unit::TestCase
 
     def test_param
-      assert_equal ::AePageObjects::RakeRouter::Param.new(:id, false), ::AePageObjects::RakeRouter::Param.new(:id, false)
-      assert_equal ::AePageObjects::RakeRouter::Param.new(:id, false), ::AePageObjects::RakeRouter::Param.new(:id, true)
+      assert_equal AePageObjects::RakeRouter::Param.new(:id, false), AePageObjects::RakeRouter::Param.new(:id, false)
+      assert_equal AePageObjects::RakeRouter::Param.new(:id, false), AePageObjects::RakeRouter::Param.new(:id, true)
     end
 
     def test_path__required
-      path = ::AePageObjects::RakeRouter::Path.new("/hello/kitty/:id(.:format)")
+      path = AePageObjects::RakeRouter::Path.new("/hello/kitty/:id(.:format)")
       assert_equal "/hello/kitty/:id", path
-      assert_equal [::AePageObjects::RakeRouter::Param.new(:id, false)], path.params.values
+      assert_equal [AePageObjects::RakeRouter::Param.new(:id, false)], path.params.values
       assert_equal '(?-mix:\\/hello\\/kitty\\/(.+))', path.regex.to_s
 
       assert_raises ArgumentError do
@@ -22,9 +22,9 @@ module AePageObjects
     end
 
     def test_path__optional
-      path = ::AePageObjects::RakeRouter::Path.new("/hello/kitty(/:id)(.:format)")
+      path = AePageObjects::RakeRouter::Path.new("/hello/kitty(/:id)(.:format)")
       assert_equal "/hello/kitty(/:id)", path
-      assert_equal [::AePageObjects::RakeRouter::Param.new(:id, true)], path.params.values
+      assert_equal [AePageObjects::RakeRouter::Param.new(:id, true)], path.params.values
       assert_equal '(?-mix:\\/hello\\/kitty(\\/.+)?)', path.regex.to_s
 
       assert_equal '/hello/kitty', path.generate({:whatever => 1})
@@ -32,9 +32,9 @@ module AePageObjects
     end
 
     def test_path__mixed
-      path = ::AePageObjects::RakeRouter::Path.new("/hello(/:homie_id)/kitty/:id(.:format)")
+      path = AePageObjects::RakeRouter::Path.new("/hello(/:homie_id)/kitty/:id(.:format)")
       assert_equal "/hello(/:homie_id)/kitty/:id", path
-      assert_sets_equal [::AePageObjects::RakeRouter::Param.new(:id, false), ::AePageObjects::RakeRouter::Param.new(:homie_id, true)], path.params.values
+      assert_sets_equal [AePageObjects::RakeRouter::Param.new(:id, false), AePageObjects::RakeRouter::Param.new(:homie_id, true)], path.params.values
       assert_equal '(?-mix:\\/hello(\\/.+)?\\/kitty\\/(.+))', path.regex.to_s
 
       assert_raises ArgumentError do
@@ -46,7 +46,7 @@ module AePageObjects
     end
 
     def test_parsing
-      router = ::AePageObjects::RakeRouter.new(routes)
+      router = AePageObjects::RakeRouter.new(routes)
 
       assert router.path_recognizes_url?(:unhide_property, "/properties/12/unhide")
       assert router.path_recognizes_url?(:past_occupants_property_unit, "/properties/123/units/23/past_occupants")
@@ -66,7 +66,7 @@ module AePageObjects
     end
 
     def test_parsing__prefix
-      router = ::AePageObjects::RakeRouter.new(routes, "/kessler")
+      router = AePageObjects::RakeRouter.new(routes, "/kessler")
 
       assert router.path_recognizes_url?(:unhide_property, "/kessler/properties/12/unhide")
       assert router.path_recognizes_url?(:past_occupants_property_unit, "/kessler/properties/123/units/23/past_occupants")
@@ -86,7 +86,7 @@ module AePageObjects
     end
 
     def test_parsing__prefix__root
-      router = ::AePageObjects::RakeRouter.new(routes, "/")
+      router = AePageObjects::RakeRouter.new(routes, "/")
 
       assert router.path_recognizes_url?(:unhide_property, "/properties/12/unhide")
       assert router.path_recognizes_url?(:past_occupants_property_unit, "/properties/123/units/23/past_occupants")

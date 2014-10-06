@@ -21,20 +21,20 @@ module AePageObjects
         previous_owners_page_object = mock
         capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
-        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
         previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
-        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__is__no_contains__block
@@ -67,11 +67,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__is__no_contains__block__no_item_class
@@ -103,11 +103,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__is__no_contains__no_block
@@ -141,11 +141,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__is__contains__no_block__same_item_class
@@ -179,11 +179,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__is__contains__no_block__different_item_class
@@ -215,11 +215,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__no_is__contains__no_block
@@ -240,7 +240,7 @@ module AePageObjects
         previous_owners_page_object = mock
         capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
-        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
@@ -249,11 +249,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__no_is__contains__block
@@ -276,7 +276,7 @@ module AePageObjects
         previous_owners_page_object = mock
         capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
-        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
@@ -285,11 +285,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__is__contains__block
@@ -328,11 +328,11 @@ module AePageObjects
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_kitty_name_during_ownership").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_collection__no_is__no_contains__no_block
@@ -347,12 +347,12 @@ module AePageObjects
         previous_owners_page_object = mock
         capybara_stub.session.expects(:find).with("#previous_owners").returns(previous_owners_page_object)
 
-        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
         previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
-        first_owner = verify_item_field(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
+        first_owner = verify_item_field(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
       end
 
       def test_collection__locator
@@ -372,20 +372,20 @@ module AePageObjects
         previous_owners_page_object = mock
         capybara_stub.session.expects(:find).with("whatever you want, baby").returns(previous_owners_page_object)
 
-        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
         previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
-        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("Kitty Name").returns(kitty_name_during_ownership_page_object)
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
       def test_nested_element__locator__proc
@@ -407,23 +407,23 @@ module AePageObjects
         previous_owners_page_object = mock
         capybara_stub.session.expects(:find).with("hello").returns(previous_owners_page_object)
 
-        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, ::AePageObjects::Collection, previous_owners_page_object)
+        previous_owners = verify_field_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
         first_owner_page_object = mock
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*").returns([first_owner_page_object])
         previous_owners_page_object.expects(:find).with(:xpath, ".//*[1]").returns(first_owner_page_object)
-        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, ::AePageObjects::Element, first_owner_page_object)
+        first_owner = verify_item_field_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = mock
         first_owner_page_object.expects(:find).with("#previous_owners_0_owner_name").returns(owner_name_page_object)
-        verify_field(first_owner, :owner_name, ::AePageObjects::Element, owner_name_page_object)
+        verify_field(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("Milkshake").returns(kitty_name_during_ownership_page_object)
 
         first_owner.expects(:page_local_context).returns("Milkshake")
 
-        verify_field(first_owner, :kitty_name_during_ownership, ::AePageObjects::Element, kitty_name_during_ownership_page_object)
+        verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
     private
