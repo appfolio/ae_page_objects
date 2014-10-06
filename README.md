@@ -990,9 +990,9 @@ end
 
 The load ensuring mechanism for elements is the same as for documents ([Load Ensuring](#load-ensuring)) just without the URL check.
 
-### Check for presence
+### Checking presence
 
-Use present? and not_present? to check whether an element is present on the page:
+Use ```present?``` and ```absent?``` to check the presence of an element on the page:
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
@@ -1003,13 +1003,42 @@ def test_delete_button_presence
   authors_page = MyPageObjects::AuthorsShowPage.visit
 
   assert authors_page.delete_button.present?
-  assert ! authors_page.delete_button.not_present?
+  assert ! authors_page.delete_button.absent?
 end
 ```
 
-### Checking for visibility
+### Waiting for presence
 
-Use visible? and not_visible? to check whether an element is present and visible on the page:
+Use ```wait_until_present``` and ```wait_until_absent``` to wait on an element's presence or absence within the page:
+
+```ruby
+class AuthorsShowPage < AePageObjects::Document
+
+  element :headshot_viewer, locator: '#head-shots', is: HeadshotViewer
+
+  def view_headshots(&block)
+    node.click_link("View Headshots")
+
+    viewer = headshot_viewer
+    viewer.wait_until_present(10) # wait 10 seconds
+
+    yield viewer
+
+    viewer.wait_until_absent
+  end
+end
+
+def test_headshots
+  authors_page = MyPageObjects::AuthorsShowPage.visit
+  authors_page.view_headshots do |viewer|
+    assert_equal 0, viewer.shots.size
+  end
+end
+```
+
+### Checking visibility
+
+Use ```visible?``` and ```hidden?``` to check whether an element is present and visible on the page:
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
@@ -1020,7 +1049,26 @@ def test_delete_button_visibility
   authors_page = MyPageObjects::AuthorsShowPage.visit
 
   assert authors_page.delete_button.visible?
-  assert ! authors_page.delete_button.not_visible?
+  assert ! authors_page.delete_button.hidden?
+end
+```
+
+### Waiting for visibility
+
+Use ```wait_until_visible``` and ```wait_until_hidden``` to wait on an element's visibility:
+
+```ruby
+class AuthorsShowPage < AePageObjects::Document
+  element :survey
+end
+
+def test_survey
+  authors_page = MyPageObjects::AuthorsShowPage.visit
+
+  survey = authors_page.survey
+  survey.wait_until_visible
+  survey.dismiss!
+  survey.wait_until_hidden
 end
 ```
 
