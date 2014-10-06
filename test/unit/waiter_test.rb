@@ -18,28 +18,6 @@ module AePageObjects
       assert_equal true, result
     end
 
-    def test_wait_for_bang
-      Capybara.stubs(:default_wait_time).returns(1)
-
-      my_obj = Object.new
-
-      result = Waiter.wait_for! do
-        my_obj
-      end
-
-      assert_equal my_obj, result
-    end
-
-    def test_wait_for_bang__exception
-      Capybara.stubs(:default_wait_time).returns(1)
-
-      assert_raises WaitTimeoutError do
-        Waiter.wait_for! do
-          false
-        end
-      end
-    end
-
     def test_wait_for__timeout
       Capybara.stubs(:default_wait_time).returns(1)
 
@@ -85,6 +63,37 @@ module AePageObjects
       end
 
       assert_equal false, result
+    end
+
+    def test_wait_for_bang
+      Capybara.stubs(:default_wait_time).returns(1)
+
+      my_obj = Object.new
+
+      result = Waiter.wait_for! do
+        my_obj
+      end
+
+      assert_equal my_obj, result
+    end
+
+    def test_wait_for_bang__exception
+      Capybara.stubs(:default_wait_time).returns(1)
+
+      assert_raises WaitTimeoutError do
+        Waiter.wait_for! do
+          false
+        end
+      end
+    end
+
+    def test_wait_for_bang__set_timeout
+      my_obj = Object.new
+      Waiter.expects(:wait_for).with(20).returns(my_obj)
+
+      result = Waiter.wait_for!(20) {}
+
+      assert_equal my_obj, result
     end
   end
 end

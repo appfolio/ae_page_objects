@@ -17,8 +17,8 @@ module AePageObjects
       result
     end
 
-    def self.wait_for!
-      result = wait_for do
+    def self.wait_for!(wait_time = nil)
+      result = wait_for(wait_time) do
         yield
       end
 
