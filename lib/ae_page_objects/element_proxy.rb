@@ -59,7 +59,7 @@ module AePageObjects
     end
 
     def wait_until_visible(timeout = nil)
-      is_visible = Waiter.wait_for(timeout) do
+      is_visible = Waiter.wait_until(timeout) do
         inst = presence
         ! inst.nil? && inst.visible?
       end
@@ -70,7 +70,7 @@ module AePageObjects
     end
 
     def wait_until_hidden(timeout = nil)
-      is_hidden = Waiter.wait_for(timeout) do
+      is_hidden = Waiter.wait_until(timeout) do
         inst = presence
         inst.nil? || ! inst.visible?
       end
@@ -81,7 +81,7 @@ module AePageObjects
     end
 
     def wait_until_present(timeout = nil)
-      is_present = Waiter.wait_for(timeout) do
+      is_present = Waiter.wait_until(timeout) do
         ! presence.nil?
       end
 
@@ -95,7 +95,7 @@ module AePageObjects
     end
 
     def wait_until_absent(timeout = nil)
-      is_absent = Waiter.wait_for(timeout) do
+      is_absent = Waiter.wait_until(timeout) do
         check_absence
       end
 

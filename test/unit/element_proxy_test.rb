@@ -277,8 +277,8 @@ module AePageObjects
 
     def unstub_wait_for
       waiter_singleton_class.class_eval do
-        alias_method :wait_for, :wait_for_whatever
-        undef_method :wait_for_whatever
+        alias_method :wait_until, :wait_until_whatever
+        undef_method :wait_until_whatever
       end
     end
 
@@ -291,10 +291,10 @@ module AePageObjects
       wait_for_mock.expects(:wait_for_called).with(expected_timeout)
 
       waiter_singleton_class.class_eval do
-        alias_method :wait_for_whatever, :wait_for
+        alias_method :wait_until_whatever, :wait_until
       end
 
-      waiter_singleton_class.send(:define_method, :wait_for) do |*timeout, &block|
+      waiter_singleton_class.send(:define_method, :wait_until) do |*timeout, &block|
         wait_for_mock.wait_for_called(*timeout)
         block.call
       end
