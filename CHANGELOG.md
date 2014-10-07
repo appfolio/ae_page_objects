@@ -1,3 +1,9 @@
+## Version 1.3.0
+
+### Added
+
+* [86](https://github.com/appfolio/ae_page_objects/pull/86) Added Waiter.wait_until!, ElementProxy#wait_until_visible, ElementProxy#wait_until_hidden
+
 ## Version 1.2.1
 
 ### Bugs
