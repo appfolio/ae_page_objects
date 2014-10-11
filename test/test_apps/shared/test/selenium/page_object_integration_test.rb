@@ -126,6 +126,44 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal PageObjects::Books::NewPage, books_new_page.class
   end
 
+  def test_window_change_to__multiple_pages
+    book = Book.create!(:title => "Brave New World")
+
+    visit("/books/#{book.id}")
+    result_page = AePageObjects.browser.current_window.change_to(PageObjects::Books::NewPage,
+                                                                 PageObjects::Books::ShowPage)
+    assert_equal true, result_page.is_a?(PageObjects::Books::ShowPage)
+
+    result_page = AePageObjects.browser.current_window.change_to(PageObjects::Books::ShowPage,
+                                                                 PageObjects::Books::NewPage)
+    assert_equal true, result_page.is_a?(PageObjects::Books::ShowPage)
+
+    assert_nothing_raised do
+      AePageObjects.browser.current_window.change_to(PageObjects::Books::ShowPage)
+    end
+
+    assert_raises AePageObjects::DocumentLoadError do
+      AePageObjects.browser.current_window.change_to(PageObjects::Books::NewPage)
+    end
+
+    visit("/books/new")
+    result_page = AePageObjects.browser.current_window.change_to(PageObjects::Books::NewPage,
+                                                                 PageObjects::Books::ShowPage)
+    assert_equal true, result_page.is_a?(PageObjects::Books::NewPage)
+
+    result_page = AePageObjects.browser.current_window.change_to(PageObjects::Books::ShowPage,
+                                                                 PageObjects::Books::NewPage)
+    assert_equal true, result_page.is_a?(PageObjects::Books::NewPage)
+
+    assert_nothing_raised do
+      AePageObjects.browser.current_window.change_to(PageObjects::Books::NewPage)
+    end
+
+    assert_raises AePageObjects::DocumentLoadError do
+      AePageObjects.browser.current_window.change_to(PageObjects::Books::ShowPage)
+    end
+  end
+
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
 
