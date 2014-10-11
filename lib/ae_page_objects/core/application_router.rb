@@ -15,11 +15,26 @@ module AePageObjects
 
       class Rails23 < Base
         def recognizes?(path, url)
-          ["GET", "PUT", "POST", "DELETE", "PATCH"].map(&:downcase).map(&:to_sym).each do |method|
-            route = ActionController::Routing::Routes.named_routes[path]
-            route.recognize(url, {:method => method})
+          path_route_result = ActionController::Routing::Routes.named_routes[path].requirements
+          recognized_result = nil
+          router = ActionController::Routing::Routes
 
-            return true if route && route.recognize(url, {:method => method})
+          ["GET", "PUT", "POST", "DELETE", "PATCH"].map(&:downcase).map(&:to_sym).each do |method|
+            begin
+              recognized_result = router.recognize_path(url, {:method => method}).select do
+              |key, _|
+                key.to_s.match(/(controller|action)/)
+              end
+            rescue ActionController::RoutingError, ActionController::MethodNotAllowed
+            end
+
+            # Only the first recognized path returned by Rails is considered,
+            # which means, we only want highest prioritized route.
+            if recognized_result && path_route_result == Hash[recognized_result]
+              return true
+            else
+              next
+            end
           end
 
           false
@@ -41,16 +56,28 @@ module AePageObjects
       class Rails3 < Base
         def recognizes?(path, url)
           url, router = url_and_router(url)
+          path_route_result = router.named_routes[path.to_s].defaults
+          recognized_result = nil
 
           ["GET", "PUT", "POST", "DELETE", "PATCH"].each do |method|
-            router.recognize(request_for(url, method)) do |route, matches, params|
-              return true if route.name.to_s == path.to_s
+            begin
+              recognized_result = router.recognize_path(url, {:method => method}).select do
+              |key, _|
+                key.to_s.match(/(controller|action)/)
+              end
+            rescue ActionController::RoutingError, ActionController::MethodNotAllowed
+            end
+
+            # Only the first recognized path returned by Rails is considered,
+            # which means, we only want highest prioritized route.
+            if recognized_result && path_route_result == Hash[recognized_result]
+              return true
+            else
+              next
             end
           end
-
           false
         end
-
 
       private
 
@@ -68,7 +95,7 @@ module AePageObjects
 
         def url_and_router(url)
           url = Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes.set
+          router = ::Rails.application.routes
 
           [url, router]
         end
@@ -86,9 +113,10 @@ module AePageObjects
       class Rails32 < Rails3
 
       private
+
         def url_and_router(url)
           url = Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes.router
+          router = ::Rails.application.routes
 
           [url, router]
         end
@@ -96,16 +124,16 @@ module AePageObjects
 
       class Rails4 < Rails32
 
-        private
+      private
+
         def url_and_router(url)
           require 'action_dispatch/journey'
           url = ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes.router
+          router = ::Rails.application.routes
 
           [url, router]
         end
       end
-
     end
 
     def path_recognizes_url?(path, url)
