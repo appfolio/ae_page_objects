@@ -17,6 +17,4 @@ if RUBY_VERSION =~ /\A1\.8/
   gem 'mime-types', '< 2'
 end
 
-gem 'forum', :path => "engines"
-
-gem 'pry-byebug'
+gem 'forum', :path => "../engines"
