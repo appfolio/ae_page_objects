@@ -7,8 +7,10 @@ module AePageObjects
 
       class Base
         def generate_path(named_route, *args)
-          if routes.respond_to?("#{named_route}_path")
+          begin
             routes.send("#{named_route}_path", *args)
+          rescue NoMethodError
+            nil
           end
         end
       end
@@ -56,7 +58,7 @@ module AePageObjects
       class Rails3 < Base
         def recognizes?(path, url)
           url, router = url_and_router(url)
-          path_route_result = router.named_routes[path.to_s].defaults
+          path_route_result = get_path_route_result(router, path) #router.named_routes[path.to_s].defaults
           recognized_result = nil
 
           ["GET", "PUT", "POST", "DELETE", "PATCH"].each do |method|
@@ -81,6 +83,18 @@ module AePageObjects
 
       private
 
+        def get_path_route_result(router, path)
+          path_route_result = router.named_routes[path.to_s]
+
+          if path_route_result
+            return path_route_result.defaults
+          else
+            #The main app didn't have the path, try the engines.
+            engine, engine_route = path.to_s.split("__")
+            router.named_routes[engine].app.instance.routes.named_routes[engine_route].defaults
+          end
+        end
+
         def request_for(url, method)
           ::Rails.application.routes.request_class.new(env_for(url, method))
         end
@@ -104,6 +118,15 @@ module AePageObjects
           @routes ||= begin
             routes_class = Class.new do
               include ::Rails.application.routes.url_helpers
+
+              def method_missing(name, *args, &block)
+                engine, named_route = name.to_s.split("__")
+                engine_const = engine.split("_").map(&:camelize).join("::")
+
+                Rails::Application::Railties.engines.detect do |engine|
+                  engine.class.to_s == engine_const
+                end.routes.url_helpers.send(named_route)
+              end
             end
             routes_class.new
           end
@@ -117,6 +140,20 @@ module AePageObjects
         def url_and_router(url)
           url = Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
           router = ::Rails.application.routes
+
+          def router.recognize_path(url, options={})
+            begin
+              super(url, options)
+            rescue ActionController::RoutingError
+              _, engine, _ = url.split("/")
+              url_for_engine = url.gsub(%r(^/#{engine}), '')
+              engine_const = "#{engine.capitalize}::Engine"
+
+              Rails::Application::Railties.engines.detect do |engine|
+                engine.class.to_s == engine_const
+              end.routes.recognize_path(url_for_engine, options)
+            end
+          end
 
           [url, router]
         end

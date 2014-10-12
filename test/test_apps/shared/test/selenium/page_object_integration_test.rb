@@ -164,6 +164,13 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
   end
 
+  def test_window_change_to_with_mounted_engine
+
+    visit("/forum/posts")
+    result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage)
+    assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::IndexPage)
+  end
+
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
 
