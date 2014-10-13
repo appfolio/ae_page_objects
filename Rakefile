@@ -167,7 +167,7 @@ namespace :test do
     end
 
     namespace :selenium do
-      desc "Generate gemfiles for test apps"
+      desc "Resolve and install dependencies for all test apps"
       task :install do
         rails_version = ENV['RAILS_VERSION']
         if rails_version
