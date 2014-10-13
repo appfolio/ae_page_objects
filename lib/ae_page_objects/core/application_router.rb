@@ -144,14 +144,20 @@ module AePageObjects
           def router.recognize_path(url, options={})
             begin
               super(url, options)
-            rescue ActionController::RoutingError
+            rescue ActionController::RoutingError => e
               _, engine, _ = url.split("/")
               url_for_engine = url.gsub(%r(^/#{engine}), '')
               engine_const = "#{engine.capitalize}::Engine"
 
-              Rails::Application::Railties.engines.detect do |engine|
+              found_engine = Rails::Application::Railties.engines.detect do |engine|
                 engine.class.to_s == engine_const
-              end.routes.recognize_path(url_for_engine, options)
+              end
+
+              if found_engine
+                found_engine.routes.recognize_path(url_for_engine, options)
+              else
+                raise ActionController::RoutingError, e.message
+              end
             end
           end
 
@@ -167,6 +173,26 @@ module AePageObjects
           require 'action_dispatch/journey'
           url = ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
           router = ::Rails.application.routes
+
+          def router.recognize_path(url, options={})
+            begin
+              super(url, options)
+            rescue ActionController::RoutingError => e
+              _, engine, _ = url.split("/")
+              url_for_engine = url.gsub(%r(^/#{engine}), '')
+              engine_const = "#{engine.capitalize}::Engine"
+
+              found_engine = Rails::Application::Railties.engines.detect do |engine|
+                engine.class.to_s == engine_const
+              end
+
+              if found_engine
+                found_engine.routes.recognize_path(url_for_engine, options)
+              else
+                raise ActionController::RoutingError, e.message
+              end
+            end
+          end
 
           [url, router]
         end
