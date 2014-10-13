@@ -165,11 +165,13 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_window_change_to_with_mounted_engine
-    skip('Test skipped when Rails version lower than 3.1') if Rails::VERSION::STRING.to_f <= 3.0
-
-    visit("/forum/posts")
-    result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage)
-    assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::IndexPage)
+    skip_test_check
+    #TODO find a way to skip test under 1.8.7
+    if RUBY_VERSION.to_f != 1.8
+      visit("/forum/posts")
+      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage)
+      assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::IndexPage)
+    end
   end
 
   def test_element_proxy
@@ -628,6 +630,17 @@ private
 
     if options[:current]
       assert_equal options[:current], AePageObjects.browser.windows.current_window
+    end
+  end
+
+  def skip_test_check
+    if Rails::VERSION::STRING.to_f <= 3.0
+      if RUBY_VERSION.to_f == 1.8
+        return true
+        #omit('Test skipped when Rails version lower than 3.1')
+      else
+        skip('Test skipped when Rails version lower than 3.1')
+      end
     end
   end
 end
