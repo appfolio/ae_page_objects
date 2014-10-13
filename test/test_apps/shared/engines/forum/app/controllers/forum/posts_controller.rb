@@ -11,6 +11,7 @@ module Forum
 
     # GET /posts/1
     def show
+      @post = Post.find(params[:id])
     end
 
     # GET /posts/new

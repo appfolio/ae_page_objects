@@ -168,9 +168,60 @@ class PageObjectIntegrationTest < Selenium::TestCase
     skip_test_check
     #TODO find a way to skip test under 1.8.7
     if RUBY_VERSION.to_f != 1.8
+
+      forum_post = Forum::Post.create!(:title => "foo", :text => "bar")
+
+      visit("/forum/posts/#{forum_post.id}")
+      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::NewPage,
+                                                                       PageObjects::ForumEngine::Posts::ShowPage)
+      assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::ShowPage)
+
+      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::ShowPage,
+                                                                       PageObjects::ForumEngine::Posts::NewPage)
+      assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::ShowPage)
+
+      assert_nothing_raised do
+        AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::ShowPage)
+      end
+
+      assert_raises AePageObjects::DocumentLoadError do
+        AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::NewPage)
+      end
+
+
+      visit("/forum/posts/new")
+      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::NewPage,
+                                                                   PageObjects::ForumEngine::Posts::ShowPage)
+      assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::NewPage)
+
+      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::ShowPage,
+                                                                   PageObjects::ForumEngine::Posts::NewPage)
+      assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::NewPage)
+
+      assert_nothing_raised do
+        AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::NewPage)
+      end
+
+      assert_raises AePageObjects::DocumentLoadError do
+        AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::ShowPage)
+      end
+
       visit("/forum/posts")
-      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage)
+      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage,
+                                                                   PageObjects::ForumEngine::Posts::ShowPage)
+
       assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::IndexPage)
+      result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage,
+                                                                   PageObjects::ForumEngine::Posts::NewPage)
+      assert_equal true, result_page.is_a?(PageObjects::ForumEngine::Posts::IndexPage)
+
+      assert_nothing_raised do
+        AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage)
+      end
+
+      assert_raises AePageObjects::DocumentLoadError do
+        AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::ShowPage)
+      end
     end
   end
 
