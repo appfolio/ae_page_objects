@@ -165,6 +165,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_window_change_to_with_mounted_engine
+    skip('Test skipped when Rails version lower than 3.1') if Rails::VERSION::STRING.to_f <= 3.0
 
     visit("/forum/posts")
     result_page = AePageObjects.browser.current_window.change_to(PageObjects::ForumEngine::Posts::IndexPage)
