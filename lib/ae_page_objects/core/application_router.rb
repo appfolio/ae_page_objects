@@ -133,6 +133,38 @@ module AePageObjects
         end
       end
 
+      class Rails31 < Rails3
+
+        private
+
+        def url_and_router(url)
+          url = Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
+          router = ::Rails.application.routes
+
+          def router.recognize_path(url, options={})
+            begin
+              super(url, options)
+            rescue ActionController::RoutingError => e
+              _, engine, _ = url.split("/")
+              url_for_engine = url.gsub(%r(^/#{engine}), '')
+              engine_const = "#{engine.capitalize}::Engine"
+
+              found_engine = Rails::Application::Railties.engines.detect do |engine|
+                engine.class.to_s == engine_const
+              end
+
+              if found_engine
+                found_engine.routes.recognize_path(url_for_engine, options)
+              else
+                raise ActionController::RoutingError, e.message
+              end
+            end
+          end
+
+          [url, router]
+        end
+      end
+
       class Rails32 < Rails3
 
       private
@@ -221,8 +253,10 @@ module AePageObjects
       @recognizer ||= begin
         if ::Rails.version =~ /\A2\.3/
           Recognizer::Rails23.new
-        elsif ::Rails.version =~ /\A3\.[01]/
+        elsif ::Rails.version =~ /\A3\.0/
           Recognizer::Rails3.new
+        elsif ::Rails.version =~ /\A3\.1/
+          Recognizer::Rails31.new
         elsif ::Rails.version =~ /\A3\.2/
           Recognizer::Rails32.new
         elsif ::Rails.version =~ /\A4\.[01]/
