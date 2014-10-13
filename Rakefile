@@ -152,6 +152,7 @@ def selenium_runner
 end
 
 namespace :test do
+  desc "Run unit test for ae_page_objects"
   Rake::TestTask.new(:units) do |test|
     test.libs << 'lib' << 'test'
     test.pattern = 'test/unit/**/*_test.rb'
@@ -159,12 +160,14 @@ namespace :test do
   end
 
   namespace :integration do
+  desc "Run unit test for ae_page_objects under appraisal environment"
     task :units do
       system("bundle exec rake -s appraisal test:units")
       raise unless $?.exitstatus == 0
     end
 
     namespace :selenium do
+      desc "Generate gemfiles for test apps"
       task :install do
         rails_version = ENV['RAILS_VERSION']
         if rails_version
@@ -175,6 +178,7 @@ namespace :test do
 
       end
 
+      desc "Remove gemfiles in test apps"
       task :clean do
         selenium_runner.clean
       end
@@ -206,14 +210,17 @@ namespace :test do
   end
 
   namespace :ci do
+    desc "Remove gemfiles in test apps and all lock files"
     task :clean => ["test:integration:selenium:clean"] do
       remove_files("test/test_apps/**/Gemfile.lock")
       remove_files("gemfiles/*.lock")
       remove_files("Gemfile.lock")
     end
+    desc "Resolve and install dependencies for unit and integration test"
     task :install => ci_install
   end
 
+  desc "Run the unit and integration test for all appraisals"
   task :ci => ci_task
 end
 
