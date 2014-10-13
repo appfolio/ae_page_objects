@@ -16,3 +16,5 @@ if RUBY_VERSION =~ /\A1\.8/
   gem 'rubyzip', '< 1.0.0'
   gem 'mime-types', '< 2'
 end
+
+gem 'forum', :path => "../engines"
