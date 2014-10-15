@@ -6,13 +6,14 @@ module AePageObjects
     def initialize(rake_routes, mounted_prefix = '')
       @mounted_prefix = mounted_prefix || ""
       @routes = {}
-      route_line_regex = /(\w+)(?:\s[A-Z]+)?\s+(\/.*)\(.:format\).*$/
+      route_line_regex = /(?'route_name'\w+)(?'http_method'\s[A-Z]+)?\s+(?'path'\/.*)\(.:format\)\s+(\w+#\w+\s*)?(?'hash'\{.*\})?.*$/
 
       rake_routes.split("\n").each do |line|
         line = line.strip
         matches = route_line_regex.match(line)
         if matches
-          @routes[matches[1].to_sym] = Route.new(matches[2], @mounted_prefix)
+          route_options_hash = matches['hash'] ? eval(matches['hash']) : {}
+          @routes[matches['route_name'].to_sym] = Route.new(matches['path'], @mounted_prefix, route_options_hash)
         end
       end
     end
@@ -37,14 +38,15 @@ module AePageObjects
       end
     end
 
-  private
+    private
 
     class Path < String
       attr_reader :params, :regex
 
-      def initialize(value)
+      def initialize(value, route_options_hash = {})
         super(value.gsub(/(\/)+/, '/').sub(/\(\.\:format\)$/, ''))
 
+        @route_options_hash = route_options_hash
         @params = parse_params
         @regex  = generate_regex
       end
@@ -56,7 +58,7 @@ module AePageObjects
         end
       end
 
-    private
+      private
       def parse_params
         # overwrite the required status with the optional
         {}.merge(required_params).merge(optional_params)
@@ -69,7 +71,7 @@ module AePageObjects
       def optional_params
         {}.tap do |optional_params|
           find_params(/\(\/\:(\w+)\)/).each do |param_name|
-            optional_params[param_name] = Param.new(param_name, true)
+            optional_params[param_name] = Param.new(param_name, true, @route_options_hash[param_name])
           end
         end
       end
@@ -77,7 +79,7 @@ module AePageObjects
       def required_params
         {}.tap do |required_params|
           find_params(/\:(\w+)/).each do |param_name|
-            required_params[param_name] = Param.new(param_name, false)
+            required_params[param_name] = Param.new(param_name, false, @route_options_hash[param_name])
           end
         end
       end
@@ -90,7 +92,7 @@ module AePageObjects
       end
     end
 
-    class Param < Struct.new(:name, :optional)
+    class Param < Struct.new(:name, :optional, :regex)
       include Comparable
 
       def optional?
@@ -111,9 +113,11 @@ module AePageObjects
 
       def replace_param_in_url(url)
         if optional?
-          url.gsub("(/:#{name})", '(\/.+)?')
+          replacement_regex_str = regex ? "(\/#{regex})?" : '(\/.+)?'
+          url.gsub("(/:#{name})", replacement_regex_str)
         else
-          url.gsub(":#{name}", '(.+)')
+          replacement_regex_str = regex ? regex.to_s : '(.+)'
+          url.gsub(":#{name}", replacement_regex_str)
         end
       end
 
@@ -132,8 +136,8 @@ module AePageObjects
     end
 
     class Route
-      def initialize(spec, mounted_prefix)
-        @path = Path.new(mounted_prefix + spec)
+      def initialize(spec, mounted_prefix, route_options_hash = {})
+        @path = Path.new(mounted_prefix + spec, route_options_hash)
         @path.freeze
       end
 
