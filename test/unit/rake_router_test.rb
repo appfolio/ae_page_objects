@@ -65,6 +65,17 @@ module AePageObjects
       assert_equal "/kessler/jon", router.generate_path("/kessler/jon")
     end
 
+    def test_parsing__uses_info_from_route_hash
+      router = AePageObjects::RakeRouter.new(routes)
+
+      assert router.path_recognizes_url?(:has_optional_param, '/properties/5/units/new')
+      assert router.path_recognizes_url?(:has_optional_param, '/properties/hey/units/new')
+      assert router.path_recognizes_url?(:has_optional_param, '/properties/5/units/1234-6789-12/new')
+
+      assert_nil router.path_recognizes_url?(:has_optional_param, '/properties/5/units/1234-6789-013/new')
+      assert_nil router.path_recognizes_url?(:has_optional_param, '/properties/5/units/1234#6789#12/new')
+    end
+
     def test_parsing__prefix
       router = AePageObjects::RakeRouter.new(routes, "/kessler")
 
@@ -105,6 +116,13 @@ module AePageObjects
       assert_equal "/kessler/jon", router.generate_path("/kessler/jon")
     end
 
+    def test_parsing__prefix__ambiguous_without_hash_info
+      router = AePageObjects::RakeRouter.new(routes, '/listings')
+
+      assert router.path_recognizes_url?(:listing_guid, '/listings/listings/7c5c1adc-0aa6-480d-88cc-f92f3a3e3309')
+      assert_nil router.path_recognizes_url?(:listing_guid, '/listings/listings')
+    end
+
   private
 
     def routes
@@ -119,6 +137,8 @@ module AePageObjects
                    hide_property_unit POST   /properties/:property_id/units/:id/hide(.:format)           {:action=>"hide", :controller=>"units"}
                                       DELETE /properties/:id(.:format)                                   {:action=>"destroy", :controller=>"properties"}
           new_applications_applicants GET    /applications(/:web_flow_id)/applicants/new(.:format)       {:controller=>"applications/applicants", :action=>"new"}
+                         listing_guid        /:id(.:format)                                              {:controller=>"listings", :action=>"show", :id=>/[0-9a-f\-]{36}/i}
+                   has_optional_param        /properties/:property_id/units(/:unit_guid)/new(.:format)   {:controller=>"units", :action=>"has_optional_param", :unit_guid=>/[0-9a-f\-]{12}/i}
       ROUTES
     end
   end
