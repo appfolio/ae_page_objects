@@ -574,8 +574,15 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_select_element
     new_page = PageObjects::Authors::NewPage.visit
     assert_equal ["Junior", "Senior", "The third", "Esq."], new_page.suffix.options.map(&:text)
+
     new_page.suffix.set("Senior")
+    assert_equal "Senior", new_page.suffix.value
     assert_equal "Senior", new_page.suffix.selected_option.text
+
+    new_page.suffix.options.last.select
+    assert new_page.suffix.options.last.selected?, "Did not successfully select option 'Esq.'"
+    assert_equal "Esq.", new_page.suffix.value
+    assert_equal "Esq.", new_page.suffix.selected_option.text
   end
 
 private
