@@ -12,6 +12,7 @@ module AePageObjects
         end
 
         sleep(0.05)
+        raise FrozenInTime, "Time appears to be frozen" if Time.now == start_time
       end
 
       result

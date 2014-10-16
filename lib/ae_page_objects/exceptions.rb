@@ -42,4 +42,7 @@ module AePageObjects
 
   class WaitTimeoutError < Error
   end
+
+  class FrozenInTime < Error
+  end
 end
