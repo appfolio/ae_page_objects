@@ -37,18 +37,33 @@ module AePageObjects
       assert_equal false, result
     end
 
+    def test_wait_until__frozen_time
+      Capybara.stubs(:default_wait_time).returns(5)
+      Time.stubs(:now).returns(1)
+
+      block = mock
+      block.expects(:called).times(1)
+
+      raised = assert_raises FrozenInTime do
+        Waiter.wait_until do
+          block.called
+        end
+      end
+     assert_equal "Time appears to be frozen", raised.message
+    end
+
     def test_wait_until__set_wait_time
       Capybara.expects(:default_wait_time).never
 
       block_calls = sequence('calls')
       time_calls  = sequence('time')
 
-      10.times {|n| Time.expects(:now).in_sequence(time_calls).returns(n)}
-      9.times { Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false) }
+      9.times { |n| Time.expects(:now).in_sequence(time_calls).returns(n) }
+      4.times { Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false) }
       Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(true)
 
       block = mock
-      block.expects(:called).times(10)
+      block.expects(:called).times(5)
       result = Waiter.wait_until(10) do
         block.called
       end
@@ -62,11 +77,11 @@ module AePageObjects
       block_calls = sequence('calls')
       time_calls  = sequence('time')
 
-      11.times { |n| Time.expects(:now).in_sequence(time_calls).returns(n) }
-      10.times { Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false) }
+      12.times { |n| Time.expects(:now).in_sequence(time_calls).returns(n) }
+      6.times { Capybara.expects(:using_wait_time).in_sequence(block_calls).with(0).yields.returns(false) }
 
       block = mock
-      block.expects(:called).times(10)
+      block.expects(:called).times(6)
       result = Waiter.wait_until(10) do
         block.called
       end
