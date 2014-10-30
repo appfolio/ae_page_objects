@@ -15,11 +15,11 @@ end
 
 nodes, edges = {}, {}
 
-twitter_objects = ObjectSpace.each_object(Class).select do |klass|
+aepos_objects = ObjectSpace.each_object(Class).select do |klass|
   klass.name.to_s.start_with?(NAMESPACE)
 end
 
-twitter_objects.each do |klass|
+aepos_objects.each do |klass|
   loop do
     unless klass.nil? || klass.superclass.nil? || klass.name.empty?
       nodes[nodize(klass)] = klass.name
