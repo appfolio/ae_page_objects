@@ -352,7 +352,7 @@ module AePageObjects
         size_page_object.expects(:find).with("#tail_attributes_size_attributes_length").returns(length_page_object)
         verify_field(size, :length, AePageObjects::Element, length_page_object)
 
-        size.expects(:page_local_context).returns("hello")
+        size.send(:implicit_element).expects(:page_local_context).returns("hello")
 
         width_page_object = mock
         size_page_object.expects(:find).with("hello").returns(width_page_object)
