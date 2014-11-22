@@ -11,15 +11,13 @@ module AePageObjects
             routes.send("#{named_route}_path", *args)
           end
         end
-      end
 
-      class Rails23 < Base
         def recognizes?(path, url)
-          path_route_result = ActionController::Routing::Routes.named_routes[path].requirements
+          url, router = url_and_router(url)
+          path_route_result = router.named_routes[path].requirements
           recognized_result = nil
-          router = ActionController::Routing::Routes
 
-          ["GET", "PUT", "POST", "DELETE", "PATCH"].map(&:downcase).map(&:to_sym).each do |method|
+          http_verbs.each do |method|
             begin
               recognized_result = router.recognize_path(url, {:method => method}).select do
               |key, _|
@@ -42,6 +40,16 @@ module AePageObjects
 
       private
 
+        def http_verbs
+          [:get, :post, :put, :delete, :patch]
+        end
+      end
+
+      class Rails23 < Base
+
+
+      private
+
         def routes
           @routes ||= begin
             routes_class = Class.new do
@@ -51,33 +59,15 @@ module AePageObjects
             routes_class.new
           end
         end
+
+        def url_and_router(url)
+          router = ActionController::Routing::Routes
+
+          [url, router]
+        end
       end
 
       class Rails3 < Base
-        def recognizes?(path, url)
-          url, router = url_and_router(url)
-          path_route_result = router.named_routes[path.to_s].defaults
-          recognized_result = nil
-
-          ["GET", "PUT", "POST", "DELETE", "PATCH"].each do |method|
-            begin
-              recognized_result = router.recognize_path(url, {:method => method}).select do
-              |key, _|
-                key.to_s.match(/(controller|action)/)
-              end
-            rescue ActionController::RoutingError, ActionController::MethodNotAllowed
-            end
-
-            # Only the first recognized path returned by Rails is considered,
-            # which means, we only want highest prioritized route.
-            if recognized_result && path_route_result == Hash[recognized_result]
-              return true
-            else
-              next
-            end
-          end
-          false
-        end
 
       private
 
