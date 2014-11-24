@@ -23,8 +23,6 @@ module AePageObjects
             # which means, we only want highest prioritized route.
             if recognized_route && path_route_result == Hash[recognized_route]
               return true
-            else
-              next
             end
           end
 
