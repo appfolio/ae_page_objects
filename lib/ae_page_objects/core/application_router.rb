@@ -15,20 +15,13 @@ module AePageObjects
         def recognizes?(path, url)
           url, router = url_and_router(url)
           path_route_result = router.named_routes[path].requirements
-          recognized_result = nil
 
           http_verbs.each do |method|
-            begin
-              recognized_result = router.recognize_path(url, {:method => method}).select do
-              |key, _|
-                key.to_s.match(/(controller|action)/)
-              end
-            rescue ActionController::RoutingError, ActionController::MethodNotAllowed
-            end
+            recognized_route = recognize_route(router, url, method)
 
             # Only the first recognized path returned by Rails is considered,
             # which means, we only want highest prioritized route.
-            if recognized_result && path_route_result == Hash[recognized_result]
+            if recognized_route && path_route_result == Hash[recognized_route]
               return true
             else
               next
@@ -42,6 +35,13 @@ module AePageObjects
 
         def http_verbs
           [:get, :post, :put, :delete, :patch]
+        end
+
+        def recognize_route(router, url, method)
+          router.recognize_path(url, {:method => method}).select do |key, _|
+            key.to_s.match(/(controller|action)/)
+          end
+        rescue ActionController::RoutingError, ActionController::MethodNotAllowed
         end
       end
 
