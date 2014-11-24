@@ -21,7 +21,7 @@ module AePageObjects
 
             # Only the first recognized path returned by Rails is considered,
             # which means, we only want highest prioritized route.
-            if recognized_route && path_route_result == Hash[recognized_route]
+            if path_route_result == recognized_route
               return true
             end
           end
@@ -36,9 +36,11 @@ module AePageObjects
         end
 
         def recognize_path(router, url, method)
-          router.recognize_path(url, {:method => method}).select do |key, _|
+          recognized_path = router.recognize_path(url, {:method => method}).select do |key, _|
             key.to_s.match(/(controller|action)/)
           end
+
+          Hash[recognized_path]
         rescue ActionController::RoutingError, ActionController::MethodNotAllowed
         end
       end
