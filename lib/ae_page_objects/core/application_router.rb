@@ -17,7 +17,7 @@ module AePageObjects
           path_route_result = router.named_routes[path].requirements
 
           http_verbs.each do |method|
-            recognized_route = recognize_route(router, url, method)
+            recognized_route = recognize_path(router, url, method)
 
             # Only the first recognized path returned by Rails is considered,
             # which means, we only want highest prioritized route.
@@ -35,7 +35,7 @@ module AePageObjects
           [:get, :post, :put, :delete, :patch]
         end
 
-        def recognize_route(router, url, method)
+        def recognize_path(router, url, method)
           router.recognize_path(url, {:method => method}).select do |key, _|
             key.to_s.match(/(controller|action)/)
           end
@@ -44,7 +44,6 @@ module AePageObjects
       end
 
       class Rails23 < Base
-
 
       private
 
