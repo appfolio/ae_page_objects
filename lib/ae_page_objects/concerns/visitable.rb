@@ -9,14 +9,14 @@ module AePageObjects
     private
 
       def ensure_loaded!
-        unless Waiter.wait_until { self.class.can_load_from_current_url? }
-          raise LoadingPageFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
+        unless AePageObjects::Waiter.wait_until { self.class.can_load_from_current_url? }
+          raise AePageObjects::LoadingPageFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
         end
 
         begin
           super
-        rescue LoadingElementFailed => e
-          raise LoadingPageFailed, e.message
+        rescue AePageObjects::LoadingElementFailed => e
+          raise AePageObjects::LoadingPageFailed, e.message
         end
       end
 

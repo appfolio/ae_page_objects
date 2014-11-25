@@ -6,7 +6,7 @@ module AePageObjects
     end
 
     def load
-      Waiter.wait_until do
+      AePageObjects::Waiter.wait_until do
         @query.conditions.each do |document_condition|
           if document = @strategy.load_document_with_condition(document_condition)
             return document
@@ -16,7 +16,7 @@ module AePageObjects
         nil
       end
 
-      raise DocumentLoadError, @strategy.document_not_loaded_error_message(@query)
+      raise AePageObjects::DocumentLoadError, @strategy.document_not_loaded_error_message(@query)
     end
   end
 end

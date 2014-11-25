@@ -12,7 +12,7 @@ module AePageObjects
         end
 
         sleep(0.05)
-        raise FrozenInTime, "Time appears to be frozen" if Time.now == start_time
+        raise AePageObjects::FrozenInTime, "Time appears to be frozen" if Time.now == start_time
       end
 
       result
@@ -28,7 +28,7 @@ module AePageObjects
       end
 
       unless result
-        raise WaitTimeoutError, "Timed out waiting for condition"
+        raise AePageObjects::WaitTimeoutError, "Timed out waiting for condition"
       end
 
       result

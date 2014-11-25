@@ -8,7 +8,7 @@ module AePageObjects
 
       def node
         if stale?
-          raise StalePageObject, "Can't access stale page object '#{self}'"
+          raise AePageObjects::StalePageObject, "Can't access stale page object '#{self}'"
         end
 
         super

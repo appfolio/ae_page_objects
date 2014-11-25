@@ -4,7 +4,7 @@ module AePageObjects
       attr_reader :windows
 
       def initialize
-        @windows = WindowList.new
+        @windows = AePageObjects::MultipleWindows::WindowList.new
       end
 
       def current_window
@@ -12,11 +12,11 @@ module AePageObjects
       end
 
       def find_document(*document_classes, &block)
-        query           = DocumentQuery.new(*document_classes, &block)
-        document_loader = DocumentLoader.new(query, CrossWindowLoaderStrategy.new(@windows))
+        query           = AePageObjects::DocumentQuery.new(*document_classes, &block)
+        document_loader = AePageObjects::DocumentLoader.new(query, AePageObjects::MultipleWindows::CrossWindowLoaderStrategy.new(@windows))
         loaded_page     = document_loader.load
 
-        DocumentProxy.new(loaded_page, query)
+        AePageObjects::DocumentProxy.new(loaded_page, query)
       end
     end
   end

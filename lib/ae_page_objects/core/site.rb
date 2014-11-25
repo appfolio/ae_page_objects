@@ -1,3 +1,6 @@
+require 'ae_page_objects/util/singleton'
+require 'ae_page_objects/core/universe'
+
 module AePageObjects
   class Site
     extend AePageObjects::Singleton
@@ -16,7 +19,7 @@ module AePageObjects
       def inherited(site_class)
         super
 
-        site_class.universe.send(:include, Universe)
+        site_class.universe.send(:include, AePageObjects::Universe)
         site_class.universe.page_objects_site_class = site_class
       end
 
@@ -26,7 +29,7 @@ module AePageObjects
 
       def from(from_mod)
         until from_mod == Object
-          if from_mod < Universe
+          if from_mod < AePageObjects::Universe
             return from_mod.page_objects_site_class.instance
           end
 
@@ -52,7 +55,7 @@ module AePageObjects
     end
 
     def router
-      @router ||= ApplicationRouter.new
+      @router ||= AePageObjects::ApplicationRouter.new
     end
 
     def initialize!

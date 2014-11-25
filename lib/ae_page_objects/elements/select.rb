@@ -1,5 +1,7 @@
+require 'ae_page_objects/element'
+
 module AePageObjects
-  class Select < Element
+  class Select < AePageObjects::Element
     def set(value)
       node.select(value)
     end

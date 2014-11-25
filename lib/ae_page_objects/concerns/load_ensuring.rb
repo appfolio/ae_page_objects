@@ -19,7 +19,7 @@ module AePageObjects
 
         self
       rescue Capybara::ElementNotFound => e
-        raise LoadingElementFailed, e.message
+        raise AePageObjects::LoadingElementFailed, e.message
       end
     end
   end

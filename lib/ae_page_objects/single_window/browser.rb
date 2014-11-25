@@ -4,7 +4,7 @@ module AePageObjects
       attr_reader :current_window
 
       def initialize
-        @current_window = Window.new
+        @current_window = AePageObjects::SingleWindow::Window.new
       end
     end
   end

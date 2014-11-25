@@ -4,12 +4,12 @@ module AePageObjects
   class WindowTest < Test::Unit::TestCase
 
     def test_all
-      Window.expects(:warn)
+      AePageObjects::Window.expects(:warn)
 
       browser = MultipleWindows::Browser.new
       AePageObjects.expects(:browser).returns(browser)
 
-      windows = Window.all
+      windows = AePageObjects::Window.all
       assert_equal MultipleWindows::WindowList, windows.class
     end
 
@@ -18,9 +18,9 @@ module AePageObjects
       browser.windows.expects(:close_all)
       AePageObjects.expects(:browser).returns(browser)
 
-      Window.expects(:warn).times(2)
+      AePageObjects::Window.expects(:warn).times(2)
       assert_nothing_raised do
-        Window.close_all
+        AePageObjects::Window.close_all
       end
     end
   end

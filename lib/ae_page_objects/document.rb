@@ -1,6 +1,9 @@
+require 'ae_page_objects/node'
+require 'ae_page_objects/concerns/visitable'
+
 module AePageObjects
-  class Document < Node
-    include Concerns::Visitable
+  class Document < AePageObjects::Node
+    include AePageObjects::Concerns::Visitable
 
     attr_reader :window
 
@@ -22,7 +25,7 @@ module AePageObjects
     class << self
     private
       def site
-        @site ||= Site.from(self)
+        @site ||= AePageObjects::Site.from(self)
       end
     end
   end

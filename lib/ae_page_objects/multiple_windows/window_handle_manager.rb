@@ -16,7 +16,7 @@ module AePageObjects
       rescue => e
         if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&
            e.is_a?(Selenium::WebDriver::Error::NoSuchWindowError)
-          raise WindowNotFound
+          raise AePageObjects::WindowNotFound
         end
 
         raise

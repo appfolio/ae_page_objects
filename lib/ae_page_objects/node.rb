@@ -1,3 +1,7 @@
+require 'ae_page_objects/core/dsl'
+require 'ae_page_objects/concerns/load_ensuring'
+require 'ae_page_objects/concerns/staleable'
+
 module AePageObjects
   class Node
     module Methods
@@ -27,7 +31,7 @@ module AePageObjects
           def #{m}(*args, &block)
             node.send(:#{m}, *args, &block)
           rescue Capybara::ElementNotFound => e
-            raise LoadingElementFailed, e.message
+            raise AePageObjects::LoadingElementFailed, e.message
           end
         RUBY
       end
@@ -55,12 +59,12 @@ module AePageObjects
       end
     end
 
-    extend Dsl
+    extend AePageObjects::Dsl
 
     include Methods
     extend  ClassMethods
 
-    include Concerns::LoadEnsuring
-    include Concerns::Staleable
+    include AePageObjects::Concerns::LoadEnsuring
+    include AePageObjects::Concerns::Staleable
   end
 end

@@ -23,7 +23,7 @@ module AePageObjects
         return @loaded_page
       end
 
-      raise CastError, "Loaded page is not a #{document_class.name}. Allowed pages: #{@query.permitted_types_dump}"
+      raise AePageObjects::CastError, "Loaded page is not a #{document_class.name}. Allowed pages: #{@query.permitted_types_dump}"
     end
 
   private
@@ -32,7 +32,7 @@ module AePageObjects
       if @loaded_page.is_a? @query.default_document_class
         @loaded_page
       else
-        raise CastError, "#{@query.default_document_class} expected, but #{@loaded_page.class} loaded"
+        raise AePageObjects::CastError, "#{@query.default_document_class} expected, but #{@loaded_page.class} loaded"
       end
     end
 
