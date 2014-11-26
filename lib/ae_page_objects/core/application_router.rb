@@ -12,6 +12,10 @@ module AePageObjects
           end
         end
 
+        def routes
+          raise NotImplementedError, "You must implement routes"
+        end
+
         def normalize_url(url)
           raise NotImplementedError, "You must implement normalize_url"
         end
