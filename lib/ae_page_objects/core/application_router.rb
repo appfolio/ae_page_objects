@@ -19,7 +19,6 @@ module AePageObjects
 
           [:get, :post, :put, :delete, :patch].each do |method|
             resolved_route_from_url = resolve_url(url, method)
-            next unless resolved_route_from_url
 
             # The first resolved route matching named route is returned as
             # Rails' routes are in priority order.
