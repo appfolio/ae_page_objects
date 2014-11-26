@@ -17,7 +17,7 @@ module AePageObjects
 
           resolved_named_route = resolve_named_route(named_route)
 
-          http_verbs.each do |method|
+          [:get, :post, :put, :delete, :patch].each do |method|
             resolved_route_from_url = resolve_url(url, method)
 
             # The first resolved route matching named route is returned as
@@ -42,10 +42,6 @@ module AePageObjects
 
         def router
           raise NotImplementedError, "You must implement router"
-        end
-
-        def http_verbs
-          [:get, :post, :put, :delete, :patch]
         end
 
         def resolve_named_route(named_route)
