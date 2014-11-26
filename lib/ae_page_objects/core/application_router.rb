@@ -12,18 +12,6 @@ module AePageObjects
           end
         end
 
-        def routes
-          raise NotImplementedError, "You must implement routes"
-        end
-
-        def normalize_url(url)
-          raise NotImplementedError, "You must implement normalize_url"
-        end
-
-        def router
-          raise NotImplementedError, "You must implement router"
-        end
-
         def recognizes?(named_route, url)
           url = normalize_url(url)
 
@@ -43,6 +31,18 @@ module AePageObjects
         end
 
       private
+
+        def routes
+          raise NotImplementedError, "You must implement routes"
+        end
+
+        def normalize_url(url)
+          raise NotImplementedError, "You must implement normalize_url"
+        end
+
+        def router
+          raise NotImplementedError, "You must implement router"
+        end
 
         def http_verbs
           [:get, :post, :put, :delete, :patch]
