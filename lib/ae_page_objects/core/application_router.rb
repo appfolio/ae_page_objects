@@ -56,12 +56,7 @@ module AePageObjects
         rescue ActionController::RoutingError, ActionController::MethodNotAllowed
         end
 
-        class ResolvedRoute < Struct.new(:controller, :action)
-          def == (o)
-            controller == o.controller &&
-              action == o.action
-          end
-        end
+        ResolvedRoute = Struct.new(:controller, :action)
       end
 
       class Rails23 < Base
