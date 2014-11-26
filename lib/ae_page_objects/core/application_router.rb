@@ -27,14 +27,14 @@ module AePageObjects
         def recognizes?(named_route, url)
           url, router = url_and_router(url)
 
-          target_action_from_named_route = target_action_from_named_route(router, named_route)
+          resolved_named_route = resolve_named_route(router, named_route)
 
           http_verbs.each do |method|
-            target_action_from_url = target_action_from_url(router, url, method)
+            resolved_route_from_url = resolve_url(router, url, method)
 
-            # Only the first recognized path returned by Rails is considered,
-            # which means, we only want highest prioritized route.
-            if target_action_from_named_route == target_action_from_url
+            # The first resolved route matching named route is returned as
+            # Rails' routes are in priority order.
+            if resolved_named_route == resolved_route_from_url
               return true
             end
           end
@@ -48,19 +48,18 @@ module AePageObjects
           [:get, :post, :put, :delete, :patch]
         end
 
-        def target_action_from_named_route(router, named_route)
+        def resolve_named_route(router, named_route)
           requirements = router.named_routes[named_route].requirements
-          TargetAction.new(requirements[:controller], requirements[:action])
+          ResolvedRoute.new(requirements[:controller], requirements[:action])
         end
 
-        def target_action_from_url(router, url, method)
+        def resolve_url(router, url, method)
           recognized_path = router.recognize_path(url, {:method => method})
-          TargetAction.new(recognized_path[:controller], recognized_path[:action])
+          ResolvedRoute.new(recognized_path[:controller], recognized_path[:action])
         rescue ActionController::RoutingError, ActionController::MethodNotAllowed
-          TargetAction.new(nil, nil)
         end
 
-        class TargetAction < Struct.new(:controller, :action)
+        class ResolvedRoute < Struct.new(:controller, :action)
           def == (o)
             controller == o.controller &&
               action == o.action
