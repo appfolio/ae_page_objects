@@ -12,6 +12,18 @@ module AePageObjects
           end
         end
 
+        def normalize_url(url)
+          raise NotImplementedError, "You must implement normalize_url"
+        end
+
+        def router
+          raise NotImplementedError, "You must implement router"
+        end
+
+        def url_and_router(url)
+          [normalize_url(url), router]
+        end
+
         def recognizes?(named_route, url)
           url, router = url_and_router(url)
 
@@ -70,10 +82,12 @@ module AePageObjects
           end
         end
 
-        def url_and_router(url)
-          router = ActionController::Routing::Routes
+        def normalize_url(url)
+          url
+        end
 
-          [url, router]
+        def router
+          ActionController::Routing::Routes
         end
       end
 
@@ -93,11 +107,12 @@ module AePageObjects
           end
         end
 
-        def url_and_router(url)
-          url = Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes
+        def normalize_url(url)
+          Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
+        end
 
-          [url, router]
+        def router
+          ::Rails.application.routes
         end
 
         def routes
@@ -114,11 +129,8 @@ module AePageObjects
 
       private
 
-        def url_and_router(url)
-          url = Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes
-
-          [url, router]
+        def normalize_url(url)
+          Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
         end
       end
 
@@ -126,12 +138,9 @@ module AePageObjects
 
       private
 
-        def url_and_router(url)
+        def normalize_url(url)
           require 'action_dispatch/journey'
-          url = ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes
-
-          [url, router]
+          ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
         end
       end
     end
