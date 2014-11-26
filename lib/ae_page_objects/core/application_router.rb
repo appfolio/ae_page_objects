@@ -20,17 +20,13 @@ module AePageObjects
           raise NotImplementedError, "You must implement router"
         end
 
-        def url_and_router(url)
-          [normalize_url(url), router]
-        end
-
         def recognizes?(named_route, url)
-          url, router = url_and_router(url)
+          url = normalize_url(url)
 
-          resolved_named_route = resolve_named_route(router, named_route)
+          resolved_named_route = resolve_named_route(named_route)
 
           http_verbs.each do |method|
-            resolved_route_from_url = resolve_url(router, url, method)
+            resolved_route_from_url = resolve_url(url, method)
 
             # The first resolved route matching named route is returned as
             # Rails' routes are in priority order.
@@ -48,12 +44,12 @@ module AePageObjects
           [:get, :post, :put, :delete, :patch]
         end
 
-        def resolve_named_route(router, named_route)
+        def resolve_named_route(named_route)
           requirements = router.named_routes[named_route].requirements
           ResolvedRoute.new(requirements[:controller], requirements[:action])
         end
 
-        def resolve_url(router, url, method)
+        def resolve_url(url, method)
           recognized_path = router.recognize_path(url, {:method => method})
           ResolvedRoute.new(recognized_path[:controller], recognized_path[:action])
         rescue ActionController::RoutingError, ActionController::MethodNotAllowed
