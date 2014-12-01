@@ -11,19 +11,54 @@ module AePageObjects
             routes.send("#{named_route}_path", *args)
           end
         end
-      end
 
-      class Rails23 < Base
-        def recognizes?(path, url)
-          ["GET", "PUT", "POST", "DELETE", "PATCH"].map(&:downcase).map(&:to_sym).each do |method|
-            route = ActionController::Routing::Routes.named_routes[path]
-            route.recognize(url, {:method => method})
+        def recognizes?(named_route, url)
+          url = normalize_url(url)
 
-            return true if route && route.recognize(url, {:method => method})
+          resolved_named_route = resolve_named_route(named_route)
+
+          [:get, :post, :put, :delete, :patch].each do |method|
+            resolved_route_from_url = resolve_url(url, method)
+
+            # The first resolved route matching named route is returned as
+            # Rails' routes are in priority order.
+            if resolved_named_route == resolved_route_from_url
+              return true
+            end
           end
 
           false
         end
+
+      private
+
+        def routes
+          raise NotImplementedError, "You must implement routes"
+        end
+
+        def normalize_url(url)
+          raise NotImplementedError, "You must implement normalize_url"
+        end
+
+        def router
+          raise NotImplementedError, "You must implement router"
+        end
+
+        def resolve_named_route(named_route)
+          requirements = router.named_routes[named_route].requirements
+          ResolvedRoute.new(requirements[:controller], requirements[:action])
+        end
+
+        def resolve_url(url, method)
+          recognized_path = router.recognize_path(url, {:method => method})
+          ResolvedRoute.new(recognized_path[:controller], recognized_path[:action])
+        rescue ActionController::RoutingError, ActionController::MethodNotAllowed
+        end
+
+        ResolvedRoute = Struct.new(:controller, :action)
+      end
+
+      class Rails23 < Base
 
       private
 
@@ -36,21 +71,17 @@ module AePageObjects
             routes_class.new
           end
         end
+
+        def normalize_url(url)
+          url
+        end
+
+        def router
+          ActionController::Routing::Routes
+        end
       end
 
       class Rails3 < Base
-        def recognizes?(path, url)
-          url, router = url_and_router(url)
-
-          ["GET", "PUT", "POST", "DELETE", "PATCH"].each do |method|
-            router.recognize(request_for(url, method)) do |route, matches, params|
-              return true if route.name.to_s == path.to_s
-            end
-          end
-
-          false
-        end
-
 
       private
 
@@ -66,11 +97,12 @@ module AePageObjects
           end
         end
 
-        def url_and_router(url)
-          url = Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes.set
+        def normalize_url(url)
+          Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
+        end
 
-          [url, router]
+        def router
+          ::Rails.application.routes
         end
 
         def routes
@@ -86,26 +118,21 @@ module AePageObjects
       class Rails32 < Rails3
 
       private
-        def url_and_router(url)
-          url = Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes.router
 
-          [url, router]
+        def normalize_url(url)
+          Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
         end
       end
 
       class Rails4 < Rails32
 
-        private
-        def url_and_router(url)
-          require 'action_dispatch/journey'
-          url = ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-          router = ::Rails.application.routes.router
+      private
 
-          [url, router]
+        def normalize_url(url)
+          require 'action_dispatch/journey'
+          ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
         end
       end
-
     end
 
     def path_recognizes_url?(path, url)
