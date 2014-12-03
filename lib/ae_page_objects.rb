@@ -1,5 +1,3 @@
-require 'capybara'
-
 require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
 
@@ -49,3 +47,5 @@ end
 
 require 'ae_page_objects/window'
 
+require 'capybara'
+require 'capybara/dsl'
