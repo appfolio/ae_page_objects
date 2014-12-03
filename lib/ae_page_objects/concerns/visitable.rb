@@ -24,7 +24,10 @@ module AePageObjects
         def visit(*args)
           raise ArgumentError, "Cannot pass block to visit()" if block_given?
 
-          full_path = site.generate_path(paths.first, *args)
+          options = args.last.is_a?(Hash)? args.last : {}
+          path = options.delete(:via) || paths.first
+
+          full_path = site.generate_path(path, *args)
           raise PathNotResolvable, "#{self.name} not visitable via #{paths.first}(#{args.inspect})" unless full_path
 
           Capybara.current_session.visit(full_path)
