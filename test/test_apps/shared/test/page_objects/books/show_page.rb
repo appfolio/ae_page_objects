@@ -2,6 +2,7 @@ module PageObjects
   module Books
     class ShowPage < AePageObjects::Document
       path :book
+      path :view_book
 
       element :title
 

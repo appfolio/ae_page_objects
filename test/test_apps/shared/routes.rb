@@ -3,6 +3,9 @@ TestApp::Application.routes.draw do
     mount Forum::Engine, :at => "/", :as => "forum_engine"
   end
 
+  get 'book_viewer' => 'books#show', :as => :view_book
+
   resources :books, :authors
+
   root :to => "books#index"
 end
