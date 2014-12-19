@@ -1,19 +1,24 @@
 module AePageObjects
   class ElementProxy
 
-    # Remove all instance methods so even things like class()
-    # get handled by method_missing(). <lifted from activerecord>
-    instance_methods.each do |m|
-      unless m.to_s =~ /^(?:nil\?|send|object_id|to_a|tap)$|^__|^respond_to/
-        undef_method m
-      end
-    end
-
     def initialize(element_class, *args)
       @element_class = element_class
       @args          = args
 
       @loaded_element = nil
+
+      implicit_element_proc = lambda { implicit_element }
+
+      forwarded_methods = element_class.public_instance_methods - self.class.public_instance_methods(false) - self.class.private_instance_methods(false) - [:send] - ["send"] - [:tap] - ["tap"]
+      mod = Module.new do
+        forwarded_methods.each do |name|
+          define_method(name) do |*args, &block|
+            implicit_element_proc.call.send(name, *args, &block)
+          end
+        end
+      end
+
+      extend(mod)
     end
 
     def visible?
@@ -109,22 +114,18 @@ module AePageObjects
     end
 
     def is_a?(type)
-      type == @element_class || type == ElementProxy
+      type == @element_class || type == AePageObjects::ElementProxy
     end
 
     def kind_of?(type)
       is_a?(type)
     end
 
-    def method_missing(name, *args, &block)
-      if name == "class"
-        return @element_class
-      end
-
-      implicit_element.__send__(name, *args, &block)
+    def respond_to?(*args)
+      super || @element_class.allocate.respond_to?(*args)
     end
 
-    def respond_to?(*args)
+    def respond_to_missing?(*args)
       super || @element_class.allocate.respond_to?(*args)
     end
 
