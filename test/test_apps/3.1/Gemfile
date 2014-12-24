@@ -15,6 +15,7 @@ if RUBY_VERSION =~ /\A1\.8/
   gem "nokogiri", "< 1.6.0"
   gem 'rubyzip', '< 1.0.0'
   gem 'mime-types', '< 2'
+  gem 'i18n', '~> 0.6.0'
 end
 
 gem 'forum', :path => "../engines"
