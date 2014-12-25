@@ -49,7 +49,7 @@ module AePageObjects
       end
 
       query = mock
-      query.expects(:default_document_class).times(3).returns(DocumentClass)
+      query.expects(:default_document_class).times(2).returns(DocumentClass)
 
       proxy = DocumentProxy.new(loaded_page, query)
       assert_equal :meow, proxy.hello_kitty

@@ -114,12 +114,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     assert_equal true, result_page.is_a?(PageObjects::Books::NewPage)
 
-    # implicit access attempts to use default document class
-    raised = assert_raises AePageObjects::CastError do
-      result_page.rating
-    end
+    # # implicit access attempts to use default document class
+    # raised = assert_raises AePageObjects::CastError do
+    #   result_page.rating
+    # end
 
-    assert_equal "PageObjects::Authors::NewPage expected, but PageObjects::Books::NewPage loaded", raised.message
+    # assert_equal "PageObjects::Authors::NewPage expected, but PageObjects::Books::NewPage loaded", raised.message
 
     books_new_page = result_page.as_a(PageObjects::Books::NewPage)
 
