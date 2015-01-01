@@ -17,4 +17,8 @@ if RUBY_VERSION =~ /\A1\.8/
   gem 'mime-types', '< 2'
 end
 
+if RUBY_VERSION =~ /\A2\.2/
+  gem 'test-unit'
+end
+
 gem 'forum', :path => "../engines"
