@@ -1,17 +1,22 @@
 module AePageObjects
   class DocumentProxy
 
-    # Remove all instance methods so even things like class()
-    # get handled by method_missing(). <lifted from activerecord>
-    instance_methods.each do |m|
-      unless m.to_s =~ /^(?:nil\?|send|object_id|to_a|tap)$|^__|^respond_to|is_a?|instance_variable_get/
-        undef_method m
-      end
-    end
-
     def initialize(loaded_page, query)
       @loaded_page = loaded_page
       @query = query
+
+      implicit_document_proc = lambda { implicit_document }
+
+      forwarded_methods = @loaded_page.public_methods - self.class.public_instance_methods(false) - self.class.private_instance_methods(false) - [:instance_variable_get] - ["instance_variable_get"]
+      mod = Module.new do
+        forwarded_methods.each do |name|
+          define_method(name) do |*args, &block|
+            implicit_document_proc.call.send(name, *args, &block)
+          end
+        end
+      end
+
+      extend(mod)
     end
 
     def is_a?(document_class)
@@ -34,10 +39,6 @@ module AePageObjects
       else
         raise CastError, "#{@query.default_document_class} expected, but #{@loaded_page.class} loaded"
       end
-    end
-
-    def method_missing(name, *args, &block)
-      implicit_document.__send__(name, *args, &block)
     end
 
     def respond_to_missing?(*args)

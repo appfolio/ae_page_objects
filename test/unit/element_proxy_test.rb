@@ -20,10 +20,11 @@ module AePageObjects
     end
 
     def test_methods_forwarded
-      proxy = new_proxy
-
       element_class.expect_initialize
       element_class.any_instance.expects(:kesslerize_my_love!).returns(:my_deepest_wishes).twice
+
+      proxy = new_proxy
+
       assert_equal :my_deepest_wishes, proxy.kesslerize_my_love!
       assert_equal :my_deepest_wishes, proxy.kesslerize_my_love!
     end
