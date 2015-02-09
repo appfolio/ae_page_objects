@@ -161,7 +161,7 @@ module AePageObjects
           Recognizer::Rails3.new
         elsif ::Rails.version =~ /\A3\.2/
           Recognizer::Rails32.new
-        elsif ::Rails.version =~ /\A4\.[01]/
+        elsif ::Rails.version =~ /\A4\.[012]/
           Recognizer::Rails4.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."
