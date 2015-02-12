@@ -1,3 +1,13 @@
+## Version 1.4.0
+
+### Bugs
+* Fix [63](https://github.com/appfolio/ae_page_objects/issues/63) Routing incorrectly matches documents
+
+### Added
+* [96](https://github.com/appfolio/ae_page_objects/issues/96) AePageObjects::Waiter.wait_until should detect when time is frozen
+* [108](https://github.com/appfolio/ae_page_objects/issues/108) Support Rails 4.1 & 4.2
+* Ruby 2.2 support
+
 ## Version 1.3.0
 
 ### Added
