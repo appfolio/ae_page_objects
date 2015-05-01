@@ -1,6 +1,8 @@
+require 'ae_page_objects/single_window/window'
+
 module AePageObjects
   module MultipleWindows
-    class Window < SingleWindow::Window
+    class Window < AePageObjects::SingleWindow::Window
       attr_reader :handle
 
       def initialize(registry, handle)
@@ -13,12 +15,12 @@ module AePageObjects
       end
 
       def switch_to
-        WindowHandleManager.switch_to(handle)
+        AePageObjects::MultipleWindows::WindowHandleManager.switch_to(handle)
         current_document
       end
 
       def close
-        if WindowHandleManager.close(@handle)
+        if AePageObjects::MultipleWindows::WindowHandleManager.close(@handle)
           self.current_document = nil
           @registry.remove(self)
         end

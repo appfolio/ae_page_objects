@@ -14,16 +14,16 @@ module AePageObjects
       end
 
       def opened
-        WindowHandleManager.all.map do |handle|
+        AePageObjects::MultipleWindows::WindowHandleManager.all.map do |handle|
           window_for(handle)
         end
       end
 
       def current_window
-        current_handle = WindowHandleManager.current
+        current_handle = AePageObjects::MultipleWindows::WindowHandleManager.current
 
         window_for(current_handle) if current_handle
-      rescue WindowNotFound
+      rescue AePageObjects::WindowNotFound
         synchronize_windows
 
         if current_window = @windows[@windows.keys.sort.first]
@@ -41,7 +41,7 @@ module AePageObjects
       def synchronize_windows
         existence_unverified_window_handles = @windows.keys
 
-        WindowHandleManager.all.map do |handle|
+        AePageObjects::MultipleWindows::WindowHandleManager.all.map do |handle|
           # If it exists in the browser, it's been verified
           existence_unverified_window_handles.delete(handle)
         end
@@ -53,7 +53,7 @@ module AePageObjects
       end
 
       def window_for(handle)
-        @windows[handle] ||= Window.new(self, handle)
+        @windows[handle] ||= AePageObjects::MultipleWindows::Window.new(self, handle)
       end
     end
   end

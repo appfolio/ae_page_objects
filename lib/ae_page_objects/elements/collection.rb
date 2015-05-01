@@ -1,5 +1,8 @@
+require 'ae_page_objects/element'
+
+
 module AePageObjects
-  class Collection < Element
+  class Collection < AePageObjects::Element
     include Enumerable
 
     attr_reader :item_locator
@@ -13,7 +16,7 @@ module AePageObjects
       end
     end
 
-    self.item_class = Element
+    self.item_class = AePageObjects::Element
 
     def item_class
       self.class.item_class
@@ -55,7 +58,7 @@ module AePageObjects
     end
 
     def item_at(index)
-      ElementProxy.new(item_class_at(index), self, :name => index, :locator => item_locator_at(index))
+      AePageObjects::ElementProxy.new(item_class_at(index), self, :name => index, :locator => item_locator_at(index))
     end
 
     def item_class_at(index)

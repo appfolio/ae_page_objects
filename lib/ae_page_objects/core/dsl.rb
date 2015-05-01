@@ -1,6 +1,8 @@
+require 'ae_page_objects/util/internal_helpers'
+
 module AePageObjects
   module Dsl
-    include InternalHelpers
+    include AePageObjects::InternalHelpers
 
     def inherited(subclass)
       subclass.class_eval do
@@ -21,7 +23,7 @@ module AePageObjects
       self.element_attributes[name.to_sym] = klass
 
       define_method name do |&block|
-        ElementProxy.new(klass, self, options, &block)
+        AePageObjects::ElementProxy.new(klass, self, options, &block)
       end
 
       klass
@@ -136,7 +138,7 @@ module AePageObjects
 
       # create/get the collection class
       if options[:is]
-        ensure_class_for_param!(:is, options[:is], Collection)
+        ensure_class_for_param!(:is, options[:is], AePageObjects::Collection)
       else
         options[:is] = Collection
       end
@@ -162,7 +164,7 @@ module AePageObjects
       raise ArgumentError, ":is option not supported" if options[:is]
       raise ArgumentError, "Block required." if block.nil?
 
-      klass = Class.new(Form, &block)
+      klass = Class.new(AePageObjects::Form, &block)
 
       options      = options.dup
       options[:is] = klass
@@ -183,7 +185,7 @@ module AePageObjects
   private
 
     def field_klass(options, &block)
-      klass = options.delete(:is) || Element
+      klass = options.delete(:is) || AePageObjects::Element
 
       if block_given?
         Class.new(klass, &block)

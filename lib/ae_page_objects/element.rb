@@ -1,5 +1,7 @@
+require 'ae_page_objects/node'
+
 module AePageObjects
-  class Element < Node
+  class Element < AePageObjects::Node
     attr_reader :parent
 
     def initialize(parent, options_or_locator = {})
@@ -20,7 +22,7 @@ module AePageObjects
       @document ||= begin
         node = self.parent
 
-        until node.is_a?(Document)
+        until node.is_a?(AePageObjects::Document)
           node = node.parent
         end
 
@@ -82,7 +84,7 @@ module AePageObjects
 
     def parse_options(options_or_locator)
       if options_or_locator.is_a?( Hash )
-        HashSymbolizer.new(options_or_locator).symbolize_keys
+        AePageObjects::HashSymbolizer.new(options_or_locator).symbolize_keys
       else
         {:locator => options_or_locator}
       end
@@ -102,7 +104,7 @@ module AePageObjects
 
       parent.node
     rescue Capybara::ElementNotFound => e
-      raise LoadingElementFailed, e.message
+      raise AePageObjects::LoadingElementFailed, e.message
     end
   end
 end

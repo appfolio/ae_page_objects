@@ -1,5 +1,7 @@
+require 'ae_page_objects/core/basic_router'
+
 module AePageObjects
-  class ApplicationRouter < BasicRouter
+  class ApplicationRouter < AePageObjects::BasicRouter
 
     # This whole file is a kludge and probably belongs in an ae_page_objects-rails extension
 

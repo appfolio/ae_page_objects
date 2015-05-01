@@ -1,5 +1,7 @@
+require 'ae_page_objects/element'
+
 module AePageObjects
-  class Form < Element
+  class Form < AePageObjects::Element
 
   private
 

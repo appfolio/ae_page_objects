@@ -19,14 +19,14 @@ module AePageObjects
     def visible?
       wait_until_visible
       true
-    rescue ElementNotVisible
+    rescue AePageObjects::ElementNotVisible
       false
     end
 
     def hidden?
       wait_until_hidden
       true
-    rescue ElementNotHidden
+    rescue AePageObjects::ElementNotHidden
       false
     end
 
@@ -37,14 +37,14 @@ module AePageObjects
     def present?
       wait_until_present
       true
-    rescue ElementNotPresent
+    rescue AePageObjects::ElementNotPresent
       false
     end
 
     def absent?
       wait_until_absent
       true
-    rescue ElementNotAbsent
+    rescue AePageObjects::ElementNotAbsent
       false
     end
 
@@ -54,39 +54,39 @@ module AePageObjects
 
     def presence
       implicit_element
-    rescue LoadingElementFailed
+    rescue AePageObjects::LoadingElementFailed
       nil
     end
 
     def wait_until_visible(timeout = nil)
-      is_visible = Waiter.wait_until(timeout) do
+      is_visible = AePageObjects::Waiter.wait_until(timeout) do
         inst = presence
         ! inst.nil? && inst.visible?
       end
 
       unless is_visible
-        raise ElementNotVisible, "element_class: #{@element_class}, options: #{@options.inspect}"
+        raise AePageObjects::ElementNotVisible, "element_class: #{@element_class}, options: #{@options.inspect}"
       end
     end
 
     def wait_until_hidden(timeout = nil)
-      is_hidden = Waiter.wait_until(timeout) do
+      is_hidden = AePageObjects::Waiter.wait_until(timeout) do
         inst = presence
         inst.nil? || ! inst.visible?
       end
 
       unless is_hidden
-        raise ElementNotHidden, "element_class: #{@element_class}, options: #{@options.inspect}"
+        raise AePageObjects::ElementNotHidden, "element_class: #{@element_class}, options: #{@options.inspect}"
       end
     end
 
     def wait_until_present(timeout = nil)
-      is_present = Waiter.wait_until(timeout) do
+      is_present = AePageObjects::Waiter.wait_until(timeout) do
         ! presence.nil?
       end
 
       unless is_present
-        raise ElementNotPresent, "element_class: #{@element_class}, options: #{@options.inspect}"
+        raise AePageObjects::ElementNotPresent, "element_class: #{@element_class}, options: #{@options.inspect}"
       end
     end
 
@@ -95,12 +95,12 @@ module AePageObjects
     end
 
     def wait_until_absent(timeout = nil)
-      is_absent = Waiter.wait_until(timeout) do
+      is_absent = AePageObjects::Waiter.wait_until(timeout) do
         check_absence
       end
 
       unless is_absent
-        raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
+        raise AePageObjects::ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
       end
     end
 
@@ -109,7 +109,7 @@ module AePageObjects
     end
 
     def is_a?(type)
-      type == @element_class || type == ElementProxy
+      type == @element_class || type == AePageObjects::ElementProxy
     end
 
     def kind_of?(type)
@@ -117,7 +117,7 @@ module AePageObjects
     end
 
     def method_missing(name, *args, &block)
-      if name == "class"
+      if name.to_s == "class"
         return @element_class
       end
 
@@ -142,7 +142,7 @@ module AePageObjects
       load_element
 
       false
-    rescue LoadingElementFailed
+    rescue AePageObjects::LoadingElementFailed
       true
     rescue => e
       if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&

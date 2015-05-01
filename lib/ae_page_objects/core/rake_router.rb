@@ -1,5 +1,7 @@
+require 'ae_page_objects/core/basic_router'
+
 module AePageObjects
-  class RakeRouter < BasicRouter
+  class RakeRouter < AePageObjects::BasicRouter
 
     attr_reader :routes
 
@@ -50,7 +52,7 @@ module AePageObjects
       end
 
       def generate(param_values)
-        param_values = HashSymbolizer.new(param_values).symbolize_keys
+        param_values = AePageObjects::HashSymbolizer.new(param_values).symbolize_keys
         @params.values.inject(self) do |path, param|
           param.substitute(path, param_values)
         end
@@ -142,7 +144,7 @@ module AePageObjects
       end
 
       def generate_path(options)
-        options = HashSymbolizer.new(options).symbolize_keys
+        options = AePageObjects::HashSymbolizer.new(options).symbolize_keys
         @path.generate(options)
       end
     end

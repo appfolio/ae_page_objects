@@ -19,13 +19,13 @@ module AePageObjects
 
       def load_document(document_class)
         document_class.new
-      rescue LoadingPageFailed
+      rescue AePageObjects::LoadingPageFailed
         nil
       end
 
       def condition_matches?(document, condition)
         condition.match?(document)
-      rescue ElementExpectationError, LoadingElementFailed
+      rescue AePageObjects::ElementExpectationError, AePageObjects::LoadingElementFailed
         false
       end
     end

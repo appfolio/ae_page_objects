@@ -39,7 +39,7 @@ module AePageObjects
       else
 
         all_documents = document_classes.all? do |document_class|
-          document_class.is_a?(Class) && document_class < Document
+          document_class.is_a?(Class) && document_class < AePageObjects::Document
         end
 
         if all_documents
@@ -54,7 +54,7 @@ module AePageObjects
           end
         else
           raise ArgumentError, "Expected (Document, document_options)" unless document_classes.size == 2
-          raise ArgumentError, "Expected (Document, document_options)" unless (document_classes.first < Document) && document_classes.last.is_a?(Hash)
+          raise ArgumentError, "Expected (Document, document_options)" unless (document_classes.first < AePageObjects::Document) && document_classes.last.is_a?(Hash)
 
           matches(document_classes.first, document_classes.last, &block)
         end

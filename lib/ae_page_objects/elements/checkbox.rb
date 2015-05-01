@@ -1,5 +1,7 @@
+require 'ae_page_objects/element'
+
 module AePageObjects
-  class Checkbox < Element
+  class Checkbox < AePageObjects::Element
     def check
       node.set true
     end

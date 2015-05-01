@@ -421,7 +421,7 @@ module AePageObjects
         kitty_name_during_ownership_page_object = mock
         first_owner_page_object.expects(:find).with("Milkshake").returns(kitty_name_during_ownership_page_object)
 
-        first_owner.expects(:page_local_context).returns("Milkshake")
+        first_owner.send(:implicit_element).expects(:page_local_context).returns("Milkshake")
 
         verify_field(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
