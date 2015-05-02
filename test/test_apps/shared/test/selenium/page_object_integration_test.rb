@@ -172,6 +172,9 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     book_show_page = PageObjects::Books::ShowPage.visit(:id => book.id, :via => :view_book)
     assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
+
+    book_show_page = PageObjects::Books::ShowPage.visit(:via => "/books/#{book.id}")
+    assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
   end
 
   def test_element_proxy
