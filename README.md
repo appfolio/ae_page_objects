@@ -323,6 +323,21 @@ login_page = LoginPage.visit
 
 `visit` navigates the browser to the page and then returns an instance of the document representing the page.
 
+If a  page can be visited by multiple paths. You can use  the `:via` option to specify which path to use. For example:
+
+```ruby
+class LoginPage < AePageObjects::Document
+  path :new_session
+  path :access_autologin
+end
+
+# navigates to /session/new
+login_page = LoginPage.visit
+
+# navigates to "/autologin/access?token=#{token}"
+login_page = LoginPage.visit(token: token, via: :access_autologin)
+```
+
 
 ### Load Ensuring
 
