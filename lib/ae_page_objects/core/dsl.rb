@@ -20,8 +20,8 @@ module AePageObjects
 
       self.element_attributes[name.to_sym] = klass
 
-      define_method name do |&block|
-        ElementProxy.new(klass, self, options, &block)
+      define_method name do
+        ElementProxy.new(klass, self, options)
       end
 
       klass
