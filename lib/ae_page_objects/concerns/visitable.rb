@@ -24,8 +24,10 @@ module AePageObjects
         def visit(*args)
           raise ArgumentError, "Cannot pass block to visit()" if block_given?
 
-          options = args.last.is_a?(Hash)? args.last : {}
-          path = options.fetch(:via, nil) || paths.first
+          args = args.dup
+          inner_options = args.last.is_a?(::Hash)? args.last : {}
+
+          path = inner_options.delete(:via) || paths.first
 
           full_path = site.generate_path(path, *args)
           raise PathNotResolvable, "#{self.name} not visitable via #{paths.first}(#{args.inspect})" unless full_path
