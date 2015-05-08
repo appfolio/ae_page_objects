@@ -1,17 +1,17 @@
 require 'unit_helper'
 
-module PageObjects
-  class Site < AePageObjects::Site
-  end
-
-  class ShowPage < AePageObjects::Document
-    path :show_book
-    path :view_book
-  end
-end
-
 module AePageObjects
   class VisitableTest < Test::Unit::TestCase
+    module PageObjects
+      class Site < AePageObjects::Site
+      end
+
+      class ShowPage < AePageObjects::Document
+        path :show_book
+        path :view_book
+      end
+    end
+
     def test_visit
       book = stub
       something = stub
