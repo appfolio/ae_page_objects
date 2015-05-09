@@ -22,8 +22,6 @@ module AePageObjects
 
       module VisitMethod
         def visit(*args)
-          raise ArgumentError, "Cannot pass block to visit()" if block_given?
-
           args = args.dup
           inner_options = args.last.is_a?(::Hash)? args.last : {}
 
