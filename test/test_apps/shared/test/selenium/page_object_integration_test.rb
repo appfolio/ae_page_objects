@@ -164,6 +164,19 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
   end
 
+  def test_multiple_paths_visit
+    book = Book.create!(:title => "Brave New World")
+
+    book_show_page = PageObjects::Books::ShowPage.visit(book)
+    assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
+
+    book_show_page = PageObjects::Books::ShowPage.visit(:id => book.id, :via => :view_book)
+    assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
+
+    book_show_page = PageObjects::Books::ShowPage.visit(:via => "/books/#{book.id}")
+    assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
+  end
+
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
 
