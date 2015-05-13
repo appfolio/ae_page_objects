@@ -19,6 +19,7 @@ module AePageObjects
     end
 
     def self.wait_for(*args, &block)
+      warn "[DEPRECATION WARNING]: AePageObjects::Waiter.wait_for is deprecated and will be removed in version 2.0.0. Use AePageObjects::Waiter.wait_until instead."
       wait_until(*args, &block)
     end
 

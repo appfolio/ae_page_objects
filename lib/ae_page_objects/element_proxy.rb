@@ -31,6 +31,7 @@ module AePageObjects
     end
 
     def not_visible?
+      warn "[DEPRECATION WARNING]: AePageObjects::Element#not_visible? is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#hidden? instead."
       hidden?
     end
 
@@ -49,6 +50,7 @@ module AePageObjects
     end
 
     def not_present?
+      warn "[DEPRECATION WARNING]: AePageObjects::Element#not_present? is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#absent? instead."
       absent?
     end
 
@@ -91,6 +93,7 @@ module AePageObjects
     end
 
     def wait_for_presence(timeout = nil)
+      warn "[DEPRECATION WARNING]: AePageObjects::Element#wait_for_presence is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#wait_until_present instead."
       wait_until_present(timeout)
     end
 
@@ -105,6 +108,7 @@ module AePageObjects
     end
 
     def wait_for_absence(timeout = nil)
+      warn "[DEPRECATION WARNING]: AePageObjects::Element#wait_for_absence is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#wait_until_absent instead."
       wait_until_absent(timeout)
     end
 
