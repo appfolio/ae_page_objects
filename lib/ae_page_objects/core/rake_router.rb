@@ -4,6 +4,8 @@ module AePageObjects
     attr_reader :routes
 
     def initialize(rake_routes, mounted_prefix = '')
+      warn "[DEPRECATION WARNING]: AePageObjects::RakeRouter is deprecated and will be removed in version 2.0.0."
+
       @mounted_prefix = mounted_prefix || ""
       @routes = {}
       route_line_regex = /(\w+)(?:\s[A-Z]+)?\s+(\/.*)\(.:format\).*$/
