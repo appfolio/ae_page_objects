@@ -2,6 +2,7 @@
 
 _Page Objects for Capybara_
 
+[![Gem Version](https://badge.fury.io/rb/ae_page_objects.png)](http://badge.fury.io/rb/ae_page_objects)
 [![Build Status](https://api.travis-ci.org/appfolio/ae_page_objects.png?branch=master)](http://travis-ci.org/appfolio/ae_page_objects)
 [![Code Climate](https://codeclimate.com/github/appfolio/ae_page_objects.png)](https://codeclimate.com/github/appfolio/ae_page_objects)
 
