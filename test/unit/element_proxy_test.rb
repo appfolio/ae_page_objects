@@ -273,6 +273,27 @@ module AePageObjects
       assert_includes raised.message, element_class.to_s
     end
 
+    def test_class
+      proxy = new_proxy
+
+      # Faking an expectation that this method should never be called.
+      # Seems it's not possible to use 'expects' on ElementProxy which has
+      # removed all (most) methods in implements 'method_missing'
+      def proxy.implicit_element(*args)
+        address = '0x' + (object_id * 2).to_s(16)
+        inspected_object = "#<AePageObjects::ElementProxy:#{address}>"
+        message = "unexpected invocation: #{inspected_object}." \
+          "implicit_element()\n" \
+          "unsatisfied expectations:\n" \
+          "- expected never, invoked once: #{inspected_object}." \
+          'implicit_element(any_parameters)'
+
+        raise Mocha::ExpectationErrorFactory.build(message, caller)
+      end
+
+      assert_equal element_class, proxy.class
+    end
+
     private
 
     def unstub_wait_for

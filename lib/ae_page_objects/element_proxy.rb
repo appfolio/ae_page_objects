@@ -121,7 +121,7 @@ module AePageObjects
     end
 
     def method_missing(name, *args, &block)
-      if name == "class"
+      if name == :class
         return @element_class
       end
 
