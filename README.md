@@ -86,7 +86,7 @@ def test_authors_are_sorted_by_last_name
 
   authors_page = MyPageObjects::LoginPage.visit.login_as!('admin', 'password')
 
-  authors = author_page.authors
+  authors = authors_page.authors
   assert_equal 2, authors.size
 
   sponge_bob = authors.first
