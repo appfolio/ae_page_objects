@@ -51,7 +51,7 @@ module AePageObjects
       end
 
       def current_url_without_params
-        current_url.sub(/\?.*/, '')
+        current_url.sub(/(\?|\#).*/, '')
       end
     end
 

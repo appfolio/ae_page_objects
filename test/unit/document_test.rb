@@ -18,6 +18,19 @@ module AePageObjects
 
       capybara_stub.session.expects(:current_url).returns("https://somejunk/yo/dude?as-if=homie")
       assert_equal "/yo/dude", kitty_page.current_url_without_params
+
+      capybara_stub.session.expects(:current_url).returns("https://somejunk/yo/dude?as-if=homie#whatever")
+      assert_equal "/yo/dude?as-if=homie#whatever", kitty_page.current_url
+
+      capybara_stub.session.expects(:current_url).returns("https://somejunk/yo/dude?as-if=homie#whatever")
+      assert_equal "/yo/dude", kitty_page.current_url_without_params
+
+      capybara_stub.session.expects(:current_url).returns("https://somejunk/yo/dude#whatever")
+      assert_equal "/yo/dude#whatever", kitty_page.current_url
+
+      capybara_stub.session.expects(:current_url).returns("https://somejunk/yo/dude#whatever")
+      assert_equal "/yo/dude", kitty_page.current_url_without_params
+
     end
 
     def test_find
