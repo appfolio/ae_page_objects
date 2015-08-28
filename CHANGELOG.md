@@ -1,3 +1,16 @@
+## Version 1.4.1
+
+### Bugs
+
+* [128](https://github.com/appfolio/ae_page_objects/pull/128) Fix method_missing for "class" in ElementProxy
+* [116](https://github.com/appfolio/ae_page_objects/pull/116) Do not support block handling in element define method. Fixes [112](https://github.com/appfolio/ae_page_objects/issues/112)
+
+### Added
+
+* [134](https://github.com/appfolio/ae_page_objects/pull/134) Change current_url_without_params to strip anchors as well as parameters
+* [121](https://github.com/appfolio/ae_page_objects/pull/121) Add Deprecation Warnings
+* [103](https://github.com/appfolio/ae_page_objects/pull/103) Enhance visit to support multiple paths
+
 ## Version 1.4.0
 
 ### Bugs
