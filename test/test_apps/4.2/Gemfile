@@ -29,3 +29,5 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
 gem 'forum', :path => "../engines"
+
+gem 'scrutinizer-ocular'
