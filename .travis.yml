@@ -11,6 +11,8 @@ rvm:
   - 2.2.0
   - ruby-head
 
+sudo: false
+
 matrix:
   allow_failures:
     - rvm: ruby-head
