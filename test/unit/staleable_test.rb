@@ -15,7 +15,7 @@ module AePageObjects
       capybara_stub.session.expects(:find).with("whatever")
       kitty_page.find("whatever")
 
-      kitty_page.send(:stale!)
+      kitty_page.stale!
       assert kitty_page.stale?
 
       assert_raises AePageObjects::StalePageObject do
