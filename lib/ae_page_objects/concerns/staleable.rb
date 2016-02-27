@@ -14,8 +14,6 @@ module AePageObjects
         super
       end
 
-      private
-
       def stale!
         @stale = true
       end
