@@ -15,5 +15,6 @@ gem "coffee-rails", "~> 4.0.0"
 gem "turbolinks"
 gem "jbuilder", "~> 1.2"
 gem "forum", :path=>"../engines"
+gem "mime-types", "< 3"
 gem "capybara", "~> 2.1.0"
 

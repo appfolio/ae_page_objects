@@ -14,3 +14,7 @@ if RUBY_VERSION =~ /\A1\.8/
   gem 'rubyzip', '< 1.0.0'
   gem 'mime-types', '< 2'
 end
+
+if RUBY_VERSION =~ /\A1\.9/
+  gem 'mime-types', '< 3'
+end
