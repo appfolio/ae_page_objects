@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module MultipleWindows
-    class CrossWindowLoaderStrategyTest < Test::Unit::TestCase
+    class CrossWindowLoaderStrategyTest < AePageObjectsTestCase
       class DocumentClass
       end
 

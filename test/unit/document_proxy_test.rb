@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class DocumentProxyTest < Test::Unit::TestCase
+  class DocumentProxyTest < AePageObjectsTestCase
 
     class DocumentClass
     end

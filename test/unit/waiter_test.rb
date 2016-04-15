@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class WaiterTest < Test::Unit::TestCase
+  class WaiterTest < AePageObjectsTestCase
     def test_wait_for
       Waiter.expects(:wait_until).yields.returns("stuff")
 

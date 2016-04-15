@@ -1,6 +1,6 @@
 require 'unit_helper'
 
-class AePageObjects::MultipleSitesTest < Test::Unit::TestCase
+class AePageObjects::MultipleSitesTest < AePageObjectsTestCase
 
   module TestApp1
     module PageObjects

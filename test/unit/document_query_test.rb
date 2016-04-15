@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class DocumentQueryTest < Test::Unit::TestCase
+  class DocumentQueryTest < AePageObjectsTestCase
 
     def test_default_document_class
       hello_class = Class.new(AePageObjects::Document)

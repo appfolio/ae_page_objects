@@ -10,12 +10,19 @@ gem "appraisal", "~> 0.5.1"
 
 gem 'ae_page_objects', :path => "../../../.."
 
+gem 'forum', :path => "../engines"
+
 if RUBY_VERSION =~ /\A1\.8/
   gem 'capybara', '~> 1.1.4'
   gem "nokogiri", "< 1.6.0"
   gem 'rubyzip', '< 1.0.0'
   gem 'mime-types', '< 2'
-  gem 'i18n', '~> 0.6.0'
+  gem 'rake', '~> 10.0'
+  gem 'rack-cache', '~> 1.2.0'
+else
+  gem 'rake'
 end
 
-gem 'forum', :path => "../engines"
+if RUBY_VERSION =~ /\A1\.9/
+  gem 'mime-types', '< 3'
+end

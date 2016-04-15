@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class CollectionTest < Test::Unit::TestCase
+  class CollectionTest < AePageObjectsTestCase
 
     def test_css_item_locator
       bullets = Class.new(AePageObjects::Element)

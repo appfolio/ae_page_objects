@@ -12,5 +12,6 @@ gem "ae_page_objects", :path=>"../../../.."
 gem "nokogiri", "< 1.6.0"
 gem "rubyzip", "< 1.0.0"
 gem "mime-types", "< 2"
+gem "rake", "~> 10.0"
 gem "capybara", "~> 1.1.4"
 

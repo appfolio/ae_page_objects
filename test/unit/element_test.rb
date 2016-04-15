@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class ElementTest < Test::Unit::TestCase
+  class ElementTest < AePageObjectsTestCase
     include NodeInterfaceTests
 
     def test_new__no_name_no_locator

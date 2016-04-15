@@ -157,6 +157,10 @@ namespace :test do
     test.libs << 'lib' << 'test'
     test.pattern = 'test/unit/**/*_test.rb'
     test.verbose = true
+
+    if test.respond_to?(:warning=)
+      test.warning = false
+    end
   end
 
   namespace :integration do

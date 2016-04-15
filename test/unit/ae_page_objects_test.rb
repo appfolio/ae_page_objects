@@ -1,6 +1,6 @@
 require 'unit_helper'
 
-class AePageObjectsTest < Test::Unit::TestCase
+class AePageObjectsTest < AePageObjectsTestCase
 
   def test_browser__selenium
     Capybara.expects(:current_session).returns(mock(:driver => Capybara::Selenium::Driver.new(mock)))

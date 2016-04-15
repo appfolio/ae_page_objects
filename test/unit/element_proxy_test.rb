@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class ElementProxyTest < Test::Unit::TestCase
+  class ElementProxyTest < AePageObjectsTestCase
 
     def test_respond_to_can_find_methods_without_element_not_found
       proxy = new_proxy
@@ -156,7 +156,7 @@ module AePageObjects
         end
       end
 
-      assert_includes raised.message, element_class.to_s
+      assert_include raised.message, element_class.to_s
     end
 
     def test_wait_until_hidden
@@ -186,7 +186,7 @@ module AePageObjects
         end
       end
 
-      assert_includes raised.message, element_class.to_s
+      assert_include raised.message, element_class.to_s
     end
 
     def test_wait_until_present
@@ -222,7 +222,7 @@ module AePageObjects
         end
       end
 
-      assert_includes raised.message, element_class.to_s
+      assert_include raised.message, element_class.to_s
     end
 
     def test_wait_until_absent
@@ -255,7 +255,7 @@ module AePageObjects
         end
       end
 
-      assert_includes raised.message, element_class.to_s
+      assert_include raised.message, element_class.to_s
     end
 
     def test_wait_until_absent__unknown
@@ -270,7 +270,7 @@ module AePageObjects
         end
       end
 
-      assert_includes raised.message, element_class.to_s
+      assert_include raised.message, element_class.to_s
     end
 
     def test_class

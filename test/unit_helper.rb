@@ -11,11 +11,18 @@ require "mocha/setup"
 
 Dir[File.join(File.dirname(__FILE__), 'test_helpers', '**', '*.rb')].each {|f| require f}
 
-class Test::Unit::TestCase
+class AePageObjectsTestCase < Test::Unit::TestCase
   include NodeFieldTestHelpers
   include AfCruft
 
-  setup :reset_browser
+  undef_method :default_test if method_defined?(:default_test)
+
+  def setup
+    super
+    reset_browser
+  end
+
+  private
 
   def reset_browser
     AePageObjects.instance_variable_set(:@browser, nil)

@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module MultipleWindows
-    class BrowserTest < Test::Unit::TestCase
+    class BrowserTest < AePageObjectsTestCase
       def test_find_document
         document_class = Class.new(AePageObjects::Document)
 

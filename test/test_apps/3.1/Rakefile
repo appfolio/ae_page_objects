@@ -11,5 +11,9 @@ namespace :test do
     t.libs << "test"
     t.pattern = 'test/selenium/**/*_test.rb'
     t.verbose = true
+
+    if t.respond_to?(:warning=)
+      t.warning = false
+    end
   end
 end
