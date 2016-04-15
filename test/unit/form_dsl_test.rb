@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class FormDslTest < Test::Unit::TestCase
+  class FormDslTest < AePageObjectsTestCase
 
     def test_form
       kitty_class = Class.new(AePageObjects::Document) do

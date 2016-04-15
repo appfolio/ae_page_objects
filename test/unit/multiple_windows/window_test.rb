@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module MultipleWindows
-    class WindowTest < Test::Unit::TestCase
+    class WindowTest < AePageObjectsTestCase
 
       def test_initialize
         registered_window = nil

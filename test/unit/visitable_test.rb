@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class VisitableTest < Test::Unit::TestCase
+  class VisitableTest < AePageObjectsTestCase
     module PageObjects
       class Site < AePageObjects::Site
       end

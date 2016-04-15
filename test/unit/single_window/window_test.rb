@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module SingleWindow
-    class WindowTest < Test::Unit::TestCase
+    class WindowTest < AePageObjectsTestCase
 
       def test_initialize
         window = Window.new

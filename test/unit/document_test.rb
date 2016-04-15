@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class DocumentTest < Test::Unit::TestCase
+  class DocumentTest < AePageObjectsTestCase
     include NodeInterfaceTests
 
     def test_document

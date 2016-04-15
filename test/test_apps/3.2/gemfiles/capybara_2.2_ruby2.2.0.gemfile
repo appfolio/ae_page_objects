@@ -11,5 +11,6 @@ gem "appraisal", "~> 0.5.1"
 gem "ae_page_objects", :path=>"../../../.."
 gem "test-unit"
 gem "forum", :path=>"../engines"
+gem "rake"
 gem "capybara", "~> 2.2.0"
 

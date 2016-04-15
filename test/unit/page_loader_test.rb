@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class DocumentLoaderTest < Test::Unit::TestCase
+  class DocumentLoaderTest < AePageObjectsTestCase
 
     def setup
       super

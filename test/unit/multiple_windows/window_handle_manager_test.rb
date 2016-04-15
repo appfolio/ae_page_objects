@@ -2,7 +2,7 @@ require 'unit_helper'
 
 module AePageObjects
   module MultipleWindows
-    class WindowHandleManagerTest < Test::Unit::TestCase
+    class WindowHandleManagerTest < AePageObjectsTestCase
 
       def test_browser
         capybara_stub.driver.expects(:browser).returns(:browser)

@@ -10,6 +10,7 @@ gem "mocha", "0.13.3", :require=>false
 gem "appraisal", "~> 0.5.1"
 gem "ae_page_objects", :path=>"../../../.."
 gem "forum", :path=>"../engines"
+gem "rake"
 gem "mime-types", "< 3"
 gem "capybara", "~> 1.1.4"
 

@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class SiteTest < Test::Unit::TestCase
+  class SiteTest < AePageObjectsTestCase
 
     def test_from__non_marked_module
       assert_nil Site.from(Object)

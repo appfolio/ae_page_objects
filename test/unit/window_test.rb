@@ -1,7 +1,7 @@
 require 'unit_helper'
 
 module AePageObjects
-  class WindowTest < Test::Unit::TestCase
+  class WindowTest < AePageObjectsTestCase
 
     def test_all
       Window.expects(:warn)
