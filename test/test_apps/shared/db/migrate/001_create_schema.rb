@@ -15,6 +15,7 @@ class CreateSchema < ActiveRecord::Migration
     
     create_table :authors do |t|
       t.integer :lock_version
+      t.string :suffix
       t.string :first_name
       t.string :last_name
       t.timestamps
