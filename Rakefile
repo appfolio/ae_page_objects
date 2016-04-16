@@ -32,6 +32,20 @@ class SeleniumRunner
     remove_files("test/test_apps/**/gemfiles/*.lock")
   end
 
+  def appraise
+    Dir.glob("test/test_apps/*/Appraisals").each do |appraisal_file|
+      test_app_directory = File.dirname(appraisal_file)
+
+      begin
+        Command.new("cd #{test_app_directory} && bundle check || bundle install").run
+        Command.new("cd #{test_app_directory} && rake appraisal:gemfiles").run
+      rescue Exception => e
+        puts e.class
+        puts e.message
+      end
+    end
+  end
+
   def install_all
     @matrix.values.each do |test_configs|
       test_configs.each do |test_config|
@@ -65,23 +79,23 @@ class SeleniumRunner
     end
   end
 
-private
+  private
 
- def install_config(test_config)
-   appraisal = Appraisal::Appraisal.new("name", test_config.gemfile)
+   def install_config(test_config)
+     appraisal = Appraisal::Appraisal.new("name", test_config.gemfile)
 
-   def appraisal.gemfile_path
-     @gemfile_path
+     def appraisal.gemfile_path
+       @gemfile_path
+     end
+
+     appraisal.instance_variable_set(:@gemfile_path, test_config.gemfile)
+
+     if @options[:dry]
+       puts "Installing: #{test_config.gemfile}"
+     else
+       appraisal.install
+     end
    end
-
-   appraisal.instance_variable_set(:@gemfile_path, test_config.gemfile)
-
-   if @options[:dry]
-     puts "Installing: #{test_config.gemfile}"
-   else
-     appraisal.install
-   end
- end
 
   # Appraisal::Command almost has what I need: a way to run things without Bundler/Ruby
   # Env variables. The subclassing is to override the initializer to not modify the command.
@@ -179,12 +193,16 @@ namespace :test do
         else
           selenium_runner.install_all
         end
-
       end
 
       desc "Remove gemfiles in test apps"
       task :clean do
         selenium_runner.clean
+      end
+
+      desc "Create gemfiles in all test apps for current version of Ruby"
+      task :appraise do
+        selenium_runner.appraise
       end
     end
 
@@ -214,7 +232,7 @@ namespace :test do
   end
 
   namespace :ci do
-    desc "Remove gemfiles in test apps and all lock files"
+    desc "Remove all gem lock files"
     task :clean => ["test:integration:selenium:clean"] do
       remove_files("test/test_apps/**/Gemfile.lock")
       remove_files("gemfiles/*.lock")
