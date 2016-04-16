@@ -5,7 +5,6 @@ digraph classes {
 	#<Class_0x007fb6b9d555f8> [label=""]
 	AePageObjects__ApplicationRouter [label="AePageObjects::ApplicationRouter"]
 	AePageObjects__ApplicationRouter__Recognizer__Base [label="AePageObjects::ApplicationRouter::Recognizer::Base"]
-	AePageObjects__ApplicationRouter__Recognizer__Rails23 [label="AePageObjects::ApplicationRouter::Recognizer::Rails23"]
 	AePageObjects__ApplicationRouter__Recognizer__Rails3 [label="AePageObjects::ApplicationRouter::Recognizer::Rails3"]
 	AePageObjects__ApplicationRouter__Recognizer__Rails32 [label="AePageObjects::ApplicationRouter::Recognizer::Rails32"]
 	AePageObjects__ApplicationRouter__Recognizer__Rails4 [label="AePageObjects::ApplicationRouter::Recognizer::Rails4"]
@@ -61,7 +60,6 @@ digraph classes {
 	#<Class_0x007fb6b9d555f8> -> Struct
 	AePageObjects__ApplicationRouter -> AePageObjects__BasicRouter
 	AePageObjects__ApplicationRouter__Recognizer__Base -> Object
-	AePageObjects__ApplicationRouter__Recognizer__Rails23 -> AePageObjects__ApplicationRouter__Recognizer__Base
 	AePageObjects__ApplicationRouter__Recognizer__Rails3 -> AePageObjects__ApplicationRouter__Recognizer__Base
 	AePageObjects__ApplicationRouter__Recognizer__Rails32 -> AePageObjects__ApplicationRouter__Recognizer__Rails3
 	AePageObjects__ApplicationRouter__Recognizer__Rails4 -> AePageObjects__ApplicationRouter__Recognizer__Rails32

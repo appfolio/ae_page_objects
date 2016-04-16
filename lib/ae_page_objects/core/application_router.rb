@@ -58,29 +58,6 @@ module AePageObjects
         ResolvedRoute = Struct.new(:controller, :action)
       end
 
-      class Rails23 < Base
-
-      private
-
-        def routes
-          @routes ||= begin
-            routes_class = Class.new do
-              include ActionController::UrlWriter
-            end
-            ActionController::Routing::Routes.install_helpers(routes_class)
-            routes_class.new
-          end
-        end
-
-        def normalize_url(url)
-          url
-        end
-
-        def router
-          ActionController::Routing::Routes
-        end
-      end
-
       class Rails3 < Base
 
       private
@@ -155,9 +132,7 @@ module AePageObjects
 
     def recognizer
       @recognizer ||= begin
-        if ::Rails.version =~ /\A2\.3/
-          Recognizer::Rails23.new
-        elsif ::Rails.version =~ /\A3\.[01]/
+        if ::Rails.version =~ /\A3\.[01]/
           Recognizer::Rails3.new
         elsif ::Rails.version =~ /\A3\.2/
           Recognizer::Rails32.new

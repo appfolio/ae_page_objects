@@ -1,1 +1,0 @@
-../../../shared/controllers/application_controller.rb
