@@ -21,11 +21,6 @@ gemfile:
 
 bundler_args: ''
 
-# for the rails 2.3 test app.
-before_install:
-  - ruby -e "exit(RUBY_VERSION.to_f >= 2.0)" || gem update --system 1.8.25
-  - gem --version
-
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -45,7 +40,6 @@ script: "bundle exec rake test:ci"
 #
 ## For all the integration tests
 env:
-  - RAILS_VERSION=2.3
   - RAILS_VERSION=3.0
   - RAILS_VERSION=3.1
   - RAILS_VERSION=3.2
@@ -57,28 +51,20 @@ env:
 matrix:
   exclude:
     - rvm: 2.0.0
-      env: RAILS_VERSION=2.3
-    - rvm: 2.0.0
       env: RAILS_VERSION=3.0
     - rvm: 2.0.0
       env: RAILS_VERSION=3.1
 
     - rvm: 2.1.2
-      env: RAILS_VERSION=2.3
-    - rvm: 2.1.2
       env: RAILS_VERSION=3.0
     - rvm: 2.1.2
       env: RAILS_VERSION=3.1
 
     - rvm: 2.2.0
-      env: RAILS_VERSION=2.3
-    - rvm: 2.2.0
       env: RAILS_VERSION=3.0
     - rvm: 2.2.0
       env: RAILS_VERSION=3.1
 
-    - rvm: ruby-head
-      env: RAILS_VERSION=2.3
     - rvm: ruby-head
       env: RAILS_VERSION=3.0
     - rvm: ruby-head
