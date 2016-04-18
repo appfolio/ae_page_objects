@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
   s.version                   = AePageObjects::VERSION
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.required_ruby_version     = '>= 1.9.3'
   s.authors                   = ["Donnie Tognazzini"]
   s.description               = "Capybara Page Objects pattern"
   s.email                     = ["engineering@appfolio.com"]
