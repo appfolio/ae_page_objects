@@ -121,7 +121,30 @@ module AePageObjects
       assert_nil kitty2.full_name
     end
 
-  private
+    def test_stale
+      pet_class   = Class.new(AePageObjects::Document)
+      kitty_class = Class.new(AePageObjects::Element)
+
+      stub_current_window
+
+      pet = pet_class.new
+
+      kitty_capybara_node = mock
+      capybara_stub.session.expects(:find).with("#tiger").returns(kitty_capybara_node)
+      kitty_element = kitty_class.new(pet, :locator => '#tiger')
+
+      assert_equal kitty_capybara_node, kitty_element.node
+      assert_false kitty_element.stale?
+
+      kitty_element.stale!
+      assert kitty_element.stale?
+
+      assert_raises AePageObjects::StalePageObject do
+        kitty_element.find("whatever")
+      end
+    end
+
+    private
 
     def node_for_node_tests
       page_klass    = Class.new(AePageObjects::Document)
