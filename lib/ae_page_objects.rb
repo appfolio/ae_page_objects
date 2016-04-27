@@ -66,6 +66,24 @@ module AePageObjects
       end
     end
   end
+
+  def self.wait_until(seconds_to_wait = nil, error_message = nil)
+    seconds_to_wait ||= Capybara.default_wait_time
+    start_time      = Time.now
+
+    until result = yield
+      delay = seconds_to_wait - (Time.now - start_time)
+
+      if delay <= 0
+        raise WaitTimeoutError, error_message || "Timed out waiting for condition"
+      end
+
+      sleep(0.05)
+      raise FrozenInTime, "Time appears to be frozen" if Time.now == start_time
+    end
+
+    result
+  end
 end
 
 require 'ae_page_objects/core_ext/module'
