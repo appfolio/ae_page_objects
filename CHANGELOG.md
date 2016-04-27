@@ -1,3 +1,10 @@
+## Version 1.5.0
+
+### Added
+
+* [99](https://github.com/appfolio/ae_page_objects/issues/99) Need a replacement for Capybara.wait_until
+* [136](https://github.com/appfolio/ae_page_objects/issues/136) stale! should be public
+
 ## Version 1.4.1
 
 ### Bugs
