@@ -9,7 +9,6 @@ module AePageObjects
   autoload :Site,                 'ae_page_objects/core/site'
   autoload :BasicRouter,          'ae_page_objects/core/basic_router'
   autoload :ApplicationRouter,    'ae_page_objects/core/application_router'
-  autoload :RakeRouter,           'ae_page_objects/core/rake_router'
   autoload :Dsl,                  'ae_page_objects/core/dsl'
 
   autoload :Singleton,            'ae_page_objects/util/singleton'
