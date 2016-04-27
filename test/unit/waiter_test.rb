@@ -113,7 +113,7 @@ module AePageObjects
 
     def test_wait_until_bang__set_timeout
       my_obj = Object.new
-      Waiter.expects(:wait_until).with(20).returns(my_obj)
+      AePageObjects.expects(:wait_until).with(20).returns(my_obj)
 
       result = Waiter.wait_until!(20) {}
 

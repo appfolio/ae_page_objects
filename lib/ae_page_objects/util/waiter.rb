@@ -1,21 +1,9 @@
 module AePageObjects
   module Waiter
     def self.wait_until(timeout = nil, &block)
-      seconds_to_wait = timeout || Capybara.default_wait_time
-      start_time      = Time.now
-
-      until result = Capybara.using_wait_time(0, &block)
-        delay = seconds_to_wait - (Time.now - start_time)
-
-        if delay <= 0
-          return false
-        end
-
-        sleep(0.05)
-        raise FrozenInTime, "Time appears to be frozen" if Time.now == start_time
-      end
-
-      result
+      wait_until!(timeout, &block)
+    rescue WaitTimeoutError
+      false
     end
 
     def self.wait_for(*args, &block)
@@ -23,16 +11,10 @@ module AePageObjects
       wait_until(*args, &block)
     end
 
-    def self.wait_until!(timeout = nil)
-      result = wait_until(timeout) do
-        yield
+    def self.wait_until!(timeout = nil, &block)
+      AePageObjects.wait_until(timeout) do
+        Capybara.using_wait_time(0, &block)
       end
-
-      unless result
-        raise WaitTimeoutError, "Timed out waiting for condition"
-      end
-
-      result
     end
   end
 end
