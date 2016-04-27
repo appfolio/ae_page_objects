@@ -9,7 +9,9 @@ module AePageObjects
     private
 
       def ensure_loaded!
-        unless Waiter.wait_until { self.class.can_load_from_current_url? }
+        begin
+          AePageObjects.wait_until { self.class.can_load_from_current_url? }
+        rescue WaitTimeoutError
           raise LoadingPageFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
         end
 
