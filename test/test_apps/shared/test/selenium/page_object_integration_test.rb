@@ -183,36 +183,36 @@ class PageObjectIntegrationTest < Selenium::TestCase
     Capybara.using_wait_time(1) do
       assert author.rating.star.present?
       assert author.rating.star.visible?
-      assert_false author.rating.star.not_present?
-      assert_false author.rating.star.not_visible?
+      assert_false author.rating.star.absent?
+      assert_false author.rating.star.hidden?
     end
 
     assert_nothing_raised do
-      author.rating.star.wait_for_presence(0)
+      author.rating.star.wait_until_present(0)
     end
 
     assert_raises AePageObjects::ElementNotAbsent do
-      author.rating.star.wait_for_absence(1)
+      author.rating.star.wait_until_absent(1)
     end
 
     Capybara.using_wait_time(1) do
       author.rating.hide_star
       assert author.rating.star.present?
       assert_false author.rating.star.visible?
-      assert_false author.rating.star.not_present?
-      assert author.rating.star.not_visible?
+      assert_false author.rating.star.absent?
+      assert author.rating.star.hidden?
 
       author.rating.show_star
       assert author.rating.star.present?
       assert author.rating.star.visible?
-      assert_false author.rating.star.not_present?
-      assert_false author.rating.star.not_visible?
+      assert_false author.rating.star.absent?
+      assert_false author.rating.star.hidden?
 
       author.rating.remove_star
       assert_false author.rating.star.present?
       assert_false author.rating.star.visible?
-      assert author.rating.star.not_present?
-      assert author.rating.star.not_visible?
+      assert author.rating.star.absent?
+      assert author.rating.star.hidden?
     end
   end
 
@@ -227,23 +227,23 @@ class PageObjectIntegrationTest < Selenium::TestCase
     author.rating.remove_star
 
     # use new object
-    assert author.rating.star.not_present?
+    assert author.rating.star.absent?
 
     # use existing object
-    assert star.not_present?
+    assert star.absent?
   end
 
   def test_element_proxy__not_present
     author = PageObjects::Authors::NewPage.visit
     assert_false author.missing.present?
-    assert author.missing.not_present?
+    assert author.missing.absent?
 
     assert_nothing_raised do
-      author.missing.wait_for_absence(0)
+      author.missing.wait_until_absent(0)
     end
 
     assert_raises AePageObjects::ElementNotPresent do
-      author.missing.wait_for_presence(2)
+      author.missing.wait_until_present(2)
     end
   end
 
