@@ -17,10 +17,6 @@ module AePageObjects
   autoload :Inflector,            'ae_page_objects/util/inflector'
   autoload :Waiter,               'ae_page_objects/util/waiter'
 
-  module Concerns
-    autoload :Visitable,        'ae_page_objects/concerns/visitable'
-  end
-
   module MultipleWindows
     autoload :Browser,                   'ae_page_objects/multiple_windows/browser'
     autoload :Window,                    'ae_page_objects/multiple_windows/window'

@@ -30,7 +30,6 @@ module AePageObjects
 
       capybara_stub.session.expects(:current_url).returns("https://somejunk/yo/dude#whatever")
       assert_equal "/yo/dude", kitty_page.current_url_without_params
-
     end
 
     def test_find
@@ -83,6 +82,39 @@ module AePageObjects
       assert_raises AePageObjects::StalePageObject do
         kitty_page.find("whatever")
       end
+    end
+
+    def test_visit
+      show_page = Class.new(AePageObjects::Document) do
+        path :show_book
+        path :view_book
+      end
+
+      site = mock
+      show_page.stubs(:site).returns(site)
+
+      book           = stub
+      something      = stub
+      something_else = stub
+      full_path      = stub
+
+      show_page.stubs(:new)
+      capybara_stub.session.stubs(:visit).with(full_path).returns(stub)
+
+      site.expects(:generate_path).with(:show_book, book, :format => :json).returns(full_path)
+      show_page.visit(book, :format => :json)
+
+      site.expects(:generate_path).with(:view_book, book, :format => :json).returns(full_path)
+      show_page.visit(book, :format => :json, :via => :view_book)
+
+      site.expects(:generate_path).with(:show_book, something, something_else).returns(full_path)
+      show_page.visit(something, something_else)
+
+      site.expects(:generate_path).with('something', something, something_else, {}).returns(full_path)
+      show_page.visit(something, something_else, :via => 'something')
+
+      site.expects(:generate_path).with(:show_book, something, something_else, {:param => 'param1'}).returns(full_path)
+      show_page.visit(something, something_else, :param => 'param1')
     end
 
     private
