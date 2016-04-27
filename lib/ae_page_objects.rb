@@ -83,6 +83,12 @@ module AePageObjects
 
     result
   end
+
+  def self.poll_until(timeout = nil, error_message = nil, &block)
+    wait_until(timeout, error_message) do
+      Capybara.using_wait_time(0, &block)
+    end
+  end
 end
 
 require 'ae_page_objects/core_ext/module'
