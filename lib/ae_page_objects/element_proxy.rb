@@ -1,6 +1,7 @@
+require 'ae_page_objects/util/page_polling'
+
 module AePageObjects
   class ElementProxy
-
     # Remove all instance methods so even things like class()
     # get handled by method_missing(). <lifted from activerecord>
     instance_methods.each do |m|
@@ -8,6 +9,8 @@ module AePageObjects
         undef_method m
       end
     end
+
+    include AePageObjects::PagePolling
 
     def initialize(element_class, *args)
       @element_class = element_class
@@ -61,7 +64,7 @@ module AePageObjects
     end
 
     def wait_until_visible(timeout = nil)
-      AePageObjects.poll_until(timeout) do
+      poll_until(timeout) do
         inst = presence
         !inst.nil? && inst.visible?
       end
@@ -71,7 +74,7 @@ module AePageObjects
     end
 
     def wait_until_hidden(timeout = nil)
-      AePageObjects.poll_until(timeout) do
+      poll_until(timeout) do
         inst = presence
         inst.nil? || !inst.visible?
       end
@@ -81,7 +84,7 @@ module AePageObjects
     end
 
     def wait_until_present(timeout = nil)
-      AePageObjects.poll_until(timeout) do
+      poll_until(timeout) do
         !presence.nil?
       end
 
@@ -95,7 +98,7 @@ module AePageObjects
     end
 
     def wait_until_absent(timeout = nil)
-      AePageObjects.poll_until(timeout) do
+      poll_until(timeout) do
         check_absence
       end
 

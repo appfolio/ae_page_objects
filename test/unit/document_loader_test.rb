@@ -30,7 +30,7 @@ module AePageObjects
 
       loader = DocumentLoader.new(query, strategy)
 
-      AePageObjects.expects(:poll_until).yields
+      loader.expects(:poll_until).yields
 
       strategy.expects(:load_document_with_condition).with(query.conditions.first).returns(nil)
       strategy.expects(:load_document_with_condition).with(query.conditions.last).returns(:page)
@@ -74,7 +74,7 @@ module AePageObjects
 
       loader = DocumentLoader.new(query, strategy)
 
-      AePageObjects.expects(:poll_until).multiple_yields(nil, nil)
+      loader.expects(:poll_until).multiple_yields(nil, nil)
 
       sequence = sequence('sequence')
       strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.first).returns(nil)

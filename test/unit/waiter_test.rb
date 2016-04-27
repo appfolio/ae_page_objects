@@ -3,7 +3,7 @@ require 'unit_helper'
 module AePageObjects
   class WaiterTest < AePageObjectsTestCase
     def test_wait_for
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_for is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_for is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Waiter.expects(:wait_until_return_false).yields.returns("stuff")
 
@@ -14,7 +14,7 @@ module AePageObjects
     end
 
     def test_wait_until
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Capybara.expects(:default_wait_time).returns(5)
 
@@ -32,7 +32,7 @@ module AePageObjects
     end
 
     def test_wait_until__timeout
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Capybara.stubs(:default_wait_time).returns(1)
 
@@ -44,7 +44,7 @@ module AePageObjects
     end
 
     def test_wait_until__frozen_time
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Capybara.stubs(:default_wait_time).returns(5)
       Time.stubs(:now).returns(1)
@@ -61,7 +61,7 @@ module AePageObjects
     end
 
     def test_wait_until__set_wait_time
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Capybara.expects(:default_wait_time).never
 
@@ -82,7 +82,7 @@ module AePageObjects
     end
 
     def test_wait_until__set_wait_time_time_out
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Capybara.expects(:default_wait_time).never
 
@@ -102,7 +102,7 @@ module AePageObjects
     end
 
     def test_wait_until_bang
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until! is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until! is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Capybara.stubs(:default_wait_time).returns(1)
 
@@ -116,7 +116,7 @@ module AePageObjects
     end
 
     def test_wait_until_bang__exception
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until! is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until! is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       Capybara.stubs(:default_wait_time).returns(1)
 
@@ -128,10 +128,10 @@ module AePageObjects
     end
 
     def test_wait_until_bang__set_timeout
-      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until! is deprecated and will be removed in version 2.0.0. Use AePageObjects.poll_until instead.")
+      Waiter.expects(:warn).with("[DEPRECATION WARNING]: AePageObjects::Waiter.wait_until! is deprecated and will be removed in version 2.0.0. Use AePageObjects.wait_until instead.")
 
       my_obj = Object.new
-      AePageObjects.expects(:poll_until).with(20).returns(my_obj)
+      AePageObjects.expects(:wait_until).with(20).returns(my_obj)
 
       result = Waiter.wait_until!(20) {}
 

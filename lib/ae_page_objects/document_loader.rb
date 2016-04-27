@@ -1,5 +1,9 @@
+require 'ae_page_objects/util/page_polling'
+
 module AePageObjects
   class DocumentLoader
+    include AePageObjects::PagePolling
+
     def initialize(query, strategy)
       @query    = query
       @strategy = strategy
@@ -7,7 +11,7 @@ module AePageObjects
 
     def load
       begin
-        AePageObjects.poll_until do
+        poll_until do
           @query.conditions.each do |document_condition|
             if document = @strategy.load_document_with_condition(document_condition)
               return document
