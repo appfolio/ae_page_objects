@@ -1,3 +1,10 @@
+## Version 2.0.0
+
+### Changed
+
+* [82](https://github.com/appfolio/ae_page_objects/pull/82) Removed Ruby 1.8.7 support
+* [119](https://github.com/appfolio/ae_page_objects/issues/119) Remove Support for Rails 2.3
+
 ## Version 1.5.0
 
 ### Added
