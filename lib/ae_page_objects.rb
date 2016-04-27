@@ -18,8 +18,6 @@ module AePageObjects
   autoload :Waiter,               'ae_page_objects/util/waiter'
 
   module Concerns
-    autoload :LoadEnsuring,     'ae_page_objects/concerns/load_ensuring'
-    autoload :Staleable,        'ae_page_objects/concerns/staleable'
     autoload :Visitable,        'ae_page_objects/concerns/visitable'
   end
 
