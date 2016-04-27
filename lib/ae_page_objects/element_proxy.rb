@@ -1,6 +1,7 @@
+require 'ae_page_objects/util/page_polling'
+
 module AePageObjects
   class ElementProxy
-
     # Remove all instance methods so even things like class()
     # get handled by method_missing(). <lifted from activerecord>
     instance_methods.each do |m|
@@ -8,6 +9,8 @@ module AePageObjects
         undef_method m
       end
     end
+
+    include AePageObjects::PagePolling
 
     def initialize(element_class, *args)
       @element_class = element_class
@@ -61,35 +64,32 @@ module AePageObjects
     end
 
     def wait_until_visible(timeout = nil)
-      is_visible = Waiter.wait_until(timeout) do
+      poll_until(timeout) do
         inst = presence
-        ! inst.nil? && inst.visible?
+        !inst.nil? && inst.visible?
       end
 
-      unless is_visible
-        raise ElementNotVisible, "element_class: #{@element_class}, options: #{@options.inspect}"
-      end
+    rescue AePageObjects::WaitTimeoutError
+      raise ElementNotVisible, "element_class: #{@element_class}, options: #{@options.inspect}"
     end
 
     def wait_until_hidden(timeout = nil)
-      is_hidden = Waiter.wait_until(timeout) do
+      poll_until(timeout) do
         inst = presence
-        inst.nil? || ! inst.visible?
+        inst.nil? || !inst.visible?
       end
 
-      unless is_hidden
-        raise ElementNotHidden, "element_class: #{@element_class}, options: #{@options.inspect}"
-      end
+    rescue AePageObjects::WaitTimeoutError
+      raise ElementNotHidden, "element_class: #{@element_class}, options: #{@options.inspect}"
     end
 
     def wait_until_present(timeout = nil)
-      is_present = Waiter.wait_until(timeout) do
-        ! presence.nil?
+      poll_until(timeout) do
+        !presence.nil?
       end
 
-      unless is_present
-        raise ElementNotPresent, "element_class: #{@element_class}, options: #{@options.inspect}"
-      end
+    rescue AePageObjects::WaitTimeoutError
+      raise ElementNotPresent, "element_class: #{@element_class}, options: #{@options.inspect}"
     end
 
     def wait_for_presence(timeout = nil)
@@ -98,13 +98,12 @@ module AePageObjects
     end
 
     def wait_until_absent(timeout = nil)
-      is_absent = Waiter.wait_until(timeout) do
+      poll_until(timeout) do
         check_absence
       end
 
-      unless is_absent
-        raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
-      end
+    rescue AePageObjects::WaitTimeoutError
+      raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
     end
 
     def wait_for_absence(timeout = nil)

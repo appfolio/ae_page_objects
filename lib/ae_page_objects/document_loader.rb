@@ -1,19 +1,26 @@
+require 'ae_page_objects/util/page_polling'
+
 module AePageObjects
   class DocumentLoader
+    include AePageObjects::PagePolling
+
     def initialize(query, strategy)
       @query    = query
       @strategy = strategy
     end
 
     def load
-      Waiter.wait_until do
-        @query.conditions.each do |document_condition|
-          if document = @strategy.load_document_with_condition(document_condition)
-            return document
+      begin
+        poll_until do
+          @query.conditions.each do |document_condition|
+            if document = @strategy.load_document_with_condition(document_condition)
+              return document
+            end
           end
-        end
 
-        nil
+          nil
+        end
+      rescue AePageObjects::WaitTimeoutError
       end
 
       raise DocumentLoadError, @strategy.document_not_loaded_error_message(@query)
