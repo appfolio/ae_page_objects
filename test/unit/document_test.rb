@@ -68,7 +68,24 @@ module AePageObjects
       assert_equal element_error.message, raised.message
     end
 
-  private
+    def test_stale
+      kitty_class = Class.new(AePageObjects::Document)
+
+      stub_current_window
+
+      kitty_page = kitty_class.new
+      assert_equal capybara_stub.session, kitty_page.node
+      assert_false kitty_page.stale?
+
+      kitty_page.stale!
+      assert kitty_page.stale?
+
+      assert_raises AePageObjects::StalePageObject do
+        kitty_page.find("whatever")
+      end
+    end
+
+    private
 
     def node_for_node_tests
       page_klass = Class.new(AePageObjects::Document)
