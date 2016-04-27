@@ -11,22 +11,21 @@ module AePageObjects
         end
       end
 
-      private
+      def visit(*args)
+        args = args.dup
+        inner_options = args.last.is_a?(::Hash)? args.last : {}
 
-      module VisitMethod
-        def visit(*args)
-          args = args.dup
-          inner_options = args.last.is_a?(::Hash)? args.last : {}
+        path = inner_options.delete(:via) || paths.first
 
-          path = inner_options.delete(:via) || paths.first
+        full_path = site.generate_path(path, *args)
+        raise PathNotResolvable, "#{self.name} not visitable via #{paths.first}(#{args.inspect})" unless full_path
 
-          full_path = site.generate_path(path, *args)
-          raise PathNotResolvable, "#{self.name} not visitable via #{paths.first}(#{args.inspect})" unless full_path
+        Capybara.current_session.visit(full_path)
 
-          Capybara.current_session.visit(full_path)
-          new
-        end
+        new
       end
+
+      private
 
       def paths
         @paths ||= []
@@ -36,8 +35,6 @@ module AePageObjects
         raise ArgumentError, "path must be a symbol or string" if ! path_method.is_a?(Symbol) && ! path_method.is_a?(String)
 
         paths << path_method
-
-        extend VisitMethod
       end
 
       def site
