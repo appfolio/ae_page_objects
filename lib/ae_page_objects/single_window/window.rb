@@ -8,7 +8,7 @@ module AePageObjects
       end
 
       def current_document=(document)
-        @current_document.send(:stale!) if @current_document
+        @current_document.stale! if @current_document
         @current_document = document
       end
 
