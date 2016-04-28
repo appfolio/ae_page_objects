@@ -65,6 +65,7 @@ module AePageObjects
       element_class.any_instance.expects(:visible?).returns(false)
       assert proxy.hidden?
 
+      element_class.expect_initialize
       element_class.any_instance.expects(:visible?).returns(true)
       assert ! proxy.hidden?
     end
