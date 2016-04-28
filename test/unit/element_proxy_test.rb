@@ -29,7 +29,7 @@ module AePageObjects
     def test_methods_forwarded
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:kesslerize_my_love!).returns(:my_deepest_wishes).twice
       assert_equal :my_deepest_wishes, proxy.kesslerize_my_love!
       assert_equal :my_deepest_wishes, proxy.kesslerize_my_love!
@@ -38,7 +38,7 @@ module AePageObjects
     def test_visible
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(true)
       assert proxy.visible?
     end
@@ -46,7 +46,7 @@ module AePageObjects
     def test_visible__false
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(false)
       assert_false proxy.visible?
     end
@@ -61,11 +61,11 @@ module AePageObjects
     def test_hidden
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(false)
       assert proxy.hidden?
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(true)
       assert ! proxy.hidden?
     end
@@ -80,7 +80,7 @@ module AePageObjects
     def test_present
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       assert proxy.present?
     end
 
@@ -94,7 +94,7 @@ module AePageObjects
     def test_absent
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
 
       assert_false proxy.absent?
     end
@@ -109,7 +109,7 @@ module AePageObjects
     def test_presence
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       assert_is_element proxy.presence
     end
 
@@ -123,7 +123,7 @@ module AePageObjects
     def test_wait_until_visible
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(true)
 
       proxy.wait_until_visible
@@ -132,7 +132,7 @@ module AePageObjects
     def test_wait_until_visible__timeout
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(false)
 
       raised = assert_raise ElementNotVisible do
@@ -145,7 +145,7 @@ module AePageObjects
     def test_wait_until_hidden
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(false)
 
       proxy.wait_until_hidden
@@ -154,7 +154,7 @@ module AePageObjects
     def test_wait_until_hidden__timeout
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(true)
 
       raised = assert_raise ElementNotHidden do
@@ -167,7 +167,7 @@ module AePageObjects
     def test_wait_until_present
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
 
       proxy.wait_until_present
     end
@@ -175,7 +175,7 @@ module AePageObjects
     def test_wait_until_present__with_timeout
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
 
       proxy.wait_until_present(20)
     end
@@ -211,7 +211,7 @@ module AePageObjects
     def test_wait_until_absent__present
       proxy = new_proxy
 
-      element_class.expect_initialize
+      element_class.expect_new
 
       raised = assert_raise ElementNotAbsent do
         proxy.wait_until_absent
@@ -258,7 +258,7 @@ module AePageObjects
 
     def element_class
       @element_class ||= Class.new(Element) do
-        def self.expect_initialize
+        def self.expect_new
           expects(:new).with(1, 2).returns(self.allocate)
         end
       end
