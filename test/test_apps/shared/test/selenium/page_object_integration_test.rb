@@ -1,6 +1,7 @@
 require 'selenium_helper'
 require 'set'
 
+
 class PageObjectIntegrationTest < Selenium::TestCase
   def test_site_setup
     assert PageObjects < AePageObjects::Universe
