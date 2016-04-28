@@ -6,6 +6,9 @@
     $('.show_star').on('click', function() {
       $('.star').show();
     });
+    $('.add_star').on('click', function() {
+      $('#rating').append('<span class="star">*</span>');
+    });
     $('.remove_star').on('click', function() {
       $('.star').remove();
     });
@@ -15,6 +18,7 @@
 <div id="rating">
   <a class="hide_star">Hide Star</a>
   <a class="show_star">Show Star</a>
+  <a class="add_star">Add Star</a>
   <a class="remove_star">Remove Star</a>
   
   <span class="star">*</span>

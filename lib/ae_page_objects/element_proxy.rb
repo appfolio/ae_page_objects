@@ -64,9 +64,8 @@ module AePageObjects
     end
 
     def wait_until_visible(timeout = nil)
-      poll_until(timeout) do
-        inst = presence
-        !inst.nil? && inst.visible?
+      with_reloaded_element(timeout) do
+        !@loaded_element.nil? && @loaded_element.visible?
       end
 
     rescue AePageObjects::WaitTimeoutError
@@ -74,9 +73,8 @@ module AePageObjects
     end
 
     def wait_until_hidden(timeout = nil)
-      poll_until(timeout) do
-        inst = presence
-        inst.nil? || !inst.visible?
+      with_reloaded_element(timeout) do
+        @loaded_element.nil? || !@loaded_element.visible?
       end
 
     rescue AePageObjects::WaitTimeoutError
@@ -84,8 +82,8 @@ module AePageObjects
     end
 
     def wait_until_present(timeout = nil)
-      poll_until(timeout) do
-        !presence.nil?
+      with_reloaded_element(timeout) do
+        !@loaded_element.nil?
       end
 
     rescue AePageObjects::WaitTimeoutError
@@ -98,8 +96,8 @@ module AePageObjects
     end
 
     def wait_until_absent(timeout = nil)
-      poll_until(timeout) do
-        check_absence
+      with_reloaded_element(timeout) do
+        @loaded_element.nil?
       end
 
     rescue AePageObjects::WaitTimeoutError
@@ -131,7 +129,7 @@ module AePageObjects
       super || @element_class.allocate.respond_to?(*args)
     end
 
-  private
+    private
 
     def load_element
       @element_class.new(*@args)
@@ -141,19 +139,29 @@ module AePageObjects
       @loaded_element ||= load_element
     end
 
-    def check_absence
-      load_element
+    def reload_element
+      @loaded_element = load_element
 
-      false
+      true
     rescue LoadingElementFailed
+      @loaded_element = nil
+
       true
     rescue => e
       if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&
         e.is_a?(Selenium::WebDriver::Error::StaleElementReferenceError)
-        # ignore and spin around for another check
+
+        # Inconclusive. Leave the handling up to the caller
         false
       else
         raise
+      end
+    end
+
+    def with_reloaded_element(timeout)
+      poll_until(timeout) do
+        reload_conclusive = reload_element
+        reload_conclusive && yield
       end
     end
   end

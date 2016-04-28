@@ -27,6 +27,10 @@ module PageObjects
           find(".hide_star").click
         end
 
+        def add_star
+          find(".add_star").click
+        end
+
         def remove_star
           find(".remove_star").click
         end
