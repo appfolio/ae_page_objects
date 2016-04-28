@@ -4,7 +4,13 @@ require 'ae_page_objects/util/page_polling'
 class PagePollingTest < AePageObjectsTestCase
 
   class Dummy
-    extend AePageObjects::PagePolling
+    include AePageObjects::PagePolling
+
+    def do_the_poll
+      poll_until do
+        yield
+      end
+    end
   end
 
   def test_poll_until__with_mocks
@@ -14,13 +20,13 @@ class PagePollingTest < AePageObjectsTestCase
     block = mock
     block.expects(:called).times(1)
 
-    Dummy.poll_until do
+    Dummy.new.do_the_poll do
       block.called
     end
   end
 
   def test_poll_until__without_mocks
-    result = Dummy.poll_until do
+    result = Dummy.new.do_the_poll do
       :hello
     end
 

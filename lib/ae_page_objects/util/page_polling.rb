@@ -1,5 +1,8 @@
 module AePageObjects
   module PagePolling
+
+    private
+
     def poll_until(timeout = nil, &block)
       AePageObjects.wait_until(timeout) do
         Capybara.using_wait_time(0, &block)
