@@ -21,8 +21,8 @@ module PageObjects
 
       collection :authors,
                  :is => Table,
-                 :locator => "table",
-                 :item_locator => [:xpath, ".//tr"] do
+                 :locator => ".author_list",
+                 :item_locator => "tr.author_info" do
 
         element :first_name, :locator => '.first_name'
         element :last_name, :locator => '.last_name'
