@@ -7,6 +7,10 @@
 
 ## Version 1.5.0
 
+### Bugs
+
+* [125](https://github.com/appfolio/ae_page_objects/issues/125) ElementProxy presence checks should invalidate cache
+
 ### Added
 
 * [99](https://github.com/appfolio/ae_page_objects/issues/99) Need a replacement for Capybara.wait_until
