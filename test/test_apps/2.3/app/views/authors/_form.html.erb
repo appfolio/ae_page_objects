@@ -8,6 +8,12 @@
       Element.show($$('.star').first());
     });
 
+    Event.observe($$('.add_star').first(), 'click', function() {
+      var rating = document.getElementById('rating');
+
+      Element.insert(rating, '<span class="star">*</span>');
+    });
+
     Event.observe($$('.remove_star').first(), 'click', function() {
       Element.remove($$('.star').first());
     });
@@ -17,6 +23,7 @@
 <div id="rating">
   <a class="hide_star">Hide Star</a>
   <a class="show_star">Show Star</a>
+  <a class="add_star">Add Star</a>
   <a class="remove_star">Remove Star</a>
 
   <span class="star">*</span>

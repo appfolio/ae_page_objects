@@ -1,6 +1,7 @@
 require 'selenium_helper'
 require 'set'
 
+
 class PageObjectIntegrationTest < Selenium::TestCase
   def test_site_setup
     assert PageObjects < AePageObjects::Universe
@@ -216,21 +217,27 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
   end
 
-  def test_element_proxy__present_then_absent
+  def test_element_proxy__present_absent_present
     author = PageObjects::Authors::NewPage.visit
-
-    author.rating.show_star
 
     star = author.rating.star
     assert star.present?
 
     author.rating.remove_star
 
+    # use existing object
+    assert star.absent?
+
     # use new object
     assert author.rating.star.absent?
 
+    author.rating.add_star
+
     # use existing object
-    assert star.absent?
+    assert star.present?
+
+    # use new object
+    assert author.rating.star.present?
   end
 
   def test_element_proxy__not_present
