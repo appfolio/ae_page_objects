@@ -351,7 +351,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1_authors_robert_row.show_in_new_window
 
-    Capybara.current_session.driver.within_window(author_path(authors(:robert)))
+    switch_to_window_with_url(author_path(authors(:robert)))
+
     window2_author_robert = PageObjects::Authors::ShowPage.new
 
     window2 = window2_author_robert.window
@@ -388,7 +389,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window1_authors_robert_row = window1_authors.authors.first
     window1_authors_robert_row.show_in_new_window
 
-    Capybara.current_session.driver.within_window(author_path(authors(:robert)))
+    switch_to_window_with_url(author_path(authors(:robert)))
     window3_author_robert = PageObjects::Authors::ShowPage.new
     window3 = window3_author_robert.window
 
@@ -640,6 +641,16 @@ private
 
     if options[:current]
       assert_equal options[:current], AePageObjects.browser.windows.current_window
+    end
+  end
+
+  def switch_to_window_with_url(path)
+    if Gem::Requirement.new("< 2.3.0").satisfied_by?(Gem::Version.new(Capybara::VERSION))
+      Capybara.current_session.driver.within_window(path)
+    else
+      Capybara.current_session.switch_to_window do
+        Capybara.current_session.current_url =~ /#{path}$/
+      end
     end
   end
 end
