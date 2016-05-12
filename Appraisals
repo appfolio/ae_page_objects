@@ -12,4 +12,9 @@ when "2.2.5" then
   appraise "capybara-2.2-ruby#{RUBY_VERSION}" do
     gem "capybara", "~> 2.2.0"
   end
+
+  appraise "capybara-2.3-ruby#{RUBY_VERSION}" do
+    gem 'capybara', '~> 2.3.0'
+  end
 end
+
