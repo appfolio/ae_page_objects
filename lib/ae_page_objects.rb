@@ -15,7 +15,6 @@ module AePageObjects
   autoload :InternalHelpers,      'ae_page_objects/util/internal_helpers'
   autoload :HashSymbolizer,       'ae_page_objects/util/hash_symbolizer'
   autoload :Inflector,            'ae_page_objects/util/inflector'
-  autoload :Waiter,               'ae_page_objects/util/waiter'
 
   module MultipleWindows
     autoload :Browser,                   'ae_page_objects/multiple_windows/browser'
@@ -30,8 +29,6 @@ module AePageObjects
     autoload :Window,                    'ae_page_objects/single_window/window'
     autoload :SameWindowLoaderStrategy,  'ae_page_objects/single_window/same_window_loader_strategy'
   end
-
-  autoload :Window,            'ae_page_objects/window'
 
   autoload :DocumentQuery,     'ae_page_objects/document_query'
   autoload :DocumentLoader,    'ae_page_objects/document_loader'

@@ -33,11 +33,6 @@ module AePageObjects
       false
     end
 
-    def not_visible?
-      warn "[DEPRECATION WARNING]: AePageObjects::Element#not_visible? is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#hidden? instead."
-      hidden?
-    end
-
     def present?
       wait_until_present
       true
@@ -50,11 +45,6 @@ module AePageObjects
       true
     rescue ElementNotAbsent
       false
-    end
-
-    def not_present?
-      warn "[DEPRECATION WARNING]: AePageObjects::Element#not_present? is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#absent? instead."
-      absent?
     end
 
     def presence
@@ -90,11 +80,6 @@ module AePageObjects
       raise ElementNotPresent, "element_class: #{@element_class}, options: #{@options.inspect}"
     end
 
-    def wait_for_presence(timeout = nil)
-      warn "[DEPRECATION WARNING]: AePageObjects::Element#wait_for_presence is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#wait_until_present instead."
-      wait_until_present(timeout)
-    end
-
     def wait_until_absent(timeout = nil)
       with_reloaded_element(timeout) do
         @loaded_element.nil?
@@ -102,11 +87,6 @@ module AePageObjects
 
     rescue AePageObjects::WaitTimeoutError
       raise ElementNotAbsent, "element_class: #{@element_class}, options: #{@options.inspect}"
-    end
-
-    def wait_for_absence(timeout = nil)
-      warn "[DEPRECATION WARNING]: AePageObjects::Element#wait_for_absence is deprecated and will be removed in version 2.0.0. Use AePageObjects::Element#wait_until_absent instead."
-      wait_until_absent(timeout)
     end
 
     def is_a?(type)
