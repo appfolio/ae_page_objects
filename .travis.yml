@@ -3,21 +3,7 @@ language: ruby
 addons:
   firefox: "23.0"
 
-rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.2
-  - 2.2.0
-  - ruby-head
-
 sudo: false
-
-matrix:
-  allow_failures:
-    - rvm: ruby-head
-
-gemfile:
-  - Gemfile
 
 bundler_args: ''
 
@@ -28,52 +14,43 @@ before_script:
 
 script: "bundle exec rake test:ci"
 
-# Without the below, Travis runs 3 builds, that take about 14 mins elapsed time and 22 mins worker time:
-#https://travis-ci.org/appfolio/ae_page_objects/builds/17328803
-#
-# With the below you get a build that takes about 15 mins elapsed time and 46.5 mins worker time:
-#https://travis-ci.org/appfolio/ae_page_objects/builds/17328226
-#
-# It might be worth trying targetting the Appraisal gemfiles directly...
-#
-# - "The Below" -
-#
-## For all the integration tests
+### Build Matrix
+
+max_ruby_version: &max_ruby 2.2.0
+
+rvm:
+  - 1.9.3
+  - *max_ruby
+  - ruby-head
+
+global:
+  gemfile:
+    - Gemfile
+
+# Run unit tests across all Ruby versions
 env:
-  - RAILS_VERSION=3.0
-  - RAILS_VERSION=3.1
-  - RAILS_VERSION=3.2
-  - RAILS_VERSION=4.0
-  - RAILS_VERSION=4.1
-  - RAILS_VERSION=4.2
   - UNITS=true
 
 matrix:
-  exclude:
-    - rvm: 2.0.0
-      env: RAILS_VERSION=3.0
-    - rvm: 2.0.0
-      env: RAILS_VERSION=3.1
+  allow_failures:
+    - rvm: ruby-head
 
-    - rvm: 2.1.2
-      env: RAILS_VERSION=3.0
-    - rvm: 2.1.2
-      env: RAILS_VERSION=3.1
+  # Integration tests
+  include:
+    - env: RAILS_VERSION=3.0
+      rvm: 1.9.3
 
-    - rvm: 2.2.0
-      env: RAILS_VERSION=3.0
-    - rvm: 2.2.0
-      env: RAILS_VERSION=3.1
+    - env: RAILS_VERSION=3.1
+      rvm: 1.9.3
 
-    - rvm: ruby-head
-      env: RAILS_VERSION=3.0
-    - rvm: ruby-head
-      env: RAILS_VERSION=3.1
-    - rvm: ruby-head
-      env: RAILS_VERSION=3.2
-    - rvm: ruby-head
-      env: RAILS_VERSION=4.0
-    - rvm: ruby-head
-      env: RAILS_VERSION=4.1
-    - rvm: ruby-head
-      env: RAILS_VERSION=4.2
+    - env: RAILS_VERSION=3.2
+      rvm: *max_ruby
+
+    - env: RAILS_VERSION=4.0
+      rvm: *max_ruby
+
+    - env: RAILS_VERSION=4.1
+      rvm: *max_ruby
+
+    - env: RAILS_VERSION=4.2
+      rvm: *max_ruby
