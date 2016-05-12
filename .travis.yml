@@ -21,7 +21,7 @@ script: "bundle exec rake test:ci"
 
 ### Build Matrix
 
-max_ruby_version: &max_ruby 2.2.0
+max_ruby_version: &max_ruby 2.2.5
 
 rvm:
   - 1.8.7
