@@ -14,10 +14,4 @@ gem 'forum', :path => "../engines"
 
 gem 'rake', '~> 11.0'
 
-if RUBY_VERSION =~ /\A1\.9/
-  gem 'mime-types', '< 3'
-end
-
-if RUBY_VERSION =~ /\A2\.2/
-  gem 'test-unit'
-end
+gem 'test-unit'
