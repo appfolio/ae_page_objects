@@ -18,7 +18,7 @@ class AePageObjectsTest < AePageObjectsTestCase
 
   def test_wait_until__tries_within_timeout
     count = 0
-    assert_equal 5, AePageObjects.wait_until { count += 1; count == 5 ? count : nil }
+    assert_equal 5, AePageObjects.wait_until(2) { count += 1; count == 5 ? count : nil }
   end
 
   def test_wait_until__timeout
