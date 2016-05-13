@@ -6,7 +6,8 @@ _Page Objects for Capybara_
 [![Build Status](https://api.travis-ci.org/appfolio/ae_page_objects.png?branch=master)](http://travis-ci.org/appfolio/ae_page_objects)
 [![Code Climate](https://codeclimate.com/github/appfolio/ae_page_objects.png)](https://codeclimate.com/github/appfolio/ae_page_objects)
 
-AePageObjects provides a powerful and customizable implementation of the Page Object pattern built on top of Capybara to be used in automated acceptance test suites.
+AePageObjects provides a powerful and customizable implementation of the Page Object pattern built on top of Capybara to
+be used in automated acceptance test suites.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -191,14 +192,13 @@ MyPageObjects::Site.initialize!
 
 ### Rails
 
-AePageObjects is built to work with Rails (version 3.X-4.X) out of the box. There is nothing to configure or
+AePageObjects is built to work with Rails (versions 3.X-4.X) out of the box. There is nothing to configure or
 change from the instructions above.
 
 ### Non Rails
 
-AePageObjects works with Rails 3.X by default. To get AePageObjects to work with non-Rails
-applications you'll need to configure a router to use other than `ApplicationRouter` in your
-`AePageObjects::Site`. For example:
+To get AePageObjects to work in non-Rails environments you'll need to configure a router to use other than
+`ApplicationRouter` in your `AePageObjects::Site`. For example:
 
 ```ruby
 # test/my_page_objects/site.rb
@@ -333,7 +333,7 @@ end
 ```
 
 The type of arguments that `path` can take depends on the router configured for the `AePageObject::Site` of your
-page objects namespace. For Rails 3.X projects, by default, `path` will accept strings and Rails URL helper names. See
+page objects namespace. For Rails projects, by default, `path` will accept strings and Rails URL helper names. See
 [Router](#router) for more details.
 
 
