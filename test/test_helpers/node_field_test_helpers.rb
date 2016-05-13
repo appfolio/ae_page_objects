@@ -11,15 +11,19 @@ module NodeFieldTestHelpers
     assert_equal expected.__name__, value.__name__
   end
 
+  def verify_element(element, expected_element_type, expected_parent, expected_capybara_node)
+    assert element.is_a?(expected_element_type)
+    assert element.is_a?(AePageObjects::ElementProxy)
+    assert_equal expected_element_type, element.class
+    assert_equal expected_capybara_node, element.node
+    assert_equal expected_parent, element.parent
+  end
+
   def verify_field(parent, field_method, expected_field_type, expected_field_page)
     assert_equal expected_field_type, parent.class.element_attributes[field_method]
 
     parent.send(field_method).tap do |field|
-      assert field.is_a?(expected_field_type)
-      assert field.is_a?(AePageObjects::ElementProxy)
-      assert_equal expected_field_type, field.class
-      assert_equal expected_field_page, field.node
-      assert_equal parent, field.parent
+      verify_element(field, expected_field_type, parent, expected_field_page)
     end
   end
 

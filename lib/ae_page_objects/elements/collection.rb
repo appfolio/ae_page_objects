@@ -57,7 +57,7 @@ module AePageObjects
     end
 
     def item_at(index)
-      ElementProxy.new(item_class_at(index), self, :name => index, :locator => item_locator_at(index))
+      element(is: item_class_at(index), name: index, locator: item_locator_at(index))
     end
 
     def item_class_at(index)

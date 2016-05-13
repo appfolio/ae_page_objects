@@ -60,6 +60,18 @@ module AePageObjects
       RUBY
     end
 
+    def element(options_or_locator)
+      options = if options_or_locator.is_a?(Hash)
+                  options_or_locator.dup
+                else
+                  {:locator => options_or_locator}
+                end
+
+      element_class = options.delete(:is) || Element
+
+      ElementProxy.new(element_class, self, options)
+    end
+
     private
 
     def eval_locator(locator)

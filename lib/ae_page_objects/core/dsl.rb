@@ -16,18 +16,23 @@ module AePageObjects
     end
 
     def element(name, options = {}, &block)
-      options = options.dup
+      options        = options.dup
       options[:name] ||= name
+      options[:is]   ||= Element
 
-      klass   = field_klass(options, &block)
-
-      self.element_attributes[name.to_sym] = klass
-
-      define_method name do
-        ElementProxy.new(klass, self, options)
+      if block_given?
+        options[:is] = Class.new(options[:is], &block)
       end
 
-      klass
+      element_class = options[:is]
+
+      self.element_attributes[name.to_sym] = element_class
+
+      define_method name do
+        self.element(options)
+      end
+
+      element_class
     end
 
     # Defines a collection of elements. Blocks are evaluated on the item class used by the
@@ -180,18 +185,6 @@ module AePageObjects
         RUBY
 
         self.element_attributes[element_name] = element_klazz
-      end
-    end
-
-  private
-
-    def field_klass(options, &block)
-      klass = options.delete(:is) || Element
-
-      if block_given?
-        Class.new(klass, &block)
-      else
-        klass
       end
     end
   end
