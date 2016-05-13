@@ -13,6 +13,7 @@
 
 ### Added
 
+* [81](https://github.com/appfolio/ae_page_objects/issues/81) Support Capybara < 2.8
 * [99](https://github.com/appfolio/ae_page_objects/issues/99) Need a replacement for Capybara.wait_until
 * [136](https://github.com/appfolio/ae_page_objects/issues/136) stale! should be public
 
