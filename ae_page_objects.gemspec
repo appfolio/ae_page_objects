@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
 
   s.files                     = `git ls-files -- lib`.split("\n")
 
-  s.add_dependency('capybara', ['>= 1.1', '< 2.8'])
+  s.add_dependency('capybara', '~> 2.1')
 end
 

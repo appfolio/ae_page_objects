@@ -6,12 +6,12 @@ module AePageObjects
     def setup
       super
 
-      @original_wait_time = Capybara.default_wait_time
-      Capybara.default_wait_time = 0
+      @original_wait_time = default_max_wait_time
+      self.default_max_wait_time = 0
     end
 
     def teardown
-      Capybara.default_wait_time = @original_wait_time
+      self.default_max_wait_time = @original_wait_time
 
       super
     end
@@ -89,6 +89,24 @@ module AePageObjects
       end
 
       assert_equal "hello", raised.message
+    end
+
+    private
+
+    def default_max_wait_time=(val)
+      if Capybara.respond_to?(:default_max_wait_time)
+        Capybara.default_max_wait_time = val
+      else
+        Capybara.default_wait_time = val
+      end
+    end
+
+    def default_max_wait_time
+      if Capybara.respond_to?(:default_max_wait_time)
+        Capybara.default_max_wait_time
+      else
+        Capybara.default_wait_time
+      end
     end
   end
 end

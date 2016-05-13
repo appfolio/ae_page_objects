@@ -47,7 +47,12 @@ end
 Capybara.configure do |config|
   config.default_driver    = :ae_page_objects_test_driver
   config.ignore_hidden_elements = false
-  config.default_wait_time = 5
+
+  if config.respond_to?(:default_max_wait_time)
+    config.default_max_wait_time = 5
+  else
+    config.default_wait_time = 5
+  end
 end
 
 require "test/page_objects"

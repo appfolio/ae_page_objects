@@ -1,14 +1,12 @@
 case(RUBY_VERSION)
-when "1.9.3" then
-  appraise "capybara-1.1-ruby#{RUBY_VERSION}" do
-    gem "capybara", "~> 1.1.4"
-  end
 
-when "2.2.5" then
+# Always test against ruby 1.9.3 with at least one version
+when "1.9.3" then
   appraise "capybara-2.1-ruby#{RUBY_VERSION}" do
     gem "capybara", "~> 2.1.0"
   end
 
+when "2.2.5" then
   appraise "capybara-2.2-ruby#{RUBY_VERSION}" do
     gem "capybara", "~> 2.2.0"
   end

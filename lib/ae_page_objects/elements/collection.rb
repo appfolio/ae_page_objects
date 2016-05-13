@@ -65,23 +65,19 @@ module AePageObjects
     def item_xpath
       @item_xpath ||= begin
         evaled_locator = eval_locator(@item_locator)
+        
+        query_args = evaled_locator + [{:exact => true}]
+        query = Capybara::Query.new(*query_args)
 
-        if Capybara::VERSION =~ /\A1/
-          Capybara::Selector.normalize(*evaled_locator).xpaths.first
-        else
-          query_args = evaled_locator + [{:exact => true}]
-          query = Capybara::Query.new(*query_args)
+        result = query.xpath
 
-          result = query.xpath
-
-          # if it's CSS, we need to run it through XPath as Capybara::Query#xpath only
-          # works when the selector is xpath. Lame.
-          if query.selector.format == :css
-            result = XPath.css(query.xpath).to_xpath
-          end
-
-          result
+        # if it's CSS, we need to run it through XPath as Capybara::Query#xpath only
+        # works when the selector is xpath. Lame.
+        if query.selector.format == :css
+          result = XPath.css(query.xpath).to_xpath
         end
+
+        result
       end
     end
 
