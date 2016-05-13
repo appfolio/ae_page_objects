@@ -8,12 +8,46 @@ _Page Objects for Capybara_
 
 AePageObjects provides a powerful and customizable implementation of the Page Object pattern built on top of Capybara to be used in automated acceptance test suites.
 
-1. [Overview](#overview)
-2. [Setup](#setup)
-3. [Object Model](#object-model)
-4. [Documents](#documents)
-5. [Elements](#elements)
-6. [Router](#router)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Overview](#overview)
+- [Setup](#setup)
+  - [AePageObjects::Site](#aepageobjectssite)
+  - [Initializing Page Objects](#initializing-page-objects)
+  - [Rails](#rails)
+  - [Non Rails](#non-rails)
+  - [Interacting With Multiple Sites](#interacting-with-multiple-sites)
+- [Object Model](#object-model)
+- [Documents](#documents)
+  - [Creating a Document](#creating-a-document)
+  - [Adding a Path](#adding-a-path)
+  - [Navigation](#navigation)
+  - [Load Ensuring](#load-ensuring)
+  - [Customizing Load Ensuring](#customizing-load-ensuring)
+  - [Windows](#windows)
+  - [Multiple Windows](#multiple-windows)
+  - [Conventions](#conventions)
+    - [Variable Results](#variable-results)
+- [Elements](#elements)
+  - [Defining Elements](#defining-elements)
+  - [Nested Elements](#nested-elements)
+    - [Extending Nested Elements](#extending-nested-elements)
+  - [Custom Elements](#custom-elements)
+  - [Forms](#forms)
+  - [Collections](#collections)
+  - [Staling](#staling)
+  - [Load Ensuring](#load-ensuring-1)
+  - [Checking presence](#checking-presence)
+  - [Waiting for presence](#waiting-for-presence)
+  - [Checking visibility](#checking-visibility)
+  - [Waiting for visibility](#waiting-for-visibility)
+  - [Locators](#locators)
+    - [Default Locator](#default-locator)
+- [Router](#router)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Overview
 
@@ -237,17 +271,11 @@ Model](https://github.com/appfolio/ae_page_objects/blob/master/etc/aepos.png)
 AePageObjects mirrors the internal design of Capybara's Node hierarchy, whereby:
 
 ```
-AePageObjects
---------------------
-Node
-Element < Node
-Document < Node
-
-Capybara
---------------------
-Node::Base
-Node::Element < Node::Base
-Node::Document < Node::Base
+AePageObjects                   Capybara
+--------------------            --------------------
+Node                            Node::Base
+Element < Node                  Node::Element < Node::Base
+Document < Node                 Node::Document < Node::Base
 ```
 
 `AePageObjects::Node` holds a reference (`node`) to the underlying `Capybara::Node::Base`. For
