@@ -264,10 +264,6 @@ end
 ```
 
 ## Object Model
-Comprehensive Object Model in AePageObjects:
-![Object
-Model](https://github.com/appfolio/ae_page_objects/blob/master/etc/aepos.png)
-
 AePageObjects mirrors the internal design of Capybara's Node hierarchy, whereby:
 
 ```
