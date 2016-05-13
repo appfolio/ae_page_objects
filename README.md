@@ -6,14 +6,49 @@ _Page Objects for Capybara_
 [![Build Status](https://api.travis-ci.org/appfolio/ae_page_objects.png?branch=master)](http://travis-ci.org/appfolio/ae_page_objects)
 [![Code Climate](https://codeclimate.com/github/appfolio/ae_page_objects.png)](https://codeclimate.com/github/appfolio/ae_page_objects)
 
-AePageObjects provides a powerful and customizable implementation of the Page Object pattern built on top of Capybara to be used in automated acceptance test suites.
+AePageObjects provides a powerful and customizable implementation of the Page Object pattern built on top of Capybara to
+be used in automated acceptance test suites.
 
-1. [Overview](#overview)
-2. [Setup](#setup)
-3. [Object Model](#object-model)
-4. [Documents](#documents)
-5. [Elements](#elements)
-6. [Router](#router)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Overview](#overview)
+- [Setup](#setup)
+  - [AePageObjects::Site](#aepageobjectssite)
+  - [Initializing Page Objects](#initializing-page-objects)
+  - [Rails](#rails)
+  - [Non Rails](#non-rails)
+  - [Interacting With Multiple Sites](#interacting-with-multiple-sites)
+- [Object Model](#object-model)
+- [Documents](#documents)
+  - [Creating a Document](#creating-a-document)
+  - [Adding a Path](#adding-a-path)
+  - [Navigation](#navigation)
+  - [Load Ensuring](#load-ensuring)
+  - [Customizing Load Ensuring](#customizing-load-ensuring)
+  - [Windows](#windows)
+  - [Multiple Windows](#multiple-windows)
+  - [Conventions](#conventions)
+    - [Variable Results](#variable-results)
+- [Elements](#elements)
+  - [Defining Elements](#defining-elements)
+  - [Nested Elements](#nested-elements)
+    - [Extending Nested Elements](#extending-nested-elements)
+  - [Custom Elements](#custom-elements)
+  - [Forms](#forms)
+  - [Collections](#collections)
+  - [Staling](#staling)
+  - [Load Ensuring](#load-ensuring-1)
+  - [Checking presence](#checking-presence)
+  - [Waiting for presence](#waiting-for-presence)
+  - [Checking visibility](#checking-visibility)
+  - [Waiting for visibility](#waiting-for-visibility)
+  - [Locators](#locators)
+    - [Default Locator](#default-locator)
+- [Router](#router)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Overview
 
@@ -155,16 +190,15 @@ Your `AePageObjects::Site` must be initialized before the page objects can be us
 MyPageObjects::Site.initialize!
 ```
 
-### Rails 3.X
+### Rails
 
-AePageObjects is built to work with Rails 3.X out of the box. There is nothing to configure or
+AePageObjects is built to work with Rails (versions 3.X-4.X) out of the box. There is nothing to configure or
 change from the instructions above.
 
 ### Non Rails
 
-AePageObjects works with Rails 3.X by default. To get AePageObjects to work with non-Rails
-applications you'll need to configure a router to use other than `ApplicationRouter` in your
-`AePageObjects::Site`. For example:
+To get AePageObjects to work in non-Rails environments you'll need to configure a router to use other than
+`ApplicationRouter` in your `AePageObjects::Site`. For example:
 
 ```ruby
 # test/my_page_objects/site.rb
@@ -230,24 +264,14 @@ end
 ```
 
 ## Object Model
-Comprehensive Object Model in AePageObjects:
-![Object
-Model](https://github.com/appfolio/ae_page_objects/blob/master/etc/aepos.png)
-
 AePageObjects mirrors the internal design of Capybara's Node hierarchy, whereby:
 
 ```
-AePageObjects
---------------------
-Node
-Element < Node
-Document < Node
-
-Capybara
---------------------
-Node::Base
-Node::Element < Node::Base
-Node::Document < Node::Base
+AePageObjects                   Capybara
+--------------------            --------------------
+Node                            Node::Base
+Element < Node                  Node::Element < Node::Base
+Document < Node                 Node::Document < Node::Base
 ```
 
 `AePageObjects::Node` holds a reference (`node`) to the underlying `Capybara::Node::Base`. For
@@ -309,7 +333,7 @@ end
 ```
 
 The type of arguments that `path` can take depends on the router configured for the `AePageObject::Site` of your
-page objects namespace. For Rails 3.X projects, by default, `path` will accept strings and Rails URL helper names. See
+page objects namespace. For Rails projects, by default, `path` will accept strings and Rails URL helper names. See
 [Router](#router) for more details.
 
 
