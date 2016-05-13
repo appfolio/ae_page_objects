@@ -21,6 +21,10 @@ when "2.2.5" then
     gem 'capybara', '~> 2.4.0'
   end
 
+  appraise "capybara-2.5-ruby#{RUBY_VERSION}" do
+    gem 'capybara', '~> 2.5.0'
+  end
+
   appraise "capybara-2.7-ruby#{RUBY_VERSION}" do
     gem 'capybara', '~> 2.7.0'
   end
