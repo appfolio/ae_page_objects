@@ -5,10 +5,10 @@ require 'selenium-webdriver'
 require 'test/unit'
 require "mocha/setup"
 
-Dir[File.join(File.dirname(__FILE__), 'test_helpers', '**', '*.rb')].each {|f| require f}
+require 'test_helpers/element_test_helpers'
 
 class AePageObjectsTestCase < Test::Unit::TestCase
-  include NodeFieldTestHelpers
+  include ElementTestHelpers
 
   undef_method :default_test if method_defined?(:default_test)
 

@@ -1,5 +1,7 @@
 require 'unit_helper'
 
+require 'test_helpers/node_interface_tests'
+
 module AePageObjects
   class DocumentTest < AePageObjectsTestCase
     include NodeInterfaceTests

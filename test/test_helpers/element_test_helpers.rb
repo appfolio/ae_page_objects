@@ -1,4 +1,4 @@
-module NodeFieldTestHelpers
+module ElementTestHelpers
 
   def assert_nodes_equal(expected, value)
     assert_equal expected.class, value.class

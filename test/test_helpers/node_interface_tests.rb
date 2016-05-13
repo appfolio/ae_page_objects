@@ -1,5 +1,7 @@
+require 'test_helpers/element_test_helpers'
+
 module NodeInterfaceTests
-  include NodeFieldTestHelpers
+  include ElementTestHelpers
 
   def test_node_method_wraps_not_found
     subject = node_for_node_tests
