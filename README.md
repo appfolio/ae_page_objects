@@ -155,9 +155,9 @@ Your `AePageObjects::Site` must be initialized before the page objects can be us
 MyPageObjects::Site.initialize!
 ```
 
-### Rails 3.X
+### Rails
 
-AePageObjects is built to work with Rails 3.X out of the box. There is nothing to configure or
+AePageObjects is built to work with Rails (version 3.X-4.X) out of the box. There is nothing to configure or
 change from the instructions above.
 
 ### Non Rails
