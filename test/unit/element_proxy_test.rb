@@ -7,7 +7,7 @@ module AePageObjects
       super
 
       # Ensure AePageObjects.wait_until never waits.
-      Capybara.stubs(:default_wait_time).returns(0)
+      AePageObjects.stubs(:default_max_wait_time).returns(0)
     end
 
     def test_respond_to_can_find_methods_without_element_not_found

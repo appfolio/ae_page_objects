@@ -28,7 +28,7 @@ class AePageObjectsTest < AePageObjectsTestCase
   end
 
   def test_wait_until__frozen_time
-    Capybara.stubs(:default_wait_time).returns(5)
+    AePageObjects.stubs(:default_max_wait_time).returns(5)
     Time.stubs(:now).returns(1)
 
     block = mock

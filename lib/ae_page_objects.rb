@@ -44,35 +44,48 @@ module AePageObjects
   autoload :Select,            'ae_page_objects/elements/select'
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'
 
-  def self.browser
-    @browser ||= begin
-      driver = Capybara.current_session.driver
+  class << self
 
-      case driver
-      when Capybara::Selenium::Driver then
-        MultipleWindows::Browser.new
+    def browser
+      @browser ||= begin
+        driver = Capybara.current_session.driver
+
+        case driver
+        when Capybara::Selenium::Driver then
+          MultipleWindows::Browser.new
+        else
+          SingleWindow::Browser.new
+        end
+      end
+    end
+
+    def wait_until(seconds_to_wait = nil, error_message = nil)
+      seconds_to_wait ||= default_max_wait_time
+      start_time      = Time.now
+
+      until result = yield
+        delay = seconds_to_wait - (Time.now - start_time)
+
+        if delay <= 0
+          raise WaitTimeoutError, error_message || "Timed out waiting for condition"
+        end
+
+        sleep(0.05)
+        raise FrozenInTime, "Time appears to be frozen" if Time.now == start_time
+      end
+
+      result
+    end
+
+    private
+
+    def default_max_wait_time
+      if Capybara.respond_to?(:default_max_wait_time)
+        Capybara.default_max_wait_time
       else
-        SingleWindow::Browser.new
+        Capybara.default_wait_time
       end
     end
-  end
-
-  def self.wait_until(seconds_to_wait = nil, error_message = nil)
-    seconds_to_wait ||= Capybara.default_wait_time
-    start_time      = Time.now
-
-    until result = yield
-      delay = seconds_to_wait - (Time.now - start_time)
-
-      if delay <= 0
-        raise WaitTimeoutError, error_message || "Timed out waiting for condition"
-      end
-
-      sleep(0.05)
-      raise FrozenInTime, "Time appears to be frozen" if Time.now == start_time
-    end
-
-    result
   end
 end
 
