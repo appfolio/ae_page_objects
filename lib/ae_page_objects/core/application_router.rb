@@ -45,8 +45,13 @@ module AePageObjects
         end
 
         def resolve_named_route(named_route)
-          requirements = router.named_routes[named_route].requirements
-          ResolvedRoute.new(requirements[:controller], requirements[:action])
+          found_route = router.named_routes[named_route]
+          if found_route
+            requirements = found_route.requirements
+            ResolvedRoute.new(requirements[:controller], requirements[:action])
+          else
+            raise PathNotResolvable, "#{named_route}_path does not exist in the application"
+          end
         end
 
         def resolve_url(url, method)

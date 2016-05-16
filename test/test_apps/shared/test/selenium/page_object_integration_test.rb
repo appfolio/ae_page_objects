@@ -26,6 +26,14 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
   end
 
+  def test_load_ensuring__second_path_in_page_object_is_unresolvable
+    visit("/books/new")
+
+    assert_raises AePageObjects::PathNotResolvable do
+      PageObjects::Books::DummyShowPageWithUnresolvablePath.new
+    end
+  end
+
   def test_load_ensuring__waits_for_page
     ActiveRecord::Base.transaction do
       Author.create!(:last_name => 'a')
