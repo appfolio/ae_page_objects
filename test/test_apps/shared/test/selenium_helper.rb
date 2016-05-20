@@ -1,6 +1,7 @@
 ENV['RAILS_ENV'] = 'test'
 
 $LOAD_PATH << File.join(File.dirname(__FILE__), '..')
+# $LOAD_PATH << File.join(File.dirname(__FILE__), '../../4.2')
 
 require "config/environment"
 
@@ -54,4 +55,3 @@ end
 
 require "ae_page_objects/rails"
 require "test/page_objects"
-

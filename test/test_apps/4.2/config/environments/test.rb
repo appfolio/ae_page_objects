@@ -12,8 +12,8 @@ TestApp::Application.configure do
   # preloads Rails for running tests, you may have to set it to true.
   config.eager_load = false
 
-  # Configure static asset server for tests with Cache-Control for performance.
-  config.serve_static_assets  = true
+  # Configure static files server for tests with Cache-Control for performance.
+  config.serve_static_files  = true
   config.static_cache_control = "public, max-age=3600"
 
   # Show full error reports and disable caching.
@@ -33,4 +33,7 @@ TestApp::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  # Disable a warning in Rails v4.x (In Rails 5, the default value of this option will change from `:sorted` to `:random`)
+  config.active_support.test_order = :sorted
 end

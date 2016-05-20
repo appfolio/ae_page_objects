@@ -25,6 +25,44 @@ module AePageObjects
 
         DocumentProxy.new(loaded_page, query)
       end
+
+      def size
+        capybara_window.size
+      end
+
+      def resize_to(width = nil, height = nil)
+        original_size = size;
+        width, height = normalize_size(width, height, original_size)
+
+        resize_window_to(width, height)
+        original_size
+      end
+
+      def with_window_size(width = nil, height = nil)
+        original_size = resize_to(width, height)
+
+        yield if block_given?
+      ensure
+        resize_to(original_size.width, original_size.height)
+      end
+
+      protected
+
+      def resize_window_to(width, height)
+        capybara_window.resize_to(width, height)
+      end
+
+      private
+
+      def capybara_window
+        Capybara.current_session.driver.browser.manage.window
+      end
+
+      def normalize_size(width, height, default_size)
+        width ||= default_size.width
+        height ||= default_size.height
+        [width, height]
+      end
     end
   end
 end

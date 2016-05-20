@@ -19,4 +19,3 @@ Gem::Specification.new do |s|
 
   s.add_dependency('capybara', '~> 2.1')
 end
-
