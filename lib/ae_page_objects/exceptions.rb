@@ -4,14 +4,10 @@ module AePageObjects
   class StalePageObject < Error
   end
 
-  # TODO: 2.0 - remove this base class.
-  class LoadingFailed < Error
+  class LoadingPageFailed < Error
   end
 
-  class LoadingPageFailed < LoadingFailed
-  end
-
-  class LoadingElementFailed < LoadingFailed
+  class LoadingElementFailed < Error
   end
 
   class ElementExpectationError < Error
