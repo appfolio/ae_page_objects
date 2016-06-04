@@ -1,14 +1,7 @@
 require 'selenium_helper'
 require 'set'
 
-
 class PageObjectIntegrationTest < Selenium::TestCase
-  def test_site_setup
-    assert PageObjects < AePageObjects::Universe
-    assert_equal PageObjects, PageObjects::Site.universe
-    assert_equal PageObjects::Site.instance, PageObjects::Authors::NewPage.send(:site)
-    assert_equal PageObjects::Site, PageObjects.page_objects_site_class
-  end
 
   def test_load_ensuring
     visit("/books/new")

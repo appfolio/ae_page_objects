@@ -1,3 +1,7 @@
+require 'ae_page_objects/deprecated_site/module_extension'
+require 'ae_page_objects/deprecated_site/singleton'
+require 'ae_page_objects/deprecated_site/universe'
+
 module AePageObjects
   class Site
     extend AePageObjects::Singleton
@@ -14,6 +18,14 @@ module AePageObjects
       end
 
       def inherited(site_class)
+        warn <<-MESSAGE
+[DEPRECATION WARNING]: AePageObjects::Site will be removed in AePageObjects 3.0.
+                       AePageObjects::Document subclasses now look for routers. You
+                       set the router via AePageObjects::Document.router or by implementing
+                       a router factory and setting AePageObjects.router_factory.
+Called from: #{caller.first}
+        MESSAGE
+
         super
 
         site_class.universe.send(:include, Universe)
@@ -52,7 +64,10 @@ module AePageObjects
     end
 
     def router
-      @router ||= ApplicationRouter.new
+      @router ||= begin
+        require 'ae_page_objects/core/application_router'
+        ApplicationRouter.new
+      end
     end
 
     def initialize!

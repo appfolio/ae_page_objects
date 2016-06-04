@@ -1,4 +1,5 @@
 require 'unit_helper'
+require 'unit/multiple_sites_test'
 
 module AePageObjects
   class SiteTest < AePageObjectsTestCase
@@ -49,6 +50,23 @@ module AePageObjects
       site_instance = stub
       Ma.expects(:page_objects_site_class).returns(mock(:instance => site_instance))
       assert_equal site_instance, Site.from(Ma::Rk::Ed::Mod::Ule)
+    end
+
+    module PageObjectsWithSite
+      class Site < AePageObjects::Site
+      end
+    end
+
+    module PageObjectsWithSite
+      class TestPage < AePageObjects::Document
+      end
+    end
+
+    def test_site_setup
+      assert PageObjectsWithSite < AePageObjects::Universe
+      assert_equal PageObjectsWithSite, PageObjectsWithSite::Site.universe
+      assert_equal PageObjectsWithSite::Site.instance, PageObjectsWithSite::TestPage.send(:site)
+      assert_equal PageObjectsWithSite::Site, PageObjectsWithSite.page_objects_site_class
     end
   end
 end

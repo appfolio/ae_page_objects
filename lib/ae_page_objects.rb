@@ -5,16 +5,10 @@ require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
 
 module AePageObjects
-  autoload :Universe,             'ae_page_objects/core/universe'
-  autoload :Site,                 'ae_page_objects/core/site'
-  autoload :BasicRouter,          'ae_page_objects/core/basic_router'
-  autoload :ApplicationRouter,    'ae_page_objects/core/application_router'
   autoload :Dsl,                  'ae_page_objects/core/dsl'
 
-  autoload :Singleton,            'ae_page_objects/util/singleton'
   autoload :InternalHelpers,      'ae_page_objects/util/internal_helpers'
   autoload :HashSymbolizer,       'ae_page_objects/util/hash_symbolizer'
-  autoload :Inflector,            'ae_page_objects/util/inflector'
 
   module MultipleWindows
     autoload :Browser,                   'ae_page_objects/multiple_windows/browser'
@@ -45,6 +39,7 @@ module AePageObjects
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'
 
   class << self
+    attr_accessor :router_factory
 
     def browser
       @browser ||= begin
@@ -89,14 +84,9 @@ module AePageObjects
   end
 end
 
-require 'ae_page_objects/core_ext/module'
+require 'ae_page_objects/core/default_router_factory'
+AePageObjects.router_factory = AePageObjects::DefaultRouterFactory.new
 
-
-
-
-
-
-
-
-
+# load deprecated Site by default.
+require 'ae_page_objects/deprecated_site/site'
 

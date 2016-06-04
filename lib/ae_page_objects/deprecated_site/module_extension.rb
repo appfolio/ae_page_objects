@@ -1,3 +1,5 @@
+require 'ae_page_objects/deprecated_site/inflector'
+
 # lifted from activesupport
 
 class Module

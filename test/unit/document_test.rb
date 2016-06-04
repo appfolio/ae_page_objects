@@ -90,8 +90,8 @@ module AePageObjects
         path :view_book
       end
 
-      site = mock
-      show_page.stubs(:site).returns(site)
+      router = mock
+      show_page.router = router
 
       book           = stub
       something      = stub
@@ -101,20 +101,30 @@ module AePageObjects
       show_page.stubs(:new)
       capybara_stub.session.stubs(:visit).with(full_path).returns(stub)
 
-      site.expects(:generate_path).with(:show_book, book, :format => :json).returns(full_path)
+      router.expects(:generate_path).with(:show_book, book, :format => :json).returns(full_path)
       show_page.visit(book, :format => :json)
 
-      site.expects(:generate_path).with(:view_book, book, :format => :json).returns(full_path)
+      router.expects(:generate_path).with(:view_book, book, :format => :json).returns(full_path)
       show_page.visit(book, :format => :json, :via => :view_book)
 
-      site.expects(:generate_path).with(:show_book, something, something_else).returns(full_path)
+      router.expects(:generate_path).with(:show_book, something, something_else).returns(full_path)
       show_page.visit(something, something_else)
 
-      site.expects(:generate_path).with('something', something, something_else, {}).returns(full_path)
+      router.expects(:generate_path).with('something', something, something_else, {}).returns(full_path)
       show_page.visit(something, something_else, :via => 'something')
 
-      site.expects(:generate_path).with(:show_book, something, something_else, {:param => 'param1'}).returns(full_path)
+      router.expects(:generate_path).with(:show_book, something, something_else, {:param => 'param1'}).returns(full_path)
       show_page.visit(something, something_else, :param => 'param1')
+    end
+
+    def test_router
+      page_class = Class.new(AePageObjects::Document)
+
+      AePageObjects.router_factory.expects(:router_for).with(page_class).returns(:blah)
+      assert_equal :blah, page_class.router
+
+      # test memoization
+      assert_equal :blah, page_class.router
     end
 
     private

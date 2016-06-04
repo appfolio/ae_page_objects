@@ -1,13 +1,19 @@
 module AePageObjects
   class Document < Node
     class << self
+      attr_writer :router
+
+      def router
+        @router ||= AePageObjects.router_factory.router_for(self)
+      end
+
       def can_load_from_current_url?
         return true if paths.empty?
 
         url = current_url_without_params
 
         paths.any? do |path|
-          site.path_recognizes_url?(path, url)
+          router.path_recognizes_url?(path, url)
         end
       end
 
@@ -17,7 +23,7 @@ module AePageObjects
 
         path = inner_options.delete(:via) || paths.first
 
-        full_path = site.generate_path(path, *args)
+        full_path = router.generate_path(path, *args)
         raise PathNotResolvable, "#{self.name} not visitable via #{paths.first}(#{args.inspect})" unless full_path
 
         Capybara.current_session.visit(full_path)
@@ -38,6 +44,12 @@ module AePageObjects
       end
 
       def site
+        warn <<-MESSAGE
+[DEPRECATION WARNING]: AePageObjects::Document.site will be removed in AePageObjects 3.0.
+                       AePageObjects::Document subclasses now look for routers. To get a handle to
+                       the router call AePageObjects::Document.router.
+        MESSAGE
+
         @site ||= Site.from(self)
       end
     end
