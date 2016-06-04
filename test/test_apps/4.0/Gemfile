@@ -28,5 +28,5 @@ gem 'turbolinks', '2.5.3'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
-gem 'forum', :path => "../engines"
+gem 'forum', :path => "engines"
 

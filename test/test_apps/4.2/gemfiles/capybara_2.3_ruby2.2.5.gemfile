@@ -14,6 +14,6 @@ gem "uglifier", ">= 1.3.0"
 gem "coffee-rails", "~> 4.0.0"
 gem "turbolinks", "2.5.3"
 gem "jbuilder", "~> 1.2"
-gem "forum", :path=>"../engines"
+gem "forum", :path=>"engines"
 gem "capybara", "~> 2.3.0"
 

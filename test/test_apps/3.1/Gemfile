@@ -10,7 +10,7 @@ gem "appraisal", "~> 0.5.1"
 
 gem 'ae_page_objects', :path => "../../../.."
 
-gem 'forum', :path => "../engines"
+gem 'forum', :path => "engines"
 
 gem 'rake', '~> 11.0'
 
