@@ -2,6 +2,8 @@
 
 ### Changed
 
+* [175](https://github.com/appfolio/ae_page_objects/issues/175) Use `BasicRouter` as default. Move Rails support to `ae_page_objects/rails`.
+* [107](https://github.com/appfolio/ae_page_objects/issues/107) Replaced `Site` and `Document.site` with `AePageObjects.default_router` and `Document.router`
 * [82](https://github.com/appfolio/ae_page_objects/pull/82) Removed Ruby 1.8.7 support
 * [119](https://github.com/appfolio/ae_page_objects/issues/119) Remove Support for Rails 2.3
 
