@@ -16,8 +16,7 @@ module AePageObjects
         MESSAGE
         site.router
       else
-        require 'ae_page_objects/core/application_router'
-        AePageObjects::ApplicationRouter.new
+        AePageObjects::BasicRouter.new
       end
     end
   end

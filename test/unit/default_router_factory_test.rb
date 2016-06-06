@@ -9,7 +9,7 @@ module AePageObjects
       document_class = Class.new
       router = factory.router_for(document_class)
 
-      assert_kind_of AePageObjects::ApplicationRouter, router
+      assert_kind_of AePageObjects::BasicRouter, router
     end
 
     def test_router_for__with_site

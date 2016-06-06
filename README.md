@@ -159,18 +159,25 @@ end
 
 ## Setup
 
-AePageObjects is built to work with any Ruby project using Capybara. To install, simply
-add ae_page_objects to your Gemfile.
+AePageObjects is built to work with any Ruby project using Capybara. To install, add ae_page_objects to your Gemfile:
+
+```ruby
+gem 'ae_page_objects'
+```
 
 ### Rails
 
-AePageObjects is built to work with Rails (versions 3.X-4.X) out of the box. There is nothing to configure or
-change from the instructions above.
+AePageObjects is built to work with Rails (versions 3.X-4.X) out of the box. To use with Rails,
+add this line to your test helper:
+
+```ruby
+require 'ae_page_objects/rails'
+```
 
 ### Non Rails
 
-To get AePageObjects to work in non-Rails environments you'll need to configure a router to use other than default. See
-[Router](#router) for information on how to do that.
+AePageObjects works in non-Rails environments out of the box. However, you'll probably want to configure a custom Router.
+See [Router](#router) for information.
 
 ## Object Model
 AePageObjects mirrors the internal design of Capybara's Node hierarchy, whereby:
@@ -191,29 +198,29 @@ UML-ish model detailing the relationships.
 
 
 ```
-                    AePageObjects                      .                             Capybara
+                 AePageObjects                .                      Capybara
 
-                                                       .
-                   .----------.
-                   |          |         node           .
-         ,---------|   Node   |<>----------------------------------------------------------.
-         |         |          |                        .                                   |
-         |         `----------'                                                       .----------.
-         |          ^       ^                          .                              |          |
-         |          |       |                                               ,---------|   Node   |
-         |          |       |                          .                    |         |          |
-   parent|          |       |                                               |         `----------'
-         |          |       |                          .                    |          ^       ^
-         |          |       |                                               |          |       |
-         |    .---------.  .----------.                .                    |          |       |
-         |    |         |  |          |                               parent|          |       |
-         `--<>| Element |  | Document |                .                    |          |       |
-              |         |  |          |                                     |          |       |
-              `---------'  `----------'                .                    |    .---------.  .----------.
-                                                                            |    |         |  |          |
-                                                       .                    `--<>| Element |  | Document |
-                                                                                 |         |  |          |
-                                                       .                         `---------'  `----------'
+                                              .
+                .----------.
+                |          |         node     .
+      ,---------|   Node   |<>---------------------------------------------.
+      |         |          |                  .                            |
+      |         `----------'                                          .----------.
+      |          ^       ^                    .                       |          |
+      |          |       |                                  ,---------|   Node   |
+      |          |       |                    .             |         |          |
+parent|          |       |                                  |         `----------'
+      |          |       |                    .             |          ^       ^
+      |          |       |                                  |          |       |
+      |    .---------.  .----------.          .             |          |       |
+      |    |         |  |          |                  parent|          |       |
+      `--<>| Element |  | Document |          .             |          |       |
+           |         |  |          |                        |          |       |
+           `---------'  `----------'          .             |    .---------.  .----------.
+                                                            |    |         |  |          |
+                                              .             `--<>| Element |  | Document |
+                                                                 |         |  |          |
+                                              .                  `---------'  `----------'
 ```
 
 ## Documents
@@ -1090,7 +1097,7 @@ proc { "##{__full_name__}" }
 The router reads the path specifications on documents and navigates the browser appropriately
 (see [Document Navigation](#navigation) for details).
 
-The default router understands Rails' named routes. Consider:
+When using in a Rails project, the default router understands Rails' named routes. Consider:
 
 ```ruby
 class LoginPage < AePageObjects::Document

@@ -55,5 +55,6 @@ Capybara.configure do |config|
   end
 end
 
+require "ae_page_objects/rails"
 require "test/page_objects"
 
