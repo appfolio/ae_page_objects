@@ -1,3 +1,5 @@
+require 'ae_page_objects/core/basic_router'
+
 module AePageObjects
   class ApplicationRouter < BasicRouter
 

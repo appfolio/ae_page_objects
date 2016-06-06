@@ -15,11 +15,8 @@ be used in automated acceptance test suites.
 
 - [Overview](#overview)
 - [Setup](#setup)
-  - [AePageObjects::Site](#aepageobjectssite)
-  - [Initializing Page Objects](#initializing-page-objects)
   - [Rails](#rails)
   - [Non Rails](#non-rails)
-  - [Interacting With Multiple Sites](#interacting-with-multiple-sites)
 - [Object Model](#object-model)
 - [Documents](#documents)
   - [Creating a Document](#creating-a-document)
@@ -47,6 +44,11 @@ be used in automated acceptance test suites.
   - [Locators](#locators)
     - [Default Locator](#default-locator)
 - [Router](#router)
+  - [Configuration](#configuration)
+    - [Router interface](#router-interface)
+    - [Configure default router](#configure-default-router)
+    - [Configure router per document](#configure-router-per-document)
+  - [Sharing routers across groups of documents](#sharing-routers-across-groups-of-documents)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -55,53 +57,50 @@ be used in automated acceptance test suites.
 Describe the pages of your site by writing Ruby classes.
 
 ```ruby
-module MyPageObjects
+class LoginPage < AePageObjects::Document
 
-  class LoginPage < AePageObjects::Document
+  # use Rails URL helpers
+  path :new_user_session
 
-    # use Rails URL helpers
-    path :new_user_session
-
-    form_for :user do
-      element :email
-      element :password
-    end
-
-    def login!(username, password)
-      email.set username
-      password.set password
-
-      node.click_on("Log In")
-
-      window.change_to(AuthorsIndexPage)
-    end
+  form_for :user do
+    element :email
+    element :password
   end
 
-  class AuthorsIndexPage < AePageObjects::Document
-    path :authors
+  def login!(username, password)
+    email.set username
+    password.set password
 
-    collection :authors,
-               :is           => Table,
-               :locator      => "table",
-               :item_locator => "tr" do
+    node.click_on("Log In")
 
-      element :first_name, :locator => '.first_name'
-      element :last_name,  :locator => '.last_name'
+    window.change_to(AuthorsIndexPage)
+  end
+end
 
-      def show!
-        node.click_link("Show")
+class AuthorsIndexPage < AePageObjects::Document
+  path :authors
 
-        window.change_to(AuthorsShowPage)
-      end
+  collection :authors,
+             is:           Table,
+             locator:      "table",
+             item_locator: "tr" do
+
+    element :first_name, locator: '.first_name'
+    element :last_name,  locator: '.last_name'
+
+    def show!
+      node.click_link("Show")
+
+      window.change_to(AuthorsShowPage)
     end
   end
+end
 
-  class AuthorsShowPage < AePageObjects::Document
-    path :author
+class AuthorsShowPage < AePageObjects::Document
+  path :author
 
-    element :first_name
-    element :last_name
-  end
+  element :first_name
+  element :last_name
 end
 ```
 
@@ -109,17 +108,17 @@ Use the page objects in a test
 
 ```ruby
 def test_logging_in_goes_to_authors
-  login_page = MyPageObjects::LoginPage.visit
+  login_page = LoginPage.visit
   authors_page = login_page.login_as!('admin', 'password')
 
-  assert_equal MyPageObjects::AuthorsIndexPage, authors_page.class
+  assert_equal AuthorsIndexPage, authors_page.class
 end
 
 def test_authors_are_sorted_by_last_name
-  Author.create!(:first_name => 'Bob', :last_name => 'Smith')
-  Author.create!(:first_name => 'Sponge', :last_name => 'Bob')
+  Author.create!(first_name: 'Bob', last_name: 'Smith')
+  Author.create!(first_name: 'Sponge', last_name: 'Bob')
 
-  authors_page = MyPageObjects::LoginPage.visit.login_as!('admin', 'password')
+  authors_page = LoginPage.visit.login_as!('admin', 'password')
 
   authors = authors_page.authors
   assert_equal 2, authors.size
@@ -134,9 +133,9 @@ def test_authors_are_sorted_by_last_name
 end
 
 def test_can_navigate_to_author_from_index
-  Author.create!(:first_name => 'Sponge', :last_name => 'Bob')
+  Author.create!(first_name: 'Sponge', last_name: 'Bob')
 
-  authors_page = MyPageObjects::LoginPage.visit.login_as!('admin', 'password')
+  authors_page = LoginPage.visit.login_as!('admin', 'password')
 
   sponge_bob = authors_page.authors.first
   sponge_bob_page = sponge_bob.view!
@@ -146,11 +145,11 @@ def test_can_navigate_to_author_from_index
 end
 
 def test_can_navigate_to_author_after_logging_in
-  sponge_bob = Author.create!(:first_name => 'Sponge', :last_name => 'Bob')
+  sponge_bob = Author.create!(first_name: 'Sponge', last_name: 'Bob')
 
-  MyPageObjects::LoginPage.visit.login_as!('admin', 'password')
+  LoginPage.visit.login_as!('admin', 'password')
 
-  sponge_bob_page = MyPageObjects::AuthorsShowPage.visit(sponge_bob)
+  sponge_bob_page = AuthorsShowPage.visit(sponge_bob)
 
   assert_equal "Sponge", sponge_bob_page.first_name.text
   assert_equal "Bob", sponge_bob_page.last_name.text
@@ -160,108 +159,25 @@ end
 
 ## Setup
 
-AePageObjects is built to work with any Ruby project using Capybara. To install, simply
-add ae_page_objects to your Gemfile.
-
-You will need to designate a namespace to hold your page objects. In that
-namespace create a subclass of `AePageObjects::Site`. For example:
+AePageObjects is built to work with any Ruby project using Capybara. To install, add ae_page_objects to your Gemfile:
 
 ```ruby
-# test/my_page_objects/site.rb
-
-require 'ae_page_objects'
-
-module MyPageObjects
-  class Site < AePageObjects::Site
-  end
-end
-```
-
-### AePageObjects::Site
-
-`AePageObjects::Site` is the place for configuring all the page objects belonging to a remote site. You are free to
-organize your page object source files however you like.
-
-### Initializing Page Objects
-
-Your `AePageObjects::Site` must be initialized before the page objects can be used:
-
-```ruby
-MyPageObjects::Site.initialize!
+gem 'ae_page_objects'
 ```
 
 ### Rails
 
-AePageObjects is built to work with Rails (versions 3.X-4.X) out of the box. There is nothing to configure or
-change from the instructions above.
+AePageObjects is built to work with Rails (versions 3.X-4.X) out of the box. To use with Rails,
+add this line to your test helper:
+
+```ruby
+require 'ae_page_objects/rails'
+```
 
 ### Non Rails
 
-To get AePageObjects to work in non-Rails environments you'll need to configure a router to use other than
-`ApplicationRouter` in your `AePageObjects::Site`. For example:
-
-```ruby
-# test/my_page_objects/site.rb
-
-require 'ae_page_objects'
-
-module MyPageObjects
-  class Site < AePageObjects::Site
-    self.router = MyRouter.new
-  end
-end
-```
-
-For more about routers see [Router](#router).
-
-### Interacting With Multiple Sites
-
-AePageObjects is designed so that a single Ruby process can interact with multiple remote sites.
-The page objects for each remote site are defined in separate namespaces, each of which define
-their own `AePageObjects::Site` subclass. For example:
-
-```ruby
-require 'ae_page_objects'
-
-module MyPageObjectsForSomeSite
-  class Site < AePageObjects::Site
-  end
-end
-
-module MyPageObjectsForADifferentSite
-  class Site < AePageObjects::Site
-  end
-end
-```
-
-Typically, different remote sites are accessible via different URLs. Before initializing, each
-Site can be configured with a router that uses a different URL. For example:
-
-```ruby
-MyPageObjectsForSomeSite::Site.router       = UrlBoundRouter.new(:url => 'www.somesite.com:3000')
-MyPageObjectsForADifferentSite::Site.router = UrlBoundRouter.new(:url => 'www.adifferentsite.com:3000')
-```
-
-In the example above a hypothetical, custom Router (UrlBoundRouter) is used. For more about routers see [Router](#router).
-
-Before using a set of page objects the Site has to be initialized:
-
-```ruby
-MyPageObjectsForSomeSite::Site.initialize!
-MyPageObjectsForADifferentSite::Site.initialize!
-```
-
-With the page objects setup, you can now write a test across different sites
-
-```ruby
-def test_some_site_and_a_different_site
-  dashboard_page = MyPageObjectsForSomeSite::LoginPage.visit.login_as!('admin', 'password')
-  assert_equal 5, dashboard_page.two_plus_two_field.value
-
-  other_site = MyPageObjectsForADifferentSite::HomePage.visit
-  assert_equal "1984", other_site.heading.text
-end
-```
+AePageObjects works in non-Rails environments out of the box. However, you'll probably want to configure a custom Router.
+See [Router](#router) for information.
 
 ## Object Model
 AePageObjects mirrors the internal design of Capybara's Node hierarchy, whereby:
@@ -282,29 +198,29 @@ UML-ish model detailing the relationships.
 
 
 ```
-                    AePageObjects                      .                             Capybara
+                 AePageObjects                .                      Capybara
 
-                                                       .
-                   .----------.
-                   |          |         node           .
-         ,---------|   Node   |<>----------------------------------------------------------.
-         |         |          |                        .                                   |
-         |         `----------'                                                       .----------.
-         |          ^       ^                          .                              |          |
-         |          |       |                                               ,---------|   Node   |
-         |          |       |                          .                    |         |          |
-   parent|          |       |                                               |         `----------'
-         |          |       |                          .                    |          ^       ^
-         |          |       |                                               |          |       |
-         |    .---------.  .----------.                .                    |          |       |
-         |    |         |  |          |                               parent|          |       |
-         `--<>| Element |  | Document |                .                    |          |       |
-              |         |  |          |                                     |          |       |
-              `---------'  `----------'                .                    |    .---------.  .----------.
-                                                                            |    |         |  |          |
-                                                       .                    `--<>| Element |  | Document |
-                                                                                 |         |  |          |
-                                                       .                         `---------'  `----------'
+                                              .
+                .----------.
+                |          |         node     .
+      ,---------|   Node   |<>---------------------------------------------.
+      |         |          |                  .                            |
+      |         `----------'                                          .----------.
+      |          ^       ^                    .                       |          |
+      |          |       |                                  ,---------|   Node   |
+      |          |       |                    .             |         |          |
+parent|          |       |                                  |         `----------'
+      |          |       |                    .             |          ^       ^
+      |          |       |                                  |          |       |
+      |    .---------.  .----------.          .             |          |       |
+      |    |         |  |          |                  parent|          |       |
+      `--<>| Element |  | Document |          .             |          |       |
+           |         |  |          |                        |          |       |
+           `---------'  `----------'          .             |    .---------.  .----------.
+                                                            |    |         |  |          |
+                                              .             `--<>| Element |  | Document |
+                                                                 |         |  |          |
+                                              .                  `---------'  `----------'
 ```
 
 ## Documents
@@ -332,9 +248,8 @@ class LoginPage < AePageObjects::Document
 end
 ```
 
-The type of arguments that `path` can take depends on the router configured for the `AePageObject::Site` of your
-page objects namespace. For Rails projects, by default, `path` will accept strings and Rails URL helper names. See
-[Router](#router) for more details.
+The type of arguments that `path` can take depends on the configured router. For Rails projects, `path` will accept 
+strings and Rails URL helper names. See [Router](#router) for more details.
 
 
 ### Navigation
@@ -363,6 +278,8 @@ login_page = LoginPage.visit
 login_page = LoginPage.visit(token: token, via: :access_autologin)
 ```
 
+The `visit` method will pass down arguments to the configured router (excluding `via:`). In Rails projects, this means
+you can pass in the same arguments you would pass to Rails URL helpers.
 
 ### Load Ensuring
 
@@ -387,7 +304,7 @@ will fail:
 
 ```ruby
 login_page = LoginPage.new
-AePageObjects::LoadingPageFailed: MyPageObjects::LoginPage cannot be loaded with url '/dashboard/statistics'
+AePageObjects::LoadingPageFailed: LoginPage cannot be loaded with url '/dashboard/statistics'
   test/selenium/login_test.rb:16:in `new'
 ```
 
@@ -422,7 +339,7 @@ class LoginPage < AePageObjects::Document
 
 private
   def loaded_locator
-    [:css, ".something .somewhere", {:visible => true}]
+    [:css, ".something .somewhere", {visible: true}]
   end
 end
 ```
@@ -520,13 +437,13 @@ Some test code using these page objects:
 
 ```ruby
 def test_logging_in_goes_to_authors
-  login_page = MyPageObjects::LoginPage.visit
+  login_page = LoginPage.visit
 
   authors_page = login_page.login_as!('admin', 'password')
-  assert_equal MyPageObjects::AuthorsIndexPage, authors_page.class
+  assert_equal AuthorsIndexPage, authors_page.class
 
   books_page = authors_page.show_report!("Book Report")
-  assert_equal MyPageObjects::ReportPage, books_page.class
+  assert_equal ReportPage, books_page.class
 end
 ```
 
@@ -538,14 +455,13 @@ be invalid. Accessing the login_page reference after the browser has changed pag
 
 ```ruby
 def test_logging_in_goes_to_authors
-  login_page = MyPageObjects::LoginPage.visit
+  login_page = LoginPage.visit
   authors_page = login_page.login_as!('admin', 'password')
 
   login_page.email.text
 
   # above line raises:
-  # AePageObjects::StalePageObject: Can't access stale page object '#<MyPageObjects::LoginPage:0x11c604268>'
-  #   ae_page_objects (0.1.2) lib/ae_page_objects/concerns/staleable.rb:15:in `node'
+  # AePageObjects::StalePageObject: Can't access stale page object '#<LoginPage:0x11c604268>'
 end
 ```
 
@@ -644,7 +560,7 @@ this case). Using the `element` method you can specify a different name to be us
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
   element :first_name
-  element :last_name, :name => 'sur_name'
+  element :last_name, name: 'sur_name'
 end
 ```
 
@@ -656,7 +572,7 @@ If you need more control of how the element is located on the page you can speci
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
   element :first_name
-  element :last_name, :locator => [:css, '.last_name', {:visible => true}]
+  element :last_name, locator: [:css, '.last_name', {visible: true}]
 end
 ```
 
@@ -706,8 +622,8 @@ in the previous examples, you can change the names for any of the elements to ma
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
-  element :address, :name => 'primary_address' do
-    element :street, :name => 'street1'
+  element :address, name: 'primary_address' do
+    element :street, name: 'street1'
     element :city
   end
 end
@@ -747,8 +663,8 @@ class AuthorsShowPage < AePageObjects::Document
     element :name
     element :phone_number
 
-    element :address, :name => 'primary_address' do
-      element :street, :name => 'street1'
+    element :address, name: 'primary_address' do
+      element :street, name: 'street1'
       element :city
     end
   end
@@ -836,12 +752,12 @@ class AuthorsShowPage < AePageObjects::Document
     element :name
     element :phone_number
 
-    element :address, :is => Address
+    element :address, is: Address
   end
 end
 
 class BusinessShowPage < AePageObjects::Document
-  element :address, :is => Address
+  element :address, is: Address
 end
 ```
 
@@ -861,7 +777,7 @@ class ThreePartDate < AePageObjects::Element
 end
 
 class AuthorsShowPage < AePageObjects::Document
-  element :birth_date, :is => ThreePartDate
+  element :birth_date, is: ThreePartDate
 end
 
 author_page = AuthorsShowPage.new
@@ -964,7 +880,7 @@ end
 
 class AuthorsNewPage < AePageObjects::Document
   form_for :author do
-    collection :addresses, :contains => Address
+    collection :addresses, contains: Address
   end
 end
 ```
@@ -985,7 +901,7 @@ end
 
 class AuthorsNewPage < AePageObjects::Document
   form_for :author do
-    collection :addresses, :is => AddressList, :contains => Address
+    collection :addresses, is: AddressList, contains: Address
   end
 end
 ```
@@ -1011,12 +927,12 @@ class AlertBox < AePageObjects::Element
 end
 
 class AuthorsShowPage < AePageObjects::Document
-  element :alert, :is => AlertBox
-  element :delete_button, :locator => '.delete'
+  element :alert, is: AlertBox
+  element :delete_button, locator: '.delete'
 end
 
 def test_logging_in_goes_to_authors
-  authors_page = MyPageObjects::AuthorsShowPage.visit
+  authors_page = AuthorsShowPage.visit
   authors_page.delete_button.click
 
   alert_box = authors_page.alert
@@ -1039,11 +955,11 @@ Use ```present?``` and ```absent?``` to check the presence of an element on the 
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
-  element :delete_button, :locator => '.delete'
+  element :delete_button, locator: '.delete'
 end
 
 def test_delete_button_presence
-  authors_page = MyPageObjects::AuthorsShowPage.visit
+  authors_page = AuthorsShowPage.visit
 
   assert authors_page.delete_button.present?
   assert ! authors_page.delete_button.absent?
@@ -1072,7 +988,7 @@ class AuthorsShowPage < AePageObjects::Document
 end
 
 def test_headshots
-  authors_page = MyPageObjects::AuthorsShowPage.visit
+  authors_page = AuthorsShowPage.visit
   authors_page.view_headshots do |viewer|
     assert_equal 0, viewer.shots.size
   end
@@ -1085,11 +1001,11 @@ Use ```visible?``` and ```hidden?``` to check whether an element is present and 
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
-  element :delete_button, :locator => '.delete'
+  element :delete_button, locator: '.delete'
 end
 
 def test_delete_button_visibility
-  authors_page = MyPageObjects::AuthorsShowPage.visit
+  authors_page = AuthorsShowPage.visit
 
   assert authors_page.delete_button.visible?
   assert ! authors_page.delete_button.hidden?
@@ -1106,7 +1022,7 @@ class AuthorsShowPage < AePageObjects::Document
 end
 
 def test_survey
-  authors_page = MyPageObjects::AuthorsShowPage.visit
+  authors_page = AuthorsShowPage.visit
 
   survey = authors_page.survey
   survey.wait_until_visible
@@ -1124,7 +1040,7 @@ the context of an existing node. Anything that `Capybara::Node::Base::find` supp
 [:css, '.somecss #selector']                      #-> calls <capybara-node>.find(:css, '.somecss #selector')
 '.somecss #selector'                              #-> calls <capybara-node>.find('.somecss #selector')
 [:xpath, '//div/tr']                              #-> calls <capybara-node>.find(:xpath, '//div/tr')
-['.somecss #selector', {:visible => true}]        #-> calls <capybara-node>.find('.somecss #selector', :visible => true)
+['.somecss #selector', {visible: true}]        #-> calls <capybara-node>.find('.somecss #selector', visible: true)
 ```
 
 `Capybara::Node::Base::find` finds elements from within the context of the element `find` is called on. The same is true
@@ -1152,7 +1068,7 @@ element at `div#div2 .highlight` will be found.
 In addition to the valid argument types to `Capybara::Node::Base::find`, locators can also be procs:
 
 ```ruby
-proc { [:css, ".somecss ##{self.name}", {:visible => true}] }
+proc { [:css, ".somecss ##{self.name}", {visible: true}] }
 ```
 
 Locators that are procs are instance_eval'd within the context of the existing `AePageObject::Node`.
@@ -1161,7 +1077,7 @@ For example:
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
-  element :first_name, :locator => proc { [:xpath, "//*[contains(@id, '#{name}')]"] }
+  element :first_name, locator: proc { [:xpath, "//*[contains(@id, '#{name}')]"] }
 end
 
 author_page = AuthorsShowPage.new
@@ -1178,5 +1094,90 @@ proc { "##{__full_name__}" }
 
 ## Router
 
-- Routing
-- alternate routers
+The router reads the path specifications on documents and navigates the browser appropriately
+(see [Document Navigation](#navigation) for details).
+
+When using in a Rails project, the default router understands Rails' named routes. Consider:
+
+```ruby
+class LoginPage < AePageObjects::Document
+  path :new_session
+end
+
+LoginPage.visit
+```
+
+In the above example, `visit` will use the router to determine the URL to use to navigate the browser. The router will
+invoke `new_session_path` on the router of the Rails application to determine the URL.
+
+### Configuration
+
+The router can be changed either globally or on a per document basis.
+
+#### Router interface
+
+Routers must implement the following interface:
+
+```ruby
+class MyFavRouter
+  # returns true if the path specification recognizes the url
+  def path_recognizes_url?(path, url)
+  end
+
+  # returns a string representing the url
+  def generate_path(path, *args)
+  end
+end
+```
+
+The `path` parameter holds the document path specification (`new_session` in the above example). The `url` argument is
+the current URL of the browser window. The `args` parameter holds the arguments passed to `visit`.
+
+#### Configure default router
+
+To change the router globally set `AePageObjects.default_router` to an object that implements the router interface:
+
+```ruby
+AePageObjects.default_router = MyFavRouter.new
+```
+
+#### Configure router per document
+
+To change the router on a per document basis set the `router` property on the document class directly:
+
+```ruby
+LoginPage.router = MyFavRouter.new
+```
+
+### Sharing routers across groups of documents
+
+In complex applications, it may be necessary to use multiple routers for different groups of documents.
+To accomplish this, group document classes under base classes and set the router on the base class.
+
+For example: 
+
+```ruby
+class AdminDocument < AePageObjects::Document
+  self.router = AdminRouter.new
+end
+
+class AdminSettingsPage < AdminDocument
+  path :admin_settings
+end
+
+class ReportDocument < AePageObjects::Document
+  self.router = ReportingRouter.new
+end
+
+class UsageReportPage < ReportDocument
+  path :usage_report
+end
+
+class LoginPage < AePageObjects::Document
+  path :new_session
+end
+```
+
+`AdminSettingsPage.visit` will use `AdminRouter`.
+`UsageReportPage.visit` will use `ReportingRouter`.
+`LoginPage.visit` will use `AePageObjects.default_router`.
