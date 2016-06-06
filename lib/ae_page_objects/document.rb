@@ -42,16 +42,6 @@ module AePageObjects
 
         paths << path_method
       end
-
-      def site
-        warn <<-MESSAGE
-[DEPRECATION WARNING]: AePageObjects::Document.site will be removed in AePageObjects 3.0.
-                       AePageObjects::Document subclasses now look for routers. To get a handle to
-                       the router call AePageObjects::Document.router.
-        MESSAGE
-
-        @site ||= Site.from(self)
-      end
     end
 
     attr_reader :window

@@ -86,7 +86,3 @@ end
 
 require 'ae_page_objects/core/default_router_factory'
 AePageObjects.router_factory = AePageObjects::DefaultRouterFactory.new
-
-# load deprecated Site by default.
-require 'ae_page_objects/deprecated_site/site'
-
