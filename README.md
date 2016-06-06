@@ -46,7 +46,7 @@ be used in automated acceptance test suites.
 - [Router](#router)
   - [Configuration](#configuration)
     - [Router interface](#router-interface)
-    - [Configure custom router factory](#configure-custom-router-factory)
+    - [Configure default router](#configure-default-router)
     - [Configure router per document](#configure-router-per-document)
   - [Sharing routers across groups of documents](#sharing-routers-across-groups-of-documents)
 
@@ -1133,23 +1133,12 @@ end
 The `path` parameter holds the document path specification (`new_session` in the above example). The `url` argument is
 the current URL of the browser window. The `args` parameter holds the arguments passed to `visit`.
 
-#### Configure custom router factory
+#### Configure default router
 
-To change the router globally, implement a router factory implementing the following interface:
-
-```ruby
-class MyFavRouterFactory
-  def router_for(document_class)
-    MyFavRouter.new
-  end
-end
-```
-
-The `router_for` method should return an object that implements the router interface described above. Set AePageObjects
-to use your router factory:
+To change the router globally set `AePageObjects.default_router` to an object that implements the router interface:
 
 ```ruby
-AePageObjects.router_factory = MyFavRouterFactory.new
+AePageObjects.default_router = MyFavRouter.new
 ```
 
 #### Configure router per document
@@ -1162,35 +1151,33 @@ LoginPage.router = MyFavRouter.new
 
 ### Sharing routers across groups of documents
 
-In complex applications, it may be necessary to use multiple routers for different groups of documents. There are 2 ways to
-accomplish this:
+In complex applications, it may be necessary to use multiple routers for different groups of documents.
+To accomplish this, group document classes under base classes and set the router on the base class.
 
-  1. Use a custom router factory that returns the appropriate router based on the specified document class.
-     (see [Configure custom router factory](#configure-custom-router-factory)).
-  2. Group document classes under base classes and set the router on the base class. For example:
+For example: 
 
-     ```ruby
-     class AdminDocument < AePageObjects::Document
-       self.router = AdminRouter.new
-     end
-    
-     class AdminSettingsPage < AdminDocument
-       path :admin_settings
-     end
-     
-     class ReportDocument < AePageObjects::Document
-       self.router = ReportingRouter.new
-     end
-     
-     class UsageReportPage < ReportDocument
-       path :usage_report
-     end
-     
-     class LoginPage < AePageObjects::Document
-       path :new_session
-     end
-     ```
-     
-     `AdminSettingsPage.visit` will use `AdminRouter`.
-     `UsageReportPage.visit` will use `ReportingRouter`.
-     `LoginPage.visit` will use `AePageObjects.router_factory`.
+```ruby
+class AdminDocument < AePageObjects::Document
+  self.router = AdminRouter.new
+end
+
+class AdminSettingsPage < AdminDocument
+  path :admin_settings
+end
+
+class ReportDocument < AePageObjects::Document
+  self.router = ReportingRouter.new
+end
+
+class UsageReportPage < ReportDocument
+  path :usage_report
+end
+
+class LoginPage < AePageObjects::Document
+  path :new_session
+end
+```
+
+`AdminSettingsPage.visit` will use `AdminRouter`.
+`UsageReportPage.visit` will use `ReportingRouter`.
+`LoginPage.visit` will use `AePageObjects.default_router`.

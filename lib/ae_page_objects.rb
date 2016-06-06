@@ -39,7 +39,7 @@ module AePageObjects
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'
 
   class << self
-    attr_accessor :router_factory
+    attr_accessor :default_router
 
     def browser
       @browser ||= begin
@@ -84,5 +84,5 @@ module AePageObjects
   end
 end
 
-require 'ae_page_objects/core/default_router_factory'
-AePageObjects.router_factory = AePageObjects::DefaultRouterFactory.new
+require 'ae_page_objects/core/basic_router'
+AePageObjects.default_router = AePageObjects::BasicRouter.new

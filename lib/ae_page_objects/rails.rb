@@ -1,3 +1,3 @@
-require 'ae_page_objects/rails/rails_router_factory'
+require 'ae_page_objects/rails/application_router'
 
-AePageObjects.router_factory = AePageObjects::RailsRouterFactory.new
+AePageObjects.default_router = AePageObjects::ApplicationRouter.new

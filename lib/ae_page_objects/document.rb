@@ -4,7 +4,13 @@ module AePageObjects
       attr_writer :router
 
       def router
-        @router ||= AePageObjects.router_factory.router_for(self)
+        @router ||= begin
+          if [self, superclass].include?(Document)
+            AePageObjects.default_router
+          else
+            superclass.router
+          end
+        end
       end
 
       def can_load_from_current_url?

@@ -41,4 +41,8 @@ class AePageObjectsTest < AePageObjectsTestCase
     end
     assert_equal "Time appears to be frozen", raised.message
   end
+
+  def test_default_router
+    assert_kind_of AePageObjects::BasicRouter, AePageObjects.default_router
+  end
 end

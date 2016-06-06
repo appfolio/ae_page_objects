@@ -4,6 +4,11 @@ module AePageObjects
   class DocumentTest < AePageObjectsTestCase
     include NodeInterfaceTests
 
+    def teardown
+      AePageObjects::Document.router = nil
+      super
+    end
+
     def test_document
       kitty_class = Class.new(AePageObjects::Document)
 
@@ -90,7 +95,7 @@ module AePageObjects
         path :view_book
       end
 
-      router = mock
+      router           = mock
       show_page.router = router
 
       book           = stub
@@ -120,11 +125,41 @@ module AePageObjects
     def test_router
       page_class = Class.new(AePageObjects::Document)
 
-      AePageObjects.router_factory.expects(:router_for).with(page_class).returns(:blah)
+      AePageObjects.expects(:default_router).returns(:blah)
       assert_equal :blah, page_class.router
 
       # test memoization
       assert_equal :blah, page_class.router
+    end
+
+    def test_router__inheritance
+      page_1 = Class.new(AePageObjects::Document)
+      page_1_2 = Class.new(page_1)
+
+      page_2 = Class.new(AePageObjects::Document)
+      page_2_2 = Class.new(page_2)
+      page_2_3 = Class.new(page_2)
+      page_2_3_2 = Class.new(page_2_3)
+
+      router1 = Object.new
+      router2 = Object.new
+
+      page_1.router = router1
+      page_2_3.router = router2
+
+      assert_equal AePageObjects.default_router, AePageObjects::Document.router
+
+      assert_equal router1, page_1.router
+      assert_equal router1, page_1_2.router
+
+      assert_equal AePageObjects.default_router, page_2.router
+      assert_equal page_2.router, page_2_2.router
+      assert_equal router2, page_2_3.router
+      assert_equal router2, page_2_3_2.router
+
+      # verify memoization
+      page_2_3.router = nil
+      assert_equal router2, page_2_3_2.router
     end
 
     private
