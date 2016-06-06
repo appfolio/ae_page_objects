@@ -1,11 +1,7 @@
-$LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
-$LOAD_PATH << File.join(File.dirname(__FILE__), '..')
-$LOAD_PATH << File.join(File.dirname(__FILE__))
-
-require 'rubygems'
+require 'ae_page_objects'
 
 require 'selenium-webdriver'
-require 'ae_page_objects'
+
 require 'test/unit'
 require "mocha/setup"
 

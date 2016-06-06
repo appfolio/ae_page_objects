@@ -12,8 +12,6 @@ require "rails/test_help"
 require 'capybara/dsl'
 require 'capybara/rails'
 
-Dir["../../test_helpers/**/*.rb"].each {|f| require f}
-
 module Selenium
   class TestCase < ActiveSupport::TestCase
     include Capybara::DSL
