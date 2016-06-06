@@ -1,3 +1,5 @@
+require 'ae_page_objects/single_window/window'
+
 module AePageObjects
   module SingleWindow
     class Browser

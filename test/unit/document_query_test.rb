@@ -1,5 +1,7 @@
 require 'unit_helper'
 
+require 'ae_page_objects/document_query'
+
 module AePageObjects
   class DocumentQueryTest < AePageObjectsTestCase
 

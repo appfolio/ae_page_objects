@@ -1,5 +1,11 @@
 require 'unit_helper'
 
+require 'ae_page_objects/single_window/same_window_loader_strategy'
+
+require 'ae_page_objects/document_loader'
+require 'ae_page_objects/document_proxy'
+require 'ae_page_objects/document_query'
+
 module AePageObjects
   module SingleWindow
     class SameWindowLoaderStrategyTest < AePageObjectsTestCase

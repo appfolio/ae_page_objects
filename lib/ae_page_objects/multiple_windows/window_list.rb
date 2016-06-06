@@ -1,3 +1,6 @@
+require 'ae_page_objects/multiple_windows/window_handle_manager'
+require 'ae_page_objects/multiple_windows/window'
+
 module AePageObjects
   module MultipleWindows
     class WindowList

@@ -29,6 +29,8 @@ class AePageObjectsTestCase < Test::Unit::TestCase
   end
 
   def stub_current_window
+    require 'ae_page_objects/multiple_windows/window_handle_manager'
+    
     capybara_stub
     AePageObjects::MultipleWindows::WindowHandleManager.stubs(:current).returns("window_handle")
   end

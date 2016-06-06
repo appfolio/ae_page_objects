@@ -1,3 +1,5 @@
+require 'ae_page_objects/core/dsl'
+
 module AePageObjects
   class Node
     extend Dsl
