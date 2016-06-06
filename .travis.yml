@@ -7,6 +7,9 @@ sudo: false
 
 bundler_args: ''
 
+before_install:
+  - gem install bundler -v 1.12.3
+
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
