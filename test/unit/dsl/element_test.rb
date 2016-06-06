@@ -9,7 +9,7 @@ module AePageObjects
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
         jon = kitty.new
@@ -25,7 +25,7 @@ module AePageObjects
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
@@ -42,7 +42,7 @@ module AePageObjects
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
@@ -60,7 +60,7 @@ module AePageObjects
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
@@ -77,7 +77,7 @@ module AePageObjects
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
@@ -96,7 +96,7 @@ module AePageObjects
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
@@ -116,7 +116,7 @@ module AePageObjects
         end
 
         assert kitty.method_defined?(:kind)
-        assert_sets_equal [:kind], kitty.element_attributes.keys
+        assert_equal [:kind], kitty.element_attributes.keys
 
         stub_current_window
 
@@ -362,11 +362,11 @@ module AePageObjects
     private
 
       def verify_kitty_structure(kitty_class)
-        assert_sets_equal [:tail], kitty_class.element_attributes.keys
-        assert_sets_equal [:color, :size], kitty_class.element_attributes[:tail].element_attributes.keys
+        assert_equal [:tail], kitty_class.element_attributes.keys
+        assert_equal [:color, :size], kitty_class.element_attributes[:tail].element_attributes.keys.sort
 
         size_class = kitty_class.element_attributes[:tail].element_attributes[:size]
-        assert_sets_equal [:length, :width], size_class.element_attributes.keys
+        assert_equal [:length, :width], size_class.element_attributes.keys.sort
         assert_include size_class.instance_methods(false).map(&:to_s), "grow!"
       end
     end

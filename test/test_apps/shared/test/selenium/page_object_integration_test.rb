@@ -76,7 +76,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     # test an explicit cast
     new_page = result_page.as_a(PageObjects::Books::NewPage)
-    assert_include new_page.form.error_messages, "Title can't be blank"
+    assert_includes new_page.form.error_messages, "Title can't be blank"
 
     new_page.title.set "Hello World"
 
@@ -177,8 +177,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
     Capybara.using_wait_time(1) do
       assert author.rating.star.present?
       assert author.rating.star.visible?
-      assert_false author.rating.star.absent?
-      assert_false author.rating.star.hidden?
+      refute author.rating.star.absent?
+      refute author.rating.star.hidden?
     end
 
     assert_nothing_raised do
@@ -192,19 +192,19 @@ class PageObjectIntegrationTest < Selenium::TestCase
     Capybara.using_wait_time(1) do
       author.rating.hide_star
       assert author.rating.star.present?
-      assert_false author.rating.star.visible?
-      assert_false author.rating.star.absent?
+      refute author.rating.star.visible?
+      refute author.rating.star.absent?
       assert author.rating.star.hidden?
 
       author.rating.show_star
       assert author.rating.star.present?
       assert author.rating.star.visible?
-      assert_false author.rating.star.absent?
-      assert_false author.rating.star.hidden?
+      refute author.rating.star.absent?
+      refute author.rating.star.hidden?
 
       author.rating.remove_star
-      assert_false author.rating.star.present?
-      assert_false author.rating.star.visible?
+      refute author.rating.star.present?
+      refute author.rating.star.visible?
       assert author.rating.star.absent?
       assert author.rating.star.hidden?
     end
@@ -235,7 +235,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_element_proxy__not_present
     author = PageObjects::Authors::NewPage.visit
-    assert_false author.missing.present?
+    refute author.missing.present?
     assert author.missing.absent?
 
     assert_nothing_raised do
@@ -254,15 +254,15 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
       author.nested_rating.hide_star
       assert author.nested_rating.star.present?
-      assert_false author.nested_rating.star.visible?
+      refute author.nested_rating.star.visible?
 
       author.nested_rating.show_star
       assert author.nested_rating.star.present?
       assert author.nested_rating.star.visible?
 
       author.nested_rating.remove_star
-      assert_false author.nested_rating.star.present?
-      assert_false author.nested_rating.star.visible?
+      refute author.nested_rating.star.present?
+      refute author.nested_rating.star.visible?
     end
   end
 
@@ -301,36 +301,36 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_document_tracking
     author = PageObjects::Authors::NewPage.visit
-    assert_false author.stale?
+    refute author.stale?
 
     visit("/books/new")
-    assert_false author.stale?
+    refute author.stale?
 
     book = PageObjects::Books::NewPage.new
     assert author.stale?
-    assert_false book.stale?
+    refute book.stale?
 
     author = PageObjects::Authors::NewPage.visit
-    assert_false author.stale?
+    refute author.stale?
     assert book.stale?
 
     book = PageObjects::Books::NewPage.visit
     assert author.stale?
-    assert_false book.stale?
+    refute book.stale?
 
     author = PageObjects::Authors::NewPage.visit
-    assert_false author.stale?
+    refute author.stale?
     assert book.stale?
 
     visit("/authors/new")
-    assert_false author.stale?
+    refute author.stale?
     assert book.stale?
 
     assert_raises AePageObjects::LoadingPageFailed do
       PageObjects::Books::NewPage.new
     end
 
-    assert_false author.stale?
+    refute author.stale?
     assert book.stale?
   end
 
@@ -367,14 +367,14 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window2_authors_robert_row = window2_authors.authors.first.show!
     assert_equal window2, window2_authors_robert_row.window
     assert window2_authors.stale?
-    assert_false window1_author_robert.stale?
+    refute window1_author_robert.stale?
 
     window2.close
     assert window2_author_robert.stale?
     assert_equal nil, window2.current_document
     assert_windows(window1, :current => window1)
 
-    assert_false window1_author_robert.stale?
+    refute window1_author_robert.stale?
     assert_equal window1_author_robert, window1.current_document
 
     # close a window without an explicit switch
@@ -393,7 +393,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal nil, window1.current_document
     assert_windows(window3, :current => window3)
 
-    assert_false window3_author_robert.stale?
+    refute window3_author_robert.stale?
     assert_equal window3_author_robert, window3.current_document
 
     # attempt to close the last window

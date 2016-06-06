@@ -17,7 +17,6 @@ Dir["../../test_helpers/**/*.rb"].each {|f| require f}
 module Selenium
   class TestCase < ActiveSupport::TestCase
     include Capybara::DSL
-    include AfCruft
 
     self.use_instantiated_fixtures  = false
     self.use_transactional_fixtures = false

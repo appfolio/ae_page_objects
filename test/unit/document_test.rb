@@ -79,7 +79,7 @@ module AePageObjects
 
       kitty_page = kitty_class.new
       assert_equal capybara_stub.session, kitty_page.node
-      assert_false kitty_page.stale?
+      refute kitty_page.stale?
 
       kitty_page.stale!
       assert kitty_page.stale?
