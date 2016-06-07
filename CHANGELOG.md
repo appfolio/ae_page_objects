@@ -1,5 +1,9 @@
 ## Version 2.0.0
 
+### Added
+
+* [111](https://github.com/appfolio/ae_page_objects/issues/111) Adding wait: option to all polling query methods.
+
 ### Changed
 
 * [176](https://github.com/appfolio/ae_page_objects/pull/176) Limit exposed constants to _public_ API.
