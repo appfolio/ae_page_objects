@@ -1,3 +1,5 @@
+require 'ae_page_objects/element_proxy'
+
 module AePageObjects
   class Collection < Element
     include Enumerable

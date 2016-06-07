@@ -1,11 +1,7 @@
-$LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
-$LOAD_PATH << File.join(File.dirname(__FILE__), '..')
-$LOAD_PATH << File.join(File.dirname(__FILE__))
-
-require 'rubygems'
+require 'ae_page_objects'
 
 require 'selenium-webdriver'
-require 'ae_page_objects'
+
 require 'test/unit'
 require "mocha/setup"
 
@@ -13,7 +9,6 @@ Dir[File.join(File.dirname(__FILE__), 'test_helpers', '**', '*.rb')].each {|f| r
 
 class AePageObjectsTestCase < Test::Unit::TestCase
   include NodeFieldTestHelpers
-  include AfCruft
 
   undef_method :default_test if method_defined?(:default_test)
 
@@ -29,6 +24,8 @@ class AePageObjectsTestCase < Test::Unit::TestCase
   end
 
   def stub_current_window
+    require 'ae_page_objects/multiple_windows/window_handle_manager'
+
     capybara_stub
     AePageObjects::MultipleWindows::WindowHandleManager.stubs(:current).returns("window_handle")
   end

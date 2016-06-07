@@ -1,3 +1,5 @@
+require 'ae_page_objects/single_window/same_window_loader_strategy'
+
 module AePageObjects
   module MultipleWindows
     class CrossWindowLoaderStrategy

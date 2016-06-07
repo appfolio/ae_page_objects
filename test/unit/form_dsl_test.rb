@@ -141,16 +141,16 @@ module AePageObjects
     end
 
     def verify_kitty_structure(kitty_class)
-      assert_sets_equal [:kitty, :name, :age, :owner, :past_lives], kitty_class.element_attributes.keys
-      assert_sets_equal [:name, :age, :owner, :past_lives], kitty_class.element_attributes[:kitty].element_attributes.keys
+      assert_equal [:age, :kitty, :name, :owner, :past_lives], kitty_class.element_attributes.keys.sort
+      assert_equal [:age, :name, :owner, :past_lives], kitty_class.element_attributes[:kitty].element_attributes.keys.sort
 
       owner_class = kitty_class.element_attributes[:kitty].element_attributes[:owner]
-      assert_sets_equal [:name], owner_class.element_attributes.keys
+      assert_equal [:name], owner_class.element_attributes.keys
 
       past_lives_item_class = kitty_class.element_attributes[:kitty].element_attributes[:past_lives].item_class
-      assert_sets_equal [:died_at], past_lives_item_class.element_attributes.keys
+      assert_equal [:died_at], past_lives_item_class.element_attributes.keys
 
-      assert_sets_equal ["kitty", "owner", "age", "name", "past_lives"].map(&:to_sym), kitty_class.public_instance_methods(false).map(&:to_sym)
+      assert_equal [:age, :kitty, :name, :owner, :past_lives], kitty_class.public_instance_methods(false).map(&:to_sym).sort
     end
   end
 end

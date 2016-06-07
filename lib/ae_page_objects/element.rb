@@ -1,3 +1,5 @@
+require 'ae_page_objects/util/hash_symbolizer'
+
 module AePageObjects
   class Element < Node
     attr_reader :parent

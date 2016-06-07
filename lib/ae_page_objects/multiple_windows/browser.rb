@@ -1,3 +1,10 @@
+require 'ae_page_objects/multiple_windows/cross_window_loader_strategy'
+require 'ae_page_objects/multiple_windows/window_list'
+
+require 'ae_page_objects/document_loader'
+require 'ae_page_objects/document_proxy'
+require 'ae_page_objects/document_query'
+
 module AePageObjects
   module MultipleWindows
     class Browser

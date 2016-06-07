@@ -5,33 +5,9 @@ require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
 
 module AePageObjects
-  autoload :Dsl,                  'ae_page_objects/core/dsl'
-
-  autoload :InternalHelpers,      'ae_page_objects/util/internal_helpers'
-  autoload :HashSymbolizer,       'ae_page_objects/util/hash_symbolizer'
-
-  module MultipleWindows
-    autoload :Browser,                   'ae_page_objects/multiple_windows/browser'
-    autoload :Window,                    'ae_page_objects/multiple_windows/window'
-    autoload :CrossWindowLoaderStrategy, 'ae_page_objects/multiple_windows/cross_window_loader_strategy'
-    autoload :WindowList,                'ae_page_objects/multiple_windows/window_list'
-    autoload :WindowHandleManager,       'ae_page_objects/multiple_windows/window_handle_manager'
-  end
-
-  module SingleWindow
-    autoload :Browser,                   'ae_page_objects/single_window/browser'
-    autoload :Window,                    'ae_page_objects/single_window/window'
-    autoload :SameWindowLoaderStrategy,  'ae_page_objects/single_window/same_window_loader_strategy'
-  end
-
-  autoload :DocumentQuery,     'ae_page_objects/document_query'
-  autoload :DocumentLoader,    'ae_page_objects/document_loader'
-
   autoload :Node,              'ae_page_objects/node'
   autoload :Document,          'ae_page_objects/document'
-  autoload :DocumentProxy,     'ae_page_objects/document_proxy'
   autoload :Element,           'ae_page_objects/element'
-  autoload :ElementProxy,      'ae_page_objects/element_proxy'
 
   autoload :Collection,        'ae_page_objects/elements/collection'
   autoload :Form,              'ae_page_objects/elements/form'
@@ -47,8 +23,10 @@ module AePageObjects
 
         case driver
         when Capybara::Selenium::Driver then
+          require 'ae_page_objects/multiple_windows/browser'
           MultipleWindows::Browser.new
         else
+          require 'ae_page_objects/single_window/browser'
           SingleWindow::Browser.new
         end
       end

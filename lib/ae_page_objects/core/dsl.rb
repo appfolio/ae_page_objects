@@ -1,3 +1,6 @@
+require 'ae_page_objects/util/internal_helpers'
+require 'ae_page_objects/element_proxy'
+
 module AePageObjects
   module Dsl
     include InternalHelpers

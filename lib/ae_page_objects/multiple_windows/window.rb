@@ -1,3 +1,7 @@
+require 'ae_page_objects/multiple_windows/window_handle_manager'
+
+require 'ae_page_objects/single_window/window'
+
 module AePageObjects
   module MultipleWindows
     class Window < SingleWindow::Window

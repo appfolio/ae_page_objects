@@ -429,8 +429,8 @@ module AePageObjects
     private
 
       def verify_kitty_structure(kitty_class)
-        assert_sets_equal [:previous_owners], kitty_class.element_attributes.keys
-        assert_sets_equal [:owner_name, :kitty_name_during_ownership], kitty_class.element_attributes[:previous_owners].item_class.element_attributes.keys
+        assert_equal [:previous_owners], kitty_class.element_attributes.keys
+        assert_equal [:kitty_name_during_ownership, :owner_name], kitty_class.element_attributes[:previous_owners].item_class.element_attributes.keys.sort
       end
     end
   end

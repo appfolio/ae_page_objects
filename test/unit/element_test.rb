@@ -35,7 +35,7 @@ module AePageObjects
       assert_equal kitty_page_object, kitty.node
       assert_equal nil, kitty.full_name
       assert_equal nil, kitty.name
-      assert_false kitty.using_default_locator?
+      refute kitty.using_default_locator?
     end
 
     def test_new__with_name
@@ -73,7 +73,7 @@ module AePageObjects
       assert_equal kitty_page_object, kitty.node
       assert_equal "tiger", kitty.full_name
       assert_equal "tiger", kitty.name
-      assert_false kitty.using_default_locator?
+      refute kitty.using_default_locator?
     end
 
     def test_document
@@ -134,7 +134,7 @@ module AePageObjects
       kitty_element = kitty_class.new(pet, :locator => '#tiger')
 
       assert_equal kitty_capybara_node, kitty_element.node
-      assert_false kitty_element.stale?
+      refute kitty_element.stale?
 
       kitty_element.stale!
       assert kitty_element.stale?

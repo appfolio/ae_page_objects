@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "appraisal", "~> 0.5.1"
+gem "appraisal", "~> 2.0"
 gem "mocha", "= 0.13.3"
 gem "selenium-webdriver", "~> 2.53.0"
 gem 'gem-release', '0.7.4'

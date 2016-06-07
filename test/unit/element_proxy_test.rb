@@ -15,7 +15,7 @@ module AePageObjects
       assert proxy.respond_to?(:class)
       assert proxy.respond_to?(:presence)
       assert proxy.respond_to?(:__full_name__)
-      assert_false proxy.respond_to?(:whiz_bang!)
+      refute proxy.respond_to?(:whiz_bang!)
     end
 
     def test_initialize__no_block
@@ -48,14 +48,14 @@ module AePageObjects
 
       element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(false)
-      assert_false proxy.visible?
+      refute proxy.visible?
     end
 
     def test_visible__element_not_found
       proxy = new_proxy
 
       element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-      assert_false proxy.visible?
+      refute proxy.visible?
     end
 
     def test_hidden
@@ -88,7 +88,7 @@ module AePageObjects
       proxy = new_proxy
 
       element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
-      assert_false proxy.present?
+      refute proxy.present?
     end
 
     def test_absent
@@ -96,7 +96,7 @@ module AePageObjects
 
       element_class.expect_new
 
-      assert_false proxy.absent?
+      refute proxy.absent?
     end
 
     def test_absent__element_not_found
@@ -275,7 +275,7 @@ module AePageObjects
 
     def assert_is_element(element)
       assert element.is_a?(element_class)
-      assert_false element.is_a?(ElementProxy)
+      refute element.is_a?(ElementProxy)
     end
   end
 end
