@@ -19,29 +19,29 @@ module AePageObjects
       @loaded_element = nil
     end
 
-    def visible?
-      wait_until_visible
+    def visible?(options = {})
+      wait_until_visible(options[:wait])
       true
     rescue ElementNotVisible
       false
     end
 
-    def hidden?
-      wait_until_hidden
+    def hidden?(options = {})
+      wait_until_hidden(options[:wait])
       true
     rescue ElementNotHidden
       false
     end
 
-    def present?
-      wait_until_present
+    def present?(options = {})
+      wait_until_present(options[:wait])
       true
     rescue ElementNotPresent
       false
     end
 
-    def absent?
-      wait_until_absent
+    def absent?(options = {})
+      wait_until_absent(options[:wait])
       true
     rescue ElementNotAbsent
       false
