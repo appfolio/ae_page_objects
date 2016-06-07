@@ -41,10 +41,10 @@ module AePageObjects
       element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(true)
       assert proxy.visible?
-    end
 
-    def test_visible__false
-      proxy = new_proxy
+      element_class.expect_new
+      element_class.any_instance.expects(:visible?).returns(true)
+      assert proxy.visible?(wait: 20)
 
       element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(false)
@@ -66,6 +66,10 @@ module AePageObjects
       assert proxy.hidden?
 
       element_class.expect_new
+      element_class.any_instance.expects(:visible?).returns(false)
+      assert proxy.hidden?(wait: 20)
+
+      element_class.expect_new
       element_class.any_instance.expects(:visible?).returns(true)
       assert ! proxy.hidden?
     end
@@ -82,6 +86,9 @@ module AePageObjects
 
       element_class.expect_new
       assert proxy.present?
+
+      element_class.expect_new
+      assert proxy.present?(wait: 20)
     end
 
     def test_present__element_not_found
@@ -95,7 +102,6 @@ module AePageObjects
       proxy = new_proxy
 
       element_class.expect_new
-
       refute proxy.absent?
     end
 
@@ -104,6 +110,9 @@ module AePageObjects
 
       element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
       assert proxy.absent?
+
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert proxy.absent?(wait: 20)
     end
 
     def test_presence

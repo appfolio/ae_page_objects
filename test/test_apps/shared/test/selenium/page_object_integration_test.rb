@@ -174,12 +174,10 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
 
-    Capybara.using_wait_time(1) do
-      assert author.rating.star.present?
-      assert author.rating.star.visible?
-      refute author.rating.star.absent?
-      refute author.rating.star.hidden?
-    end
+    assert author.rating.star.present?(wait: 1)
+    assert author.rating.star.visible?(wait: 1)
+    refute author.rating.star.absent?(wait: 1)
+    refute author.rating.star.hidden?(wait: 1)
 
     assert_nothing_raised do
       author.rating.star.wait_until_present(0)
