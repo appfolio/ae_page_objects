@@ -2,6 +2,7 @@
 
 ### Added
 
+* [179](https://github.com/appfolio/ae_page_objects/pull/179) Add Node#element element factory to create elements off of existing elements.
 * [111](https://github.com/appfolio/ae_page_objects/issues/111) Adding wait: option to all polling query methods.
 
 ### Changed

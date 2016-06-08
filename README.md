@@ -30,6 +30,7 @@ be used in automated acceptance test suites.
     - [Variable Results](#variable-results)
 - [Elements](#elements)
   - [Defining Elements](#defining-elements)
+  - [Creating elements on the fly](#creating-elements-on-the-fly)
   - [Nested Elements](#nested-elements)
     - [Extending Nested Elements](#extending-nested-elements)
   - [Custom Elements](#custom-elements)
@@ -526,13 +527,17 @@ default document type (the first document specified through the parameters of `w
 
 ## Elements
 
-Elements in AePageObjects represent the DOM elements on the page and are subclasses of `AePageObject::Element`. Just like
+Elements in AePageObjects represent the DOM elements on a page and are subclasses of `AePageObject::Element`. Just like
 in Capybara, all elements have a reference to their parent element. The parent of the topmost element in the element tree
 is `AePageObject::Document`.
 
 ### Defining Elements
 
-AePageObjects provides a concise DSL for expressing elements on a document. For example:
+AePageObjects provides a concise DSL for defining elements on a document. Elements defined on a document express the static
+structure of your page.
+
+For example:
+
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
@@ -577,6 +582,18 @@ end
 ```
 
 See [Locators](#locators) for a discussion of locators.
+
+### Creating elements on the fly
+
+In addition to defining elements to express the static structure of a page, you can also create elements on the fly by
+calling the `element` method on a node:
+
+```ruby
+some_modal = some_page.element('.dialog')
+close_button = some_modal.element('.x-close')
+```
+
+`element` will return a new `AePageObjects::Element` object with a `parent` pointer to the object `element` was called on.
 
 
 ### Nested Elements

@@ -128,13 +128,13 @@ module AePageObjects
         document_stub.stubs(:find).with("#kitty_#{field_method}").returns(field_page_object)
       end
 
-      form = verify_field(kitty, :kitty, kitty.class.element_attributes[:kitty], document_stub)
+      form = verify_element_on_parent(kitty, :kitty, kitty.class.element_attributes[:kitty], document_stub)
 
       field_xpath = "kitty_#{field_method}_xpath"
       field_page_object = mock
       prepare_for_field_reference.call(field_xpath, field_page_object)
       expected_field_type = form.class.element_attributes[field_method]
-      field_node = verify_field(form, field_method, expected_field_type, field_page_object)
+      field_node = verify_element_on_parent(form, field_method, expected_field_type, field_page_object)
 
       prepare_for_field_reference.call(field_xpath, field_page_object)
       assert_nodes_equal field_node, kitty.send(field_method)
