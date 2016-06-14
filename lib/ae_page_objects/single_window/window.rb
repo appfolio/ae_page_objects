@@ -5,6 +5,8 @@ require 'ae_page_objects/document_proxy'
 require 'ae_page_objects/document_query'
 
 module AePageObjects
+  WindowDimension = Struct.new(:width, :height)
+
   module SingleWindow
     class Window
       attr_reader :current_document
@@ -26,42 +28,39 @@ module AePageObjects
         DocumentProxy.new(loaded_page, query)
       end
 
-      def size
-        capybara_window.size
+      def dimension
+        to_dimension(*capybara_window.size)
       end
 
-      def resize_to(width = nil, height = nil)
-        original_size = size;
-        width, height = normalize_size(width, height, original_size)
+      def resize_to(width: nil, height: nil)
+        original_dimension = dimension;
+        width ||= original_dimension.width
+        height ||= original_dimension.height
 
-        resize_window_to(width, height)
-        original_size
+        set_window_width_and_height(width, height)
+        original_dimension
       end
 
-      def with_window_size(width = nil, height = nil)
-        original_size = resize_to(width, height)
+      def with_dimension(width: nil, height: nil)
+        original_dimension = resize_to(width: width, height: height)
 
         yield if block_given?
       ensure
-        resize_to(original_size.width, original_size.height)
-      end
-
-      protected
-
-      def resize_window_to(width, height)
-        capybara_window.resize_to(width, height)
+        resize_to(width: original_dimension.width, height: original_dimension.height)
       end
 
       private
 
-      def capybara_window
-        Capybara.current_session.driver.browser.manage.window
+      def to_dimension(width, height)
+        WindowDimension.new(width, height)
       end
 
-      def normalize_size(width, height, default_size)
-        width ||= default_size.width
-        height ||= default_size.height
-        [width, height]
+      def set_window_width_and_height(width, height)
+        capybara_window.resize_to(width, height)
+      end
+
+      def capybara_window
+        Capybara.current_session.driver.browser.manage.window
       end
     end
   end

@@ -1,104 +1,105 @@
 require 'selenium_helper'
-require 'set'
-
 
 class WindowResizeTest < Selenium::TestCase
 
-  def test_window_resize_to_with_both_width_and_height
+  def test_resize_window_with_both_width_and_height
     current_window = PageObjects::Books::NewPage.visit.window
-    size = current_window.size
+    window_dimension = current_window.dimension
 
-    expected_width = size.width - 10
-    expected_height = size.height - 5
+    new_width = window_dimension.width - 10
+    new_height = window_dimension.height - 5
 
-    current_window.resize_to(expected_width, expected_height)
+    original_dimension = current_window.resize_to(:width => new_width, :height => new_height)
 
-    size = current_window.size
+    assert_equal window_dimension.width, original_dimension.width
+    assert_equal window_dimension.height, original_dimension.height
 
-    assert_equal expected_width, size.width
-    assert_equal expected_height, size.height
+    window_dimension = current_window.dimension
+
+    assert_equal new_width, window_dimension.width
+    assert_equal new_height, window_dimension.height
   end
 
-  def test_window_resize_to_with_only_width
+  def test_resize_window_with_only_width
     current_window = PageObjects::Books::NewPage.visit.window
-    size = current_window.size
+    window_dimension = current_window.dimension
 
-    expected_width = size.width - 10
-    expected_height = size.height
+    new_width = window_dimension.width - 10
 
-    current_window.resize_to(expected_width)
+    original_dimension = current_window.resize_to(:width => new_width)
 
-    size = current_window.size
+    assert_equal window_dimension.width, original_dimension.width
+    assert_equal window_dimension.height, original_dimension.height
 
-    assert_equal expected_width, size.width
-    assert_equal expected_height, size.height
+    window_dimension = current_window.dimension
+
+    assert_equal new_width, window_dimension.width
+    assert_equal original_dimension.height, window_dimension.height
   end
 
-  def test_window_resize_to_with_only_height
+  def test_resize_window_with_only_height
     current_window = PageObjects::Books::NewPage.visit.window
-    size = current_window.size
+    window_dimension = current_window.dimension
 
-    expected_width = size.width
-    expected_height = size.height - 5
+    new_height = window_dimension.height - 5
 
-    current_window.resize_to(nil, expected_height)
+    original_dimension = current_window.resize_to(:height => new_height)
 
-    size = current_window.size
+    assert_equal window_dimension.width, original_dimension.width
+    assert_equal window_dimension.height, original_dimension.height
 
-    assert_equal expected_width, size.width
-    assert_equal expected_height, size.height
+    window_dimension = current_window.dimension
+
+    assert_equal original_dimension.width, window_dimension.width
+    assert_equal new_height, window_dimension.height
   end
 
-  def test_window_resize_to_with_multiple_windows
+  def test_resize_when_multiple_windows_are_open
     ActiveRecord::Base.transaction do
       Author.create!(:first_name => 'Andrew', :last_name => "Putz")
     end
 
     authors_page = PageObjects::Authors::IndexPage.visit
     authors_window = authors_page.window
-    authors_window_size = authors_window.size
+    authors_original_dimension = authors_window.dimension
 
     robert_page = authors_page.authors[0].show_in_new_window_with_name!("Robert")
     robert_window = robert_page.window
-    robert_window_size = robert_window.size
+    robert_original_dimension = robert_window.dimension
 
-    new_width = robert_window_size.width - 10
-    new_height = robert_window_size.height - 5
+    robert_new_width = robert_original_dimension.width - 10
+    robert_new_height = robert_original_dimension.height - 5
 
-    robert_window.resize_to(new_width, new_height)
+    robert_window.resize_to(:width => robert_new_width, :height => robert_new_height)
 
-    expected_width = new_width
-    expected_height = new_height
-    acutal_size = robert_window.size
+    robert_current_dimension = robert_window.dimension
 
-    assert_equal expected_width, acutal_size.width
-    assert_equal expected_height, acutal_size.height
+    assert_equal robert_new_width, robert_current_dimension.width
+    assert_equal robert_new_height, robert_current_dimension.height
 
-    expected_width = authors_window_size.width
-    expected_height = authors_window_size.height
-    acutal_size = authors_window.size
+    authors_current_dimension = authors_window.dimension
 
-    assert_equal expected_width, acutal_size.width
-    assert_equal expected_height, acutal_size.height
+    assert_equal authors_original_dimension.width, authors_current_dimension.width
+    assert_equal authors_original_dimension.height, authors_current_dimension.height
   end
 
-  def test_with_window_size
+  def test_with_dimension
     current_window = PageObjects::Books::NewPage.visit.window
-    original_size = current_window.size
+    original_dimension = current_window.dimension
 
-    new_width = original_size.width - 10
-    new_height = original_size.height - 5
+    new_width = original_dimension.width - 10
+    new_height = original_dimension.height - 5
 
-    current_window.with_window_size(new_width, new_height) do
-      actual_size = current_window.size
+    current_window.with_dimension(:width => new_width, :height => new_height) do
+      current_dimension = current_window.dimension
 
-      assert_equal new_width, actual_size.width
-      assert_equal new_height, actual_size.height
+      assert_equal new_width, current_dimension.width
+      assert_equal new_height, current_dimension.height
     end
 
-    actual_size = current_window.size
+    current_dimension = current_window.dimension
 
-    assert_equal original_size.width, actual_size.width
-    assert_equal original_size.height, actual_size.height
+    assert_equal original_dimension.width, current_dimension.width
+    assert_equal original_dimension.height, current_dimension.height
   end
 end

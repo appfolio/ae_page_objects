@@ -4,8 +4,6 @@ require 'ae_page_objects/single_window/window'
 
 module AePageObjects
   module MultipleWindows
-    SizeClass = Struct.new(:width, :height)
-
     class Window < SingleWindow::Window
       attr_reader :handle
 
@@ -29,14 +27,13 @@ module AePageObjects
         end
       end
 
-      def size
-        width, height = Capybara.current_session.driver.window_size(@handle)
-        SizeClass.new(width, height)
+      def dimension
+        to_dimension(*Capybara.current_session.driver.window_size(@handle))
       end
 
-      protected
+      private
 
-      def resize_window_to(width, height)
+      def set_window_width_and_height(width, height)
         Capybara.current_session.driver.resize_window_to(@handle, width, height)
       end
     end
