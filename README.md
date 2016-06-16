@@ -990,12 +990,10 @@ Use ```wait_until_present``` and ```wait_until_absent``` to wait on an element's
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
 
-  element :headshot_viewer, locator: '#head-shots', is: HeadshotViewer
-
   def view_headshots(&block)
     node.click_link("View Headshots")
 
-    viewer = headshot_viewer
+    viewer = element(locator: '#head-shots', is: HeadshotViewer)
     viewer.wait_until_present(10) # wait 10 seconds
 
     yield viewer
