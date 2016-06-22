@@ -50,6 +50,7 @@ be used in automated acceptance test suites.
     - [Configure default router](#configure-default-router)
     - [Configure router per document](#configure-router-per-document)
   - [Sharing routers across groups of documents](#sharing-routers-across-groups-of-documents)
+- [Development](#development)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1196,3 +1197,15 @@ end
 `AdminSettingsPage.visit` will use `AdminRouter`.
 `UsageReportPage.visit` will use `ReportingRouter`.
 `LoginPage.visit` will use `AePageObjects.default_router`.
+
+## Development
+
+To set up a development environment and run the basic unit tests:
+
+```
+bundle install
+bundle exec rake
+```
+
+See the [Development documentation](development.md) for more detailed information. 
+
