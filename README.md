@@ -593,8 +593,44 @@ some_modal = some_page.element('.dialog')
 close_button = some_modal.element('.x-close')
 ```
 
-`element` will return a new `AePageObjects::Element` object with a `parent` pointer to the object `element` was called on.
+`element` will return a new `AePageObjects::Element` object with a `parent` pointer to the object `element` was called
+on.
 
+This is useful for designing the page object interface for things like modals which cannot be interacted with until
+they are triggered by some action (e.g. a button click). Instead of declaring the modal as a static element of the
+Document, you would define a method that corresponds to the action that opens the modal, and this method would yield
+the dynamically created element. For example, instead of writing something like:
+
+```ruby
+class ShowPage < AePageObjects::Document
+  element :share_modal, is: ShareModal
+  
+  def share_image(&block)
+    node.click_button('Share')
+    share_modal.wait_until_visible
+    block.call(share_modal)
+    share_modal.wait_until_hidden
+  end
+end
+```
+
+you'd write:
+
+```ruby
+class ShowPage < AePageObjects::Document
+  def share_image(&block)
+    node.click_button('Share')
+    share_modal = element(locator: '#share_modal', is: ShareModal)
+    share_modal.wait_until_visible
+    block.call(share_modal)
+    share_modal.wait_until_hidden
+  end
+end
+```
+
+which only exposes the `share_image` method on instances of ShowPage (it does not expose a `share_modal` method). Thus,
+users can only access a `share_modal` element in the block this method yields to, which is the only time the modal can
+*actually* be interacted with.
 
 ### Nested Elements
 
@@ -989,7 +1025,6 @@ Use ```wait_until_present``` and ```wait_until_absent``` to wait on an element's
 
 ```ruby
 class AuthorsShowPage < AePageObjects::Document
-
   def view_headshots(&block)
     node.click_link("View Headshots")
 
