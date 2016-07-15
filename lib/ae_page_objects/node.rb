@@ -89,7 +89,7 @@ module AePageObjects
 
     def ensure_loaded!
       if locator = loaded_locator
-        find(*eval_locator(locator))
+        node.find(*eval_locator(locator))
       end
 
       self
