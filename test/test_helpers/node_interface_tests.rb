@@ -10,7 +10,7 @@ module NodeInterfaceTests
       error = Capybara::ElementNotFound.new("The message")
       capybara_stub.session.expects(method).with(:args).raises(error)
 
-      raised = assert_raises AePageObjects::LoadingElementFailed do
+      raised = assert_raises error do
         subject.send(method, :args)
       end
 
