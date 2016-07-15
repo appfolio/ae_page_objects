@@ -11,5 +11,6 @@ gem "appraisal", "~> 2.0"
 gem "ae_page_objects", :path => "../../../../.."
 gem "rake", "~> 11.0"
 gem "mime-types", "< 3"
+gem "rack", "< 2"
 gem "capybara", "~> 2.2.0"
 

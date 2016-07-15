@@ -12,5 +12,6 @@ gem "ae_page_objects", :path => "../../../../.."
 gem "forum", :path => "../engines"
 gem "rake", "~> 11.0"
 gem "mime-types", "< 3"
+gem "rack", "< 2"
 gem "capybara", "~> 2.2.0"
 
