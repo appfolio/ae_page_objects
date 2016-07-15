@@ -12,4 +12,5 @@ gem 'test-unit', '~> 3.0'
 
 if RUBY_VERSION =~ /\A1\.9/
   gem 'mime-types', '< 3'
+  gem 'rack', '< 2'
 end
