@@ -36,6 +36,7 @@ be used in automated acceptance test suites.
   - [Custom Elements](#custom-elements)
   - [Forms](#forms)
   - [Collections](#collections)
+    - [Custom Collections](#custom-collections)
   - [Staling](#staling)
   - [Load Ensuring](#load-ensuring-1)
   - [Checking presence](#checking-presence)
@@ -939,7 +940,13 @@ class AuthorsNewPage < AePageObjects::Document
 end
 ```
 
-Additionally, if you can use `:is` to specify the collection type:
+
+#### Custom Collections
+
+Sometimes, we'll want a collection that supports more methods
+than what the [default implementation](./lib/ae_page_objects/elements/collection.rb)
+supports. An easy way to handle this use case is to create a new
+class that inherits from `AePageObjects::Collection`:
 
 ```ruby
 class Address < AePageObjects::Element
@@ -952,7 +959,11 @@ class AddressList < AePageObjects::Collection
     last.click('.delete-button')
   end
 end
+```
 
+Then, in the page object, use `:is` to specify the collection type:
+
+```ruby 
 class AuthorsNewPage < AePageObjects::Document
   form_for :author do
     collection :addresses, is: AddressList, contains: Address
@@ -960,7 +971,9 @@ class AuthorsNewPage < AePageObjects::Document
 end
 ```
 
-`collection` supports every combination of `:is`, `:contains`, and the block. See the source for more examples.
+This custom collection is also declared to contain items of the custom 
+`Address` element subclass. `collection` supports every combination of 
+`:is`, `:contains`, and the block. See the source for more examples.
 
 ### Staling
 
