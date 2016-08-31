@@ -8,12 +8,11 @@ module AePageObjects
       attr_reader :handle
 
       def initialize(registry, handle)
+        super()
+
         @registry = registry
         @handle   = handle
-
         @registry.add(self)
-
-        super()
       end
 
       def switch_to
@@ -26,6 +25,16 @@ module AePageObjects
           self.current_document = nil
           @registry.remove(self)
         end
+      end
+
+      def dimension
+        to_dimension(*Capybara.current_session.driver.window_size(@handle))
+      end
+
+      private
+
+      def set_window_width_and_height(width, height)
+        Capybara.current_session.driver.resize_window_to(@handle, width, height)
       end
     end
   end
