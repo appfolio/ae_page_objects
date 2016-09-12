@@ -605,7 +605,8 @@ the dynamically created element. For example, instead of writing something like:
 
 ```ruby
 class ShowPage < AePageObjects::Document
-  element :share_modal, is: ShareModal
+  element :share_modal, is: ShareModal # bad because the `share_modal` element
+  # can always be accessed, even when the real modal cannot be interacted with
   
   def share_image(&block)
     node.click_button('Share')
