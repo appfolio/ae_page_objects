@@ -103,6 +103,14 @@ module AePageObjects
       end
 
       implicit_element.__send__(name, *args, &block)
+    rescue AePageObjects::LoadingElementFailed
+      raise unless %w(to_s inspect).include? name.to_s
+
+      # The element is being serialized for debug / warning purposes.  In
+      # this situation it is a valid case that the element may not exist so
+      # instead of raising an error just return a string indicating that the
+      # element does not exist.
+      '[element not found]'
     end
 
     def respond_to?(*args)
