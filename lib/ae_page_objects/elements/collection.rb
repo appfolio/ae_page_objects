@@ -41,7 +41,7 @@ module AePageObjects
     end
 
     def size
-      node.all(:xpath, item_xpath).size
+      node.all(:xpath, item_xpath, options).size
     end
 
     def last
@@ -56,6 +56,11 @@ module AePageObjects
       @item_locator = options.delete(:item_locator) || default_item_locator
     end
 
+    def options
+      evaled_locator = eval_locator(@item_locator)
+      evaled_locator.last.is_a?(::Hash) ? evaled_locator.last.dup : {}
+    end
+
     def item_at(index)
       element(is: item_class_at(index), name: index, locator: item_locator_at(index))
     end
@@ -66,18 +71,25 @@ module AePageObjects
 
     def item_xpath
       @item_xpath ||= begin
-        query_args = eval_locator(@item_locator)
+        query_args = eval_locator(@item_locator).dup
 
-        #
-        # Use the { exact: true } setting for XPath selectors that use "XPath.is".  For example, given the XPath
-        #   XPath::HTML.descendant(:div)[XPath.text.is('Example Text')]
-        # the resulting path will be
-        #   .//div[./text() = 'Example Text']
-        # instead of
-        #   .//div[contains(./text(), 'Example Text')]
-        # See https://github.com/jnicklas/capybara#exactness for more information.
-        #
-        query_args += [{:exact => true}] if query_args.first.to_sym == :xpath
+        if query_args.first.to_sym == :xpath
+          #
+          # Use the { exact: true } setting for XPath selectors that use "XPath.is".  For example, given the XPath
+          #   XPath::HTML.descendant(:div)[XPath.text.is('Example Text')]
+          # the resulting path will be
+          #   .//div[./text() = 'Example Text']
+          # instead of
+          #   .//div[contains(./text(), 'Example Text')]
+          # See https://github.com/jnicklas/capybara#exactness for more information.
+          #
+          default_options = {:exact => true}
+          if query_args.last.is_a?(::Hash)
+            query_args[-1] = default_options.merge(query_args.last)
+          else
+            query_args.push(default_options)
+          end
+        end
 
         query = Capybara::Query.new(*query_args)
 
@@ -94,7 +106,7 @@ module AePageObjects
     end
 
     def item_locator_at(index)
-      [:xpath, "#{item_xpath}[#{index + 1}]"]
+      [:xpath, "#{item_xpath}[#{index + 1}]", options]
     end
 
     def default_item_locator
