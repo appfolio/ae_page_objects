@@ -8,7 +8,7 @@ sudo: false
 bundler_args: ''
 
 before_install:
-  - gem install bundler -v 1.12.3
+  - gem update bundler
 
 before_script:
   - export DISPLAY=:99.0

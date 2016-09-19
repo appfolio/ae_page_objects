@@ -117,13 +117,7 @@ class SeleniumRunner
     puts "Running '#{command}'"
     return if @options[:dry]
 
-    specific_gemfile_env = Bundler.clean_env
-
-    if gemfile
-      specific_gemfile_env['BUNDLE_GEMFILE'] = gemfile
-    end
-
-    Bundler.send(:with_env, specific_gemfile_env) do
+    Bundler.with_clean_env do
       system(command)
       raise unless $?.exitstatus == 0
     end
