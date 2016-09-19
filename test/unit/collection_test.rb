@@ -60,6 +60,66 @@ module AePageObjects
       assert_equal ".//div[./text() = 'Example Text']", magazine.send(:item_xpath)
     end
 
+    def test_xpath_item_locator__respects_passed_exact_option
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
+        self.item_class = bullets
+      end
+
+      parent_node = mock
+      parent = mock
+      parent.stubs(:node).returns(parent_node)
+
+      magazine_node = mock
+      parent_node.expects(:find).with("#18_holder").returns(magazine_node)
+
+      magazine = clip.new(parent, :name => "18_holder", :item_locator => [
+        :xpath,
+        XPath::HTML.descendant(:div)[XPath.text.is('Example Text')],
+        :exact => false
+      ])
+
+      assert_equal ".//div[contains(./text(), 'Example Text')]", magazine.send(:item_xpath)
+    end
+
+    def test_locator_options__blank
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
+        self.item_class = bullets
+      end
+
+      magazine_node = mock
+      parent_node = mock(:find =>  magazine_node)
+      parent = mock(:node => parent_node)
+
+      magazine = clip.new(parent, :name => "18_holder", :item_locator => ".some_class")
+      magazine.stubs(:item_xpath).returns('item_xpath')
+
+      bullet1_stub = mock
+      magazine_node.expects(:all).with(:xpath, 'item_xpath', {}).returns([bullet1_stub])
+      magazine_node.expects(:find).with(:xpath, 'item_xpath[1]', {}).returns(bullet1_stub)
+      assert_equal bullet1_stub, magazine.at(0).node
+    end
+
+    def test_locator_options__present
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
+        self.item_class = bullets
+      end
+
+      magazine_node = mock
+      parent_node = mock(:find => magazine_node)
+      parent = mock(:node => parent_node)
+
+      magazine = clip.new(parent, :name => "18_holder", :item_locator => [".some_class", { :capybara => 'options' }])
+      magazine.stubs(:item_xpath).returns("item_xpath")
+
+      bullet1_stub = mock
+      magazine_node.expects(:all).with(:xpath, 'item_xpath', { :capybara => 'options' }).returns([bullet1_stub])
+      magazine_node.expects(:find).with(:xpath, "item_xpath[1]", { :capybara => 'options' }).returns(bullet1_stub)
+      assert_equal bullet1_stub, magazine.at(0).node
+    end
+
     def test_empty
       bullets = Class.new(AePageObjects::Element)
       clip    = Class.new(AePageObjects::Collection) do
@@ -76,7 +136,7 @@ module AePageObjects
       magazine = clip.new(parent, :name => "18_holder")
       magazine.stubs(:item_xpath).returns("item_xpath")
 
-      magazine_node.stubs(:all).with(:xpath, "item_xpath").returns([])
+      magazine_node.stubs(:all).with(:xpath, "item_xpath", {}).returns([])
 
       assert_equal 0, magazine.size
 
@@ -109,12 +169,12 @@ module AePageObjects
 
       bullet1_stub = mock
       bullet2_stub = mock
-      magazine_node.stubs(:all).with(:xpath, "item_xpath").returns([bullet1_stub, bullet2_stub])
+      magazine_node.stubs(:all).with(:xpath, "item_xpath", {}).returns([bullet1_stub, bullet2_stub])
 
       assert_equal 2, magazine.size
 
-      magazine_node.expects(:find).with(:xpath, "item_xpath[1]").returns(bullet1_stub)
-      magazine_node.expects(:find).with(:xpath, "item_xpath[2]").returns(bullet2_stub)
+      magazine_node.expects(:find).with(:xpath, "item_xpath[1]", {}).returns(bullet1_stub)
+      magazine_node.expects(:find).with(:xpath, "item_xpath[2]", {}).returns(bullet2_stub)
       each_block_call_count = 0
       magazine.each do |bullet|
         bullet.name
@@ -122,16 +182,16 @@ module AePageObjects
       end
       assert_equal 2, each_block_call_count
 
-      magazine_node.expects(:find).with(:xpath, "item_xpath[1]").times(2).returns(bullet1_stub)
+      magazine_node.expects(:find).with(:xpath, "item_xpath[1]", {}).times(2).returns(bullet1_stub)
       assert_equal bullet1_stub, magazine.at(0).node
       assert_equal bullet1_stub, magazine.first.node
 
-      magazine_node.expects(:find).with(:xpath, "item_xpath[2]").times(2).returns(bullet2_stub)
+      magazine_node.expects(:find).with(:xpath, "item_xpath[2]", {}).times(2).returns(bullet2_stub)
       assert_equal bullet2_stub, magazine.at(1).node
       assert_equal bullet2_stub, magazine.last.node
 
-      magazine_node.expects(:find).with(:xpath, "item_xpath[1]").returns(bullet1_stub)
-      magazine_node.expects(:find).with(:xpath, "item_xpath[2]").returns(bullet2_stub)
+      magazine_node.expects(:find).with(:xpath, "item_xpath[1]", {}).returns(bullet1_stub)
+      magazine_node.expects(:find).with(:xpath, "item_xpath[2]", {}).returns(bullet2_stub)
       assert_equal [bullet1_stub, bullet2_stub], magazine.map(&:node)
 
       assert_equal nil, magazine.at(1000)
