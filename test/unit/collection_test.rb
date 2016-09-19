@@ -21,6 +21,45 @@ module AePageObjects
       assert_equal ".//*[contains(concat(' ', normalize-space(@class), ' '), ' some_class ')]", magazine.send(:item_xpath)
     end
 
+    def test_xpath_item_locator
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
+        self.item_class = bullets
+      end
+
+      parent_node = mock
+      parent = mock
+      parent.stubs(:node).returns(parent_node)
+
+      magazine_node = mock
+      parent_node.expects(:find).with("#18_holder").returns(magazine_node)
+
+      magazine = clip.new(parent, :name => "18_holder", :item_locator => [:xpath, ".//div[text()='Example Text']"])
+
+      assert_equal ".//div[text()='Example Text']", magazine.send(:item_xpath)
+    end
+
+    def test_xpath_item_locator__matches_exact_text
+      bullets = Class.new(AePageObjects::Element)
+      clip    = Class.new(AePageObjects::Collection) do
+        self.item_class = bullets
+      end
+
+      parent_node = mock
+      parent = mock
+      parent.stubs(:node).returns(parent_node)
+
+      magazine_node = mock
+      parent_node.expects(:find).with("#18_holder").returns(magazine_node)
+
+      magazine = clip.new(parent, :name => "18_holder", :item_locator => [
+        :xpath,
+        XPath::HTML.descendant(:div)[XPath.text.is('Example Text')]
+      ])
+
+      assert_equal ".//div[./text() = 'Example Text']", magazine.send(:item_xpath)
+    end
+
     def test_empty
       bullets = Class.new(AePageObjects::Element)
       clip    = Class.new(AePageObjects::Collection) do
