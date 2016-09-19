@@ -66,9 +66,19 @@ module AePageObjects
 
     def item_xpath
       @item_xpath ||= begin
-        evaled_locator = eval_locator(@item_locator)
-        
-        query_args = evaled_locator + [{:exact => true}]
+        query_args = eval_locator(@item_locator)
+
+        #
+        # Use the { exact: true } setting for XPath selectors that use "XPath.is".  For example, given the XPath
+        #   XPath::HTML.descendant(:div)[XPath.text.is('Example Text')]
+        # the resulting path will be
+        #   .//div[./text() = 'Example Text']
+        # instead of
+        #   .//div[contains(./text(), 'Example Text')]
+        # See https://github.com/jnicklas/capybara#exactness for more information.
+        #
+        query_args += [{:exact => true}] if query_args.first.to_sym == :xpath
+
         query = Capybara::Query.new(*query_args)
 
         result = query.xpath
