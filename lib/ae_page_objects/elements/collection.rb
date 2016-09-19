@@ -35,8 +35,8 @@ module AePageObjects
     end
 
     def each
-      (0..(size - 1)).each do |index|
-        yield at(index)
+      size.times do |index|
+        yield item_at(index)
       end
     end
 
