@@ -1,3 +1,17 @@
+## Version 2.0.1
+
+### Bugs
+
+* [189](https://github.com/appfolio/ae_page_objects/pull/189) Fixed the behavior of `AePageObjects::Collection` when options are passed within `item_locator`.
+  
+  Previously options passed such as `visible` or `text` below would have been ignored:
+  
+    ```ruby
+    collection :children, item_locator: ['li', { visible: true, text: 'Hello World' }]
+    ```   
+    
+* [191](https://github.com/appfolio/ae_page_objects/pull/191) Fixed performance issue with `AePageObjects::Collection.each`
+
 ## Version 2.0.0
 
 ### Added
