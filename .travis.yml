@@ -19,10 +19,12 @@ script: "bundle exec rake test:ci"
 
 ### Build Matrix
 
-max_ruby_version: &max_ruby 2.2.5
+max_ruby_version: &max_ruby 2.3.1
 
 rvm:
   - 1.9.3
+  - 2.1.10
+  - 2.2.5
   - *max_ruby
   - ruby-head
 
