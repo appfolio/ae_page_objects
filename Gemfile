@@ -10,7 +10,5 @@ gemspec
 gem 'rake', '~> 11.0'
 gem 'test-unit', '~> 3.0'
 
-if RUBY_VERSION =~ /\A1\.9/
-  gem 'mime-types', '< 3'
-  gem 'rack', '< 2'
-end
+gem 'mime-types', '< 3' if RUBY_VERSION.to_f < 2.0
+gem 'rack', '< 2' if RUBY_VERSION.to_f < 2.2
