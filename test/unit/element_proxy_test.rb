@@ -1,4 +1,5 @@
 require 'unit_helper'
+require 'ae_page_objects/element_proxy'
 
 module AePageObjects
   class ElementProxyTest < AePageObjectsTestCase
@@ -221,19 +222,6 @@ module AePageObjects
       proxy = new_proxy
 
       element_class.expect_new
-
-      raised = assert_raise ElementNotAbsent do
-        proxy.wait_until_absent
-      end
-
-      assert_include raised.message, element_class.to_s
-    end
-
-    def test_wait_until_absent__unknown
-      proxy = new_proxy
-
-      element_class.expects(:new).raises(Selenium::WebDriver::Error::StaleElementReferenceError)
-      capybara_stub.driver.expects(:is_a?).with(Capybara::Selenium::Driver).returns(true)
 
       raised = assert_raise ElementNotAbsent do
         proxy.wait_until_absent

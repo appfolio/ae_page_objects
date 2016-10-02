@@ -13,8 +13,12 @@ module AePageObjects
       begin
         poll_until do
           @query.conditions.each do |document_condition|
-            if document = @strategy.load_document_with_condition(document_condition)
-              return document
+            begin
+              if document = @strategy.load_document_with_condition(document_condition)
+                return document
+              end
+            rescue => e
+              raise unless catch_poll_util_error?(e)
             end
           end
 
