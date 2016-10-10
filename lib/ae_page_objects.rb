@@ -3,6 +3,7 @@ require 'capybara/dsl'
 
 require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
+require 'ae_page_objects/util/page_polling'
 
 module AePageObjects
   autoload :Node,              'ae_page_objects/node'
@@ -15,6 +16,8 @@ module AePageObjects
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'
 
   class << self
+    include PagePolling
+
     attr_accessor :default_router
 
     def browser
@@ -49,8 +52,6 @@ module AePageObjects
 
       result
     end
-
-    private
 
     def default_max_wait_time
       if Capybara.respond_to?(:default_max_wait_time)

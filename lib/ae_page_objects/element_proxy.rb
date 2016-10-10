@@ -127,21 +127,12 @@ module AePageObjects
       @loaded_element = nil
 
       true
-    rescue => e
-      if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&
-        e.is_a?(Selenium::WebDriver::Error::StaleElementReferenceError)
-
-        # Inconclusive. Leave the handling up to the caller
-        false
-      else
-        raise
-      end
     end
 
     def with_reloaded_element(timeout)
       poll_until(timeout) do
-        reload_conclusive = reload_element
-        reload_conclusive && yield
+        reload_element
+        yield
       end
     end
   end
