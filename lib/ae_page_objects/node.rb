@@ -54,8 +54,6 @@ module AePageObjects
       class_eval <<-RUBY
         def #{m}(*args, &block)
           node.send(:#{m}, *args, &block)
-        rescue Capybara::ElementNotFound => e
-          raise LoadingElementFailed, e.message
         end
       RUBY
     end
@@ -89,7 +87,7 @@ module AePageObjects
 
     def ensure_loaded!
       if locator = loaded_locator
-        find(*eval_locator(locator))
+        node.find(*eval_locator(locator))
       end
 
       self

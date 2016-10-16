@@ -64,14 +64,14 @@ module AePageObjects
       end
       some_document_class.expects(:can_load_from_current_url?).returns(true)
 
-      element_error = LoadingElementFailed.new("Twas an error")
-      some_document_class.any_instance.expects(:find).with("#hello").raises(element_error)
+      capybara_error = Capybara::ElementNotFound.new("Twas an error")
+      capybara_stub.session.expects(:find).with("#hello").raises(capybara_error)
 
       raised = assert_raises LoadingPageFailed do
         some_document_class.new
       end
 
-      assert_equal element_error.message, raised.message
+      assert_equal capybara_error.message, raised.message
     end
 
     def test_stale
