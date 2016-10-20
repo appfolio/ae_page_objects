@@ -3,6 +3,8 @@ require 'ae_page_objects/core/dsl'
 module AePageObjects
   class Node
     extend Dsl
+    extend Forwardable
+    include InternalHelpers
 
     class << self
       def current_url
@@ -29,6 +31,9 @@ module AePageObjects
       @node
     end
 
+    METHODS_TO_DELEGATE_TO_NODE = [:value, :set, :text, :visible?]
+    def_delegators :node, *METHODS_TO_DELEGATE_TO_NODE
+
     def stale?
       @stale
     end
@@ -47,17 +52,6 @@ module AePageObjects
 
     def current_url_without_params
       self.class.current_url_without_params
-    end
-
-    METHODS_TO_DELEGATE_TO_NODE = [:find, :all, :value, :set, :text, :visible?]
-    METHODS_TO_DELEGATE_TO_NODE.each do |m|
-      class_eval <<-RUBY
-        def #{m}(*args, &block)
-          node.send(:#{m}, *args, &block)
-        rescue Capybara::ElementNotFound => e
-          raise LoadingElementFailed, e.message
-        end
-      RUBY
     end
 
     def element(options_or_locator)
@@ -88,13 +82,21 @@ module AePageObjects
     end
 
     def ensure_loaded!
-      if locator = loaded_locator
-        find(*eval_locator(locator))
-      end
+      AePageObjects.wait_until { is_loaded? } and return
 
-      self
-    rescue Capybara::ElementNotFound => e
+      raise LoadingElementFailed
+    rescue AePageObjects::WaitTimeOut => e
       raise LoadingElementFailed, e.message
+    end
+
+    def is_loaded?
+      if locator = loaded_locator
+        args = eval_locator(locator)
+        options = extract_options!(args).merge(minimum: 0)
+        node.has_selector?(*(args + [options]))
+      else
+        true
+      end
     end
   end
 end

@@ -10,8 +10,6 @@ module AePageObjects
       end
     end
 
-    include AePageObjects::PagePolling
-
     def initialize(element_class, *args)
       @element_class = element_class
       @args          = args
@@ -119,19 +117,9 @@ module AePageObjects
       @loaded_element ||= load_element
     end
 
-    def reload_element
-      @loaded_element = load_element
-
-      true
-    rescue LoadingElementFailed
-      @loaded_element = nil
-
-      true
-    end
-
     def with_reloaded_element(timeout)
-      poll_until(timeout) do
-        reload_element
+      AePageObjects.wait_until(timeout) do
+        implicit_element
         yield
       end
     end

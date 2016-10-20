@@ -10,19 +10,16 @@ module AePageObjects
   class LoadingElementFailed < Error
   end
 
-  class ElementExpectationError < Error
+  class ElementNotVisible < WaitTimeoutError
   end
 
-  class ElementNotVisible < ElementExpectationError
+  class ElementNotHidden < WaitTimeoutError
   end
 
-  class ElementNotHidden < ElementExpectationError
+  class ElementNotPresent < WaitTimeoutError
   end
 
-  class ElementNotPresent < ElementExpectationError
-  end
-
-  class ElementNotAbsent < ElementExpectationError
+  class ElementNotAbsent < WaitTimeoutError
   end
 
   class PathNotResolvable < Error
