@@ -25,7 +25,7 @@ module AePageObjects
 
       def condition_matches?(document, condition)
         condition.match?(document)
-      rescue ElementExpectationError, LoadingElementFailed
+      rescue LoadingElementFailed
         false
       end
     end

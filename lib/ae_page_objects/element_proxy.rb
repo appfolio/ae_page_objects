@@ -10,8 +10,6 @@ module AePageObjects
       end
     end
 
-    include AePageObjects::PagePolling
-
     def initialize(element_class, *args)
       @element_class = element_class
       @args          = args
@@ -119,29 +117,10 @@ module AePageObjects
       @loaded_element ||= load_element
     end
 
-    def reload_element
-      @loaded_element = load_element
-
-      true
-    rescue LoadingElementFailed
-      @loaded_element = nil
-
-      true
-    rescue => e
-      if Capybara.current_session.driver.is_a?(Capybara::Selenium::Driver) &&
-        e.is_a?(Selenium::WebDriver::Error::StaleElementReferenceError)
-
-        # Inconclusive. Leave the handling up to the caller
-        false
-      else
-        raise
-      end
-    end
-
     def with_reloaded_element(timeout)
-      poll_until(timeout) do
-        reload_conclusive = reload_element
-        reload_conclusive && yield
+      AePageObjects.wait_until(timeout) do
+        implicit_element
+        yield
       end
     end
   end

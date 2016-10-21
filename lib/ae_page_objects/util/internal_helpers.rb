@@ -5,5 +5,13 @@ module AePageObjects
         raise "#{param_name} <#{klass}> must extend #{ancestor_class}, ->#{klass.ancestors.inspect}"
       end
     end
+
+    def extract_options!(array)
+      if array.last.instance_of?(Hash)
+        array.pop
+      else
+        {}
+      end
+    end
   end
 end

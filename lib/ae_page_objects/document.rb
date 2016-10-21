@@ -70,17 +70,13 @@ module AePageObjects
     private
 
     def ensure_loaded!
-      begin
-        AePageObjects.wait_until { self.class.can_load_from_current_url? }
-      rescue WaitTimeoutError
-        raise LoadingPageFailed, "#{self.class.name} cannot be loaded with url '#{current_url_without_params}'"
-      end
+      super
+    rescue LoadingElementFailed => e
+      raise LoadingPageFailed, e.message
+    end
 
-      begin
-        super
-      rescue LoadingElementFailed => e
-        raise LoadingPageFailed, e.message
-      end
+    def is_loaded?
+      self.class.can_load_from_current_url? && super
     end
   end
 end
