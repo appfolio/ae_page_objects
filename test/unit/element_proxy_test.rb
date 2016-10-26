@@ -9,6 +9,7 @@ module AePageObjects
 
       # Ensure AePageObjects.wait_until never waits.
       AePageObjects.stubs(:default_max_wait_time).returns(0)
+      capybara_stub
     end
 
     def test_respond_to_can_find_methods_without_element_not_found
@@ -222,6 +223,18 @@ module AePageObjects
       proxy = new_proxy
 
       element_class.expect_new
+
+      raised = assert_raise ElementNotAbsent do
+        proxy.wait_until_absent
+      end
+
+      assert_include raised.message, element_class.to_s
+    end
+
+    def test_wait_until_absent__unknown
+      proxy = new_proxy
+
+      element_class.expects(:new).raises(Capybara::ElementNotFound)
 
       raised = assert_raise ElementNotAbsent do
         proxy.wait_until_absent

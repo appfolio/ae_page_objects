@@ -20,19 +20,19 @@ module PageObjects
         element :star, :locator => ".star"
 
         def show_star
-          find(".show_star").click
+          node.find(".show_star").click
         end
 
         def hide_star
-          find(".hide_star").click
+          node.find(".hide_star").click
         end
 
         def add_star
-          find(".add_star").click
+          node.find(".add_star").click
         end
 
         def remove_star
-          find(".remove_star").click
+          node.find(".remove_star").click
         end
       end
 
@@ -44,15 +44,15 @@ module PageObjects
         element :star, :locator => ".star"
 
         def show_star
-          find(".show_star").click
+          node.find(".show_star").click
         end
 
         def hide_star
-          find(".hide_star").click
+          node.find(".hide_star").click
         end
 
         def remove_star
-          find(".remove_star").click
+          node.find(".remove_star").click
         end
       end
     end

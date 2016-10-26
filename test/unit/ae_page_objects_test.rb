@@ -12,22 +12,28 @@ class AePageObjectsTest < AePageObjectsTestCase
     assert_equal AePageObjects::SingleWindow::Browser, AePageObjects.browser.class
   end
 
-  def test_wait_until__returns_result_when_true
+  def test_wait_until__something_truthy__returns_result
     assert_equal "hello", AePageObjects.wait_until { "hello" }
   end
 
-  def test_wait_until__tries_within_timeout
+  def test_wait_until__waits_until_truthy__returns_result
+    capybara_stub
+
     count = 0
     assert_equal 5, AePageObjects.wait_until(2) { count += 1; count == 5 ? count : nil }
   end
 
-  def test_wait_until__timeout
+  def test_wait_until__timeout__raises_wait_timeout_error
+    capybara_stub
+
     assert_raises AePageObjects::WaitTimeoutError do
       AePageObjects.wait_until(0.1) { false }
     end
   end
 
   def test_wait_until__frozen_time
+    capybara_stub
+
     AePageObjects.stubs(:default_max_wait_time).returns(5)
     Time.stubs(:now).returns(1)
 

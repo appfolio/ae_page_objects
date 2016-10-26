@@ -95,15 +95,15 @@ module AePageObjects
     end
 
     def scoped_node
-      if @locator
-        locator = eval_locator(@locator)
-        if ! locator.empty?
-          return parent.node.find(*locator)
-        end
+      locator = eval_locator(@locator)
+      if locator.empty?
+        parent.node
+      else
+        node = AePageObjects.wait_until { parent.node.first(*locator) }
+        node.allow_reload!
+        node
       end
-
-      parent.node
-    rescue Capybara::ElementNotFound => e
+    rescue AePageObjects::WaitTimeoutError => e
       raise LoadingElementFailed, e.message
     end
   end

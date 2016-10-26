@@ -1,5 +1,3 @@
-require 'ae_page_objects/util/page_polling'
-
 module AePageObjects
   class ElementProxy
     # Remove all instance methods so even things like class()
@@ -9,8 +7,6 @@ module AePageObjects
         undef_method m
       end
     end
-
-    include AePageObjects::PagePolling
 
     def initialize(element_class, *args)
       @element_class = element_class
@@ -121,16 +117,12 @@ module AePageObjects
 
     def reload_element
       @loaded_element = load_element
-
-      true
     rescue LoadingElementFailed
       @loaded_element = nil
-
-      true
     end
 
     def with_reloaded_element(timeout)
-      poll_until(timeout) do
+      AePageObjects.wait_until(timeout) do
         reload_element
         yield
       end

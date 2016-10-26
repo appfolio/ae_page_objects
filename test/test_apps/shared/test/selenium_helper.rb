@@ -1,5 +1,6 @@
 ENV['RAILS_ENV'] = 'test'
 
+puts $LOAD_PATH
 $LOAD_PATH << File.join(File.dirname(__FILE__), '..')
 
 require "config/environment"

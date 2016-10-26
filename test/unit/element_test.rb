@@ -29,8 +29,8 @@ module AePageObjects
 
       pet           = pet_class.new
 
-      kitty_page_object = mock
-      capybara_stub.session.expects(:find).with("#tiger").returns(kitty_page_object)
+      kitty_page_object = stub(:allow_reload!)
+      capybara_stub.session.expects(:first).with("#tiger").returns(kitty_page_object)
       kitty = kitty_class.new(pet, :locator => '#tiger')
 
       assert_equal pet, kitty.parent
@@ -48,8 +48,8 @@ module AePageObjects
 
       pet           = pet_class.new
 
-      kitty_page_object = mock
-      capybara_stub.session.expects(:find).with("#tiger").returns(kitty_page_object)
+      kitty_page_object = stub(:allow_reload!)
+      capybara_stub.session.expects(:first).with("#tiger").returns(kitty_page_object)
       kitty = kitty_class.new(pet, :name => 'tiger')
 
       assert_equal pet, kitty.parent
@@ -67,8 +67,8 @@ module AePageObjects
 
       pet           = pet_class.new
 
-      kitty_page_object = mock
-      capybara_stub.session.expects(:find).with("J 2da K").returns(kitty_page_object)
+      kitty_page_object = stub(:allow_reload!)
+      capybara_stub.session.expects(:first).with("J 2da K").returns(kitty_page_object)
       kitty = kitty_class.new(pet, :name => 'tiger', :locator => "J 2da K")
 
       assert_equal pet, kitty.parent
@@ -76,6 +76,35 @@ module AePageObjects
       assert_equal "tiger", kitty.full_name
       assert_equal "tiger", kitty.name
       refute kitty.using_default_locator?
+    end
+
+    def test_new__cannot_find_scoped_node__raises_loading_element_failed
+      kitty_page_class = Class.new(AePageObjects::Document)
+      kitty_class      = Class.new(AePageObjects::Element)
+
+      capybara_stub
+      capybara_stub.session.stubs(:first).with('#hi').raises(Capybara::ElementNotFound)
+      AePageObjects.stubs(:default_max_wait_time).returns(0)
+
+      raised = assert_raises LoadingElementFailed do
+        kitty_class.new(kitty_page_class.new, '#hi')
+      end
+    end
+
+    def test_new__is_not_loaded__raises_loading_element_failed
+      kitty_page_class = Class.new(AePageObjects::Document)
+      kitty_class      = Class.new(AePageObjects::Element)
+      kitty_class.any_instance.stubs(:is_loaded?).returns(false)
+
+      kitty_page_object = stub(:allow_reload!)
+
+      capybara_stub
+      capybara_stub.session.stubs(:first).with('#hi').returns(kitty_page_object)
+      AePageObjects.stubs(:default_max_wait_time).returns(0)
+
+      raised = assert_raises LoadingElementFailed do
+        kitty_class.new(kitty_page_class.new, '#hi')
+      end
     end
 
     def test_document
@@ -87,7 +116,8 @@ module AePageObjects
       kitty_page    = kitty_page_class.new
       assert_equal kitty_page, kitty_page.document
 
-      capybara_stub.session.stubs(:find).returns(capybara_stub.session)
+      capybara_stub.session.stubs(:allow_reload!)
+      capybara_stub.session.stubs(:first).returns(capybara_stub.session)
 
       kitty1 = kitty_class.new(kitty_page, :name => 'tiger')
       kitty2 = kitty_class.new(kitty1,     :name => 'tiger')
@@ -114,7 +144,8 @@ module AePageObjects
       capybara_stub
 
       kitty_page = kitty_page_class.new
-      capybara_stub.session.stubs(:find).returns(capybara_stub.session)
+      capybara_stub.session.stubs(:allow_reload!)
+      capybara_stub.session.stubs(:first).returns(capybara_stub.session)
 
       kitty1 = kitty_class.new(kitty_page, :locator => 'purr')
       assert_nil kitty1.full_name
@@ -131,8 +162,9 @@ module AePageObjects
 
       pet = pet_class.new
 
-      kitty_capybara_node = mock
-      capybara_stub.session.expects(:find).with("#tiger").returns(kitty_capybara_node)
+      kitty_capybara_node = stub(:allow_reload!)
+
+      capybara_stub.session.expects(:first).with("#tiger").returns(kitty_capybara_node)
       kitty_element = kitty_class.new(pet, :locator => '#tiger')
 
       assert_equal kitty_capybara_node, kitty_element.node
@@ -142,7 +174,7 @@ module AePageObjects
       assert kitty_element.stale?
 
       assert_raises AePageObjects::StalePageObject do
-        kitty_element.find("whatever")
+        kitty_element.node.find("whatever")
       end
     end
 
