@@ -251,7 +251,7 @@ class LoginPage < AePageObjects::Document
 end
 ```
 
-The type of arguments that `path` can take depends on the configured router. For Rails projects, `path` will accept 
+The type of arguments that `path` can take depends on the configured router. For Rails projects, `path` will accept
 strings and Rails URL helper names. See [Router](#router) for more details.
 
 
@@ -347,7 +347,7 @@ private
 end
 ```
 
-- You can override `ensure_loaded!` to implement any type of checks:
+- You can use `is_loaded` to implement any type of checks:
 
 ```ruby
 class LoginPage < AePageObjects::Document
@@ -355,23 +355,14 @@ class LoginPage < AePageObjects::Document
   path :login
   path '/new_user/login'
 
-private
-  def ensure_loaded!
-    # do all the default load ensuring
-    super
-
-    # do custom load ensuring
-    unless current_url =~ /\?debug\=true/
-      raise AePageObjects::LoadingPageFailed, "Should be in debug mode"
-    end
-  end
+  is_loaded { current_url =~ /\?debug\=true/ }
 end
 ```
 
-If you choose to override `ensure_loaded!` you:
-
-- need to call super() to get the default load ensuring
-- should raise `AePageObjects::LoadingPageFailed` if the document should not be loaded.
+The `is_loaded` block is meant to return quickly. This means that you should use `#all` and `#first`
+instead of the other Capybara::Node::Matchers or Capybara::Node::Finders. All the methods provided
+by AePageObjects::ElementProxy are safe as well. All the necessary waiting / rescuing is handled by
+the caller of the block.
 
 ### Windows
 
@@ -607,7 +598,7 @@ the dynamically created element. For example, instead of writing something like:
 class ShowPage < AePageObjects::Document
   element :share_modal, is: ShareModal # bad because the `share_modal` element
   # can always be accessed, even when the real modal cannot be interacted with
-  
+
   def share_image(&block)
     node.click_button('Share')
     share_modal.wait_until_visible
@@ -751,11 +742,11 @@ class AuthorsShowPage < AePageObjects::Document
     element :city
 
     def hide
-      find('.hide-button').click
+      node.find('.hide-button').click
     end
 
     def show
-      find('.show-button').click
+      node.find('.show-button').click
     end
   end
 end
@@ -964,7 +955,7 @@ end
 
 Then, in the page object, use `:is` to specify the collection type:
 
-```ruby 
+```ruby
 class AuthorsNewPage < AePageObjects::Document
   form_for :author do
     collection :addresses, is: AddressList, contains: Address
@@ -972,8 +963,8 @@ class AuthorsNewPage < AePageObjects::Document
 end
 ```
 
-This custom collection is also declared to contain items of the custom 
-`Address` element subclass. `collection` supports every combination of 
+This custom collection is also declared to contain items of the custom
+`Address` element subclass. `collection` supports every combination of
 `:is`, `:contains`, and the block. See the source for more examples.
 
 ### Staling
@@ -1219,7 +1210,7 @@ LoginPage.router = MyFavRouter.new
 In complex applications, it may be necessary to use multiple routers for different groups of documents.
 To accomplish this, group document classes under base classes and set the router on the base class.
 
-For example: 
+For example:
 
 ```ruby
 class AdminDocument < AePageObjects::Document
@@ -1256,5 +1247,5 @@ bundle install
 bundle exec rake
 ```
 
-See the [Development documentation](development.md) for more detailed information. 
+See the [Development documentation](development.md) for more detailed information.
 

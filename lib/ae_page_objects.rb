@@ -36,8 +36,6 @@ module AePageObjects
     def wait_until(seconds_to_wait = nil, error_message = nil, &block)
       @wait_until ||= 0
       @wait_until += 1
-      # start_time = Time.now
-      # puts "#{"--" * @wait_until} wait_until #{caller.first}"
 
       result = nil
 
@@ -90,7 +88,6 @@ module AePageObjects
 
       result
     ensure
-      # puts "#{"--" * @wait_until} wait_until => #{Time.now - start_time}"
       @wait_until -= 1
     end
 
