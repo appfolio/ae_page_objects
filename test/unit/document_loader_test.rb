@@ -8,6 +8,7 @@ module AePageObjects
     def setup
       super
 
+      capybara_stub
       @original_wait_time = default_max_wait_time
       self.default_max_wait_time = 0
     end
@@ -32,7 +33,7 @@ module AePageObjects
 
       loader = DocumentLoader.new(query, strategy)
 
-      loader.expects(:poll_until).yields
+      AePageObjects.expects(:wait_until).yields
 
       strategy.expects(:load_document_with_condition).with(query.conditions.first).returns(nil)
       strategy.expects(:load_document_with_condition).with(query.conditions.last).returns(:page)
@@ -76,7 +77,7 @@ module AePageObjects
 
       loader = DocumentLoader.new(query, strategy)
 
-      loader.expects(:poll_until).multiple_yields(nil, nil)
+      AePageObjects.expects(:wait_until).multiple_yields(nil, nil)
 
       sequence = sequence('sequence')
       strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions.first).returns(nil)

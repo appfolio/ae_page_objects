@@ -1,9 +1,5 @@
-require 'ae_page_objects/util/page_polling'
-
 module AePageObjects
   class DocumentLoader
-    include AePageObjects::PagePolling
-
     def initialize(query, strategy)
       @query    = query
       @strategy = strategy
@@ -11,14 +7,10 @@ module AePageObjects
 
     def load
       begin
-        poll_until do
+        AePageObjects.wait_until do
           @query.conditions.each do |document_condition|
-            begin
-              if document = @strategy.load_document_with_condition(document_condition)
-                return document
-              end
-            rescue => e
-              raise unless catch_poll_util_error?(e)
+            if document = @strategy.load_document_with_condition(document_condition)
+              return document
             end
           end
 

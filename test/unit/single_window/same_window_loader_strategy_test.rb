@@ -47,18 +47,6 @@ module AePageObjects
         assert_equal nil, result
       end
 
-      def test_load_page_with_condition__element_expectation_error
-        DocumentClass.expects(:new).returns(:instance)
-
-        condition = DocumentQuery::Condition.new(DocumentClass)
-        condition.expects(:match?).with(:instance).raises(ElementExpectationError)
-
-
-        loader = SameWindowLoaderStrategy.new
-        result = loader.load_document_with_condition(condition)
-        assert_equal nil, result
-      end
-
       def test_load_page_with_condition__loading_document_failed
         DocumentClass.expects(:new).raises(LoadingPageFailed.new)
 

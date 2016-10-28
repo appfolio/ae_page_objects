@@ -6,13 +6,21 @@ module AePageObjects
     include InternalHelpers
 
     def inherited(subclass)
-      subclass.class_eval do
-        class << self
-          def element_attributes
-            @element_attributes ||= {}
-          end
-        end
-      end
+      super
+
+      subclass.is_loaded_blocks.push(*is_loaded_blocks)
+    end
+
+    def element_attributes
+      @element_attributes ||= {}
+    end
+
+    def is_loaded_blocks
+      @is_loaded_blocks ||= []
+    end
+
+    def is_loaded(&block)
+      self.is_loaded_blocks << block
     end
 
     def element(name, options = {}, &block)

@@ -1,4 +1,5 @@
 require 'ae_page_objects/core/dsl'
+require 'ae_page_objects/element_proxy'
 
 module AePageObjects
   class Node
@@ -11,6 +12,14 @@ module AePageObjects
 
       def current_url_without_params
         current_url.sub(/(\?|\#).*/, '')
+      end
+    end
+
+    is_loaded do
+      if locator = loaded_locator
+        node.first(*eval_locator(locator)) != nil
+      else
+        true
       end
     end
 
@@ -49,7 +58,7 @@ module AePageObjects
       self.class.current_url_without_params
     end
 
-    METHODS_TO_DELEGATE_TO_NODE = [:find, :all, :value, :set, :text, :visible?]
+    METHODS_TO_DELEGATE_TO_NODE = [:value, :set, :text, :visible?]
     METHODS_TO_DELEGATE_TO_NODE.each do |m|
       class_eval <<-RUBY
         def #{m}(*args, &block)
@@ -88,13 +97,16 @@ module AePageObjects
     end
 
     def ensure_loaded!
-      if locator = loaded_locator
-        find(*eval_locator(locator))
-      end
-
-      self
-    rescue Capybara::ElementNotFound => e
+      AePageObjects.wait_until { is_loaded? }
+    rescue AePageObjects::WaitTimeoutError => e
       raise LoadingElementFailed, e.message
+    end
+
+    # This should not block and instead attempt to return immediately (e.g. use #all / #first
+    # instead of #find / #has_selector ). Unfortunately, this is difficult to enforce since even
+    # with #all / #first capyabara may wait.
+    def is_loaded?
+      self.class.is_loaded_blocks.all? { |block| self.instance_eval(&block) }
     end
   end
 end

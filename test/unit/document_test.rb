@@ -11,6 +11,18 @@ module AePageObjects
       super
     end
 
+    def test_new__is_not_loaded__raises_loading_page_failed
+      capybara_stub
+
+      some_document_class = Class.new(AePageObjects::Document)
+      some_document_class.any_instance.stubs(:is_loaded?).returns(false)
+      AePageObjects.stubs(:default_max_wait_time).returns(0)
+
+      raised = assert_raises LoadingPageFailed do
+        some_document_class.new
+      end
+    end
+
     def test_document
       kitty_class = Class.new(AePageObjects::Document)
 
@@ -39,41 +51,6 @@ module AePageObjects
       assert_equal "/yo/dude", kitty_page.current_url_without_params
     end
 
-    def test_find
-      kitty_class = Class.new(AePageObjects::Document)
-
-      stub_current_window
-
-      kitty_page = kitty_class.new
-
-      capybara_stub.session.expects(:find).with(1, 2).returns("result")
-      assert_equal "result", kitty_page.find(1, 2)
-
-      capybara_stub.session.expects(:find).with("hello kids").returns("result")
-      kitty_page.find("hello kids")
-
-      capybara_stub.session.expects(:find).with(:xpath, "yo").returns("result")
-      kitty_page.find(:xpath, "yo")
-    end
-
-    def test_ensure_loaded
-      some_document_class = Class.new(AePageObjects::Document) do
-        def loaded_locator
-          "#hello"
-        end
-      end
-      some_document_class.expects(:can_load_from_current_url?).returns(true)
-
-      element_error = LoadingElementFailed.new("Twas an error")
-      some_document_class.any_instance.expects(:find).with("#hello").raises(element_error)
-
-      raised = assert_raises LoadingPageFailed do
-        some_document_class.new
-      end
-
-      assert_equal element_error.message, raised.message
-    end
-
     def test_stale
       kitty_class = Class.new(AePageObjects::Document)
 
@@ -87,7 +64,7 @@ module AePageObjects
       assert kitty_page.stale?
 
       assert_raises AePageObjects::StalePageObject do
-        kitty_page.find("whatever")
+        kitty_page.node.find("whatever")
       end
     end
 
