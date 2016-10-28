@@ -1,3 +1,105 @@
+## Version 3.0.0
+
+### Changed
+
+* [194](https://github.com/appfolio/ae_page_objects/pull/194) Changed AePageObjects.wait_until semantics and changed ensure loaded interface.
+
+  This change improves `browser.find_document`, `window.change_to`, and all the method like
+  `absent?` / `wait_until_absent` on `ElementProxy` by not relaying on
+  `Capybara.using_wait_time(0)`. This results in three backward incompatible changes,
+
+  #### AePageObjects.wait_until
+
+  Previously, `AePageObjects.wait_until` was not aware of nested invocations. So that:
+
+     ```ruby
+     AePageObjects.wait_until(5) do
+       AePageObjects.wait_until(60) do
+         false
+       end
+     end
+     ```
+  resulting in the outer invocation waiting 5 seconds and the inner invocation waiting 60 seconds.
+
+  Now, `AePageObjects.wait_until` keeps track of nested invocations and only the outer most
+  invocation matters,
+
+     ```ruby
+     AePageObjects.wait_until(5) do
+       AePageObjects.wait_until(60) do
+         false
+       end
+     end
+     ```
+
+  resulting in the outer invocation waiting 5 seconds and the inner invocation not waiting at all.
+
+  #### ensure_loaded!
+
+  Previously, one would implement 'load ensuring' by overriding `ensure_loaded!`,
+
+    ```ruby
+    class Page < AePageObjects::Document
+      private
+      def ensure_loaded!
+        super
+        raise LoadingPageFailed unless title == 'Hi There'
+      end
+    end
+    ```
+
+  Now, one should implement `load ensuring` via the `is_loaded` dsl,
+
+    ```ruby
+    class Page < AePageObjects::Document
+      is_loaded { title == 'Hi There' }
+    end
+    ```
+
+  Note, there is no need to remember to call super nor catch Selenium / Capybara exceptions. The
+  is_loaded block should return quickly. That means using `#all` / `#first` instead of the other
+  Capybara matchers / finders. For example, to check whether the page contains an element with a
+  certain id, you want to do,
+
+    ```ruby
+    class Page < AePageObjects::Document
+      is_loaded { !node.first('#foo').nil? }
+    end
+    ```
+
+  as opposed to,
+
+    ```ruby
+    class Page < AePageObjects::Document
+      is_loaded { node.has_selector?('#foo') }
+    end
+    ```
+
+  Don't worry, the caller of is_loaded blocks will correctly wait / rescue exceptions.
+
+  #### more separation between AePageObjects / Capybara
+
+  Finally, `#find` and `#all` on `AePageObjects::Node` are no longer delegated to `node`. So
+  instead of,
+
+    ```ruby
+    class Page < AePageObjects::Document
+      def produce_halloween_candy
+        find('#candy-producer').click
+      end
+    end
+    ```
+
+  you simply grab the node first,
+
+    ```ruby
+    class Page < AePageObjects::Document
+      def produce_halloween_candy
+        node.find('#candy-producer').click
+      end
+    end
+    ```
+
 ## Version 2.0.1
 
 ### Bugs
