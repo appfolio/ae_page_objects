@@ -3,6 +3,7 @@ require 'capybara/dsl'
 
 require 'ae_page_objects/version'
 require 'ae_page_objects/exceptions'
+require 'ae_page_objects/util/wait_time_manager'
 
 module AePageObjects
   autoload :Node,              'ae_page_objects/node'
@@ -61,18 +62,10 @@ module AePageObjects
         # Capabara will just raise the error.
         #
         # In order to combat the two cases, we start with a lower Capybara wait time and increase
-        # it each iteration.
-        smallish_wait_time = 1.0
-        block_start_time = nil
+        # it each iteration. This logic is encapsulated in a little utility class.
+        time_manager = WaitTimeManager.new(1.0, seconds_to_wait)
         begin
-          if block_start_time && Time.now - block_start_time > smallish_wait_time
-            # Increase wait time to ensure Capybara has a chance to reload.
-            smallish_wait_time = [smallish_wait_time * 2.0, seconds_to_wait].min
-          end
-          block_start_time = Time.now
-          Capybara.using_wait_time(smallish_wait_time) do
-            result = call_wait_until_block(error_message, &block)
-          end
+          result = time_manager.using_wait_time { call_wait_until_block(error_message, &block) }
         rescue => e
           errors = Capybara.current_session.driver.invalid_element_errors
           errors += [Capybara::ElementNotFound]
