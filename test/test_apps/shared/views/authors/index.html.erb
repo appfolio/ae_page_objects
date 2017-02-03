@@ -4,21 +4,32 @@
 
 <h1>Listing authors</h1>
 
-<table>
+<div class="author_list">
+  <table>
+    <tbody>
+    <% @authors.each do |author| %>
+      <tr>
+        <td class="author_info">
+          <table>
+            <tr>
+              <td class="first_name"><%= author.first_name %></td>
+              <td class="last_name"><%= author.last_name %></td>
+              <td><%= link_to 'Show', author %></td>
+              <td><span class="js-delay-show" data-href="<%= url_for author %>">Delayed Show</span></td>
+              <td><%= link_to 'Show In New Window', author, :target => '_blank' %></td>
+              <td><%= link_to 'Edit', edit_author_path(author) %></td>
+              <td><%= link_to 'Destroy', author, :confirm => 'Are you sure?', :method => :delete %></td>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
 
-<% @authors.each do |author| %>
-  <tr>
-    <td class="first_name"><%= author.first_name %></td>
-    <td class="last_name"><%= author.last_name %></td>
-    <td><%= link_to 'Show', author %></td>
-    <td><span class="js-delay-show" data-href="<%= url_for author %>">Delayed Show</span></td>
-    <td><%= link_to 'Show In New Window', author, :target => '_blank' %></td>
-    <td><%= link_to 'Edit', edit_author_path(author) %></td>
-    <td><%= link_to 'Destroy', author, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
 
-<br />
+<br/>
 
 <%= link_to 'New Author', new_author_path %>
