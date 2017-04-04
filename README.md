@@ -112,7 +112,7 @@ Use the page objects in a test
 ```ruby
 def test_logging_in_goes_to_authors
   login_page = LoginPage.visit
-  authors_page = login_page.login_as!('admin', 'password')
+  authors_page = login_page.login!('admin', 'password')
 
   assert_equal AuthorsIndexPage, authors_page.class
 end
@@ -121,7 +121,7 @@ def test_authors_are_sorted_by_last_name
   Author.create!(first_name: 'Bob', last_name: 'Smith')
   Author.create!(first_name: 'Sponge', last_name: 'Bob')
 
-  authors_page = LoginPage.visit.login_as!('admin', 'password')
+  authors_page = LoginPage.visit.login!('admin', 'password')
 
   authors = authors_page.authors
   assert_equal 2, authors.size
@@ -138,10 +138,10 @@ end
 def test_can_navigate_to_author_from_index
   Author.create!(first_name: 'Sponge', last_name: 'Bob')
 
-  authors_page = LoginPage.visit.login_as!('admin', 'password')
+  authors_page = LoginPage.visit.login!('admin', 'password')
 
   sponge_bob = authors_page.authors.first
-  sponge_bob_page = sponge_bob.view!
+  sponge_bob_page = sponge_bob.show!
 
   assert_equal "Sponge", sponge_bob_page.first_name.text
   assert_equal "Bob", sponge_bob_page.last_name.text
@@ -150,7 +150,7 @@ end
 def test_can_navigate_to_author_after_logging_in
   sponge_bob = Author.create!(first_name: 'Sponge', last_name: 'Bob')
 
-  LoginPage.visit.login_as!('admin', 'password')
+  LoginPage.visit.login!('admin', 'password')
 
   sponge_bob_page = AuthorsShowPage.visit(sponge_bob)
 
