@@ -121,7 +121,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_window_change_to__multiple_pages
-    book = Book.create!(:title => "Brave New World")
+    book = Book.create!(:title => 'Brave New World', :author => Author.create!(:last_name => 'Huxley'))
 
     visit("/books/#{book.id}")
     result_page = AePageObjects.browser.current_window.change_to(PageObjects::Books::NewPage,
@@ -159,7 +159,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_multiple_paths_visit
-    book = Book.create!(:title => "Brave New World")
+    book = Book.create!(:title => 'Brave New World', :author => Author.create!(:last_name => 'Huxley'))
 
     book_show_page = PageObjects::Books::ShowPage.visit(book)
     assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
