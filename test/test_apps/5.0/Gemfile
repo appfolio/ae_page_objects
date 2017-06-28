@@ -50,3 +50,11 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'forum', path: 'engines'
+
+group :test do
+  gem 'selenium-webdriver', '~> 2.53.0'
+  gem 'mocha', '0.13.3', require: false
+  gem 'appraisal', '~> 2.0'
+
+  gem 'ae_page_objects', path: '../../..'
+end
