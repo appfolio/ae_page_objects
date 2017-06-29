@@ -57,7 +57,7 @@ module AePageObjects
         XPath::HTML.descendant(:div)[XPath.text.is('Example Text')]
       ])
 
-      assert_equal ".//div[./text() = 'Example Text']", magazine.send(:item_xpath)
+      assert_equal ".//div[(./text() = 'Example Text')]", magazine.send(:item_xpath)
     end
 
     def test_xpath_item_locator__respects_passed_exact_option
