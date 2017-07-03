@@ -138,7 +138,7 @@ module AePageObjects
           Recognizer::Rails3.new
         when /\A3\.2/
           Recognizer::Rails32.new
-        when /\A4\.[012]/, /\A5\.0/
+        when /\A(4\.[012]|5\.0)/
           Recognizer::Rails4Plus.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."
