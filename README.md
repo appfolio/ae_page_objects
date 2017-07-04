@@ -170,7 +170,7 @@ gem 'ae_page_objects'
 
 ### Rails
 
-AePageObjects is built to work with Rails (versions 3.X-4.X) out of the box. To use with Rails,
+AePageObjects is built to work with Rails (versions 3.X-5.0) out of the box. To use with Rails,
 add this line to your test helper:
 
 ```ruby

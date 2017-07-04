@@ -21,7 +21,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_load_ensuring__waits_for_page
     ActiveRecord::Base.transaction do
-      Author.create!(:last_name => 'a')
+      Author.create!(last_name: 'a')
     end
 
     index = PageObjects::Authors::IndexPage.visit
@@ -121,7 +121,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_window_change_to__multiple_pages
-    book = Book.create!(:title => "Brave New World")
+    book = Book.create!(title: 'Brave New World', author: Author.create!(last_name: 'Huxley'))
 
     visit("/books/#{book.id}")
     result_page = AePageObjects.browser.current_window.change_to(PageObjects::Books::NewPage,
@@ -159,15 +159,15 @@ class PageObjectIntegrationTest < Selenium::TestCase
   end
 
   def test_multiple_paths_visit
-    book = Book.create!(:title => "Brave New World")
+    book = Book.create!(title: 'Brave New World', author: Author.create!(last_name: 'Huxley'))
 
     book_show_page = PageObjects::Books::ShowPage.visit(book)
     assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
 
-    book_show_page = PageObjects::Books::ShowPage.visit(:id => book.id, :via => :view_book)
+    book_show_page = PageObjects::Books::ShowPage.visit(id: book.id, via: :view_book)
     assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
 
-    book_show_page = PageObjects::Books::ShowPage.visit(:via => "/books/#{book.id}")
+    book_show_page = PageObjects::Books::ShowPage.visit(via: "/books/#{book.id}")
     assert_equal true, book_show_page.is_a?(PageObjects::Books::ShowPage)
   end
 
@@ -266,12 +266,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_some_collection_enumerables
     ActiveRecord::Base.transaction do
-      Author.create!(:last_name => 'a')
-      Author.create!(:last_name => 'm')
-      Author.create!(:last_name => 'u')
-      Author.create!(:last_name => 't')
-      Author.create!(:last_name => 'z')
-      Author.create!(:last_name => '7')
+      Author.create!(last_name: 'a')
+      Author.create!(last_name: 'm')
+      Author.create!(last_name: 'u')
+      Author.create!(last_name: 't')
+      Author.create!(last_name: 'z')
+      Author.create!(last_name: '7')
     end
 
     index = PageObjects::Authors::IndexPage.visit
@@ -335,7 +335,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_document_tracking__multiple_windows
     window1_authors = PageObjects::Authors::IndexPage.visit
     window1 = window1_authors.window
-    assert_windows(window1, :current => window1)
+    assert_windows(window1, current: window1)
 
     window1_authors_robert_row = window1_authors.authors.first
     assert_equal "Robert", window1_authors_robert_row.first_name.text
@@ -347,7 +347,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window2_author_robert = PageObjects::Authors::ShowPage.new
 
     window2 = window2_author_robert.window
-    assert_windows(window1, window2, :current => window2)
+    assert_windows(window1, window2, current: window2)
 
     window2_authors = PageObjects::Authors::IndexPage.visit
     assert_equal window2, window2_authors.window
@@ -370,7 +370,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window2.close
     assert window2_author_robert.stale?
     assert_equal nil, window2.current_document
-    assert_windows(window1, :current => window1)
+    assert_windows(window1, current: window1)
 
     refute window1_author_robert.stale?
     assert_equal window1_author_robert, window1.current_document
@@ -384,19 +384,19 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window3_author_robert = PageObjects::Authors::ShowPage.new
     window3 = window3_author_robert.window
 
-    assert_windows(window1, window3, :current => window3)
+    assert_windows(window1, window3, current: window3)
 
     window1.close
     assert window1_authors.stale?
     assert_equal nil, window1.current_document
-    assert_windows(window3, :current => window3)
+    assert_windows(window3, current: window3)
 
     refute window3_author_robert.stale?
     assert_equal window3_author_robert, window3.current_document
 
     # attempt to close the last window
     window3.close
-    assert_windows(window3, :current => window3)
+    assert_windows(window3, current: window3)
   end
 
   def test_finding_windows
@@ -412,7 +412,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "Robert", window2_author_robert.first_name.text
     window2 = window2_author_robert.window
 
-    assert_windows(window1, window2, :current => window2)
+    assert_windows(window1, window2, current: window2)
 
     window1.switch_to
 
@@ -427,7 +427,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     end
 
     window3 = window3_author_paul.window
-    assert_windows(window1, window2, window3, :current => window3)
+    assert_windows(window1, window2, window3, current: window3)
 
     assert_raises AePageObjects::DocumentLoadError do
       Capybara.using_wait_time(3) do
@@ -437,7 +437,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       end
     end
 
-    assert_windows(window1, window2, window3, :current => window3)
+    assert_windows(window1, window2, window3, current: window3)
 
     index_page = AePageObjects.browser.find_document(PageObjects::Authors::IndexPage)
     assert_equal window1, index_page.window
@@ -455,7 +455,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal "Robert", window2_author_robert.first_name.text
     window2 = window2_author_robert.window
 
-    assert_windows(window1, window2, :current => window2)
+    assert_windows(window1, window2, current: window2)
 
     window1.switch_to
 
@@ -466,7 +466,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     window3_author_paul = window1_authors_paul_row.show_in_new_window_with_name!("Paul")
 
     window3 = window3_author_paul.window
-    assert_windows(window1, window2, window3, :current => window3)
+    assert_windows(window1, window2, window3, current: window3)
 
     window3_authors = PageObjects::Authors::IndexPage.visit
     window3_authors_paul_row = window1_authors.authors[1]
@@ -481,7 +481,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_find_document_iterates_over_all_windows__element_not_found
     ActiveRecord::Base.transaction do
-      Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+      Author.create!(first_name: 'Andrew', last_name: "Putz")
     end
 
     authors = PageObjects::Authors::IndexPage.visit
@@ -530,12 +530,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
     # we should have iterated over the windows more than once.
     assert_operator window_visit_registry[window4.handle], :>, 1
 
-    assert_windows(window1, window2, window3, window4, :current => window4)
+    assert_windows(window1, window2, window3, window4, current: window4)
   end
 
   def test_find_document_iterates_over_all_windows__window_loading_lags
     ActiveRecord::Base.transaction do
-      Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+      Author.create!(first_name: 'Andrew', last_name: "Putz")
     end
 
     authors = PageObjects::Authors::IndexPage.visit
@@ -583,14 +583,14 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal 2, window_visit_registry[window2.handle]
     assert_equal 1, window_visit_registry[window3.handle]
 
-    assert_windows(window1, window2, window3, :current => window3)
+    assert_windows(window1, window2, window3, current: window3)
   ensure
     windows = AePageObjects.browser.windows
     windows.singleton_class.send(:remove_method, :opened)
   end
 
   def test_find_document__ignores_stale_windows
-    Author.create!(:first_name => 'Andrew', :last_name => "Putz")
+    Author.create!(first_name: 'Andrew', last_name: "Putz")
 
     authors = PageObjects::Authors::IndexPage.visit
     window1 = authors.window
@@ -603,7 +603,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
     andrew = authors.authors[1].show_in_new_window_with_name!("Andrew")
     window3 = andrew.window
 
-    assert_windows(window1, window2, window3, :current => window3)
+    assert_windows(window1, window2, window3, current: window3)
 
     window3.switch_to
 
@@ -618,7 +618,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       AePageObjects.browser.find_document(PageObjects::Authors::IndexPage)
     end
 
-    assert_windows(window1, window2, :current => window1)
+    assert_windows(window1, window2, current: window1)
   end
 
 private

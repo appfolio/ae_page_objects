@@ -103,7 +103,7 @@ module AePageObjects
         end
       end
 
-      class Rails4 < Rails32
+      class Rails4Plus < Rails32
 
       private
 
@@ -130,20 +130,19 @@ module AePageObjects
       end
     end
 
-  private
+    private
 
     def recognizer
-      @recognizer ||= begin
-        if ::Rails.version =~ /\A3\.[01]/
+      @recognizer ||= case ::Rails.version
+        when /\A3\.[01]/
           Recognizer::Rails3.new
-        elsif ::Rails.version =~ /\A3\.2/
+        when /\A3\.2/
           Recognizer::Rails32.new
-        elsif ::Rails.version =~ /\A4\.[012]/
-          Recognizer::Rails4.new
+        when /\A(4\.[012]|5\.0)/
+          Recognizer::Rails4Plus.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."
-          Recognizer::Rails4.new
-        end
+          Recognizer::Rails4Plus.new
       end
     end
   end

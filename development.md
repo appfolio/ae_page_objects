@@ -137,7 +137,7 @@ rake test:units
 
 ### Rails
 
-`AePageObjects::ApplicationRouter` is tested against various versions of Rails in the _test/test_apps_ directory (currently 3.0 to 4.2).
+`AePageObjects::ApplicationRouter` is tested against various versions of Rails in the _test/test_apps_ directory (currently 3.0 to 5.0).
 These tests use the most recent Ruby and Capybara versions possible for the version of Rails.
  
 To run the integration tests against a specific version of Rails: 
