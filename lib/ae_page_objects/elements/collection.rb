@@ -106,7 +106,7 @@ module AePageObjects
     end
 
     def item_locator_at(index)
-      [:xpath, "#{item_xpath}[#{index + 1}]", options]
+      [:xpath, "(#{item_xpath})[#{index + 1}]", options]
     end
 
     def default_item_locator
