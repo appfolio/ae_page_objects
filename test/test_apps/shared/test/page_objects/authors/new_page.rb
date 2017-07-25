@@ -11,7 +11,7 @@ module PageObjects
         collection :books,
                    :name         => "books_attributes",
                    :locator      => "#author_books",
-                   :item_locator => ".some-books-fool .row" do
+                   :item_locator => ".a-book-fool" do
           element :title
         end
       end
