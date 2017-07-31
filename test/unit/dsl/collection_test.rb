@@ -25,7 +25,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -62,7 +62,7 @@ module AePageObjects
         first_owner_page_object = stub(:allow_reload!)
 
         previous_owners_page_object.expects(:all).with(:xpath, ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -98,7 +98,7 @@ module AePageObjects
         first_owner_page_object = stub(:allow_reload!)
 
         previous_owners_page_object.expects(:all).with(:xpath, ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -136,7 +136,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -174,7 +174,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -210,7 +210,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -244,7 +244,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -280,7 +280,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -323,7 +323,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -351,7 +351,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
       end
 
@@ -376,7 +376,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)
@@ -411,7 +411,7 @@ module AePageObjects
 
         first_owner_page_object = stub(:allow_reload!)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, ".//*[1]", {}).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", {}).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
         owner_name_page_object = stub(:allow_reload!)

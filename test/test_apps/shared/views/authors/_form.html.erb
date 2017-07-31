@@ -20,7 +20,7 @@
   <a class="show_star">Show Star</a>
   <a class="add_star">Add Star</a>
   <a class="remove_star">Remove Star</a>
-  
+
   <span class="star">*</span>
 </div>
 
@@ -41,17 +41,17 @@
   <%= f.text_field :last_name %>
 
   <div id="author_books">
-    <div class="some-books-fool">
-      <%= f.fields_for :books do |book_form| %>
-        <div class="row">
+    <%= f.fields_for :books do |book_form| %>
+      <div class="a-book-fool-parent">
+        <div class="a-book-fool">
           <%= book_form.label :title %>
           <%= book_form.text_field :title %>
           <%= book_form.fields_for :index do |index_form| %>
             <%= index_form.text_field :pages %>
           <% end %>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 
   <%= f.submit %>
