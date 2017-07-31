@@ -1,3 +1,10 @@
+## Version 3.1.0
+
+### Changed
+
+* [198](https://github.com/appfolio/ae_page_objects/pull/198) Add Rails 5.0 support for ae_page_objects router
+* [197](https://github.com/appfolio/ae_page_objects/pull/197) Fix documentation
+
 ## Version 3.0.0
 
 ### Changed
