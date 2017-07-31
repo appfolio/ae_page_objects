@@ -1,3 +1,10 @@
+## Version 3.1.1
+
+### Fixed
+
+* [199](https://github.com/appfolio/ae_page_objects/pull/199)
+  * Fixes [142](https://github.com/appfolio/ae_page_objects/issues/142)
+
 ## Version 3.1.0
 
 ### Changed
