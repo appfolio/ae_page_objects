@@ -117,6 +117,18 @@ module AePageObjects
       assert proxy.absent?(wait: 20)
     end
 
+    def test_inspect__element_not_found
+      proxy = new_proxy
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert_equal '[element not found]', proxy.inspect
+    end
+
+    def test_to_s__element_not_found
+      proxy = new_proxy
+      element_class.expects(:new).raises(AePageObjects::LoadingElementFailed)
+      assert_equal '[element not found]', proxy.to_s
+    end
+
     def test_presence
       proxy = new_proxy
 
