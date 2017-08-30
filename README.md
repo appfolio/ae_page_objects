@@ -433,7 +433,7 @@ Some test code using these page objects:
 def test_logging_in_goes_to_authors
   login_page = LoginPage.visit
 
-  authors_page = login_page.login_as!('admin', 'password')
+  authors_page = login_page.login!('admin', 'password')
   assert_equal AuthorsIndexPage, authors_page.class
 
   books_page = authors_page.show_report!("Book Report")
@@ -441,7 +441,7 @@ def test_logging_in_goes_to_authors
 end
 ```
 
-Keeping the conventions in mind while reading the above test code should make it clear to the reader that the login_as!
+Keeping the conventions in mind while reading the above test code should make it clear to the reader that the login!
 method will be navigating the browser to a new page within the current window; any references to the previous page will
 be invalid. Accessing the login_page reference after the browser has changed pages will result in an
 `AePageObjects::StalePageObject` error:
@@ -450,7 +450,7 @@ be invalid. Accessing the login_page reference after the browser has changed pag
 ```ruby
 def test_logging_in_goes_to_authors
   login_page = LoginPage.visit
-  authors_page = login_page.login_as!('admin', 'password')
+  authors_page = login_page.login!('admin', 'password')
 
   login_page.email.text
 
