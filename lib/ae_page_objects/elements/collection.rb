@@ -44,6 +44,10 @@ module AePageObjects
       node.all(:xpath, item_xpath, options).size
     end
 
+    def first
+      item_at(0)
+    end
+
     def last
       self.at(size - 1)
     end
