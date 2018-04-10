@@ -112,6 +112,7 @@ module AePageObjects
     end
 
     def implicit_element
+      reload_element if obsolete?
       @loaded_element ||= load_element
     end
 
@@ -126,6 +127,13 @@ module AePageObjects
         reload_element
         yield
       end
+    end
+
+    def obsolete?
+      @loaded_element && @loaded_element.node.base
+      false
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError
+      true
     end
   end
 end
