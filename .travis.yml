@@ -40,15 +40,6 @@ matrix:
 
   # Integration tests
   include:
-    - env: RAILS_VERSION=3.0
-      rvm: 1.9.3
-
-    - env: RAILS_VERSION=3.1
-      rvm: 1.9.3
-
-    - env: RAILS_VERSION=3.2
-      rvm: *max_ruby
-
     - env: RAILS_VERSION=4.0
       rvm: *max_ruby
 
