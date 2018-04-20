@@ -247,7 +247,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
   def test_element_proxy__nested
     author = PageObjects::Authors::NewPage.visit
-    Capybara.using_wait_time(1) do
+    Capybara.using_wait_time(0.1) do
       assert author.nested_rating.star.present?
 
       author.nested_rating.hide_star
@@ -369,7 +369,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window2.close
     assert window2_author_robert.stale?
-    assert_equal nil, window2.current_document
+    assert_nil window2.current_document
     assert_windows(window1, current: window1)
 
     refute window1_author_robert.stale?
@@ -388,7 +388,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window1.close
     assert window1_authors.stale?
-    assert_equal nil, window1.current_document
+    assert_nil window1.current_document
     assert_windows(window3, current: window3)
 
     refute window3_author_robert.stale?
@@ -522,10 +522,12 @@ class PageObjectIntegrationTest < Selenium::TestCase
 
     window4 = found.window
 
-    # Since the document we're looking for is in the 4th window, we should have
-    # visited all the windows the number of times we visited the 4th window
-    assert_equal window_visit_registry[window4.handle], window_visit_registry[window2.handle]
-    assert_equal window_visit_registry[window4.handle], window_visit_registry[window3.handle]
+    # Firefox opens new tabs adjacent to the current tab so the order of windows is going to be:
+    #   window1, window4, window3, window2.
+    # Since the document we're looking for is in window4, we should have
+    # visited all the windows one less time than the number of times we visited the 4th window
+    assert_equal window_visit_registry[window4.handle] - 1, window_visit_registry[window2.handle]
+    assert_equal window_visit_registry[window4.handle] - 1, window_visit_registry[window3.handle]
 
     # we should have iterated over the windows more than once.
     assert_operator window_visit_registry[window4.handle], :>, 1
@@ -579,8 +581,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_equal window3, found.window
 
     # window1 has IndexPage, so the block above isn't called
-    assert_equal nil, window_visit_registry[window1.handle]
-    assert_equal 2, window_visit_registry[window2.handle]
+    assert_nil window_visit_registry[window1.handle]
+    assert_equal 1, window_visit_registry[window2.handle]
     assert_equal 1, window_visit_registry[window3.handle]
 
     assert_windows(window1, window2, window3, current: window3)
