@@ -99,6 +99,13 @@ module AePageObjects
       if locator.empty?
         parent.node
       else
+        default_options = { minimum: 0 }
+        if locator.last.is_a?(::Hash)
+          locator[-1] = default_options.merge(locator.last)
+        else
+          locator.push(default_options)
+        end
+
         node = AePageObjects.wait_until { parent.node.first(*locator) }
         node.allow_reload!
         node
