@@ -1,3 +1,15 @@
+## Version 4.0.0
+
+### Fixed
+
+* [203](https://github.com/appfolio/ae_page_objects/pull/203) Fixed deprecation warning when using `exact: true` without `XPath.is`
+* [203](https://github.com/appfolio/ae_page_objects/pull/203) Gracefully handle `Selenium::WebDriver::Error::StaleElementReferenceError` after page reload
+
+### Changed
+
+* [203](https://github.com/appfolio/ae_page_objects/pull/203) Update minimum Capybara version to 3.0.0
+* [203](https://github.com/appfolio/ae_page_objects/pull/203) Added `Document#reload`
+
 ## Version 3.1.1
 
 ### Fixed
