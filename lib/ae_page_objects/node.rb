@@ -17,6 +17,13 @@ module AePageObjects
 
     is_loaded do
       if locator = loaded_locator
+        default_options = { minimum: 0 }
+        if locator.last.is_a?(::Hash)
+          locator[-1] = default_options.merge(locator.last)
+        else
+          locator.push(default_options)
+        end
+
         node.first(*eval_locator(locator)) != nil
       else
         true

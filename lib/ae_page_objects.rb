@@ -99,11 +99,7 @@ module AePageObjects
     end
 
     def default_max_wait_time
-      if Capybara.respond_to?(:default_max_wait_time)
-        Capybara.default_max_wait_time
-      else
-        Capybara.default_wait_time
-      end
+      Capybara.default_max_wait_time
     end
   end
 end

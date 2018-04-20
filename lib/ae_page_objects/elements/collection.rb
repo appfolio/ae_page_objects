@@ -41,7 +41,7 @@ module AePageObjects
     end
 
     def size
-      node.all(:xpath, item_xpath, options).size
+      node.all(:xpath, item_xpath, options.merge(wait: false)).size
     end
 
     def last
@@ -73,7 +73,9 @@ module AePageObjects
       @item_xpath ||= begin
         query_args = eval_locator(@item_locator).dup
 
-        default_options = {}
+        default_options = {
+          session_options: Capybara.session_options
+        }
 
         if query_args[1].is_a?(XPath::Expression)
           #
@@ -94,11 +96,11 @@ module AePageObjects
           query_args.push(default_options)
         end
 
-        query = Capybara::Query.new(*query_args)
+        query = Capybara::Queries::SelectorQuery.new(*query_args)
 
         result = query.xpath
 
-        # if it's CSS, we need to run it through XPath as Capybara::Query#xpath only
+        # if it's CSS, we need to run it through XPath as Capybara::Queries::SelectorQuery#xpath only
         # works when the selector is xpath. Lame.
         if query.selector.format == :css
           result = XPath.css(query.xpath).to_xpath

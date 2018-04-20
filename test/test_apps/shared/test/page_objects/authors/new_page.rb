@@ -1,7 +1,6 @@
 module PageObjects
   module Authors
     class NewPage < AePageObjects::Document
-
       path :new_author
 
       form_for "author" do
@@ -17,7 +16,7 @@ module PageObjects
       end
 
       class Rating < AePageObjects::Element
-        element :star, :locator => ".star"
+        element :star, locator: ['.star', visible: :all]
 
         def show_star
           node.find(".show_star").click
@@ -41,7 +40,7 @@ module PageObjects
       element :rating, :is => Rating, :locator => "#rating"
 
       element :nested_rating, :name => "nested_rating_attributes", :locator => "#rating" do
-        element :star, :locator => ".star"
+        element :star, locator: ['.star', visible: :all]
 
         def show_star
           node.find(".show_star").click

@@ -13,7 +13,7 @@ gem "turbolinks", "~> 5"
 gem "jbuilder", "~> 2.5"
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "forum", path: "../engines"
-gem "capybara", "~> 2.8.0"
+gem "capybara", "~> 3.0.2"
 
 group :development, :test do
   gem "byebug", platform: :mri
@@ -25,7 +25,7 @@ group :development do
 end
 
 group :test do
-  gem "selenium-webdriver", "~> 2.53.0"
+  gem "selenium-webdriver", "~> 3.11.0"
   gem "mocha", "0.13.3", require: false
   gem "appraisal", "~> 2.0"
   gem "ae_page_objects", path: "../../../.."
