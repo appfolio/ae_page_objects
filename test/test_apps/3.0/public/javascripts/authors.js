@@ -1,1 +1,0 @@
-../../../3.1/app/assets/javascripts/authors.js
