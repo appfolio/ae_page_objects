@@ -1,3 +1,13 @@
+## Version 4.0.0
+
+### Fixed
+
+* Fixed deprecation warning when using `exact: true` without `XPath.is`
+
+### Changed
+
+* Update minimum Capybara version to 3.0.0
+
 ## Version 3.1.1
 
 ### Fixed
