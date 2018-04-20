@@ -60,11 +60,11 @@ module AePageObjects
       jon = kitty_class.new
 
       verify_top_level_form_field(jon, :name, capybara_stub.session) do |field_xpath, field_page_object|
-        capybara_stub.session.stubs(:first).with("#the_kat_name").returns(field_page_object)
+        capybara_stub.session.stubs(:first).with("#the_kat_name", minimum: 0).returns(field_page_object)
       end
 
       verify_top_level_form_field(jon, :age, capybara_stub.session) do |field_xpath, field_page_object|
-        capybara_stub.session.stubs(:first).with("#the_kat_age").returns(field_page_object)
+        capybara_stub.session.stubs(:first).with("#the_kat_age", minimum: 0).returns(field_page_object)
       end
 
       verify_top_level_form_field(jon, :owner, capybara_stub.session) do |field_xpath, field_page_object|
@@ -100,22 +100,22 @@ module AePageObjects
 
       kitty_box_page_stub = stub(:allow_reload!)
 
-      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box').returns(kitty_box_page_stub).times(2)
+      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box', minimum: 0).returns(kitty_box_page_stub).times(2)
       verify_top_level_form_field(jon, :name, kitty_box_page_stub) do |field_xpath, field_page_object, times|
-        kitty_box_page_stub.stubs(:first).with("#the_kat_name").returns(field_page_object)
+        kitty_box_page_stub.stubs(:first).with("#the_kat_name", minimum: 0).returns(field_page_object)
       end
 
-      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box').returns(kitty_box_page_stub).times(2)
+      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box', minimum: 0).returns(kitty_box_page_stub).times(2)
       verify_top_level_form_field(jon, :age, kitty_box_page_stub) do |field_xpath, field_page_object|
-        kitty_box_page_stub.stubs(:first).with("#the_kat_age").returns(field_page_object)
+        kitty_box_page_stub.stubs(:first).with("#the_kat_age", minimum: 0).returns(field_page_object)
       end
 
-      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box').returns(kitty_box_page_stub).times(2)
+      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box', minimum: 0).returns(kitty_box_page_stub).times(2)
       verify_top_level_form_field(jon, :owner, kitty_box_page_stub) do |field_xpath, field_page_object|
         kitty_box_page_stub.stubs(:first).with("#the_kat_owner", anything).returns(field_page_object)
       end
 
-      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box').returns(kitty_box_page_stub).times(2)
+      capybara_stub.session.expects(:first).with(:css, '#my_kitty_box', minimum: 0).returns(kitty_box_page_stub).times(2)
       verify_top_level_form_field(jon, :past_lives, kitty_box_page_stub) do |field_xpath, field_page_object|
         kitty_box_page_stub.stubs(:first).with("#the_kat_past_lives", anything).returns(field_page_object)
       end
@@ -125,7 +125,7 @@ module AePageObjects
 
     def verify_top_level_form_field(kitty, field_method, document_stub, &prepare_for_field_reference)
       prepare_for_field_reference ||= Proc.new do |field_xpath, field_page_object|
-        document_stub.stubs(:first).with("#kitty_#{field_method}").returns(field_page_object)
+        document_stub.stubs(:first).with("#kitty_#{field_method}", minimum: 0).returns(field_page_object)
       end
 
       form = verify_element_on_parent(kitty, :kitty, kitty.class.element_attributes[:kitty], document_stub)
