@@ -54,7 +54,7 @@ module AePageObjects
 
       magazine = clip.new(parent, :name => "18_holder", :item_locator => [
         :xpath,
-        XPath::HTML.descendant(:div)[XPath.text.is('Example Text')]
+        XPath.descendant(:div)[XPath.text.is('Example Text')]
       ])
 
       assert_equal ".//div[(./text() = 'Example Text')]", magazine.send(:item_xpath)
@@ -75,7 +75,7 @@ module AePageObjects
 
       magazine = clip.new(parent, :name => "18_holder", :item_locator => [
         :xpath,
-        XPath::HTML.descendant(:div)[XPath.text.is('Example Text')],
+        XPath.descendant(:div)[XPath.text.is('Example Text')],
         :exact => false
       ])
 
