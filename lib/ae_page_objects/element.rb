@@ -73,6 +73,13 @@ module AePageObjects
       @locator == default_locator
     end
 
+    def reload_descendents
+      parent.reload_descendents if parent.respond_to?(:reload_descendents)
+      @node  = scoped_node
+      @stale = false
+      ensure_loaded!
+    end
+
   private
 
     def configure(options)

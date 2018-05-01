@@ -99,6 +99,11 @@ module AePageObjects
       end
 
       implicit_element.__send__(name, *args, &block)
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError
+      # A StaleElementReferenceError can occur when a selenium node is referenced but is no longer attached to the DOM.
+      # In this case we need to work our way up the element tree to make sure we are referencing the latest DOM nodes.
+      implicit_element.reload_descendents
+      retry
     end
 
     def respond_to?(*args)
