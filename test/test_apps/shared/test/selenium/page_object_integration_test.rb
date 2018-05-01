@@ -621,6 +621,24 @@ class PageObjectIntegrationTest < Selenium::TestCase
     assert_windows(window1, window2, current: window1)
   end
 
+  def test_element_reload_ancestors
+    new_author_page = PageObjects::Authors::NewPage.visit
+    new_author_page.first_name.set "Michael"
+
+    # Cache the nested `books` collection
+    books = new_author_page.books
+    books.at(0).title.set 'something else'
+
+    # Reload the page. The cached node in the `books` collection is now obsolete
+    Capybara.current_session.driver.execute_script('location.reload(true)')
+    AePageObjects.wait_until { new_author_page.first_name.value.blank? }
+
+    # After reload the correct element should be found
+    assert_nothing_raised do
+      assert_equal '', books.at(0).title.value
+    end
+  end
+
 private
 
   def assert_windows(*windows)
