@@ -73,6 +73,17 @@ module AePageObjects
       @locator == default_locator
     end
 
+    def reload_descendents
+      # Reload the parent first, traversing up until we hit the document
+      parent.reload_descendents if parent.respond_to?(:reload_descendents)
+
+      return unless @node.respond_to?(:reload)
+
+      # Tell the capybara node to reload
+      @node.reload
+      ensure_loaded!
+    end
+
   private
 
     def configure(options)
