@@ -141,6 +141,32 @@ module AePageObjects
       assert_equal router2, page_2_3_2.router
     end
 
+    def test_reload
+      kitty_class = Class.new(AePageObjects::Document)
+
+      stub_current_window
+
+      kitty_page = kitty_class.new
+      capybara_stub.session.driver.expects(:execute_script) do |script|
+        puts script
+        true
+      end
+
+      capybara_node = stub(:allow_reload!)
+
+      kitty_page
+        .node
+        .expects(:first)
+        .with('body.reloading', minimum: 0)
+        .times(4)
+        .returns(capybara_node, capybara_node, capybara_node, nil)
+
+      kitty_page.expects(:ensure_loaded!)
+
+      new_page = kitty_page.reload
+      assert_equal new_page, kitty_page
+    end
+
     private
 
     def node_for_node_tests
