@@ -67,6 +67,17 @@ module AePageObjects
       self
     end
 
+    def reload(timeout: nil)
+      Capybara.current_session.driver.execute_script <<-SCRIPT
+        document.body.classList.add('ae_page_objects-reloading');
+        location.reload(true);
+      SCRIPT
+
+      element('body.reloading').wait_until_absent(timeout)
+      ensure_loaded!
+      self
+    end
+
     private
 
     def ensure_loaded!
