@@ -41,7 +41,7 @@ module AePageObjects
     end
 
     def size
-      node.all(:xpath, item_xpath, options).size
+      node.all(:xpath, item_xpath, options.merge(wait: false)).size
     end
 
     def last
@@ -73,29 +73,34 @@ module AePageObjects
       @item_xpath ||= begin
         query_args = eval_locator(@item_locator).dup
 
-        if query_args.first.to_sym == :xpath
+        default_options = {
+          session_options: Capybara.session_options
+        }
+
+        if query_args[1].is_a?(XPath::Expression)
           #
           # Use the { exact: true } setting for XPath selectors that use "XPath.is".  For example, given the XPath
-          #   XPath::HTML.descendant(:div)[XPath.text.is('Example Text')]
+          #   XPath.descendant(:div)[XPath.text.is('Example Text')]
           # the resulting path will be
           #   .//div[./text() = 'Example Text']
           # instead of
           #   .//div[contains(./text(), 'Example Text')]
           # See https://github.com/jnicklas/capybara#exactness for more information.
           #
-          default_options = {:exact => true}
-          if query_args.last.is_a?(::Hash)
-            query_args[-1] = default_options.merge(query_args.last)
-          else
-            query_args.push(default_options)
-          end
+          default_options[:exact] = true
         end
 
-        query = Capybara::Query.new(*query_args)
+        if query_args.last.is_a?(::Hash)
+          query_args[-1] = default_options.merge(query_args.last)
+        else
+          query_args.push(default_options)
+        end
+
+        query = Capybara::Queries::SelectorQuery.new(*query_args)
 
         result = query.xpath
 
-        # if it's CSS, we need to run it through XPath as Capybara::Query#xpath only
+        # if it's CSS, we need to run it through XPath as Capybara::Queries::SelectorQuery#xpath only
         # works when the selector is xpath. Lame.
         if query.selector.format == :css
           result = XPath.css(query.xpath).to_xpath

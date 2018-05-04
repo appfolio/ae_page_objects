@@ -30,7 +30,7 @@ module AePageObjects
       pet           = pet_class.new
 
       kitty_page_object = stub(:allow_reload!)
-      capybara_stub.session.expects(:first).with("#tiger").returns(kitty_page_object)
+      capybara_stub.session.expects(:first).with("#tiger", minimum: 0).returns(kitty_page_object)
       kitty = kitty_class.new(pet, :locator => '#tiger')
 
       assert_equal pet, kitty.parent
@@ -49,7 +49,7 @@ module AePageObjects
       pet           = pet_class.new
 
       kitty_page_object = stub(:allow_reload!)
-      capybara_stub.session.expects(:first).with("#tiger").returns(kitty_page_object)
+      capybara_stub.session.expects(:first).with("#tiger", minimum: 0).returns(kitty_page_object)
       kitty = kitty_class.new(pet, :name => 'tiger')
 
       assert_equal pet, kitty.parent
@@ -68,7 +68,7 @@ module AePageObjects
       pet           = pet_class.new
 
       kitty_page_object = stub(:allow_reload!)
-      capybara_stub.session.expects(:first).with("J 2da K").returns(kitty_page_object)
+      capybara_stub.session.expects(:first).with("J 2da K", minimum: 0).returns(kitty_page_object)
       kitty = kitty_class.new(pet, :name => 'tiger', :locator => "J 2da K")
 
       assert_equal pet, kitty.parent
@@ -83,7 +83,7 @@ module AePageObjects
       kitty_class      = Class.new(AePageObjects::Element)
 
       capybara_stub
-      capybara_stub.session.stubs(:first).with('#hi').raises(Capybara::ElementNotFound)
+      capybara_stub.session.stubs(:first).with('#hi', minimum: 0).raises(Capybara::ElementNotFound)
       AePageObjects.stubs(:default_max_wait_time).returns(0)
 
       raised = assert_raises LoadingElementFailed do
@@ -99,7 +99,7 @@ module AePageObjects
       kitty_page_object = stub(:allow_reload!)
 
       capybara_stub
-      capybara_stub.session.stubs(:first).with('#hi').returns(kitty_page_object)
+      capybara_stub.session.stubs(:first).with('#hi', minimum: 0).returns(kitty_page_object)
       AePageObjects.stubs(:default_max_wait_time).returns(0)
 
       raised = assert_raises LoadingElementFailed do
@@ -164,7 +164,7 @@ module AePageObjects
 
       kitty_capybara_node = stub(:allow_reload!)
 
-      capybara_stub.session.expects(:first).with("#tiger").returns(kitty_capybara_node)
+      capybara_stub.session.expects(:first).with("#tiger", minimum: 0).returns(kitty_capybara_node)
       kitty_element = kitty_class.new(pet, :locator => '#tiger')
 
       assert_equal kitty_capybara_node, kitty_element.node

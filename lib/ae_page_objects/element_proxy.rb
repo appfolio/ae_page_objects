@@ -99,6 +99,22 @@ module AePageObjects
       end
 
       implicit_element.__send__(name, *args, &block)
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError
+      #
+      # A StaleElementReferenceError can occur when a selenium node is referenced but is no longer attached to the DOM.
+      # In this case we need to work our way up the element tree to make sure we are referencing the latest DOM nodes.
+      #
+      # In some cases we get this exception and cannot recover from it.  This usually occurs when code outside of
+      # ae_page_objects calls capybara queries directly.  In these cases we need to raise the original exception
+      #
+      @retry_count ||= 0
+      @retry_count += 1
+      if @retry_count < 5
+        implicit_element.reload_ancestors
+        retry
+      else
+        raise
+      end
     end
 
     def respond_to?(*args)
