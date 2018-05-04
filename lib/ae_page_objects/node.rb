@@ -16,10 +16,18 @@ module AePageObjects
     end
 
     is_loaded do
-      if locator = loaded_locator
-        node.first(*eval_locator(locator)) != nil
-      else
+      locator = eval_locator(loaded_locator)
+      if locator.empty?
         true
+      else
+        default_options = { wait: false }
+        if locator.last.is_a?(::Hash)
+          locator[-1] = default_options.merge(locator.last)
+        else
+          locator.push(default_options)
+        end
+
+        node.all(*locator).any?
       end
     end
 

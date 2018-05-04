@@ -38,18 +38,16 @@ class TestSeleniumDriver < Capybara::Selenium::Driver
 end
 
 Capybara.register_driver :ae_page_objects_test_driver do |app|
-  TestSeleniumDriver.new(app)
+  Capybara::Selenium::Driver.new(app, options: Selenium::WebDriver::Firefox::Options.new({
+    browser: :firefox,
+    args: ['--headless']
+  }))
 end
 
 Capybara.configure do |config|
-  config.default_driver    = :ae_page_objects_test_driver
-  config.ignore_hidden_elements = false
-
-  if config.respond_to?(:default_max_wait_time)
-    config.default_max_wait_time = 5
-  else
-    config.default_wait_time = 5
-  end
+  config.default_driver = :ae_page_objects_test_driver
+  config.server = :puma
+  config.default_max_wait_time = 5
 end
 
 require "ae_page_objects/rails"

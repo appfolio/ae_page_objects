@@ -73,6 +73,17 @@ module AePageObjects
       @locator == default_locator
     end
 
+    def reload_descendents
+      # Reload the parent first, traversing up until we hit the document
+      parent.reload_descendents if parent.respond_to?(:reload_descendents)
+
+      return unless @node.respond_to?(:reload)
+
+      # Tell the capybara node to reload
+      @node.reload
+      ensure_loaded!
+    end
+
   private
 
     def configure(options)
@@ -99,6 +110,13 @@ module AePageObjects
       if locator.empty?
         parent.node
       else
+        default_options = { minimum: 0 }
+        if locator.last.is_a?(::Hash)
+          locator[-1] = default_options.merge(locator.last)
+        else
+          locator.push(default_options)
+        end
+
         node = AePageObjects.wait_until { parent.node.first(*locator) }
         node.allow_reload!
         node
