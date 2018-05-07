@@ -159,7 +159,7 @@ module AePageObjects
       kitty_page
         .node
         .expects(:first)
-        .with('body.reloading', minimum: 0)
+        .with('body.ae_page_objects-reloading', minimum: 0)
         .times(4)
         .returns(capybara_node, capybara_node, capybara_node, nil)
 

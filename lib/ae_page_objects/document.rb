@@ -73,7 +73,7 @@ module AePageObjects
         location.reload(true);
       SCRIPT
 
-      element('body.reloading').wait_until_absent(timeout)
+      element('body.ae_page_objects-reloading').wait_until_absent(timeout)
       ensure_loaded!
       self
     end
