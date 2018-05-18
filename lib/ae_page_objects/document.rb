@@ -32,7 +32,25 @@ module AePageObjects
         full_path = router.generate_path(path, *args)
         raise PathNotResolvable, "#{self.name} not visitable via #{paths.first}(#{args.inspect})" unless full_path
 
-        Capybara.current_session.visit(full_path)
+        load_retries = 0
+        begin
+          Capybara.current_session.visit(full_path)
+        rescue Net::ReadTimeout
+          # A Net::ReadTimeout can occur when the current session was already in the progress of loading
+          # a page.  This is fairly common and happens in situations like below:
+          #   1. the test performs an action that causes the page to reload
+          #   2. an assertion is made on the new page
+          #   3. the test then loads a different page
+          # Its possible for the assertion in #2 above to happen before the page is fully loaded, in which
+          # case the page load in #3 can fail with Net::ReadTimeout.
+          # In this situation the easiest thing to do is to retry
+          if load_retries < 3
+            load_retries += 1
+            retry
+          else
+            raise
+          end
+        end
 
         new
       end
