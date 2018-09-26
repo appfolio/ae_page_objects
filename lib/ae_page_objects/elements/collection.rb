@@ -41,7 +41,19 @@ module AePageObjects
     end
 
     def size
-      node.all(:xpath, item_xpath, options.merge(wait: false)).size
+      #
+      # In some cases when #size is called while the DOM is updating, Capybara
+      # will catch (and swallow) underlying exceptions such as
+      # `Selenium::WebDriver::Error::StaleElementReferenceError`.
+      # When this happens it will wait up to the max wait time, which can cause
+      # issues for `AePageObjects.wait_until` blocks.
+      #
+      # To prevent this issue the #all and #size calls are made with the Capybara
+      # wait time set to 0.
+      #
+      Capybara.using_wait_time(0) do
+        node.all(:xpath, item_xpath, options).size
+      end
     end
 
     def last
