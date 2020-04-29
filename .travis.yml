@@ -44,3 +44,6 @@ matrix:
   include:
     - env: RAILS_VERSION=5.0
       rvm: *max_ruby
+
+    - env: RAILS_VERSION=6.0
+      rvm: *max_ruby

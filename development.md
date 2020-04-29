@@ -49,7 +49,7 @@ in the gemspec.
  
 ### Supported Ruby versions
 
-AePageObjects supports the same minimum Ruby version as Capybara, which is currently 1.9.3. The minimum Ruby version
+AePageObjects supports the same minimum Ruby version as Capybara. The minimum Ruby version
 is specified in the gemspec.
 
 The test suite tests against the minimum version and a designated maximum version, specified in `.travis.yml`. The test
@@ -117,11 +117,11 @@ that the stub/mock setup within the tests works across Capybara versions.
 Integration tests using page objects written via AePageObjects run against all versions of Capybara as well. These tests run using a Rails
 application, using the most recent version of Rails possible that supports the Ruby version that the version of Capybara under test supports.
 
-Today, all Capybara integration tests are run in the Rails 4.2 application using Ruby 2.2.5. To run these tests:
+To run these tests:
 
 ```
-RAILS_VERSION=4.2 rake test:integration:selenium:install
-RAILS_VERSION=4.2 rake test:integration:selenium
+RAILS_VERSION=6.0 rake test:integration:selenium:install
+RAILS_VERSION=6.0 rake test:integration:selenium
 ```
 
 
@@ -143,8 +143,8 @@ These tests use the most recent Ruby and Capybara versions possible for the vers
 To run the integration tests against a specific version of Rails: 
 
 ```
-RAILS_VERSION=4.0 rake test:integration:selenium:install
-RAILS_VERSION=4.0 rake test:integration:selenium
+RAILS_VERSION=6.0 rake test:integration:selenium:install
+RAILS_VERSION=6.0 rake test:integration:selenium
 ```
 
 ## CI

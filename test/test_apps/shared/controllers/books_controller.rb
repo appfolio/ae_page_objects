@@ -42,7 +42,7 @@ class BooksController < ApplicationController
   # POST /books
   # POST /books.json
   def create
-    @book = Book.new(params[:book])
+    @book = Book.new(params.require(:book).permit!)
     @book.index.book = @book
 
     respond_to do |format|
@@ -62,7 +62,7 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
 
     respond_to do |format|
-      if @book.update_attributes(params[:book])
+      if @book.update_attributes(params.require(:book).permit!)
         format.html { redirect_to @book, :notice => 'Book was successfully updated.' }
         format.json { head :ok }
       else

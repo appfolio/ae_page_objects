@@ -1,4 +1,4 @@
-class CreateSchema < ActiveRecord::Migration
+class CreateSchema < ActiveRecord::Migration[4.2]
   def self.up
     create_table :indices do |t|
       t.integer :lock_version
@@ -12,7 +12,7 @@ class CreateSchema < ActiveRecord::Migration
       t.string :title
       t.timestamps
     end
-    
+
     create_table :authors do |t|
       t.integer :lock_version
       t.string :first_name
