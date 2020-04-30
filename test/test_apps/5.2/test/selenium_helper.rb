@@ -5,7 +5,9 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), '..')
 require "config/environment"
 
 # Run the migrations
-ActiveRecord::Migrator.migrate("#{Rails.root}/db/migrate")
+ActiveRecord::MigrationContext
+  .new(ActiveRecord::Migrator.migrations_paths)
+  .migrate
 
 require "rails/test_help"
 
@@ -17,7 +19,7 @@ module Selenium
     include Capybara::DSL
 
     self.use_instantiated_fixtures  = false
-    self.use_transactional_fixtures = false
+    self.use_transactional_tests = false
 
     fixtures :all
 
