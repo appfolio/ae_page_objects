@@ -12,7 +12,6 @@ before_install:
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.20.1-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
-  - gem install bundler -v 1.16.1
 
 before_script: "bundle exec rake test:ci:install"
 
