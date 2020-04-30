@@ -2,7 +2,7 @@ class AuthorsController < ApplicationController
   # GET /authors
   # GET /authors.json
   def index
-    @authors = Author.all(:order => :last_name)
+    @authors = Author.order(:last_name)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -67,7 +67,7 @@ class AuthorsController < ApplicationController
     @author = Author.find(params[:id])
 
     respond_to do |format|
-      if @author.update_attributes(params[:author])
+      if @author.update(params[:author])
         format.html { redirect_to @author, :notice => 'Author was successfully updated.' }
         format.json { head :ok }
       else

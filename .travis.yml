@@ -12,7 +12,6 @@ before_install:
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.20.1-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
-  - gem install bundler -v 1.16.1
 
 before_script: "bundle exec rake test:ci:install"
 
@@ -20,30 +19,17 @@ script: "bundle exec rake test:ci"
 
 ### Build Matrix
 
-max_ruby_version: &max_ruby 2.3.3
-
 rvm:
-  - 2.2.5
-  - *max_ruby
-  - ruby-head
+  - 2.5.8
+  - 2.6.6
+  - 2.7.1
 
 global:
   gemfile:
     - Gemfile
 
-# Run unit tests across all Ruby versions
+# Run all tests across all Ruby versions
 env:
   - UNITS=true
-
-matrix:
-  allow_failures:
-    - rvm: ruby-head
-
-  # Integration tests
-  include:
-    - env: RAILS_VERSION=4.2
-      rvm: *max_ruby
-
-    - env: RAILS_VERSION=5.0
-      rvm: *max_ruby
-
+  - RAILS_VERSION=5.2
+  - RAILS_VERSION=6.0

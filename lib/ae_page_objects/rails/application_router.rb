@@ -133,12 +133,12 @@ module AePageObjects
     private
 
     def recognizer
-      @recognizer ||= case ::Rails.version
-        when /\A3\.[01]/
+      @recognizer ||= case ::Rails.gem_version
+        when Gem::Requirement.new('>= 3.0', '< 3.2')
           Recognizer::Rails3.new
-        when /\A3\.2/
+        when Gem::Requirement.new('~> 3.2')
           Recognizer::Rails32.new
-        when /\A(4\.[012]|5\.0)/
+        when Gem::Requirement.new('>= 4.0', '< 7.0')
           Recognizer::Rails4Plus.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."
