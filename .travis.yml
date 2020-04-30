@@ -20,30 +20,22 @@ script: "bundle exec rake test:ci"
 
 ### Build Matrix
 
-max_ruby_version: &max_ruby 2.7.1
-
 rvm:
   - 2.5.8
   - 2.6.6
-  - *max_ruby
+  - 2.7.1
   - ruby-head
 
 global:
   gemfile:
     - Gemfile
 
-# Run unit tests across all Ruby versions
+# Run all tests across all Ruby versions
 env:
   - UNITS=true
+  - RAILS_VERSION=5.2
+  - RAILS_VERSION=6.0
 
 matrix:
   allow_failures:
     - rvm: ruby-head
-
-  # Integration tests
-  include:
-    - env: RAILS_VERSION=5.2
-      rvm: *max_ruby
-
-    - env: RAILS_VERSION=6.0
-      rvm: *max_ruby
