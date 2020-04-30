@@ -7,7 +7,7 @@ gem 'gem-release', '0.7.4'
 
 gemspec
 
-gem 'rake', '~> 11.0'
+gem 'rake', '~> 13.0'
 gem 'test-unit', '~> 3.0'
 
 if RUBY_VERSION =~ /\A1\.9/
