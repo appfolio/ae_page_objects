@@ -23,7 +23,6 @@ rvm:
   - 2.5.8
   - 2.6.6
   - 2.7.1
-  - ruby-head
 
 global:
   gemfile:
@@ -34,7 +33,3 @@ env:
   - UNITS=true
   - RAILS_VERSION=5.2
   - RAILS_VERSION=6.0
-
-matrix:
-  allow_failures:
-    - rvm: ruby-head

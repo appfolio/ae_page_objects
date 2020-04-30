@@ -52,8 +52,7 @@ in the gemspec.
 AePageObjects supports the same minimum Ruby version as Capybara. The minimum Ruby version
 is specified in the gemspec.
 
-The test suite tests against the minimum version and a designated maximum version, specified in `.travis.yml`. The test
-suite also runs against `ruby-head`, though failures are ignored.
+The test suite tests against the minimum version and a designated maximum version, specified in `.travis.yml`.
 
 ### Supported Rails versions
 
