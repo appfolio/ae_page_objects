@@ -1,3 +1,27 @@
+## Version 4.3.0
+
+### Fixed
+
+* [209](https://github.com/appfolio/ae_page_objects/pull/209) Remove warning for Rails 5.x and 6.x
+
+## Version 4.2.0
+
+### Changed
+
+* [207](https://github.com/appfolio/ae_page_objects/pull/207) Prevent AePageObjects::Collection#size from waiting
+
+## Version 4.1.0
+
+### Changed
+
+* [206](https://github.com/appfolio/ae_page_objects/pull/206) Retry Document#visit on Net::ReadTimeout
+
+## Version 4.0.1
+
+### Fixed
+
+* [205](https://github.com/appfolio/ae_page_objects/pull/205) Fix typo in Document#reload
+
 ## Version 4.0.0
 
 ### Fixed
