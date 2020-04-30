@@ -62,7 +62,7 @@ class BooksController < ApplicationController
     @book = Book.find(params[:id])
 
     respond_to do |format|
-      if @book.update_attributes(params.require(:book).permit!)
+      if @book.update(params.require(:book).permit!)
         format.html { redirect_to @book, :notice => 'Book was successfully updated.' }
         format.json { head :ok }
       else
