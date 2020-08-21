@@ -16,7 +16,7 @@ module AePageObjects
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'
 
   class << self
-    attr_accessor :default_router
+    attr_accessor :default_router, :time_keeper
 
     def browser
       @browser ||= begin
@@ -45,7 +45,7 @@ module AePageObjects
         result = call_wait_until_block(error_message, &block)
       else
         seconds_to_wait ||= default_max_wait_time
-        start_time      = Time.now
+        start_time      = AePageObjects.time_keeper.now
 
         # In an effort to avoid flakiness, Capybara waits, rescues errors, reloads nodes, and
         # retries.
@@ -71,7 +71,7 @@ module AePageObjects
           errors += [WaitTimeoutError]
           raise e unless errors.include?(e.class)
 
-          delay = seconds_to_wait - (Time.now - start_time)
+          delay = seconds_to_wait - (AePageObjects.time_keeper.now - start_time)
 
           if delay <= 0
             # Raising the WaitTimeoutError in the rescue block ensures that Ruby attaches
@@ -80,7 +80,7 @@ module AePageObjects
           end
 
           sleep(0.05)
-          raise FrozenInTime, "Time appears to be frozen" if Time.now == start_time
+          raise FrozenInTime, "Time appears to be frozen" if AePageObjects.time_keeper.now == start_time
 
           retry
         end
@@ -106,3 +106,4 @@ end
 
 require 'ae_page_objects/core/basic_router'
 AePageObjects.default_router = AePageObjects::BasicRouter.new
+AePageObjects.time_keeper = Time

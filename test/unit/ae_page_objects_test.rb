@@ -37,7 +37,7 @@ class AePageObjectsTest < AePageObjectsTestCase
     capybara_stub
 
     AePageObjects.stubs(:default_max_wait_time).returns(5)
-    Time.stubs(:now).returns(1)
+    AePageObjects.time_keeper.stubs(:now).returns(1)
 
     block = mock
     block.expects(:called).times(1)
