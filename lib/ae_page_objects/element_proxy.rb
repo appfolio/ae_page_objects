@@ -16,31 +16,21 @@ module AePageObjects
     end
 
     def visible?(options = {})
-      wait_until_visible(options[:wait])
-      true
-    rescue ElementNotVisible
-      false
+      reload_element
+      @loaded_element&.visible?
     end
 
     def hidden?(options = {})
-      wait_until_hidden(options[:wait])
-      true
-    rescue ElementNotHidden
-      false
+      !visible?
     end
 
     def present?(options = {})
-      wait_until_present(options[:wait])
-      true
-    rescue ElementNotPresent
-      false
+      reload_element
+      !@loaded_element.nil?
     end
 
     def absent?(options = {})
-      wait_until_absent(options[:wait])
-      true
-    rescue ElementNotAbsent
-      false
+      !present?
     end
 
     def presence
@@ -123,8 +113,19 @@ module AePageObjects
 
     private
 
-    def load_element
-      @element_class.new(*@args)
+    def load_element(wait: true)
+      args = @args.dup
+
+      options_or_locator = args.pop
+      options = if options_or_locator.is_a?(Hash)
+                  options_or_locator.dup.merge(wait: wait)
+                else
+                  { locator: options_or_locator, wait: wait }
+                end
+
+      args << options
+
+      @element_class.new(*args)
     end
 
     def implicit_element
@@ -132,7 +133,7 @@ module AePageObjects
     end
 
     def reload_element
-      @loaded_element = load_element
+      @loaded_element = load_element(wait: false)
     rescue LoadingElementFailed
       @loaded_element = nil
     end

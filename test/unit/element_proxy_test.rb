@@ -40,15 +40,15 @@ module AePageObjects
     def test_visible
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(true)
       assert proxy.visible?
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(true)
       assert proxy.visible?(wait: 20)
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(false)
       refute proxy.visible?
     end
@@ -63,15 +63,11 @@ module AePageObjects
     def test_hidden
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(false)
       assert proxy.hidden?
 
-      element_class.expect_new
-      element_class.any_instance.expects(:visible?).returns(false)
-      assert proxy.hidden?(wait: 20)
-
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(true)
       assert ! proxy.hidden?
     end
@@ -86,10 +82,10 @@ module AePageObjects
     def test_present
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       assert proxy.present?
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       assert proxy.present?(wait: 20)
     end
 
@@ -103,7 +99,7 @@ module AePageObjects
     def test_absent
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       refute proxy.absent?
     end
 
@@ -134,7 +130,7 @@ module AePageObjects
     def test_wait_until_visible
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(true)
 
       proxy.wait_until_visible
@@ -143,7 +139,7 @@ module AePageObjects
     def test_wait_until_visible__timeout
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(false)
 
       raised = assert_raise ElementNotVisible do
@@ -156,7 +152,7 @@ module AePageObjects
     def test_wait_until_hidden
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(false)
 
       proxy.wait_until_hidden
@@ -165,7 +161,7 @@ module AePageObjects
     def test_wait_until_hidden__timeout
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
       element_class.any_instance.expects(:visible?).returns(true)
 
       raised = assert_raise ElementNotHidden do
@@ -178,7 +174,7 @@ module AePageObjects
     def test_wait_until_present
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
 
       proxy.wait_until_present
     end
@@ -186,7 +182,7 @@ module AePageObjects
     def test_wait_until_present__with_timeout
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
 
       proxy.wait_until_present(20)
     end
@@ -222,7 +218,7 @@ module AePageObjects
     def test_wait_until_absent__present
       proxy = new_proxy
 
-      element_class.expect_new
+      element_class.expect_new(wait: false)
 
       raised = assert_raise ElementNotAbsent do
         proxy.wait_until_absent
@@ -268,14 +264,14 @@ module AePageObjects
 
     def element_class
       @element_class ||= Class.new(Element) do
-        def self.expect_new
-          expects(:new).with(1, 2).returns(self.allocate)
+        def self.expect_new(wait: true)
+          expects(:new).with('mock_parent', { locator: 'mock_locator', wait: wait }).returns(self.allocate)
         end
       end
     end
 
     def new_proxy
-      ElementProxy.new(element_class, 1, 2)
+      ElementProxy.new(element_class, 'mock_parent', 'mock_locator')
     end
 
     def assert_is_proxy(proxy)
