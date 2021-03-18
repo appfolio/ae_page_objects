@@ -18,7 +18,7 @@ module AePageObjects
 
       magazine = clip.new(parent, :name => "18_holder", :item_locator => ".some_class")
 
-      assert_equal ".//*[contains(concat(' ', normalize-space(@class), ' '), ' some_class ')]", magazine.send(:item_xpath)
+      assert_equal ".//*[contains(concat(' ',normalize-space(@class),' '),' some_class ')]", magazine.send(:item_xpath)
     end
 
     def test_xpath_item_locator
