@@ -16,31 +16,21 @@ module AePageObjects
     end
 
     def visible?(options = {})
-      wait_until_visible(0)
-      true
-    rescue ElementNotVisible
-      false
+      reload_element
+      @loaded_element&.visible?
     end
 
     def hidden?(options = {})
-      wait_until_hidden(0)
-      true
-    rescue ElementNotHidden
-      false
+      !visible?
     end
 
     def present?(options = {})
-      wait_until_present(0)
-      true
-    rescue ElementNotPresent
-      false
+      reload_element
+      !@loaded_element.nil?
     end
 
     def absent?(options = {})
-      wait_until_absent(0)
-      true
-    rescue ElementNotAbsent
-      false
+      !present?
     end
 
     def presence
