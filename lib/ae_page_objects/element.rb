@@ -89,6 +89,11 @@ module AePageObjects
     def configure(options)
       @locator = options.delete(:locator)
       @name    = options.delete(:name)
+      if options.key?(:wait)
+        @wait = options.delete(:wait)
+      else
+        @wait = true
+      end
 
       @name = @name.to_s if @name
     end
@@ -107,20 +112,24 @@ module AePageObjects
 
     def scoped_node
       locator = eval_locator(@locator)
-      if locator.empty?
-        parent.node
-      else
-        default_options = { minimum: 0 }
-        if locator.last.is_a?(::Hash)
-          locator[-1] = default_options.merge(locator.last)
-        else
-          locator.push(default_options)
-        end
 
-        node = AePageObjects.wait_until { parent.node.first(*locator) }
-        node.allow_reload!
-        node
+      return parent.node if locator.empty?
+
+      default_options = { minimum: 0 }
+      if locator.last.is_a?(::Hash)
+        locator[-1] = default_options.merge(locator.last)
+      else
+        locator.push(default_options)
       end
+
+      if @wait
+        node = AePageObjects.wait_until { parent.node.first(*locator) }
+      else
+        node = parent.node.first(*locator)
+        raise LoadingElementFailed, 'Element Not Found' unless node
+      end
+      node.allow_reload!
+      node
     rescue AePageObjects::WaitTimeoutError => e
       raise LoadingElementFailed, e.message
     end
