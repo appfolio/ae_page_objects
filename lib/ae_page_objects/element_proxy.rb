@@ -16,28 +16,28 @@ module AePageObjects
     end
 
     def visible?(options = {})
-      wait_until_visible(options[:wait])
+      wait_until_visible(0)
       true
     rescue ElementNotVisible
       false
     end
 
     def hidden?(options = {})
-      wait_until_hidden(options[:wait])
+      wait_until_hidden(0)
       true
     rescue ElementNotHidden
       false
     end
 
     def present?(options = {})
-      wait_until_present(options[:wait])
+      wait_until_present(0)
       true
     rescue ElementNotPresent
       false
     end
 
     def absent?(options = {})
-      wait_until_absent(options[:wait])
+      wait_until_absent(0)
       true
     rescue ElementNotAbsent
       false
