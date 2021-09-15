@@ -509,7 +509,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
     # Setup 4th window to delay displaying last_name
     AuthorsController.last_name_display_delay_ms = (default_wait_time - 2) * 1000
 
-    authors.authors[2].show_in_new_window!
+    paul = authors.authors[2].show_in_new_window_with_name!("Paul")
+    window4 = paul.window
 
     AuthorsController.last_name_display_delay_ms = nil
 
@@ -525,7 +526,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       end
     end
 
-    window4 = found.window
+    assert_equal window4.handle, found.window.handle
 
     # Firefox opens new tabs adjacent to the current tab so the order of windows is going to be:
     #   window1, window4, window3, window2.
