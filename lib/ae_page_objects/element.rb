@@ -89,6 +89,11 @@ module AePageObjects
     def configure(options)
       @locator = options.delete(:locator)
       @name    = options.delete(:name)
+      if options.key?(:wait)
+        @wait = options.delete(:wait)
+      else
+        @wait = true
+      end
 
       @name = @name.to_s if @name
     end
@@ -117,7 +122,12 @@ module AePageObjects
         locator.push(default_options)
       end
 
-      node = AePageObjects.wait_until { parent.node.first(*locator) }
+      if @wait
+        node = AePageObjects.wait_until { parent.node.first(*locator) }
+      else
+        node = parent.node.first(*locator)
+        raise LoadingElementFailed, 'Element Not Found' unless node
+      end
       node.allow_reload!
       node
     rescue AePageObjects::WaitTimeoutError => e
