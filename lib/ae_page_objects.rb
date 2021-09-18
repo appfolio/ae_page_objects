@@ -14,6 +14,7 @@ module AePageObjects
   autoload :Form,              'ae_page_objects/elements/form'
   autoload :Select,            'ae_page_objects/elements/select'
   autoload :Checkbox,          'ae_page_objects/elements/checkbox'
+  autoload :Textarea,          'ae_page_objects/elements/textarea'
 
   class << self
     attr_accessor :default_router
