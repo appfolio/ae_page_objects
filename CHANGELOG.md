@@ -1,3 +1,13 @@
+## Version 5.0.0
+
+### Changed
+
+* [211](https://github.com/appfolio/ae_page_objects/pull/211) Remove waiting from ElementProxy methods
+
+  This change updates the signature and behavior of the `visible?` / `hidden?` / `present?` / `absent?` methods on the `ElementProxy` class.
+  
+  These methods no longer take any arguments and do not wait. To wait for any of the above conditions, users should instead call the `wait_until_*` methods.
+
 ## Version 4.3.0
 
 ### Fixed

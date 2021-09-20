@@ -174,10 +174,10 @@ class PageObjectIntegrationTest < Selenium::TestCase
   def test_element_proxy
     author = PageObjects::Authors::NewPage.visit
 
-    assert author.rating.star.present?(wait: 1)
-    assert author.rating.star.visible?(wait: 1)
-    refute author.rating.star.absent?(wait: 1)
-    refute author.rating.star.hidden?(wait: 1)
+    assert author.rating.star.present?
+    assert author.rating.star.visible?
+    refute author.rating.star.absent?
+    refute author.rating.star.hidden?
 
     assert_nothing_raised do
       author.rating.star.wait_until_present(0)
@@ -509,7 +509,8 @@ class PageObjectIntegrationTest < Selenium::TestCase
     # Setup 4th window to delay displaying last_name
     AuthorsController.last_name_display_delay_ms = (default_wait_time - 2) * 1000
 
-    authors.authors[2].show_in_new_window!
+    paul = authors.authors[2].show_in_new_window_with_name!("Paul")
+    window4 = paul.window
 
     AuthorsController.last_name_display_delay_ms = nil
 
@@ -525,7 +526,7 @@ class PageObjectIntegrationTest < Selenium::TestCase
       end
     end
 
-    window4 = found.window
+    assert_equal window4.handle, found.window.handle
 
     # Firefox opens new tabs adjacent to the current tab so the order of windows is going to be:
     #   window1, window4, window3, window2.
