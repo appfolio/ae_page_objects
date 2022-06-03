@@ -1,3 +1,3 @@
 module Forum
-  VERSION = "4.1.0"
+  VERSION = "5.1.0.pre.2"
 end

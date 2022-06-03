@@ -88,6 +88,23 @@ module AePageObjects
         verify_element_on_parent(jon, :kind, AePageObjects::Checkbox, kind_page_object)
       end
 
+      def test_element__is__textarea
+        kitty = Class.new(AePageObjects::Document) do
+          element :description, is: AePageObjects::Textarea
+        end
+
+        assert kitty.method_defined?(:description)
+        assert_equal [:description], kitty.element_attributes.keys
+
+        stub_current_window
+
+        jon = kitty.new
+
+        description_page_object = stub(:allow_reload!)
+        capybara_stub.session.expects(:first).with("#description", minimum: 0).returns(description_page_object)
+        verify_element_on_parent(jon, :description, AePageObjects::Textarea, description_page_object)
+      end
+
       def test_element__is__special_widget
         special_widget = Class.new(AePageObjects::Element)
 
