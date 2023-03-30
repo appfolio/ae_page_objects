@@ -89,12 +89,12 @@ class SeleniumRunner
   end
 
   def read_matrix
-    file_pattern = "test/test_apps/**/gemfiles/*ruby#{RUBY_VERSION}*.gemfile"
+    file_pattern = "test/test_apps/**/gemfiles/*ruby_#{RUBY_VERSION}*.gemfile"
 
     matrix = {}
 
     Dir.glob(file_pattern).each do |file|
-      matches = file.match(%r{(test/test_apps/(\d\.\d))/gemfiles/(.*ruby(\d\.\d\.\d)\.gemfile)})
+      matches = file.match(%r{(test/test_apps/(\d\.\d))/gemfiles/(.*ruby_(\d\.\d\.\d)\.gemfile)})
 
       gemfile_path  = matches[0]
       app_root      = matches[1]
@@ -117,13 +117,7 @@ class SeleniumRunner
     puts "Running '#{command}'"
     return if @options[:dry]
 
-    specific_gemfile_env = Bundler.clean_env
-
-    if gemfile
-      specific_gemfile_env['BUNDLE_GEMFILE'] = gemfile
-    end
-
-    Bundler.send(:with_env, specific_gemfile_env) do
+    Bundler.send(:unbundled_env) do
       system(command)
       raise unless $?.exitstatus == 0
     end
@@ -223,4 +217,4 @@ namespace :test do
 end
 
 desc 'Default: run the unit and integration tests.'
-task :default => ['test:units', 'test:integration:selenium']
+task default: %i[test:ci]
