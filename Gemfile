@@ -1,18 +1,14 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-gem "appraisal", "~> 2.0"
-gem "mocha", "= 0.13.3"
-gem "selenium-webdriver", "~> 3.11.0"
-gem 'gem-release', '0.7.4'
+source 'https://rubygems.org' # global source
+
+source 'https://rubygems.org' do
+  gem 'appraisal', '>= 2.4', '< 3'
+  gem 'bundler', '>= 2.2', '< 3'
+  gem 'mocha', '>= 2', '< 3'
+  gem 'rake', '>= 13', '< 14'
+  gem 'selenium-webdriver', '>= 4', '< 5'
+  gem 'test-unit', '>= 3', '< 4'
+end
 
 gemspec
-
-gem 'rake', '~> 13.0'
-gem 'test-unit', '~> 3.0'
-
-if RUBY_VERSION =~ /\A1\.9/
-  gem 'mime-types', '< 3'
-  gem 'rack', '< 2'
-  gem 'public_suffix', '~> 1.4.6'
-  gem 'nokogiri', '~> 1.6.8'
-end
