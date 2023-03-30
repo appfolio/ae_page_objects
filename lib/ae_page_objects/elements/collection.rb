@@ -52,7 +52,7 @@ module AePageObjects
       # wait time set to 0.
       #
       Capybara.using_wait_time(0) do
-        node.all(:xpath, item_xpath, options).size
+        node.all(:xpath, item_xpath, **options).size
       end
     end
 
@@ -85,30 +85,25 @@ module AePageObjects
       @item_xpath ||= begin
         query_args = eval_locator(@item_locator).dup
 
-        default_options = {
-          session_options: Capybara.session_options
-        }
+        options = {}
+        # Use the { exact: true } setting for XPath selectors that use "XPath.is".  For example, given the XPath
+        #   XPath.descendant(:div)[XPath.text.is('Example Text')]
+        # the resulting path will be
+        #   .//div[./text() = 'Example Text']
+        # instead of
+        #   .//div[contains(./text(), 'Example Text')]
+        # See https://github.com/jnicklas/capybara#exactness for more information.
+        options[:exact] = true if query_args[1].is_a?(XPath::Expression)
 
-        if query_args[1].is_a?(XPath::Expression)
-          #
-          # Use the { exact: true } setting for XPath selectors that use "XPath.is".  For example, given the XPath
-          #   XPath.descendant(:div)[XPath.text.is('Example Text')]
-          # the resulting path will be
-          #   .//div[./text() = 'Example Text']
-          # instead of
-          #   .//div[contains(./text(), 'Example Text')]
-          # See https://github.com/jnicklas/capybara#exactness for more information.
-          #
-          default_options[:exact] = true
+        options.merge!(query_args.pop) if query_args.last.is_a?(::Hash)
+
+        query = begin
+          if options.size != 0
+            Capybara::Queries::SelectorQuery.new(*query_args, **options, session_options: Capybara.session_options)
+          else
+            Capybara::Queries::SelectorQuery.new(*query_args, session_options: Capybara.session_options)
+          end
         end
-
-        if query_args.last.is_a?(::Hash)
-          query_args[-1] = default_options.merge(query_args.last)
-        else
-          query_args.push(default_options)
-        end
-
-        query = Capybara::Queries::SelectorQuery.new(*query_args)
 
         result = query.xpath
 

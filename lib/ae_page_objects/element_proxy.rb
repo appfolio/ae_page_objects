@@ -8,9 +8,10 @@ module AePageObjects
       end
     end
 
-    def initialize(element_class, *args)
+    def initialize(element_class, *args, **options)
       @element_class = element_class
       @args          = args
+      @options       = options
 
       @loaded_element = nil
     end
@@ -83,12 +84,12 @@ module AePageObjects
       is_a?(type)
     end
 
-    def method_missing(name, *args, &block)
+    def method_missing(name, *args, **options, &block)
       if name == :class
         return @element_class
       end
 
-      implicit_element.__send__(name, *args, &block)
+      implicit_element.__send__(name, *args, **options, &block)
     rescue Selenium::WebDriver::Error::StaleElementReferenceError
       #
       # A StaleElementReferenceError can occur when a selenium node is referenced but is no longer attached to the DOM.
@@ -107,8 +108,8 @@ module AePageObjects
       end
     end
 
-    def respond_to?(*args)
-      super || @element_class.allocate.respond_to?(*args)
+    def respond_to?(*args, **options)
+      super || @element_class.allocate.respond_to?(*args, **options)
     end
 
     private
@@ -125,7 +126,7 @@ module AePageObjects
 
       args << options
 
-      @element_class.new(*args)
+      @element_class.new(*@args, **options)
     end
 
     def implicit_element

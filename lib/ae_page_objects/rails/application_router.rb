@@ -138,7 +138,7 @@ module AePageObjects
           Recognizer::Rails3.new
         when Gem::Requirement.new('~> 3.2')
           Recognizer::Rails32.new
-        when Gem::Requirement.new('>= 4.0', '< 7.0')
+        when Gem::Requirement.new('>= 4.0', '< 8.0')
           Recognizer::Rails4Plus.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."

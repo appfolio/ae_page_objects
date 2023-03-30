@@ -20,14 +20,10 @@ module AePageObjects
       if locator.empty?
         true
       else
-        default_options = { wait: false }
-        if locator.last.is_a?(::Hash)
-          locator[-1] = default_options.merge(locator.last)
-        else
-          locator.push(default_options)
-        end
+        options = { wait: false }
+        options.merge!(locator.pop) if locator.last.is_a(::Hash)
 
-        node.all(*locator).any?
+        node.all(*locator, **options).any?
       end
     end
 
@@ -86,7 +82,7 @@ module AePageObjects
 
       element_class = options.delete(:is) || Element
 
-      ElementProxy.new(element_class, self, options)
+      ElementProxy.new(element_class, *self, **options)
     end
 
     private
