@@ -1,14 +1,17 @@
-test/test_apps/**/.bundle
-test/test_apps/**/db/*.sqlite3
-test/test_apps/**/log/*.log
-test/test_apps/**/tmp/**/*
-test/test_apps/**/gemfiles/*.lock
+/.bundle/
+/coverage/
+/pkg/
+/tmp/
+/test/test_apps/**/.bundle
+/test/test_apps/**/db/*.sqlite3
+/test/test_apps/**/log/*.log
+/test/test_apps/**/tmp/**/*
+/test/test_apps/**/gemfiles/*.lock
 
-*.lock
-gemfiles/*.lock
+# Only generate Appraisal gemfiles on CI
+/gemfiles/
 
-*.sqlite3
-pkg
-.idea
-.bundle
-
+# Ignore generated files
+Gemfile.lock
+*.log
+*.gem
