@@ -23,8 +23,8 @@ module NodeInterfaceTests
 
     element = subject.element("#blahblah")
 
-    capybara_node = stub(:allow_reload!)
-    capybara_stub.session.expects(:first).with("#blahblah", minimum: 0).returns(capybara_node)
+    capybara_node = stub(allow_reload!: nil)
+    capybara_stub.session.expects(:first).with("#blahblah", { minimum: 0 }).returns(capybara_node)
     verify_element(element, AePageObjects::Element, subject, capybara_node)
   end
 
@@ -33,8 +33,8 @@ module NodeInterfaceTests
 
     element = subject.element(:locator => ["#blahblah", {:visible => true}])
 
-    capybara_node = stub(:allow_reload!)
-    capybara_stub.session.expects(:first).with("#blahblah", visible: true, minimum: 0).returns(capybara_node)
+    capybara_node = stub(allow_reload!: nil)
+    capybara_stub.session.expects(:first).with("#blahblah", { visible: true, minimum: 0 }).returns(capybara_node)
     verify_element(element, AePageObjects::Element, subject, capybara_node)
   end
 
@@ -45,8 +45,8 @@ module NodeInterfaceTests
 
     element = subject.element(:locator => ["#blahblah", {:visible => true}], :is => element_class)
 
-    capybara_node = stub(:allow_reload!)
-    capybara_stub.session.expects(:first).with("#blahblah", visible: true, minimum: 0).returns(capybara_node)
+    capybara_node = stub(allow_reload!: nil)
+    capybara_stub.session.expects(:first).with("#blahblah", { visible: true, minimum: 0 }).returns(capybara_node)
     verify_element(element, element_class, subject, capybara_node)
   end
 

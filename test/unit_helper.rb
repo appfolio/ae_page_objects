@@ -4,7 +4,12 @@ require 'ae_page_objects'
 require 'selenium-webdriver'
 
 require 'test/unit'
-require "mocha/setup"
+require 'mocha/test_unit'
+
+Mocha.configure do |config|
+  config.stubbing_non_existent_method = :prevent
+  config.strict_keyword_argument_matching = true
+end
 
 require 'test_helpers/element_test_helpers'
 

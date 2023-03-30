@@ -257,6 +257,8 @@ module AePageObjects
         def self.expect_new(wait: true)
           expects(:new).with('mock_parent', { locator: 'mock_locator', wait: wait }).returns(self.allocate)
         end
+
+        def kesslerize_my_love!; end
       end
     end
 

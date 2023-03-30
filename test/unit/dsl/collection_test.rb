@@ -18,22 +18,22 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -54,23 +54,23 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
 
         previous_owners_page_object.expects(:all).with(:xpath, ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -90,23 +90,23 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
 
         previous_owners_page_object.expects(:all).with(:xpath, ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owners_class.item_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -129,22 +129,22 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -167,22 +167,22 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -203,22 +203,22 @@ module AePageObjects
         stub_current_window
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -237,22 +237,22 @@ module AePageObjects
         stub_current_window
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -273,22 +273,22 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -316,22 +316,22 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, previous_owners_class, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, previous_owner_class, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_kitty_name_during_ownership", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -344,14 +344,14 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("#previous_owners", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("#previous_owners", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
       end
 
@@ -369,22 +369,22 @@ module AePageObjects
 
         jon = kitty.new
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("whatever you want, baby", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("whatever you want, baby", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("Kitty Name", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("Kitty Name", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
         verify_element_on_parent(first_owner, :kitty_name_during_ownership, AePageObjects::Element, kitty_name_during_ownership_page_object)
       end
 
@@ -393,7 +393,11 @@ module AePageObjects
           collection :previous_owners, :locator => Proc.new { parent.page_local_context } do
             element :owner_name
             element :kitty_name_during_ownership, :locator => Proc.new { parent.page_local_context }
+
+            def page_local_context; end
           end
+
+          def page_local_context; end
         end
 
         verify_kitty_structure(kitty)
@@ -404,22 +408,22 @@ module AePageObjects
 
         jon.expects(:page_local_context).returns("hello")
 
-        previous_owners_page_object = stub(:allow_reload!)
-        capybara_stub.session.expects(:first).with("hello", minimum: 0).returns(previous_owners_page_object)
+        previous_owners_page_object = stub(allow_reload!: nil)
+        capybara_stub.session.expects(:first).with("hello", { minimum: 0 }).returns(previous_owners_page_object)
 
         previous_owners = verify_element_on_parent_with_intermediary_class(jon, :previous_owners, AePageObjects::Collection, previous_owners_page_object)
 
-        first_owner_page_object = stub(:allow_reload!)
+        first_owner_page_object = stub(allow_reload!: nil)
         previous_owners_page_object.expects(:all).with(:xpath,  ".//*", {}).returns([first_owner_page_object])
-        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", minimum: 0).returns(first_owner_page_object)
+        previous_owners_page_object.expects(:first).with(:xpath, "(.//*)[1]", { minimum: 0 }).returns(first_owner_page_object)
         first_owner = verify_item_element_with_intermediary_class(previous_owners, 0, AePageObjects::Element, first_owner_page_object)
 
-        owner_name_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", minimum: 0).returns(owner_name_page_object)
+        owner_name_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("#previous_owners_0_owner_name", { minimum: 0 }).returns(owner_name_page_object)
         verify_element_on_parent(first_owner, :owner_name, AePageObjects::Element, owner_name_page_object)
 
-        kitty_name_during_ownership_page_object = stub(:allow_reload!)
-        first_owner_page_object.expects(:first).with("Milkshake", minimum: 0).returns(kitty_name_during_ownership_page_object)
+        kitty_name_during_ownership_page_object = stub(allow_reload!: nil)
+        first_owner_page_object.expects(:first).with("Milkshake", { minimum: 0 }).returns(kitty_name_during_ownership_page_object)
 
         first_owner.expects(:page_local_context).returns("Milkshake")
 

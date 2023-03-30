@@ -17,9 +17,9 @@ module AePageObjects
           is_loaded { loaded << 'doggy' }
         end
 
-        capybara_node = stub(:allow_reload!)
+        capybara_node = stub(allow_reload!: nil)
         capybara_stub
-        capybara_stub.session.stubs(:first).with('#foo', minimum: 0).returns(capybara_node)
+        capybara_stub.session.stubs(:first).with('#foo', { minimum: 0 }).returns(capybara_node)
 
         loaded.clear
         kitty_class.new(document_class.new, '#foo')
