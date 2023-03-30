@@ -16,7 +16,7 @@ module PageObjects
       end
 
       class Rating < AePageObjects::Element
-        element :star, locator: ['.star', visible: :all]
+        element :star, locator: ['.star', { visible: true }]
 
         def show_star
           node.find(".show_star").click
@@ -40,7 +40,7 @@ module PageObjects
       element :rating, :is => Rating, :locator => "#rating"
 
       element :nested_rating, :name => "nested_rating_attributes", :locator => "#rating" do
-        element :star, locator: ['.star', visible: :all]
+        element :star, locator: ['.star', { visible: true }]
 
         def show_star
           node.find(".show_star").click
