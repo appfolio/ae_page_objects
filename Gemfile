@@ -8,6 +8,7 @@ source 'https://rubygems.org' do
   gem 'mocha', '>= 2', '< 3'
   gem 'rake', '>= 13', '< 14'
   gem 'selenium-webdriver', '>= 4', '< 5'
+  gem 'simplecov', require: false, group: :test
   gem 'test-unit', '>= 3', '< 4'
 end
 

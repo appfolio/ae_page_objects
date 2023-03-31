@@ -1,3 +1,9 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter %r{^/test/}
+  enable_coverage :branch
+end
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'ae_page_objects'
 
