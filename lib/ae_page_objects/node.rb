@@ -22,12 +22,10 @@ module AePageObjects
       else
         default_options = { wait: false }
         if locator.last.is_a?(::Hash)
-          locator[-1] = default_options.merge(locator.last)
-        else
-          locator.push(default_options)
+          default_options.merge!(locator.pop)
         end
 
-        node.all(*locator).any?
+        node.all(*locator, **default_options).any?
       end
     end
 

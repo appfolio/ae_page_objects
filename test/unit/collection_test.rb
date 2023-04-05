@@ -96,7 +96,7 @@ module AePageObjects
       magazine.stubs(:item_xpath).returns('item_xpath')
 
       bullet1_stub = mock(:allow_reload!)
-      magazine_node.expects(:all).with(:xpath, 'item_xpath', {}).returns([bullet1_stub])
+      magazine_node.expects(:all).with(:xpath, 'item_xpath').returns([bullet1_stub])
       magazine_node.expects(:first).with(:xpath, '(item_xpath)[1]', minimum: 0).returns(bullet1_stub)
       assert_equal bullet1_stub, magazine.at(0).node
     end
@@ -136,7 +136,7 @@ module AePageObjects
       magazine = clip.new(parent, :name => "18_holder")
       magazine.stubs(:item_xpath).returns("item_xpath")
 
-      magazine_node.stubs(:all).with(:xpath, "item_xpath", {}).returns([])
+      magazine_node.stubs(:all).with(:xpath, "item_xpath").returns([])
 
       assert_equal 0, magazine.size
 
@@ -169,7 +169,7 @@ module AePageObjects
 
       bullet1_stub = stub(:allow_reload!)
       bullet2_stub = stub(:allow_reload!)
-      magazine_node.stubs(:all).with(:xpath, "item_xpath", {}).returns([bullet1_stub, bullet2_stub])
+      magazine_node.stubs(:all).with(:xpath, "item_xpath").returns([bullet1_stub, bullet2_stub])
 
       assert_equal 2, magazine.size
 

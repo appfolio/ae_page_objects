@@ -117,15 +117,13 @@ module AePageObjects
 
       default_options = { minimum: 0 }
       if locator.last.is_a?(::Hash)
-        locator[-1] = default_options.merge(locator.last)
-      else
-        locator.push(default_options)
+        default_options.merge!(locator.pop)
       end
 
       if @wait
-        node = AePageObjects.wait_until { parent.node.first(*locator) }
+        node = AePageObjects.wait_until { parent.node.first(*locator, **default_options) }
       else
-        node = parent.node.first(*locator)
+        node = parent.node.first(*locator, **default_options)
         raise LoadingElementFailed, 'Element Not Found' unless node
       end
       node.allow_reload!
