@@ -4,7 +4,7 @@ require 'ae_page_objects'
 require 'selenium-webdriver'
 
 require 'test/unit'
-require "mocha/setup"
+require "mocha/test_unit"
 
 require 'test_helpers/element_test_helpers'
 
