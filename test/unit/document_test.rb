@@ -79,7 +79,7 @@ module AePageObjects
 
       book           = stub
       something      = stub
-      something_else = stub
+      something_else = stub("something_else")
       full_path      = stub
 
       show_page.stubs(:new)
@@ -154,7 +154,7 @@ module AePageObjects
         ].all? { |line| script.include?(line) }
       end
 
-      capybara_node = stub(allow_reload!: nil)
+      capybara_node = stub("capybara_node", allow_reload!: nil)
 
       kitty_page
         .node

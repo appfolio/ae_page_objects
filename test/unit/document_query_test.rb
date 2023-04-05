@@ -42,7 +42,7 @@ module AePageObjects
       block_condition = proc do |page|
         page.is_starbucks?
       end
-      document_class = mock
+      document_class = mock("document_class")
       conditions = DocumentQuery::Condition.new(document_class, {:ignore_current => true, :url => 'www.starbucks.com', :title => 'Coffee'}, &block_condition)
 
       page = setup_page_for_conditions

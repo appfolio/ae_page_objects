@@ -24,12 +24,12 @@ module AePageObjects
     class DocumentClass3; end
 
     def test_load_page
-      query = stub(:conditions => [
+      query = stub("query", :conditions => [
         stub(:document_class => DocumentClass1),
         stub(:document_class => DocumentClass2)
       ])
 
-      strategy = mock
+      strategy = mock("strategy")
 
       loader = DocumentLoader.new(query, strategy)
 
@@ -43,13 +43,13 @@ module AePageObjects
     end
 
     def test_load_page__document_not_loaded_error
-      query = stub(:conditions => [
+      query = stub("query", :conditions => [
         stub(:document_class => DocumentClass1),
         stub(:document_class => DocumentClass2),
         stub(:document_class => DocumentClass3)
       ])
 
-      strategy = mock
+      strategy = mock("strategy")
 
       loader = DocumentLoader.new(query, strategy)
 
@@ -68,12 +68,12 @@ module AePageObjects
     end
 
     def test_load_page__timeout
-      query = stub(:conditions => [
+      query = stub("query", :conditions => [
         stub(:document_class => DocumentClass1),
         stub(:document_class => DocumentClass2)
       ])
 
-      strategy = mock
+      strategy = mock("strategy")
 
       loader = DocumentLoader.new(query, strategy)
 

@@ -39,7 +39,7 @@ class AePageObjectsTest < AePageObjectsTestCase
     AePageObjects.stubs(:default_max_wait_time).returns(5)
     Time.stubs(:now).returns(1)
 
-    block = mock
+    block = mock("block")
     block.expects(:called).times(1)
 
     raised = assert_raises AePageObjects::FrozenInTime do

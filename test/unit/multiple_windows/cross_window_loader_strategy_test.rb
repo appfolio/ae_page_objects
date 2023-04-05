@@ -12,7 +12,7 @@ module AePageObjects
       end
 
       def test_load_page_with_condition__found__current_window
-        current_window = mock
+        current_window = mock("current_window")
 
         window_list = WindowList.new
         window_list.expects(:current_window).returns(current_window)
@@ -31,7 +31,7 @@ module AePageObjects
       end
 
       def test_load_page_with_condition__found__other_window
-        current_window = mock
+        current_window = mock("current_window")
         other_window   = mock
 
         window_list = WindowList.new
@@ -59,7 +59,7 @@ module AePageObjects
       end
 
       def test_load_page_with_condition__found__other_window__ignore_current
-        current_window = mock
+        current_window = mock("current_window")
         other_window   = mock
 
         window_list = WindowList.new
@@ -84,7 +84,7 @@ module AePageObjects
       end
 
       def test_load_page_with_condition__not_found
-        current_window = mock
+        current_window = mock("current_window")
         other_window   = mock
 
         window_list = WindowList.new
@@ -114,7 +114,7 @@ module AePageObjects
       end
 
       def test_document_not_loaded_error
-        window_list = stub(
+        window_list = stub("window_list", 
           :current_window => true,
           :opened => [
             stub(:handle => "window1", :current_document => "Document1"),
@@ -124,7 +124,7 @@ module AePageObjects
         )
 
         loader = CrossWindowLoaderStrategy.new(window_list)
-        query = mock(:permitted_types_dump => "permitted_types_dump")
+        query = mock("query", :permitted_types_dump => "permitted_types_dump")
 
         error_message = loader.document_not_loaded_error_message(query)
 

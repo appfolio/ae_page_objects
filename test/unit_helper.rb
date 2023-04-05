@@ -44,9 +44,9 @@ class AePageObjectsTestCase < Test::Unit::TestCase
 
   def capybara_stub
     @capybara_stub ||= begin
-      browser_stub = stub
-      driver_stub = stub(:browser => browser_stub, :invalid_element_errors => [])
-      session_stub = stub(:driver => driver_stub)
+      browser_stub = stub("browser_stub")
+      driver_stub = stub("driver_stub", :browser => browser_stub, :invalid_element_errors => [])
+      session_stub = stub("session_stub", :driver => driver_stub)
 
       Capybara.stubs(:current_session).returns(session_stub)
 

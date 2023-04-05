@@ -67,9 +67,9 @@ module AePageObjects
       end
 
       def test_current_window__not_found__causes_synchronize
-        window1 = stub(:handle => "1")
-        window2 = stub(:handle => "2")
-        window3 = stub(:handle => "3")
+        window1 = stub("window1", :handle => "1")
+        window2 = stub("window2", :handle => "2")
+        window3 = stub("window3", :handle => "3")
 
         windows = WindowList.new
         windows.add(window1)

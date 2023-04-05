@@ -17,7 +17,7 @@ module AePageObjects
 
         assert_nil window.current_document
 
-        document_mock = mock(:stale! => true)
+        document_mock = mock("document_mock", :stale! => true)
         window.current_document = document_mock
 
         assert_equal document_mock, window.current_document

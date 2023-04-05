@@ -14,7 +14,7 @@ module AePageObjects
         stub_current_window
         jon = kitty.new
 
-        kind_page_object = stub(allow_reload!: nil)
+        kind_page_object = stub("kind_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#kind", { minimum: 0 }).returns(kind_page_object)
         verify_element_on_parent(jon, :kind, AePageObjects::Element, kind_page_object)
       end
@@ -31,7 +31,7 @@ module AePageObjects
 
         jon = kitty.new
 
-        kind_page_object = stub(allow_reload!: nil)
+        kind_page_object = stub("kind_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("Kind Homie", { minimum: 0 }).returns(kind_page_object)
         verify_element_on_parent(jon, :kind, AePageObjects::Element, kind_page_object)
       end
@@ -51,7 +51,7 @@ module AePageObjects
         jon = kitty.new
         jon.expects(:page_local_context).returns("hello")
 
-        kind_page_object = stub(allow_reload!: nil)
+        kind_page_object = stub("kind_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("hello", { minimum: 0 }).returns(kind_page_object)
         verify_element_on_parent(jon, :kind, AePageObjects::Element, kind_page_object)
       end
@@ -68,7 +68,7 @@ module AePageObjects
 
         jon = kitty.new
 
-        kind_page_object = stub(allow_reload!: nil)
+        kind_page_object = stub("kind_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#kind", { minimum: 0 }).returns(kind_page_object)
         verify_element_on_parent(jon, :kind, AePageObjects::Select, kind_page_object)
       end
@@ -85,7 +85,7 @@ module AePageObjects
 
         jon = kitty.new
 
-        kind_page_object = stub(allow_reload!: nil)
+        kind_page_object = stub("kind_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#kind", { minimum: 0 }).returns(kind_page_object)
         verify_element_on_parent(jon, :kind, AePageObjects::Checkbox, kind_page_object)
       end
@@ -104,7 +104,7 @@ module AePageObjects
 
         jon = kitty.new
 
-        kind_page_object = stub(allow_reload!: nil)
+        kind_page_object = stub("kind_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#kind", { minimum: 0 }).returns(kind_page_object)
 
         verify_element_on_parent(jon, :kind, special_widget, kind_page_object)
@@ -124,7 +124,7 @@ module AePageObjects
 
         jon = kitty.new
 
-        kind_page_object = stub(allow_reload!: nil)
+        kind_page_object = stub("kind_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("As If!", { minimum: 0 }).returns(kind_page_object)
 
         verify_element_on_parent(jon, :kind, special_widget, kind_page_object)
@@ -151,26 +151,26 @@ module AePageObjects
 
         jon = kitty.new
 
-        tail_page_object = stub(allow_reload!: nil)
+        tail_page_object = stub("tail_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#tail_attributes", { minimum: 0 }).returns(tail_page_object)
 
         tail = verify_element_on_parent_with_intermediary_class(jon, :tail, AePageObjects::Element, tail_page_object)
 
-        color_page_object = stub(allow_reload!: nil)
+        color_page_object = stub("color_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_color", { minimum: 0 }).returns(color_page_object)
         verify_element_on_parent(tail, :color, AePageObjects::Element, color_page_object)
 
-        size_page_object = stub(allow_reload!: nil)
+        size_page_object = stub("size_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_size_attributes", { minimum: 0 }).returns(size_page_object)
         size = verify_element_on_parent_with_intermediary_class(tail, :size, AePageObjects::Element, size_page_object)
 
         assert_equal "Growing!", size.grow!
 
-        length_page_object = stub(allow_reload!: nil)
+        length_page_object = stub("length_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_length", { minimum: 0 }).returns(length_page_object)
         verify_element_on_parent(size, :length, AePageObjects::Element, length_page_object)
 
-        width_page_object = stub(allow_reload!: nil)
+        width_page_object = stub("width_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_width", { minimum: 0 }).returns(width_page_object)
         verify_element_on_parent(size, :width, AePageObjects::Element, width_page_object)
       end
@@ -198,26 +198,26 @@ module AePageObjects
 
         jon = kitty.new
 
-        tail_page_object = stub(allow_reload!: nil)
+        tail_page_object = stub("tail_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#tail_attributes", { minimum: 0 }).returns(tail_page_object)
 
         tail = verify_element_on_parent(jon, :tail, tail_class, tail_page_object)
 
-        color_page_object = stub(allow_reload!: nil)
+        color_page_object = stub("color_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_color", { minimum: 0 }).returns(color_page_object)
         verify_element_on_parent(tail, :color, AePageObjects::Element, color_page_object)
 
-        size_page_object = stub(allow_reload!: nil)
+        size_page_object = stub("size_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_size_attributes", { minimum: 0 }).returns(size_page_object)
         size = verify_element_on_parent_with_intermediary_class(tail, :size, AePageObjects::Element, size_page_object)
 
         assert_equal "Growing!", size.grow!
 
-        length_page_object = stub(allow_reload!: nil)
+        length_page_object = stub("length_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_length", { minimum: 0 }).returns(length_page_object)
         verify_element_on_parent(size, :length, AePageObjects::Element, length_page_object)
 
-        width_page_object = stub(allow_reload!: nil)
+        width_page_object = stub("width_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_width", anything).returns(width_page_object)
         verify_element_on_parent(size, :width, AePageObjects::Element, width_page_object)
       end
@@ -245,26 +245,26 @@ module AePageObjects
 
         jon = kitty.new
 
-        tail_page_object = stub(allow_reload!: nil)
+        tail_page_object = stub("tail_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#tail_attributes", { minimum: 0 }).returns(tail_page_object)
 
         tail = verify_element_on_parent_with_intermediary_class(jon, :tail, tail_base_class, tail_page_object)
 
-        color_page_object = stub(allow_reload!: nil)
+        color_page_object = stub("color_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_color", { minimum: 0 }).returns(color_page_object)
         verify_element_on_parent(tail, :color, AePageObjects::Element, color_page_object)
 
-        size_page_object = stub(allow_reload!: nil)
+        size_page_object = stub("size_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_size_attributes", { minimum: 0 }).returns(size_page_object)
         size = verify_element_on_parent_with_intermediary_class(tail, :size, AePageObjects::Element, size_page_object)
 
         assert_equal "Growing!", size.grow!
 
-        length_page_object = stub(allow_reload!: nil)
+        length_page_object = stub("length_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_length", { minimum: 0 }).returns(length_page_object)
         verify_element_on_parent(size, :length, AePageObjects::Element, length_page_object)
 
-        width_page_object = stub(allow_reload!: nil)
+        width_page_object = stub("width_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_width", { minimum: 0 }).returns(width_page_object)
         verify_element_on_parent(size, :width, AePageObjects::Element, width_page_object)
       end
@@ -290,26 +290,26 @@ module AePageObjects
 
         jon = kitty.new
 
-        tail_page_object = stub(allow_reload!: nil)
+        tail_page_object = stub("tail_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("what ever you want, baby", { minimum: 0 }).returns(tail_page_object)
 
         tail = verify_element_on_parent_with_intermediary_class(jon, :tail, AePageObjects::Element, tail_page_object)
 
-        color_page_object = stub(allow_reload!: nil)
+        color_page_object = stub("color_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_color", { minimum: 0 }).returns(color_page_object)
         verify_element_on_parent(tail, :color, AePageObjects::Element, color_page_object)
 
-        size_page_object = stub(allow_reload!: nil)
+        size_page_object = stub("size_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("Size", { minimum: 0 }).returns(size_page_object)
         size = verify_element_on_parent_with_intermediary_class(tail, :size, AePageObjects::Element, size_page_object)
 
         assert_equal "Growing!", size.grow!
 
-        length_page_object = stub(allow_reload!: nil)
+        length_page_object = stub("length_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_length", { minimum: 0 }).returns(length_page_object)
         verify_element_on_parent(size, :length, AePageObjects::Element, length_page_object)
 
-        width_page_object = stub(allow_reload!: nil)
+        width_page_object = stub("width_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("Fatness", { minimum: 0 }).returns(width_page_object)
         verify_element_on_parent(size, :width, AePageObjects::Element, width_page_object)
       end
@@ -337,28 +337,28 @@ module AePageObjects
 
         jon = kitty.new
 
-        tail_page_object = stub(allow_reload!: nil)
+        tail_page_object = stub("tail_page_object", allow_reload!: nil)
         capybara_stub.session.expects(:first).with("#tail_attributes", { minimum: 0 }).returns(tail_page_object)
 
         tail = verify_element_on_parent_with_intermediary_class(jon, :tail, AePageObjects::Element, tail_page_object)
 
-        color_page_object = stub(allow_reload!: nil)
+        color_page_object = stub("color_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_color", { minimum: 0 }).returns(color_page_object)
         verify_element_on_parent(tail, :color, AePageObjects::Element, color_page_object)
 
-        size_page_object = stub(allow_reload!: nil)
+        size_page_object = stub("size_page_object", allow_reload!: nil)
         tail_page_object.expects(:first).with("#tail_attributes_size_attributes", { minimum: 0 }).returns(size_page_object)
         size = verify_element_on_parent_with_intermediary_class(tail, :size, AePageObjects::Element, size_page_object)
 
         assert_equal "Growing!", size.grow!
 
-        length_page_object = stub(allow_reload!: nil)
+        length_page_object = stub("length_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("#tail_attributes_size_attributes_length", { minimum: 0 }).returns(length_page_object)
         verify_element_on_parent(size, :length, AePageObjects::Element, length_page_object)
 
         size.expects(:page_local_context).returns("hello")
 
-        width_page_object = stub(allow_reload!: nil)
+        width_page_object = stub("width_page_object", allow_reload!: nil)
         size_page_object.expects(:first).with("hello", { minimum: 0 }).returns(width_page_object)
         verify_element_on_parent(size, :width, AePageObjects::Element, width_page_object)
       end

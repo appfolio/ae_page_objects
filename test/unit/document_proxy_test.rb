@@ -12,7 +12,7 @@ module AePageObjects
     end
 
     def test_is_a
-      page_loader = mock
+      page_loader = mock("page_loader")
       loaded_page = DocumentClass.new
 
       proxy = DocumentProxy.new(loaded_page, page_loader)
@@ -23,7 +23,7 @@ module AePageObjects
     end
 
     def test_as_a
-      page_loader = mock
+      page_loader = mock("page_loader")
       loaded_page = DocumentClass.new
 
       proxy = DocumentProxy.new(loaded_page, page_loader)
@@ -32,7 +32,7 @@ module AePageObjects
     end
 
     def test_as_a__error
-      page_loader = mock(:permitted_types_dump => "permitted_types_dump")
+      page_loader = mock("page_loader", :permitted_types_dump => "permitted_types_dump")
       loaded_page = DocumentClass.new
 
       proxy = DocumentProxy.new(loaded_page, page_loader)
@@ -50,7 +50,7 @@ module AePageObjects
         :meow
       end
 
-      query = mock
+      query = mock("query")
       query.expects(:default_document_class).times(3).returns(DocumentClass)
 
       proxy = DocumentProxy.new(loaded_page, query)
