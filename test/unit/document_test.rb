@@ -79,7 +79,7 @@ module AePageObjects
 
       book           = stub
       something      = stub
-      something_else = stub("something_else")
+      something_else = stub
       full_path      = stub
 
       show_page.stubs(:new)

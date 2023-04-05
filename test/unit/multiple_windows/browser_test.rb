@@ -19,7 +19,7 @@ module AePageObjects
         browser = Browser.new
         browser.windows.expects(:current_window).returns(:current_window)
 
-        document_loader = mock("document_loader")
+        document_loader = mock
         document_loader.expects(:load).returns(:loaded_page)
 
         query =  nil

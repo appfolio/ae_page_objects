@@ -29,7 +29,7 @@ module AePageObjects
         stub(:document_class => DocumentClass2)
       ])
 
-      strategy = mock("strategy")
+      strategy = mock
 
       loader = DocumentLoader.new(query, strategy)
 
@@ -49,7 +49,7 @@ module AePageObjects
         stub(:document_class => DocumentClass3)
       ])
 
-      strategy = mock("strategy")
+      strategy = mock
 
       loader = DocumentLoader.new(query, strategy)
 
@@ -73,7 +73,7 @@ module AePageObjects
         stub(:document_class => DocumentClass2)
       ])
 
-      strategy = mock("strategy")
+      strategy = mock
 
       loader = DocumentLoader.new(query, strategy)
 

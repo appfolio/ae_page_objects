@@ -66,7 +66,7 @@ module AePageObjects
         WindowHandleManager.expects(:current).returns(:handle3)
 
         switch_to_sequence = sequence('switch_to')
-        switch_to_stub = mock("switch_to_stub")
+        switch_to_stub = mock
         switch_to_stub.expects(:window).with(:handle2).in_sequence(switch_to_sequence)
         switch_to_stub.expects(:window).with(:handle3).in_sequence(switch_to_sequence)
 
@@ -85,7 +85,7 @@ module AePageObjects
         WindowHandleManager.expects(:current).returns(:handle2)
 
         switch_to_sequence = sequence('switch_to')
-        switch_to_stub = mock("switch_to_stub")
+        switch_to_stub = mock
         switch_to_stub.expects(:window).with(:handle2).in_sequence(switch_to_sequence)
         switch_to_stub.expects(:window).with(:handle1).in_sequence(switch_to_sequence)
 
