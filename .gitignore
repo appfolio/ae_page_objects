@@ -1,9 +1,3 @@
-test/test_apps/**/.bundle
-test/test_apps/**/db/*.sqlite3
-test/test_apps/**/log/*.log
-test/test_apps/**/tmp/**/*
-test/test_apps/**/gemfiles/*.lock
-
 *.lock
 gemfiles/*.lock
 
@@ -11,4 +5,5 @@ gemfiles/*.lock
 pkg
 .idea
 .bundle
+.DS_Store
 
