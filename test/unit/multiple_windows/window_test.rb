@@ -10,7 +10,7 @@ module AePageObjects
       def test_initialize
         registered_window = nil
 
-        registry = mock
+        registry = mock("registry")
         registry.expects(:add).with do |w|
           registered_window = w
           true
@@ -24,13 +24,13 @@ module AePageObjects
       end
 
       def test_current_document=
-        registry = mock(:add => nil)
+        registry = mock("registry", :add => nil)
 
         window = Window.new(registry, "window_handle")
 
         assert_nil window.current_document
 
-        document_mock = mock(:stale! => true)
+        document_mock = mock("document_mock", :stale! => true)
         window.current_document = document_mock
 
         assert_equal document_mock, window.current_document
@@ -40,13 +40,13 @@ module AePageObjects
       end
 
       def test_switch_to
-        registry = mock(:add => nil)
+        registry = mock("registry", :add => nil)
 
         window = Window.new(registry, "window_handle")
 
         window.current_document = "current_document"
 
-        navigator_mock = stub
+        navigator_mock = stub("navigator_mock")
         navigator_mock.expects(:window).with("window_handle")
         capybara_stub.browser.expects(:switch_to).returns(navigator_mock)
 
@@ -54,11 +54,11 @@ module AePageObjects
       end
 
       def test_close__window_closed
-        registry = mock(:add => nil)
+        registry = mock("registry", :add => nil)
 
         window = Window.new(registry, "window_handle")
 
-        document_mock = mock(:stale! => true)
+        document_mock = mock("document_mock", :stale! => true)
         window.current_document = document_mock
 
         WindowHandleManager.expects(:close).with("window_handle").returns(true)
@@ -74,7 +74,7 @@ module AePageObjects
       end
 
       def test_close__window_not_closed
-        registry = mock(:add => nil)
+        registry = mock("registry", :add => nil)
 
         window = Window.new(registry, "window_handle")
 

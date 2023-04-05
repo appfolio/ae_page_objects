@@ -59,7 +59,7 @@ module AePageObjects
 
       def test_document_not_loaded_error_message
         loader = SameWindowLoaderStrategy.new
-        query = mock(:permitted_types_dump => "permitted_types_dump")
+        query = mock("query", :permitted_types_dump => "permitted_types_dump")
 
         error_message = loader.document_not_loaded_error_message(query)
 
