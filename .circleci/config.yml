@@ -1,0 +1,111 @@
+version: 2.1
+
+orbs:
+  gem-tool: appfolio/gem-tool@volatile
+
+commands:
+  install_dependencies:
+    steps:
+      - run:
+          name: Update Package Lists
+          command: sudo apt-get update
+      - run:
+          name: Install wget libgtk-3-dev libxt-dev libdbus-glib-1-2
+          command: sudo apt-get install wget libgtk-3-dev libxt-dev libdbus-glib-1-2
+      - restore_cache:
+          # need to update cache key when you bump version of geckodriver and firefox
+          key: v1-geckodriver-0.32.1-firefox-111.0
+      - run:
+          name: Install geckodriver
+          command: |
+            wget https://github.com/mozilla/geckodriver/releases/download/v0.32.1/geckodriver-v0.32.1-linux64.tar.gz
+            tar -zxvf geckodriver-v0.32.1-linux64.tar.gz
+            sudo mv geckodriver /usr/bin
+            rm -rf geckodriver-v0.32.1-linux64.tar.gz
+      - run:
+          name: Install firefox
+          command: |
+            wget https://ftp.mozilla.org/pub/firefox/releases/111.0/linux-x86_64/en-US/firefox-111.0.tar.bz2
+            tar xvjf firefox-111.0.tar.bz2
+            sudo mv firefox /usr/local/firefox
+            sudo ln -s /usr/local/firefox/firefox /usr/bin/firefox
+            firefox -v
+            rm -rf firefox-111.0.tar.bz2
+      - save_cache:
+          # need to update cache key when you bump version of geckodriver and firefox
+          key: v1-geckodriver-0.32.1-firefox-111.0
+          paths:
+            - ./bin
+            - ./firefox
+      - run:
+          name: set PATH to include geckodriver and firefox
+          command: echo 'export PATH=$HOME/project/firefox:$HOME/project/bin:$PATH' >> $BASH_ENV
+
+workflows:
+  rc:
+    jobs:
+      - gem-tool/rake_test:
+          name: test_ruby-<< matrix.ruby_version >>_rails_60
+          context: appfolio_test_context
+          executor_tag: ruby
+          matrix:
+            environment:
+              RAILS_VERSION: "6.0"
+            parameters:
+              ruby_version:
+                - "2.7.5"
+                - "2.7.7"
+          after-checkout-steps:
+            - install_dependencies
+          after-appraisal-install-steps:
+            - run:
+                name: Install CI Dependencies
+                command: bundle exec rake test:ci:install
+            - run:
+                name: Run CI Tests
+                command: bundle exec rake test:ci
+      - gem-tool/rake_test:
+          name: test_ruby-<< matrix.ruby_version >>_rails_61
+          context: appfolio_test_context
+          executor_tag: ruby
+          matrix:
+            environment:
+              RAILS_VERSION: "6.1"
+            parameters:
+              ruby_version:
+                - "3.2.1"
+                - "3.1.3"
+                - "3.0.6"
+                - "2.7.7"
+                - "2.7.5"
+          after-checkout-steps:
+            - install_dependencies
+          after-appraisal-install-steps:
+            - run:
+                name: Install CI Dependencies
+                command: bundle exec rake test:ci:install
+            - run:
+                name: Run CI Tests
+                command: bundle exec rake test:ci
+      - gem-tool/rake_test:
+          name: test_ruby-<< matrix.ruby_version >>_rails_70
+          context: appfolio_test_context
+          executor_tag: ruby
+          matrix:
+            environment:
+              RAILS_VERSION: "7.0"
+            parameters:
+              ruby_version:
+                - "3.2.1"
+                - "3.1.3"
+                - "3.0.6"
+                - "2.7.7"
+          after-checkout-steps:
+            - install_dependencies
+          after-appraisal-install-steps:
+            - run:
+                name: Install CI Dependencies
+                command: bundle exec rake test:ci:install
+            - run:
+                name: Run CI Tests
+                command: bundle exec rake test:ci
