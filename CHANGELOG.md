@@ -1,3 +1,15 @@
+## Version 6.0.0
+
+### Changed
+
+* [214](https://github.com/appfolio/ae_page_objects/pull/214) Add Ruby 3 Support
+
+  This does a few notable things:
+
+  - Updates the appraised Ruby versions to 2.7.7, 3.0.6, 3.1.3, and 3.2.1.
+  - Fixes Capybara and Mocha deprecations / incompatibilities (mostly revolving around changes to Ruby splat operators and keyword arguments)
+  - Removes Rails integration testing. Why? Because they never actually seemed to work or run and creating new sample applications for every new Rails version is a very difficult endeavor. We use this gem in various internal Rails projects so it's not like we don't know if this works with Rails or not.
+
 ## Version 5.0.0
 
 ### Changed
@@ -5,7 +17,7 @@
 * [211](https://github.com/appfolio/ae_page_objects/pull/211) Remove waiting from ElementProxy methods
 
   This change updates the signature and behavior of the `visible?` / `hidden?` / `present?` / `absent?` methods on the `ElementProxy` class.
-  
+
   These methods no longer take any arguments and do not wait. To wait for any of the above conditions, users should instead call the `wait_until_*` methods.
 
 ## Version 4.3.0
