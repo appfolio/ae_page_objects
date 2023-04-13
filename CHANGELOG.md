@@ -1,4 +1,4 @@
-## Version 6.0.0
+## Version 6.0.0.pre1
 
 ### Changed
 
@@ -6,7 +6,8 @@
 
   This does a few notable things:
 
-  - Updates the appraised Ruby versions to 2.7.7, 3.0.6, 3.1.3, and 3.2.1.
+  - Drops support for Ruby 2.X.X
+  - Updates the appraised Ruby versions to 3.0.6, 3.1.3, and 3.2.1
   - Fixes Capybara and Mocha deprecations / incompatibilities (mostly revolving around changes to Ruby splat operators and keyword arguments)
   - Removes Rails integration testing. Why? Because they never actually seemed to work or run and creating new sample applications for every new Rails version is a very difficult endeavor. We use this gem in various internal Rails projects so it's not like we don't know if this works with Rails or not.
 

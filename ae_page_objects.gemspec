@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.license               = 'MIT'
   spec.files                 = Dir['**/*'].select { |f| f[%r{^(lib/|LICENSE.txt|.*gemspec)}] }
   spec.require_paths         = ['lib']
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.7.7')
+  spec.required_ruby_version = Gem::Requirement.new('>= 3')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
