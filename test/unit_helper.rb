@@ -8,6 +8,15 @@ require "mocha/test_unit"
 
 require 'test_helpers/element_test_helpers'
 
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter "/test/"
+  add_filter "/gemfiles/"
+end
+
+SimpleCov.start
+
 class AePageObjectsTestCase < Test::Unit::TestCase
   include ElementTestHelpers
 

@@ -12,3 +12,4 @@ pkg
 .idea
 .bundle
 
+/coverage
