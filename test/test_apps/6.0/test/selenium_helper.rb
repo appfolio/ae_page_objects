@@ -40,10 +40,9 @@ class TestSeleniumDriver < Capybara::Selenium::Driver
 end
 
 Capybara.register_driver :ae_page_objects_test_driver do |app|
-  Capybara::Selenium::Driver.new(app, options: Selenium::WebDriver::Firefox::Options.new({
-    browser: :firefox,
-    args: ['--headless']
-  }))
+  options = Selenium::WebDriver::Firefox::Options.new
+  options.add_argument('-headless')
+  Capybara::Selenium::Driver.new(app, options: options)
 end
 
 Capybara.configure do |config|
