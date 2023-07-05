@@ -31,14 +31,6 @@ module Selenium
   end
 end
 
-class TestSeleniumDriver < Capybara::Selenium::Driver
-
-  def initialize(app, options = {})
-    options[:profile] ||= Selenium::WebDriver::Firefox::Profile.from_name("selenium") || Selenium::WebDriver::Firefox::Profile.new
-    super
-  end
-end
-
 Capybara.register_driver :ae_page_objects_test_driver do |app|
   options = Selenium::WebDriver::Firefox::Options.new
   options.add_argument('-headless')
