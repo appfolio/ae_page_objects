@@ -4,9 +4,7 @@ module AePageObjects
   class ApplicationRouter < BasicRouter
 
     # This whole file is a kludge and probably belongs in an ae_page_objects-rails extension
-
     module Recognizer
-
       class Base
         def generate_path(named_route, *args)
           if routes.respond_to?("#{named_route}_path")
@@ -32,7 +30,7 @@ module AePageObjects
           false
         end
 
-      private
+        private
 
         def routes
           raise NotImplementedError, "You must implement routes"
@@ -60,9 +58,8 @@ module AePageObjects
         ResolvedRoute = Struct.new(:controller, :action)
       end
 
-      class Rails3 < Base
-
-      private
+      class Rails6Plus < Base
+        private
 
         def request_for(url, method)
           ::Rails.application.routes.request_class.new(env_for(url, method))
@@ -77,7 +74,8 @@ module AePageObjects
         end
 
         def normalize_url(url)
-          Rack::Mount::Utils.normalize_path(url) unless url =~ %r{://}
+          require 'action_dispatch/journey'
+          ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
         end
 
         def router
@@ -91,25 +89,6 @@ module AePageObjects
             end
             routes_class.new
           end
-        end
-      end
-
-      class Rails32 < Rails3
-
-      private
-
-        def normalize_url(url)
-          Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
-        end
-      end
-
-      class Rails4Plus < Rails32
-
-      private
-
-        def normalize_url(url)
-          require 'action_dispatch/journey'
-          ActionDispatch::Journey::Router::Utils.normalize_path(url) unless url =~ %r{://}
         end
       end
     end
@@ -134,15 +113,11 @@ module AePageObjects
 
     def recognizer
       @recognizer ||= case ::Rails.gem_version
-        when Gem::Requirement.new('>= 3.0', '< 3.2')
-          Recognizer::Rails3.new
-        when Gem::Requirement.new('~> 3.2')
-          Recognizer::Rails32.new
-        when Gem::Requirement.new('>= 4.0', '< 7.0')
-          Recognizer::Rails4Plus.new
+        when Gem::Requirement.new('>= 6.0', '< 8.0')
+          Recognizer::Rails6Plus.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."
-          Recognizer::Rails4Plus.new
+          Recognizer::Rails6Plus.new
       end
     end
   end

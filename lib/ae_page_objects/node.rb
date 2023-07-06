@@ -27,7 +27,10 @@ module AePageObjects
           locator.push(default_options)
         end
 
-        node.all(*locator).any?
+        locator_copy = locator.dup
+        options = locator_copy.pop
+
+        node.all(*locator_copy, **options).any?
       end
     end
 

@@ -52,7 +52,7 @@ module AePageObjects
       # wait time set to 0.
       #
       Capybara.using_wait_time(0) do
-        node.all(:xpath, item_xpath, options).size
+        node.all(:xpath, item_xpath, **options).size
       end
     end
 
@@ -90,7 +90,6 @@ module AePageObjects
         }
 
         if query_args[1].is_a?(XPath::Expression)
-          #
           # Use the { exact: true } setting for XPath selectors that use "XPath.is".  For example, given the XPath
           #   XPath.descendant(:div)[XPath.text.is('Example Text')]
           # the resulting path will be
@@ -98,17 +97,14 @@ module AePageObjects
           # instead of
           #   .//div[contains(./text(), 'Example Text')]
           # See https://github.com/jnicklas/capybara#exactness for more information.
-          #
           default_options[:exact] = true
         end
 
         if query_args.last.is_a?(::Hash)
-          query_args[-1] = default_options.merge(query_args.last)
-        else
-          query_args.push(default_options)
+          default_options.merge!(query_args.pop)
         end
 
-        query = Capybara::Queries::SelectorQuery.new(*query_args)
+        query = Capybara::Queries::SelectorQuery.new(*query_args, **default_options)
 
         result = query.xpath
 
