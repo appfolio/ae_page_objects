@@ -45,26 +45,6 @@ workflows:
   rc:
     jobs:
       - gem-tool/rake_test:
-          name: test_ruby-<< matrix.ruby_version >>_rails_60
-          context: appfolio_test_context
-          executor_tag: ruby
-          matrix:
-            environment:
-              RAILS_VERSION: "6.0"
-            parameters:
-              ruby_version:
-                - "2.7.5"
-                - "2.7.7"
-          after-checkout-steps:
-            - install_dependencies
-          after-appraisal-install-steps:
-            - run:
-                name: Install CI Dependencies
-                command: bundle exec rake test:ci:install
-            - run:
-                name: Run CI Tests
-                command: bundle exec rake test:ci
-      - gem-tool/rake_test:
           name: test_ruby-<< matrix.ruby_version >>_rails_61
           context: appfolio_test_context
           executor_tag: ruby
