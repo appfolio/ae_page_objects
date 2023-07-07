@@ -5,9 +5,8 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), '..')
 require "config/environment"
 
 # Run the migrations
-ActiveRecord::MigrationContext
-  .new(ActiveRecord::Migrator.migrations_paths, ActiveRecord::SchemaMigration)
-  .migrate
+ActiveRecord::Tasks::DatabaseTasks.create_current
+ActiveRecord::Tasks::DatabaseTasks.migrate
 
 require "rails/test_help"
 

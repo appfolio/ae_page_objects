@@ -2,11 +2,11 @@
 
 source "https://rubygems.org"
 
-gem "rails", "~> 6.0.2", ">= 6.0.2.2"
+gem "rails", "~> 6.1.4"
 gem "sqlite3", "~> 1.4"
 gem "puma", "~> 4.1"
 gem "sass-rails", ">= 6"
-gem "webpacker", "~> 4.0"
+gem "webpacker", "~> 5.4"
 gem "jquery-rails"
 gem "turbolinks", "~> 5"
 gem "jbuilder", "~> 2.7"
