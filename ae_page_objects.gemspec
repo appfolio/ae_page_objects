@@ -1,22 +1,23 @@
-$LOAD_PATH << File.expand_path("../lib", __FILE__)
-require 'ae_page_objects/version'
 
-Gem::Specification.new do |s|
-  s.name                      = "ae_page_objects"
-  s.version                   = AePageObjects::VERSION
+# frozen_string_literal: true
 
-  s.required_ruby_version     = '>= 2.2.5'
-  s.authors                   = ["AppFolio Engineering"]
-  s.description               = "Capybara Page Objects pattern"
-  s.email                     = ["engineering@appfolio.com"]
+require_relative 'lib/ae_page_objects/version'
 
-  s.homepage                  = "http://github.com/appfolio/ae_page_objects"
-  s.licenses                  = ["MIT"]
-  s.require_paths             = ["lib"]
-  s.summary                   = "Capybara Page Objects pattern"
+Gem::Specification.new do |spec|
+  spec.name                  = 'ae_page_objects'
+  spec.version               = AePageObjects::VERSION
+  spec.platform              = Gem::Platform::RUBY
+  spec.author                = 'AppFolio'
+  spec.email                 = 'opensource@appfolio.com'
+  spec.description           = 'Capybara Page Objects pattern.'
+  spec.summary               = spec.description
+  spec.homepage              = 'https://github.com/appfolio/ae_page_objects'
+  spec.license               = 'MIT'
+  spec.files                 = Dir['**/*'].select { |f| f[%r{^(lib/|LICENSE.txt|.*gemspec)}] }
+  spec.require_paths         = ['lib']
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.7.5')
 
-  s.files                     = `git ls-files -- lib`.split("\n")
+  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
-  s.add_dependency('capybara', '~> 3.0')
+  spec.add_dependency('capybara', ['>= 3', '< 4'])
 end
-

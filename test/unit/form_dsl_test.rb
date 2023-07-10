@@ -98,7 +98,7 @@ module AePageObjects
 
       jon = kitty_class.new
 
-      kitty_box_page_stub = stub(:allow_reload!)
+      kitty_box_page_stub = stub(allow_reload!: nil)
 
       capybara_stub.session.expects(:first).with(:css, '#my_kitty_box', minimum: 0).returns(kitty_box_page_stub).times(2)
       verify_top_level_form_field(jon, :name, kitty_box_page_stub) do |field_xpath, field_page_object, times|
@@ -131,7 +131,7 @@ module AePageObjects
       form = verify_element_on_parent(kitty, :kitty, kitty.class.element_attributes[:kitty], document_stub)
 
       field_xpath = "kitty_#{field_method}_xpath"
-      field_page_object = stub(:allow_reload!)
+      field_page_object = stub(allow_reload!: nil)
       prepare_for_field_reference.call(field_xpath, field_page_object)
       expected_field_type = form.class.element_attributes[field_method]
       field_node = verify_element_on_parent(form, field_method, expected_field_type, field_page_object)

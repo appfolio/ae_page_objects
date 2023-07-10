@@ -85,11 +85,11 @@ module AePageObjects
       show_page.stubs(:new)
       capybara_stub.session.stubs(:visit).with(full_path).returns(stub)
 
-      router.expects(:generate_path).with(:show_book, book, :format => :json).returns(full_path)
-      show_page.visit(book, :format => :json)
+      router.expects(:generate_path).with(:show_book, book, { format: :json }).returns(full_path)
+      show_page.visit(book, { format: :json })
 
-      router.expects(:generate_path).with(:view_book, book, :format => :json).returns(full_path)
-      show_page.visit(book, :format => :json, :via => :view_book)
+      router.expects(:generate_path).with(:view_book, book, { format: :json }).returns(full_path)
+      show_page.visit(book, { format: :json, via: :view_book })
 
       router.expects(:generate_path).with(:show_book, something, something_else).returns(full_path)
       show_page.visit(something, something_else)
@@ -154,7 +154,7 @@ module AePageObjects
         ].all? { |line| script.include?(line) }
       end
 
-      capybara_node = stub(:allow_reload!)
+      capybara_node = stub(allow_reload!: nil)
 
       kitty_page
         .node

@@ -1,7 +1,7 @@
 # Development
 
 This page documents how to make changes to AePageObjects including running the test suite.
- 
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
@@ -36,23 +36,23 @@ Generally, internal correctness is verified via _unit tests_ and correctness wit
 
 Unit tests run against every version of Capybara _at most once_ and against both the minimum and maximum Ruby version _at least once_.
 
-Integration tests run against every version of Rails at least once and every version of Capybara at least once. 
+Integration tests run against every version of Rails at least once and every version of Capybara at least once.
 
 ## Dependencies
 
-AePageObjects is tested across various versions of Capybara, Ruby, and Rails. 
+AePageObjects is tested across various versions of Capybara, Ruby, and Rails.
 
 ### Supported Capybara versions
 
 AePageObjects aims to support all recent versions of Capybara. The currently supported versions of Capybara are listed
 in the gemspec.
- 
+
 ### Supported Ruby versions
 
 AePageObjects supports the same minimum Ruby version as Capybara. The minimum Ruby version
 is specified in the gemspec.
 
-The test suite tests against the minimum version and a designated maximum version, specified in `.travis.yml`.
+The test suite tests against the minimum version and a designated maximum version, specified in `.circle/config.yml`.
 
 ### Supported Rails versions
 
@@ -61,11 +61,10 @@ the built-in Rails router for resolving path declarations.
 
 The router support is tested against various Rails versions matching versioned directories in _test/test_apps_.
 
-
 ## Implementation
- 
+
 Tests are run using rake tasks defined in the Rakefile. The rake tasks use [Appraisals](https://github.com/thoughtbot/appraisal)
-for running integration tests across versions of dependencies. The test suite run by Travis CI is defined in `.travis.yml`,
+for running integration tests across versions of dependencies. The test suite run by CircleCI is defined in `.circleci/config.yml`,
 which specifies various ENV variables that the tasks defined in Rakefile use to select tests to run.
 
 ### Appraisals
@@ -77,13 +76,13 @@ files in the _test/test_apps_ directories are used for running integration tests
 ## Unit tests
 
 The unit tests are stored in the _test/unit_ directory. To run the unit tests:
- 
+
 ```
 bundle install
 rake test:units
 ```
 
-This will run the unit tests for the current version of Ruby using the Capybara version from the Gemfile.lock file. 
+This will run the unit tests for the current version of Ruby using the Capybara version from the Gemfile.lock file.
 
 ## Integration tests
 
@@ -93,7 +92,7 @@ There are 2 types of integration tests:
 
 1. Ruby-only unit tests that run against different versions.
 2. Selenium tests that make use of page objects written via AePageObjects and run against a Rails application.
- 
+
 ### Capybara
 
 #### Units
@@ -108,7 +107,7 @@ rake test:integration:units:install
 rake test:integration:units
 ```
 
-The tests run by the above commands generally stub/mock out Capybara. Running these tests against multiple versions of Capybara verifies 
+The tests run by the above commands generally stub/mock out Capybara. Running these tests against multiple versions of Capybara verifies
 that the stub/mock setup within the tests works across Capybara versions.
 
 #### Integration
@@ -138,8 +137,8 @@ rake test:units
 
 `AePageObjects::ApplicationRouter` is tested against various versions of Rails in the _test/test_apps_ directory (currently 3.0 to 5.0).
 These tests use the most recent Ruby and Capybara versions possible for the version of Rails.
- 
-To run the integration tests against a specific version of Rails: 
+
+To run the integration tests against a specific version of Rails:
 
 ```
 RAILS_VERSION=6.0 rake test:integration:selenium:install
@@ -148,7 +147,7 @@ RAILS_VERSION=6.0 rake test:integration:selenium
 
 ## CI
 
-The test suite is run on Travis CI via the `.travis.yml` config, which uses the `test:ci` and `test:ci:install` rake tasks. To run these
+The test suite is run on CircleCI via the `.circleci/config.yml` config, which uses the `test:ci` and `test:ci:install` rake tasks. To run these
 locally using the current Ruby version:
 
 ```

@@ -122,10 +122,13 @@ module AePageObjects
         locator.push(default_options)
       end
 
+      locator_copy = locator.dup
+      options = locator_copy.pop
+
       if @wait
-        node = AePageObjects.wait_until { parent.node.first(*locator) }
+        node = AePageObjects.wait_until { parent.node.first(*locator_copy, **options) }
       else
-        node = parent.node.first(*locator)
+        node = parent.node.first(*locator_copy, **options)
         raise LoadingElementFailed, 'Element Not Found' unless node
       end
       node.allow_reload!
