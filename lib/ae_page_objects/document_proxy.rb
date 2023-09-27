@@ -36,8 +36,8 @@ module AePageObjects
       end
     end
 
-    def method_missing(name, *args, &block)
-      implicit_document.__send__(name, *args, &block)
+    def method_missing(name, *args, **kwargs, &block)
+      implicit_document.__send__(name, *args, **kwargs, &block)
     end
 
     def respond_to_missing?(*args)
