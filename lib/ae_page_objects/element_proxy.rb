@@ -83,12 +83,12 @@ module AePageObjects
       is_a?(type)
     end
 
-    def method_missing(name, *args, &block)
+    def method_missing(name, *args, **kwargs, &block)
       if name == :class
         return @element_class
       end
 
-      implicit_element.__send__(name, *args, &block)
+      implicit_element.__send__(name, *args, **kwargs, &block)
     rescue Selenium::WebDriver::Error::StaleElementReferenceError
       #
       # A StaleElementReferenceError can occur when a selenium node is referenced but is no longer attached to the DOM.
