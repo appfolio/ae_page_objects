@@ -53,11 +53,9 @@ workflows:
               RAILS_VERSION: "6.1"
             parameters:
               ruby_version:
-                - "3.2.1"
-                - "3.1.3"
-                - "3.0.6"
-                - "2.7.7"
-                - "2.7.5"
+                - '3.3.0'
+                - '3.2.1'
+                - '3.1.3'
           after-checkout-steps:
             - install_dependencies
           after-appraisal-install-steps:
@@ -76,10 +74,9 @@ workflows:
               RAILS_VERSION: "7.0"
             parameters:
               ruby_version:
-                - "3.2.1"
-                - "3.1.3"
-                - "3.0.6"
-                - "2.7.7"
+                - '3.3.0'
+                - '3.2.1'
+                - '3.1.3'
           after-checkout-steps:
             - install_dependencies
           after-appraisal-install-steps:
