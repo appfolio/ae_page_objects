@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  title: ae_page_objects
+  description: Legacy library which provides a customizable implementation of the
+    Page Object pattern built on top of Capybara to be used in automated
+    acceptance test suites.
+  tags:
+    - oss
+  annotations:
+    appfolio.com/package-location: url:https://rubygems.org/gems/ae_page_objects
+    appfolio.com/package-type: gem
+  name: ae-page-objects
+spec:
+  type: library
+  lifecycle: maintenance
+  owner: apm-test-automation
