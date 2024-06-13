@@ -54,11 +54,11 @@ module AePageObjects
       loader = DocumentLoader.new(query, strategy)
 
       sequence = sequence('sequence')
-      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[0]).returns(nil)
-      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[1]).returns(nil)
-      strategy.expects(:load_document_with_condition).in_sequence(sequence).with(query.conditions[2]).returns(nil)
+      strategy.stubs(:load_document_with_condition).in_sequence(sequence).with(query.conditions[0]).returns(nil)
+      strategy.stubs(:load_document_with_condition).in_sequence(sequence).with(query.conditions[1]).returns(nil)
+      strategy.stubs(:load_document_with_condition).in_sequence(sequence).with(query.conditions[2]).returns(nil)
 
-      strategy.expects(:document_not_loaded_error_message).with(query).returns("hello")
+      strategy.stubs(:document_not_loaded_error_message).with(query).returns("hello")
 
       raised = assert_raise DocumentLoadError do
         loader.load
@@ -113,5 +113,3 @@ module AePageObjects
     end
   end
 end
-
-
