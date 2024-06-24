@@ -1,0 +1,22 @@
+name: PR team auto-labeler
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - labeled
+      - unlabeled
+
+permissions:
+  pull-requests: write
+
+jobs:
+  set-and-verify-label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appfolio/team-labeler@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
