@@ -8,14 +8,13 @@ require "mocha/test_unit"
 
 require 'test_helpers/element_test_helpers'
 
-require 'simplecov'
-
-SimpleCov.start do
-  add_filter "/test/"
-  add_filter "/gemfiles/"
+if ENV['WITH_COVERAGE'] == 'true'
+  require 'simplecov'
+  SimpleCov.start do
+    enable_coverage :branch
+    add_filter %r{\A/test}
+  end
 end
-
-SimpleCov.start
 
 class AePageObjectsTestCase < Test::Unit::TestCase
   include ElementTestHelpers

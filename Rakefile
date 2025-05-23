@@ -1,6 +1,7 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-require 'rubygems'
+require 'logger' # Due to issue with activesupport / concurrent-ruby
+
 require 'bundler'
 require 'fileutils'
 
@@ -8,7 +9,6 @@ require 'rake'
 require 'appraisal'
 
 require 'rake/testtask'
-
 
 Bundler::GemHelper.install_tasks
 

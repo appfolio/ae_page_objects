@@ -1,0 +1,7 @@
+roberts_book:
+  author_id: 1
+  title: "My own name"
+
+pauls_book:
+  author_id: 2
+  title: "Own thy name"

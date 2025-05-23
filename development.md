@@ -27,20 +27,19 @@ This page documents how to make changes to AePageObjects including running the t
 
 # Tests
 
-The aim of the AePageObjects test suite is to verify both the correctness of internal code and the correctness of
-the integration with external code.
-
-Generally, internal correctness is verified via _unit tests_ and correctness with external code is verified via _integration tests_.
+The aim of the AePageObjects test suite is to verify both the correctness of internal code and the correctness of the
+integration with external code. Generally, internal correctness is verified via _unit tests_ and correctness with
+external code is verified via _integration tests_.
 
 ## Coverage
 
-Unit tests run against every version of Capybara _at most once_ and against both the minimum and maximum Ruby version _at least once_.
-
-Integration tests run against every version of Rails at least once and every version of Capybara at least once.
+Unit tests run against every version of Capybara _at most once_ and against both the minimum and maximum Ruby version
+_at least once_. Integration tests run against every version of Rails at least once and every version of Capybara at
+least once.
 
 ## Dependencies
 
-AePageObjects is tested across various versions of Capybara, Ruby, and Rails.
+AePageObjects is tested across various versions of CRuby, and Rails.
 
 ### Supported Capybara versions
 
@@ -49,28 +48,26 @@ in the gemspec.
 
 ### Supported Ruby versions
 
-AePageObjects supports the same minimum Ruby version as Capybara. The minimum Ruby version
-is specified in the gemspec.
-
+AePageObjects supports the same minimum Ruby version as Capybara. The maximum Ruby version is specified in the gemspec.
 The test suite tests against the minimum version and a designated maximum version, specified in `.circle/config.yml`.
 
 ### Supported Rails versions
 
 The `ae_page_objects/rails` fork sets the AePageObjects default router to `AePageObjects::ApplicationRouter` which uses
-the built-in Rails router for resolving path declarations.
-
-The router support is tested against various Rails versions matching versioned directories in _test/test_apps_.
+the built-in Rails router for resolving path declarations. The router support is tested against various Rails versions
+matching versioned directories in _test/test_apps_.
 
 ## Implementation
 
-Tests are run using rake tasks defined in the Rakefile. The rake tasks use [Appraisals](https://github.com/thoughtbot/appraisal)
-for running integration tests across versions of dependencies. The test suite run by CircleCI is defined in `.circleci/config.yml`,
-which specifies various ENV variables that the tasks defined in Rakefile use to select tests to run.
+Tests are run using rake tasks defined in the Rakefile. The rake tasks use
+[Appraisals](https://github.com/thoughtbot/appraisal) for running integration tests across versions of dependencies. The
+test suite run by CircleCI is defined in `.circleci/config.yml`, which specifies various ENV variables that the tasks
+defined in Rakefile use to select tests to run.
 
 ### Appraisals
 
-The top level Appraisals file is used for running integration tests across Ruby and Capybara versions. The Appraisals
-files in the _test/test_apps_ directories are used for running integration tests across Capybara and Rails versions.
+The top level Appraisals file is used for running integration tests across Ruby versions. The Appraisals files in the
+_test/test_apps_ directories are used for running integration tests across Capybara and Rails versions.
 
 
 ## Unit tests
@@ -118,14 +115,14 @@ application, using the most recent version of Rails possible that supports the R
 To run these tests:
 
 ```
-RAILS_VERSION=6.0 rake test:integration:selenium:install
-RAILS_VERSION=6.0 rake test:integration:selenium
+RAILS_VERSION=8.0 rake test:integration:selenium:install
+RAILS_VERSION=8.0 rake test:integration:selenium
 ```
 
 
 ### Ruby
 
-To run the unit tests against different versions of Ruby switch to a different version of Ruby (e.g. a la [rvm](https://rvm.io/))
+To run the unit tests against different versions of Ruby switch to a different version of Ruby (e.g. [asdf](https://asdf-vm.com/))
 and run:
 
 ```
@@ -135,14 +132,14 @@ rake test:units
 
 ### Rails
 
-`AePageObjects::ApplicationRouter` is tested against various versions of Rails in the _test/test_apps_ directory (currently 3.0 to 5.0).
+`AePageObjects::ApplicationRouter` is tested against various versions of Rails in the _test/test_apps_ directory (currently 7.0 to 8.0).
 These tests use the most recent Ruby and Capybara versions possible for the version of Rails.
 
 To run the integration tests against a specific version of Rails:
 
 ```
-RAILS_VERSION=6.0 rake test:integration:selenium:install
-RAILS_VERSION=6.0 rake test:integration:selenium
+RAILS_VERSION=8.0 rake test:integration:selenium:install
+RAILS_VERSION=8.0 rake test:integration:selenium
 ```
 
 ## CI
