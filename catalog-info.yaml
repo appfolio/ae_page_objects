@@ -14,4 +14,4 @@ metadata:
 spec:
   type: library
   lifecycle: maintenance
-  owner: apm-test-automation
+  owner: appfolio-developers
