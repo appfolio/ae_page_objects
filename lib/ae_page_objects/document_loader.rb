@@ -7,7 +7,7 @@ module AePageObjects
 
     def load
       begin
-        AePageObjects.wait_until do
+        AePageObjects.wait_until(10) do
           @query.conditions.each do |document_condition|
             if document = @strategy.load_document_with_condition(document_condition)
               return document
