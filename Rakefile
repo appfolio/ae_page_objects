@@ -215,11 +215,19 @@ namespace :test do
       remove_files("Gemfile.lock")
     end
     desc "Resolve and install dependencies for unit and integration test"
-    task :install => ci_install
+    task :install do
+      Array(ci_install).each do |task|
+        Rake::Task[task].invoke
+      end
+    end
   end
 
   desc "Run the unit and integration test for all appraisals"
-  task :ci => ci_task
+  task :ci do
+    Array(ci_task).each do |task|
+      Rake::Task[task].invoke
+    end
+  end
 end
 
 desc 'Default: run the unit and integration tests.'
