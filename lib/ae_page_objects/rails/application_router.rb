@@ -112,12 +112,14 @@ module AePageObjects
     private
 
     def recognizer
-      @recognizer ||= case ::Rails.gem_version
-        when Gem::Requirement.new('>= 6.0', '< 8.0')
+      @recognizer ||= begin
+        case ::Rails.gem_version
+        when Gem::Requirement.new('>= 7.2', '< 8.2')
           Recognizer::Rails6Plus.new
         else
           warn "[WARNING]: AePageObjects is not tested against Rails #{::Rails.version} and may behave in an undefined manner."
           Recognizer::Rails6Plus.new
+        end
       end
     end
   end

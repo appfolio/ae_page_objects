@@ -1,6 +1,5 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-require 'rubygems'
 require 'bundler'
 require 'fileutils'
 
@@ -8,7 +7,6 @@ require 'rake'
 require 'appraisal'
 
 require 'rake/testtask'
-
 
 Bundler::GemHelper.install_tasks
 
@@ -89,18 +87,16 @@ class SeleniumRunner
   end
 
   def read_matrix
-    file_pattern = "test/test_apps/**/gemfiles/*ruby#{RUBY_VERSION}*.gemfile"
+    file_pattern = "test/test_apps/**/gemfiles/*ruby_#{RUBY_VERSION}*.gemfile"
 
     matrix = {}
 
     Dir.glob(file_pattern).each do |file|
-      matches = file.match(%r{(test/test_apps/(\d\.\d))/gemfiles/(.*ruby(\d\.\d\.\d)\.gemfile)})
+      matches = file.match(%r{(test/test_apps/(\d\.\d))/gemfiles/(.*ruby_(\d\.\d\.\d)\.gemfile)})
 
       gemfile_path  = matches[0]
       app_root      = matches[1]
       rails_version = matches[2]
-      gemfile       = matches[3]
-      ruby_version  = matches[4]
 
       matrix[rails_version] ||= []
       matrix[rails_version] << TestConfig.new(rails_version, app_root, File.expand_path("../#{gemfile_path}", __FILE__))
