@@ -1,12 +1,17 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-gem "appraisal", "~> 2.0"
-gem "mocha", ">= 2", "< 3"
-gem "selenium-webdriver", "~> 3.11.0"
-gem 'gem-release', '0.7.4'
-gem "simplecov", require: false
+source 'https://rubygems.org' # global source
+
+source 'https://rubygems.org' do
+  gem 'appraisal', '>= 2.5', '< 3'
+  gem 'bundler', '>= 2.6', '< 3'
+  gem 'debug', '>= 1.11', '< 2'
+  gem 'mocha', '>= 2.7', '< 3'
+  gem 'pry', '>= 0.15', '< 1'
+  gem 'rake', '>= 13.3', '< 14'
+  gem 'selenium-webdriver', '>= 4.38', '< 5'
+  gem 'simplecov', '>= 0.22', '< 1', group: :test, require: false
+  gem 'test-unit', '>= 3.6', '< 4'
+end
 
 gemspec
-
-gem 'rake', '~> 13.0'
-gem 'test-unit', '~> 3.0'
