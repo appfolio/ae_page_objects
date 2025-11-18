@@ -14,29 +14,29 @@ commands:
           command: sudo apt-get install wget libgtk-3-dev libxt-dev libdbus-glib-1-2
       - restore_cache:
           # need to update cache key when you bump version of geckodriver and firefox
-          key: v1-geckodriver-0.33.0-firefox-119.0
+          key: v1-geckodriver-0.36.0-firefox-145.0
       - run:
           name: Install geckodriver
           command: |
             if [ -d "local_bin" ]; then exit; fi
             mkdir local_bin
-            wget https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz
-            tar -zxvf geckodriver-v0.33.0-linux64.tar.gz
+            wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz
+            tar -zxvf geckodriver-v0.36.0-linux64.tar.gz
             sudo mv geckodriver local_bin
-            rm -rf geckodriver-v0.33.0-linux64.tar.gz
+            rm -rf geckodriver-v0.36.0-linux64.tar.gz
       - run:
           name: Install firefox
           command: |
             if [ -d "firefox" ]; then exit; fi
-            wget https://ftp.mozilla.org/pub/firefox/releases/119.0/linux-x86_64/en-US/firefox-119.0.tar.bz2
-            tar xvjf firefox-119.0.tar.bz2
+            wget https://ftp.mozilla.org/pub/firefox/releases/145.0/linux-x86_64/en-US/firefox-145.0.tar.xz
+            tar xf firefox-145.0.tar.xz
             sudo mv firefox /usr/local/firefox
             sudo ln -s /usr/local/firefox/firefox /usr/bin/firefox
             firefox -v
-            rm -rf firefox-119.0.tar.bz2
+            rm -rf firefox-145.0.tar.xz
       - save_cache:
           # need to update cache key when you bump version of geckodriver and firefox
-          key: v1-geckodriver-0.33.0-firefox-119.0
+          key: v1-geckodriver-0.36.0-firefox-145.0
           paths:
             - ./local_bin
             - ./firefox
