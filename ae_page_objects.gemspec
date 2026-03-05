@@ -13,10 +13,10 @@ Gem::Specification.new do |spec|
   spec.summary       = spec.description
   spec.homepage      = 'https://github.com/appfolio/ae_page_objects'
   spec.license       = 'MIT'
-  spec.files         = Dir['**/*'].select { |f| f[%r{^(lib/|LICENSE.txt|.*gemspec)}] }
+  spec.files         = Dir['**/*'].select { |f| f[%r{^(lib/|LICENSE.txt|ae_page_objects\.gemspec)}] }
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = Gem::Requirement.new('< 3.5')
+  spec.required_ruby_version = Gem::Requirement.new('< 4.1')
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
   spec.add_dependency('capybara', ['>= 3', '< 4'])
