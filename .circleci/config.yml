@@ -54,9 +54,9 @@ workflows:
           matrix:
             parameters:
               ruby_version:
-                - '3.4.1'
-                - '3.3.6'
-                - '3.2.5'
+                - '4.0.1'
+                - '3.4.8'
+                - '3.3.10'
           after-checkout-steps:
             - install_dependencies
           after-appraisal-install-steps:
@@ -73,9 +73,9 @@ workflows:
           matrix:
             parameters:
               ruby_version:
-                - '3.4.1'
-                - '3.3.6'
-                - '3.2.5'
+                - '4.0.1'
+                - '3.4.8'
+                - '3.3.10'
           after-checkout-steps:
             - install_dependencies
           after-appraisal-install-steps:
@@ -92,9 +92,9 @@ workflows:
           matrix:
             parameters:
               ruby_version:
-                - '3.4.1'
-                - '3.3.6'
-                - '3.2.5'
+                - '4.0.1'
+                - '3.4.8'
+                - '3.3.10'
           after-checkout-steps:
             - install_dependencies
           after-appraisal-install-steps:

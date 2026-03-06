@@ -92,7 +92,7 @@ class SeleniumRunner
     matrix = {}
 
     Dir.glob(file_pattern).each do |file|
-      matches = file.match(%r{(test/test_apps/(\d\.\d))/gemfiles/(.*ruby_(\d\.\d\.\d)\.gemfile)})
+      matches = file.match(%r{(test/test_apps/(\d+\.\d+))/gemfiles/(.*ruby_(\d+\.\d+\.\d+)\.gemfile)})
 
       gemfile_path  = matches[0]
       app_root      = matches[1]

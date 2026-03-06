@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-case RUBY_VERSION
-when '3.2.5', '3.3.6', '3.4.1'
+if Gem::Requirement.new(['>= 3.3', '< 4.1']).satisfied_by?(Gem::Version.new(RUBY_VERSION))
   appraise "ruby-#{RUBY_VERSION}" do
   end
 else
