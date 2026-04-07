@@ -1,0 +1,29 @@
+# .dependabot_alert_notifications.yml
+
+# Controls whether dependabot alerts are enabled for the repository.
+enabled: true
+
+# Filters for dependabot alerts. 
+# If no filters are specified, all alerts will be processed.
+# Any combination of the 'action' and 'severity' filters can be used.
+filter:
+
+  # Filter by action
+  action:
+    - auto_reopened
+    - created
+    - reintroduced
+    - reopened
+
+  # Filter by severity
+  severity:
+    - critical
+    - high
+
+# Notifications instructions. 
+# Any combination of 'slack' and 'code_owner' notification can be used.
+notify:
+  # Instructs Kermit to send dependabot scan alerts to Slack
+  slack:
+    # Channel name to send the messages to
+    channel: "#platform-ci-dev-tooling"
