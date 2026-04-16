@@ -1,1 +1,5 @@
 * @appfolio/platform-test-automation
+
+# Automatic Dependabot approvals
+Gemfile @patchpal @appfolio/platform-ci-dev-tooling
+Gemfile.lock @patchpal @appfolio/platform-ci-dev-tooling
