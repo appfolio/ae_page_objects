@@ -1,5 +1,23 @@
 # Changelog
 
+## [6.5.1](https://github.com/appfolio/ae_page_objects/compare/v6.5.0...v6.5.1) (2026-04-27)
+
+
+### Documentation
+
+* update changelog ([c890ddd](https://github.com/appfolio/ae_page_objects/commit/c890ddd77f06d458a7cd9f4a09263e4ea9e4ea54))
+
+
+### Miscellaneous Chores
+
+* bump webpack-dev-server constraint to fix CVE-2025-30359 and CVE-2025-30360 ([75587b5](https://github.com/appfolio/ae_page_objects/commit/75587b530263e5255fcaae5d94e77af2dfd294e5))
+
+
+### Continuous Integration
+
+* add Release Please and gem-releaser workflows for automated releases ([acdc47f](https://github.com/appfolio/ae_page_objects/commit/acdc47f5da3e26b617ee536a684e75a2f9d2476e))
+* add Release Please and gem-releaser workflows for automated releases ([4d7a1d4](https://github.com/appfolio/ae_page_objects/commit/4d7a1d4520040802d9a01c1bff14faecda1d3252))
+
 ## [Unreleased](https://github.com/appfolio/ae_page_objects/tree/HEAD)
 
 [Full Changelog](https://github.com/appfolio/ae_page_objects/compare/v6.5.0...HEAD)
