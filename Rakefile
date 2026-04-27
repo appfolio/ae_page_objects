@@ -6,9 +6,9 @@ require 'fileutils'
 require 'rake'
 require 'appraisal'
 
-require 'rake/testtask'
+require 'bundler/gem_tasks'
 
-Bundler::GemHelper.install_tasks
+require 'rake/testtask'
 
 def remove_files(glob_pattern)
   puts "Removing '#{glob_pattern}'"
