@@ -1,3 +1,3 @@
 module AePageObjects
-  VERSION = '6.5.0'.freeze
+  VERSION = '6.5.1'.freeze
 end
