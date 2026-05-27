@@ -135,7 +135,7 @@ namespace :test do
   Rake::TestTask.new(:units) do |test|
     test.libs << 'lib' << 'test'
     test.pattern = 'test/unit/**/*_test.rb'
-    test.verbose = true
+    test.verbose = false
 
     if test.respond_to?(:warning=)
       test.warning = false
