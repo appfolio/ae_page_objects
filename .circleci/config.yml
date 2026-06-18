@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   gem-tool: appfolio/gem-tool@volatile
+  public-packages: https://raw.githubusercontent.com/appfolio/public-packages/v1/orbs/public-packages.yml
 
 commands:
   install_dependencies:
@@ -58,6 +59,7 @@ workflows:
                 - '3.4.8'
                 - '3.3.10'
           after-checkout-steps:
+            - public-packages/setup
             - install_dependencies
           after-appraisal-install-steps:
             - run:
@@ -77,6 +79,7 @@ workflows:
                 - '3.4.8'
                 - '3.3.10'
           after-checkout-steps:
+            - public-packages/setup
             - install_dependencies
           after-appraisal-install-steps:
             - run:
@@ -96,6 +99,7 @@ workflows:
                 - '3.4.8'
                 - '3.3.10'
           after-checkout-steps:
+            - public-packages/setup
             - install_dependencies
           after-appraisal-install-steps:
             - run:
