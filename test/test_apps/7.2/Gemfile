@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'https://appfolio.jfrog.io/artifactory/api/gems/appfolio-ae_page_objects-gem/'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

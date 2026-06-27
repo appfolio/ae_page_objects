@@ -113,13 +113,10 @@ class SeleniumRunner
     puts "Running '#{command}'"
     return if @options[:dry]
 
-    specific_gemfile_env = Bundler.clean_env
-
-    if gemfile
-      specific_gemfile_env['BUNDLE_GEMFILE'] = gemfile
-    end
-
-    Bundler.send(:with_env, specific_gemfile_env) do
+    jfrog_creds = ENV['BUNDLE_APPFOLIO__JFROG__IO']
+    Bundler.with_unbundled_env do
+      ENV['BUNDLE_GEMFILE'] = gemfile if gemfile
+      ENV['BUNDLE_APPFOLIO__JFROG__IO'] = jfrog_creds if jfrog_creds
       system(command)
       raise unless $?.exitstatus == 0
     end
