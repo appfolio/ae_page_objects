@@ -1,5 +1,35 @@
 # Changelog
 
+## [6.5.1](https://github.com/appfolio/ae_page_objects/compare/v6.5.0...v6.5.1) (2026-07-17)
+
+
+### Documentation
+
+* update changelog ([c890ddd](https://github.com/appfolio/ae_page_objects/commit/c890ddd77f06d458a7cd9f4a09263e4ea9e4ea54))
+
+
+### Miscellaneous Chores
+
+* bump webpack-dev-server constraint to fix CVE-2025-30359 and CVE-2025-30360 ([75587b5](https://github.com/appfolio/ae_page_objects/commit/75587b530263e5255fcaae5d94e77af2dfd294e5))
+* migrate catalog-info.yaml metadata into gemspec for gemspec catalog ingestor ([1c867a6](https://github.com/appfolio/ae_page_objects/commit/1c867a6392d46c6fd677b378ae9e8c828fb7ab99))
+* migrate npm registry from CodeArtifact to JFrog ([00e860e](https://github.com/appfolio/ae_page_objects/commit/00e860e86a4a12c6c89191d10bd545b459eed882))
+* migrate npm registry from CodeArtifact to JFrog ([651b5b7](https://github.com/appfolio/ae_page_objects/commit/651b5b780ec92e8ff1f38d595106b128ef77f1c1))
+* standardize CI and test configuration ([2b43fb7](https://github.com/appfolio/ae_page_objects/commit/2b43fb79ddd1b4200774bc3ac12859cadc7d2d2a))
+
+
+### Build System
+
+* migrate gem source from RubyGems to JFrog ([c169d82](https://github.com/appfolio/ae_page_objects/commit/c169d825a6c13b03f35d705d0ddb9df34d9ad04f))
+
+
+### Continuous Integration
+
+* add id-token permission for OIDC trusted publishing ([bf5d3ea](https://github.com/appfolio/ae_page_objects/commit/bf5d3ea50aaa2383b79bb46ab1751586e3367532))
+* add id-token permission for OIDC trusted publishing ([09b05cd](https://github.com/appfolio/ae_page_objects/commit/09b05cd0a659f221d4d03947cc1da417177ef02b))
+* add Release Please and gem-releaser workflows for automated releases ([acdc47f](https://github.com/appfolio/ae_page_objects/commit/acdc47f5da3e26b617ee536a684e75a2f9d2476e))
+* add Release Please and gem-releaser workflows for automated releases ([4d7a1d4](https://github.com/appfolio/ae_page_objects/commit/4d7a1d4520040802d9a01c1bff14faecda1d3252))
+* scope release-please to gem-shipped files ([df32cba](https://github.com/appfolio/ae_page_objects/commit/df32cbac564e6a7a069d987a90facf6059ae7308))
+
 ## [Unreleased](https://github.com/appfolio/ae_page_objects/tree/HEAD)
 
 [Full Changelog](https://github.com/appfolio/ae_page_objects/compare/v6.5.0...HEAD)
