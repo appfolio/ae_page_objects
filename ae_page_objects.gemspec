@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.platform      = Gem::Platform::RUBY
   spec.author        = 'AppFolio'
   spec.email         = 'opensource@appfolio.com'
-  spec.description   = 'Capybara Page Objects pattern.'
-  spec.summary       = spec.description
+  spec.description   = 'A legacy library that provides a customizable implementation of the Page Object pattern built on top of Capybara. It is intended for use in automated acceptance test suites, helping organize and encapsulate page interactions.'
+  spec.summary       = 'Customizable Page Object pattern implementation built on top of Capybara.'
   spec.homepage      = 'https://github.com/appfolio/ae_page_objects'
   spec.license       = 'MIT'
   spec.files         = Dir['**/*'].select { |f| f[%r{^(lib/|LICENSE.txt|ae_page_objects\.gemspec)}] }
