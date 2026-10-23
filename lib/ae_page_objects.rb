@@ -53,11 +53,11 @@ module AePageObjects
         # There are cases when Capybara will rescue an error and either nodes are not
         # reloadable or the DOM has changed in a such a way that no amount of reloading will
         # help (but perhaps a retry at the higher level may have a chance of success). This leads
-        # to us needless waiting for a long time just to fail.
+        # to us needlessly waiting for a long time just to fail.
         #
         # There are also cases when Selenium will take such a long time to respond with an error
         # that Capybara's timeout will be exceeded and no reloading / retrying will occur. Instead,
-        # Capabara will just raise the error.
+        # Capybara will just raise the error.
         #
         # In order to combat the two cases, we start with a lower Capybara wait time and increase
         # it each iteration. This logic is encapsulated in a little utility class.

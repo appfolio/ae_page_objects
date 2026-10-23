@@ -120,7 +120,7 @@ module AePageObjects
     #
     #     collection :addresses, :is => AddressList, :contains => ExtendedAddress
     #
-    #   Collection class: one-off subclass ofAddressList
+    #   Collection class: one-off subclass of AddressList
     #   Item class:       ExtendedAddress
     #
     # ------------------------------------------------
