@@ -115,7 +115,7 @@ module AePageObjects
 
     # This should not block and instead attempt to return immediately (e.g. use #all / #first
     # instead of #find / #has_selector ). Unfortunately, this is difficult to enforce since even
-    # with #all / #first capyabara may wait.
+    # with #all / #first Capybara may wait.
     def is_loaded?
       self.class.is_loaded_blocks.all? { |block| self.instance_eval(&block) }
     end
